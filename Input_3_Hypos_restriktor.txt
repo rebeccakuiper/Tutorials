@@ -1,0 +1,15 @@
+#Study 1
+# Model 1
+b1 > b2; b2 > b3; b3 > b4
+# Model 2
+b1 == b2
+#Study 2
+# Model 1
+b_m > b_w
+# Model 2
+b_m == b_w
+#Study 3
+# Model 1
+b1 > b2; b2 > b3
+# Model 2
+b1 == b2
