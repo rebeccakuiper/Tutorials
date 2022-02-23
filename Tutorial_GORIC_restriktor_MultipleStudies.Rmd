@@ -1,0 +1,335 @@
+---
+title: "Model selection using GORIC and GORICA for multiple studies"
+author: "Rebecca M. Kuiper"
+date: "19-7-2021"
+fontsize: 14pt
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+
+# Updating hypotheses
+
+Updating hypotheses, consists of the following three steps:
+
+1. Conduct (exploratory) model selection to the first study.
+2. Specify the (confirmatory/informative) hypotheses for the second study (the replication study) using the results from Step 1.
+3. Conduct model selection to the second study.
+
+In this example, we will use the Monin data set to render theory-based hypotheses for the replication data set of Holubar.
+
+
+## Step 1: Model selection first study
+
+#### Data preparation
+
+First, we need to load the required libraries (after they have been installed). These libraries contain functions, such as `goric`, that will be used in the R code below.
+Each time you reopen R, you will have to load the required libraries.
+
+```{r, message = FALSE, warning = FALSE}
+## First, we need to install the packages, if you have not done this already:
+if (!require("psych")) install.packages("psych")
+if (!require("restriktor")) install.packages("restriktor")
+
+## Then, load the packages:
+library(psych) # for the function describeBy
+library(restriktor) # for the goric function
+```
+
+
+Second, it is necessary to load the data.
+
+Notably, it is only possible to load the data if you are using the correct working directory (with both your R script and data file). The command `getwd()` shows you your current working directory. You can change the working directory to the one you prefer using the function `setwd()` by specifying the correct location between parentheses. Alternatively, in Rstudio, you can use the "Session" tab (on top) or you can use the "Files"-pane (on top of probably the right lower box of your Rstudio-screen, this pane is located next to the panes for "Plots", "Packages", "Help" and "Viewer").
+
+If you open the data file `Data_Monin.txt` in a text editor, you can see that the variable labels have been inserted (using quotes; i.e., "...") in the first line of the file, which is called a header. Therefore, you have to specify 'header = TRUE' when loading the data:
+
+```{r}
+# Load the data
+Monin <- read.table("Data_Monin.txt", header = TRUE)
+```
+
+Since we loaded a txt file, R does not know the measurment levels of the variables and assumes all to be continuous (so, interval or ratio). Hence, we need to tell R that the variable `group` is a factor (i.e., a grouping / categorical / nominal variable): 
+
+```{r}
+# Make the variable group a factor
+Monin$group <- factor(Monin$group) 
+```
+
+To inspect the dataset, use:
+
+```{r}
+head(Monin) # Look at first (6) rows of the data
+```
+
+If you want a more detailed overview of the data, by means of descriptive statistics splitted by `group`, use
+
+```{r}
+descrstat <- describeBy(Monin$attract, Monin$group, mat = TRUE)
+descrstat
+```
+
+
+### Preparation for GORIC(A)
+
+#### ANOVA model: R-object
+First, we need an R-object with unconstrained estimates, that is, in this example, the group means and one residual variance.
+
+```{r}
+lm_fit_Monin <- lm(attract ~ group - 1, data = Monin)
+```
+
+Note that:
+
+  1. `y ~ group - 1` instructs the function `lm` (linear model) to regress y on group.
+  
+  2. The `- 1` instructs the function `lm` to drop the intercept and, therefore, estimate the means in each group, resulting here in five group means. 
+On the other hand,  `y ~ group' would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, four) groups and the reference group.
+  
+  3. The results are collected in, what is called, an R-object, named `lm_fit_Monin`.
+
+
+
+Let's check the names used in this model.
+
+```{r}
+names(coef(lm_fit_Monin))
+```
+  
+ 
+#### Set of (exploratory) hypotheses
+On the Monin data set, we are going to do an exploratory analysis, which means that we are going to use all combinations with equalities (and no restrictions). We will specify all possibilities using the following:
+
+* `restriktor()` recognizes the following operators: `>`, `<`, `=`, `== `,`<=`or`>=`. (Note :that the `==` is interpreted in the same fashion as the `=`, meaning an equality. The `<=` and `>=` operators are interpreted by the restiktor functions as respectively: `<` and `>`.)
+* The `goric`-function or `restriktor` can deal with pairwise and combined, with operator restrictions with
+the `;` as a separator for each restriction within one hypothesis. 
+
+
+
+```{r}
+H00 <- 'group1 == group2 == group3'
+H01 <- 'group1 == group2'
+H02 <- 'group1 == group3'
+H03 <- 'group2 == group3'
+```
+
+
+#### Seed values
+In the calculation of the GORIC, an iterative process is needed to calculate the penalty / complexity part. Therefore, one needs to set a seed value:
+
+1. Then, you will obtain the same penalty value every time you run this code.
+
+2. Then, you can change the seed value to check the sensitivity of the penalty value. If it is sensitive, then increase number of iterations used in calculation of the penalty (see below).
+
+
+### Calculate GORIC values and weights
+```{r}
+set.seed(123) # Set seed value
+goric(lm_fit_Monin, H00, H01, H02, H03)
+```
+
+
+#### Calculate GORICA values and weights
+In case you want to use the GORICA values and weights instead, use:
+
+```{r, eval = FALSE}
+set.seed(123) # Set seed value
+goric(lm_fit_Monin, H0, H1, H2, H3, type = "gorica")
+```
+
+
+## Step 2: Specify hypotheses second study
+It can be seen that $H_01$ ($\mu_1 = \mu_2, \mu_3$) receives the most support. Based on the means (see `descrstat`), where we see that $\mu_1$ and $\mu_2$ are both larger than $\mu_3$, we will evaluate the following hypothesis in the Holubar data: $$H_1: \mu_1 = \mu_2 > \mu_3.$$
+Since $H_u$ obtained some support as well, we could specify (using the sample means of the Monin data) thw following competing hypothesis: $$H_2: \mu_2 > \mu_1 > \mu_3.$$
+
+
+
+## Step 3: model selection second study
+
+#### Data preparation
+
+First, we have to read in the Holubar dataset (the replication study of Monin), and tell R that the variable `gr` (group) is a factor instead of a continuous variable.
+
+```{r}
+Holubar <- read.table("Data_Holubar.txt", header = TRUE) # load the data
+Holubar$gr <- factor(Holubar$gr) # tell R that gr is a factor
+```
+
+If you want a more detailed overview of the data, also by means of descriptive statistics splitted by `group`, use
+
+```{r}
+head(Holubar)
+
+descrstat <- describeBy(Holubar$at, Holubar$gr, mat = TRUE)
+descrstat
+```
+
+
+### Preparation for GORIC(A)
+
+#### ANOVA model: R-object
+Then, we fit an ANOVA-model by means of the `lm`-function (linear model) and directly check the names that are used in this model:
+```{r}
+lm_fit_Holubar <- lm(at ~ gr - 1, data = Holubar)
+names(coef(lm_fit_Holubar))
+```
+
+#### Set of hypotheses
+Based on the results and sample means of Monin, we created two competing hypotheses: 
+```{r}
+H1 <- 'gr1 == gr2 > gr3' 
+H2 <- 'gr2 > gr1 > gr3'
+```
+
+### Calculate GORIC values and weights
+```{r}
+set.seed(123) # Set seed value
+output_repl <- goric(lm_fit_Holubar, H1, H2)
+summary(output_repl)
+```
+Since the support for $H_1$ and $H_2$ is lower than for $H_u$, both are weak hypotheses. Hence, the study of Holubar did not replicate the findings of Monin.
+
+
+#### Alternative set
+In case you are only interested in the 'main hypothesis' $H_1$ found in Monin, you could also evaluate this against its complement:
+```{r}
+set.seed(123) # Set seed value
+goric(lm_fit_Holubar, H1, comparison = "complement")
+```
+Since $H_1$ has only 0.39 (lower than 1) times more support than its complement, it is a weak hypothesis. Hence, the study of Holubar did not replicate the findings of Monin.
+
+
+#### Calculate GORICA values and weights
+Notably, in case you want to use the GORICA, you can use the following commands:
+```{r, eval = FALSE}
+set.seed(123) # Set seed value
+goric(lm_fit_Holubar, H0, H1, H2, type = "gorica")
+```
+
+When you want to calculate the GORICA for $H_1$ and its complement, use:
+```{r, eval = FALSE}
+set.seed(123) # Set seed value
+goric(lm_fit_Holubar, H1, type = "gorica", comparison = "complement")
+```
+
+
+
+# Aggregating support (evidence synthesis)
+
+_**Note 1: This is work in progress. So, please only use the upcoming function for applications.**_
+
+_**Also, let me know if you think things could be improved (e.g., way of asking for input, what should be reported as output, et cetera).**_
+
+_**Note 2: Make sure you use the right version of restriktor ('library(restriktor)'), namely version 0.2-800 (or higher). Note: Version 0.2-500 might seem to work, but renders wrong results if the complement is used.**_
+
+
+## Preparation
+
+First, we need to load the required libraries (after installing them once). 
+
+Since the `GoricEvSyn` package is only on GitHub (not on CRAN), we need `devtools` to install it. 
+
+```{r, message = FALSE, warning = FALSE}
+# Needed in GoricEvSyn()
+if (!require("restriktor")) install.packages("restriktor")
+library(restriktor) # check version!
+#if (!require("bain")) install.packages("bain")
+#library(bain)
+
+# GoricEvSyn()
+if (!require("devtools")) install.packages("devtools")
+library(devtools)
+install_github("rebeccakuiper/GoricEvSyn")
+library(GoricEvSyn)
+```
+
+If you want to see the help/description files of this function, you can use the following code:
+
+```{r, results = FALSE, warning = FALSE}
+#?GoricEvSyn
+#?GoricEvSyn_IC
+#?GoricEvSyn_LLandPT
+#?GoricEvSyn_weights
+#?IC.weights
+#?BayesianEvSyn    # should check code once more
+#?BayesianEvSyn_BF # should check code once more
+```
+
+
+## Example
+In this example, we will use the data and hypotheses used in Kuiper et al. (2013). This article describes four diverse trust studies where each have a theory about the sign of the parameter of interest ($H_0$, $H_{pos}$ and $H_{neg}$). Please note the following:
+* You could also choose to discard the uninformative hypothesis $H_0$.
+* The GORICA only requires the structural parameters! Hence, we do not need to use all the parameters, but only the one of interest.
+
+Below, we set the number of primary studies for which the evidence for a central theory should be determined and synthesized:
+
+```{r}
+S <- 4
+```
+
+In this example, all studies have the same number of parameters of interest (namely 1; i.e., the hypotheses below address only one parameter). In that case, we can collect the study-specific estimates (i.e., the $\beta$-values from the studies) in one matrix: The estimates of the studies are placed in seperated rows, while the parameter estimates are placed in the columns. In this example, there are $S = 4$ rows and $nrParam = 1$ column. We also specify the name of this column accordingly to what it represents, namely `beta1`. Please make sure to name the column the same way as in the hypotheses below.
+
+```{r}
+nrParam <- 1
+param_studies <- matrix(c(0.09, 0.14, 1.09, 1.781), nrow = S, ncol = nrParam)
+colnames(param_studies) <- "beta1"
+param_studies # To check the resulting matrix
+```
+
+Furthermore, we need to specify the covariance matrix of the parameter estimates; for this matrix it is not necessary to specify the column names. 
+Since there is only one parameter in the example, we only need the squared standard errors of the $\beta$-values. 
+
+```{r}
+covmx_studies <- matrix(c(0.029^2, 0.054^2, 0.093^2, 0.179^2), nrow = S, ncol = nrParam)
+```
+
+
+### Evidence synthesis using the GORICA
+
+#### Set of hypotheses
+Now, we need to specify the hypotheses for all studies. In this example, all studies have the same set of hypotheses ('same_hypo <- 1'), consisting of three hypotheses ('nrHypos <- 3').
+
+```{r}
+same_hypo <- 1
+nrHypos <- 3
+
+H0 <- "beta1 == 0"
+Hpos <- "beta1 > 0"
+Hneg <- "beta1 < 0"
+
+hypo_studies <- c(H0, Hpos, Hneg)
+```
+
+Then, we also need to set a safeguard-hypothesis, to prevent choosing a best hypothesis from a set of weak hypotheses. In this example, the whole space of theories is covered by the three hypotheses. Therefore, we do not need a safeguard-hypothesis here.
+
+```{r}
+safeguard <- "none"
+```
+
+
+#### Evidence synthesis
+Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis. In this case, we will set it to 1 ('type_ev <- 1'), the added-evidence approach.
+
+```{r}
+type_ev <- 1
+GoricEvSyn(type_ev, S, param_studies, covmx_studies, same_hypo, nrHypos, hypo_studies, safeguard)
+```
+From the last line in 'Cumulative.GORICA.weights', it can be seen that 'H2' (i.e., $H_{pos}$) is the most supported hypothesis and even has the maximum support.
+From 'Final.rel.GORICA.weights', you can also see that $H_{pos}$ is many more times supported than the other hypotheses.
+
+
+Note: There is also a plot, but this is (somehow) not shown in the html. In this plot, you can see 
+
+- the evidence/support per hypotheses.
+- the Cumulative.GORICA.weights, that is, the aggregated support when adding the next study (x-axis).
+
+
+
+[//]: #The following line is needed to prevent R Markdown from including a lot of white space below the last content.
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>

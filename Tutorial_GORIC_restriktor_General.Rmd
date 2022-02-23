@@ -1,0 +1,534 @@
+---
+title: "Tutorial for goric(): How to evaluate theory-based hypotheses using the GORIC and GORICA"
+author: "19-7-2021"
+date: "12-4-2020"
+fontsize: 14pt
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+# Introduction
+
+## Analyses
+
+Below, you will find examples for the use of the `goric`-function in the `restriktor`-package. 
+
+Two types of analyses can be run: 
+
+* `type = "goric"` (the default), which can be applied to multivariate normal linear models; 
+* `type = "gorica"`, the approximation of the GORIC which can be applied to a broad range of models.
+
+
+Furthermore, there is the option `comparison =`. There are three types of comparisons: 
+
+* `"none"`
+* `"unconstrained"` (default)
+* `"complement"`
+
+If you choose `"none"`, only the hypotheses of interest are inspected. This can lead to choosing the best out of a set of weak hypotheses. Therefore, this is only recommended when the hypotheses of interest cover the full parameter space / cover the whole set of possible theories. If `"unconstrained"` is chosen, then the unconstrained / unrestricted / classical alternative hypothesis is included in the set. This safeguards from choosing a weak hypothesis as the best one. Currently, `"complement"` only works for one hypothesis and not for a whole set. Then, the complement of the hypothesis of interest is also evaluated. In case of one hypothesis, this is more powerful than including the unconstrained hypothesis. Please note that in the example below, the default `comparison = "unconstrained"` is used. At the end of the file, there are three examples for the three types of comparisons.
+
+The `goric`-function of `restriktor` takes different forms of input (for model (parameter estimates) and constraints). When `type = "goric"` or `type = "gorica"`:
+
+(@) Fitted unconstrained (`lm` or `glm`) object* + character constraints.
+(@) Fitted unconstrained (`lm` or `glm`) object + list with constraints matrix (rhs, neq).
+    + In case of within effects, the GORIC cannot be calculated.
+(@) Fitted `restriktor` object(s).
+
+Only when `type = "gorica"`, one can also use:
+
+(@) Numeric vector + character constraints.
+(@) Numeric vector + list with constraints matrix (rhs, neq).
+
+Please note that:
+* The numeric vector contains parameter estimates, and these can be obtained from any type of model.
+* The estimates are assumed to be normally distributed, so for some models, when the sample size is small, this assumption might not hold.
+
+## Hypothesis specification
+
+A few remarks on how to specify hypotheses when working with the `goric()` function. When one uses `character constraints`:
+
+ * It is possible to use the following operators: `>`, `<`, `=`, `== `,`<=`or`>=` within the `restriktor()` and `goric()` functions 
+      + `==` operator is interpreted in the same fashion as the `=`, meaning an equality  
+      + `<=` and `>=` operators are interpreted as respectively: `<` and `>` by the code
+
+ * The `goric()` and the `restriktor` functions can deal with:
+      + pairwise restrictions (eg. "x1>x2;x2==x3" also equivalent to "x1>x2;x2=x3")
+      + combined with more than one operators restrictions(eg. "x1>x2==x3" also equivalent to "x1>x2=x3")
+      
+It is important to remember that all restrictions within one hypothesis has to be separated with a semicolon `;`.
+
+ * One can also define hypothesis in terms of linear functions of parameters (For more details, see 'Extra possibility specification hypotheses'     near the end of this document).
+
+ * When one wish to use a list with constraints matrix (rhs, neq), it should be done as follows: `list(constraints = xxx, rhs = xxx, neq = x)`,     with `constraints`  being a matrix, `rhs` a vector (when not zero), and `neq` a number (when not zero), for which then holds: `constraints *     parameters >= rhs`, where the first `neq`-restrictions are equalities. Please also note the example below.
+
+# Preparation
+
+Before we can start with the analyses, it is necessary to install and load the packages.
+
+```{r, message=FALSE, warning=FALSE}
+# If you want to use restriktor from github:
+#if (!require("devtools")) install.packages("devtools")
+#library(devtools) 
+#install_github("LeonardV/restriktor")
+#library(restriktor) # for goric function
+# If from CRAN:
+if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
+library(restriktor) # for goric function
+```
+
+Then, we also have to generate data that can be used to analyze. If you want to obtain the same results as obtained in this example, it is necessary to set the seed at a fixed number.
+
+```{r}
+set.seed(123)
+
+n <- 10 #the sample size
+x1 <- rnorm(n) # IV 1, n random draws from a standard normal distributed population
+x2 <- rnorm(n) # IV 2
+x3 <- rnorm(n) # IV 3
+e <- rnorm(n) #the error term
+y <- 1 + x1 + x2 + x3 + e
+
+```
+
+Now, we can fit a regression model using `lm()` function.
+
+```{r}
+fit.lm <- lm(y ~ x1 + x2 + x3)
+```
+
+We also have to specify hypotheses. Normally, these would be based on theory. However, since we just generated the data, we just randomly specify two hypotheses. Please note that if estimates of continuous predictor variables are compared (e.g., `"x1 < x2"`), one should standardize the data (this is shown in more detail below).
+
+
+# Model Selection using GORIC & GORICA
+
+Please note that the upcoming analyses can be performed by means of both the GORIC and the GORICA. In general, `goric()` function is calculating the *GORIC* values by default(type = "goric"). To calculate the *GORICA* values the argument `type` has to be set to `gorica` within the `goric()` function. 
+
+## Fitted unconstrained (lm or glm) object + character constraints
+
+```{r}
+h1 <- "x1 > 0"
+h2 <- "x1 > 0; x2 > 0"
+```
+
+Now as we have the data and the hypotheses, we can calculate the GORIC values and weights.
+
+```{r}
+out <- goric(fit.lm, h1, h2)
+summary(out)
+```
+
+Moreover, we could have calculated the GORICA values and weights as well wchich is done as explained above:
+
+```{r}
+out_gorica <- goric(fit.lm, h1, h2, type = "gorica")
+summary(out_gorica)
+```
+
+## Fitted unconstrained (lm or glm) object + list with constraints matrix (rhs, neq)
+
+Please note that in this example `rhs` and `neq` are assumed to be 0 by default.It means that the left hand side of (in)equalities are set to $0$'s, and that the number of equality restrictions is equal to $0$. 
+
+```{r}
+h1 <- list(constraints = c(0,1,0,0)) #assuming the above it is equal to "x1>0"
+h2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)))  #assuming the above it is equal to "x1>0;x2>0" 
+```
+
+After specifying the hypotheses, we can calculate the GORIC values:
+
+```{r}
+out <- goric(fit.lm, h1, h2)
+summary(out)
+```
+
+and the GORICA:
+
+```{r}
+out_gorica <- goric(fit.lm, h1, h2, type = "gorica")
+summary(out_gorica)
+```
+
+## Fitted unconstrained (lm or glm) object + list with constraints matrix (rhs, neq)
+
+In this example, `rhs` and `neq` are not assumed to be 0. Furthermore, please note that equality restrictions should be stated first in the constraints' list.
+
+```{r}
+h1 <- list(constraints = c(0,1,0,0), rhs = 2) # equal to "x1>2"
+h2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)), rhs = c(1,0), neq = 1) #equal to "x1==1;x2>0"
+```
+
+We can now calculate the GORIC:
+
+```{r}
+out <- goric(fit.lm, h1, h2)
+summary(out)
+```
+
+and the GORICA:
+
+```{r}
+out_gorica <- goric(fit.lm, h1, h2, type = "gorica")
+summary(out_gorica)
+```
+
+## Fitted restriktor object(s)
+
+We once again have to specify the hypotheses. Please note that the `;` separates the restrictions within one hypothesis.
+
+```{r}
+h1 <- "x1 > 0"
+h2 <- "x1 > 0; x2 > 0"
+```
+
+After specifying the restrictions, we can fit the `restriktor` objects as follows:
+
+```{r}
+fit1.restr <- restriktor(fit.lm, constraints = h1)
+fit2.restr <- restriktor(fit.lm, constraints = h2)
+```
+
+Now we can once again use the GORIC for model selection:
+
+```{r}
+out <- goric(fit1.restr, fit2.restr)
+summary(out)
+```
+
+also can derive the GORICA:
+
+```{r}
+out_gorica <- goric(fit1.restr, fit2.restr, type = "gorica")
+summary(out)
+```
+
+# Model selection using the GORICA
+
+Please note that the upcoming analyses can only be performed by means of the *GORICA*. It is because, the variable can be used for a broad range of models(e.g.,SEM models), and allow us for more modifications of parameters.
+
+## Numeric vector + character constraints
+
+In this situation, we need to extract the regression coefficients from the linear model, as well as the variance-covariance matrix of the data. Both objects can be extracted from the `fit.lm` object.
+
+```{r}
+est <- coef(fit.lm)
+VCOV <- vcov(fit.lm)
+```
+
+Then, we also have to specify the hypotheses.
+
+```{r}
+h1 <- "x1 > 0"
+h2 <- "x1 > 0; x2 > 0"
+```
+
+And we can use the `goric()` function select the best model.
+
+```{r}
+out <- goric(est, h1, h2, VCOV = VCOV, type = "gorica")
+summary(out)
+```
+
+However, one could also use the structural parameters only, that is, the parameters used in all hypotheses in the set. In this case, the following code can be used:
+
+```{r}
+h1 <- "x1 > 0"
+h2 <- "x1 > 0; x2 > 0"
+
+est <- coef(fit.lm)[2:3]
+VCOV <- vcov(fit.lm)[2:3, 2:3]
+
+out <- goric(est, h1, h2, VCOV = VCOV, type = "gorica")
+summary(out)
+```
+
+Now, the exact same weights are obtained. However, the penalties are two points lower than before, which is due to the fact that we left out two unconstrained/free parameters. The log-likelihoods also change, but the differences between them remain the same.
+
+## Numeric vector + character constraints
+
+If other names of the parameter make more sense, it might be wise to change the names in the R-code, to prevent future misunderstandings. However, you will also have to specify the hypotheses according to the names of the parameters. In this case, the code could look like the example below.
+
+```{r}
+est <- coef(fit.lm)
+names(est) <- c("beta1", "beta2", "beta3", "beta4")
+
+VCOV <- vcov(fit.lm)
+
+h1 <- "beta1 > 0"
+h2 <- "beta1 > 0; beta2 > 0"
+
+out <- goric(est, h1, h2, VCOV = VCOV, type = "gorica")
+summary(out)
+```
+
+## Numeric vector + character constraints
+
+Sometimes, one cannot extract the coefficients and variance-covariance matrix directly from an R-object, for example due to the fact that previous analyses were performed by means of other software, or since it stems from another article. In these situations, it is also possible to manually insert the regression coefficients and the variance-covariance matrix. This can be done as follows.
+
+```{r}
+est <- c(1.2479164, 1.4067410, 0.8260098, 0.8113972)
+
+names(est) <- c("beta1", "beta2", "beta3", "beta4")
+
+VCOV <- matrix(c(0.023513875, 0.002584345, 0.000504821, 0.011663312,
+                 0.002584345, 0.035044625, -0.016490653, 0.004143737,
+                 0.000504821, -0.016490653, 0.036437680, 0.016195388,
+                 0.011663312, 0.004143737, 0.016195388, 0.036158130),
+               byrow = TRUE, ncol = 4)
+
+h1 <- "beta1 > 0"
+h2 <- "beta1 > 0; beta2 > 0"
+
+out <- goric(est, h1, h2, VCOV = VCOV, type = "gorica")
+summary(out)
+```
+
+## Numeric vector + list with constraints matrix (rhs, neq)
+
+When one only wants to use a list with a constraints matrix, the following code can be used.
+
+```{r}
+est <- coef(fit.lm)
+VCOV <- vcov(fit.lm)
+
+h1 <- list(constraints = c(0,1,0,0)) #equal to "beta1 > 0"
+h2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0))) #equal to "beta1 > 0; beta2 > 0"
+
+out <- goric(est, h1, h2, VCOV = VCOV, type = "gorica")
+summary(out)
+```
+
+# Standardized data example
+
+Please note that if estimates of continuous predictor variables are compared (e.g., `"x1 < x2"`), then one should standardize the data.
+
+In order to demonstrate this, new data will be generated, in which the variables differ in their contribution to the dependent variable.
+
+```{r}
+ratio <- c(1, 1.5, 2) # ratio between effects of the IV's
+
+n <- 30 #sample size
+
+x1 <- rnorm(n) # IV1: n draws from a standard normal distributed population
+x2 <- rnorm(n) # IV2
+x3 <- rnorm(n) # IV3
+e <- rnorm(n)
+
+data <- cbind(x1, x2, x3) #combine the columns with the data
+```
+
+Then, one should standardardize the data, before one calculates the DV, since the parameters for continuous variables will be compared.
+
+```{r}
+data_s <- as.data.frame(scale(data))
+
+y <- ratio[1] * data_s$x1 + ratio[2] * data_s$x2 + ratio[3] * data_s$x3 + e
+```
+
+*Note.* Since there is only one outcome, the outcome does not need to be standardized.
+
+Now, we can once again fit the regression model, and specify a hypothesis by means of character constraints.
+
+```{r}
+fit.lm_s <- lm(y ~ -1 + x1 + x2 + x3, data = data_s)
+
+h1 <- "x1 < x2"
+```
+
+Then, we can calculate the GORIC values and weights.
+
+```{r}
+out_s <- goric(fit.lm, h1, comparison = "complement")
+
+summary(out_s)
+```
+
+# Extra possibilities of hypothesis specification
+
+In `restriktor`, it is also possible to specify hypotheses in terms of linear functions of the parameters. For instance, in case of adjusted means, you can specify the restrictions in two ways:
+
+1. You can write the out yourself in terms of those expressions (using the parameter/variable names from an R-object, like `lm()`).
+2. You can first specify the adjusted means (below called `"m1"` to `"m4"` and specify the hypotheses in terms of those):
+
+```{r}
+h1 <- ' m1 := .Intercept.
+        m2 := .Intercept. + facialBurns
+        m3 := .Intercept. + gender
+        m4 := .Intercept. + facialBurns + gender + gender:facialBurns
+        m1 < m4
+        m2 < m4
+        m3 < m4 '
+```
+
+For more details, please see Vanbrabant, Van Loey, and Kuiper (unpublished). However, please note that this code cannot be run now, since we do not have the data at hand. The following code can be run, although it is less meaningful.
+
+```{r}
+h1 <- ' m1 := .Intercept.
+        m2 := .Intercept. + x1
+        m3 := .Intercept. + x2
+        m4 := .Intercept. + x3
+        m1 < m4
+        m2 < m4
+        m3 < m4 '
+
+out <- goric(fit.lm, h1)
+summary(out)
+```
+
+# Types of comparisons
+
+There are three types of comparisons: `"none"`, `"unconstrained"`, and `"complement"`. We also show for the last type what output can be asked for, which of course holds for all examples.
+
+## Comparison = "none""
+
+If `comparison = "none"`, then only the hypotheses of interest are inspected. This can lead to choosing the best hypothesis out of a set of weak hypotheses.
+
+```{r}
+h1 <- "x1 > 0"
+h2 <- "x1 > 0; x2 > 0"
+
+out <- goric(fit.lm, h1, h2, type = "gorica", comparison = "none")
+summary(out)
+```
+
+## Comparison = "unconstrained"
+
+If `comparison = "unconstrained"`, then the unconstrained / unrestricted / classical alternative hypothesis is included in the set. This safeguards from choosing a weak hypothesis as the best one.
+
+```{r}
+h1 <- "x1 > 0"
+h2 <- "x1 > 0; x2 > 0"
+out <- goric(fit.lm, h1, h2, comparison = "unconstrained")
+# or: out <- goric(fit.lm, h1, h2, type = "gorica", comparison = "unconstrained")
+summary(out)
+```
+
+## Comparison = "complement"
+
+Currently, `comparison = "complement"` only works for one hypothesis and not for a whole set of hypotheses. Then, the complement of the hypothesis of interest is also evaluated. In case of one hypothesis, this is more powerful than including the unconstrained hypothesis.
+
+```{r}
+h1 <- "x1 > 0"
+
+out <- goric(fit.lm, h1, type = "gorica", comparison = "complement")
+summary(out, brief = FALSE)
+```
+
+```{r}
+h2 <- "x1 > 0; x2 > 0"
+
+out <- goric(fit.lm, h2, type = "gorica", comparison = "complement")
+summary(out)
+```
+
+Please note that the obtained weights for the two hypotheses cannot be compared. If this is the goal of the analysis, one should evaluate them simultaneously in one set, as done earlier.
+
+# Different types of output
+
+The command `out` gives the results (i.e., per model / hypothesis the log-likelihood, penalty, GORIC(A), and GORIC(A)-weights).
+
+```{r}
+out
+```
+
+The command `summary(out)` gives, besides the results, also the relative GORIC(A)-weights matrix.
+
+```{r}
+summary(out)
+```
+
+The command `summary(out, brief = FALSE)` gives also the order / inequality restricted coefficients (order-restricted mle's) and constraint matrices.
+
+```{r}
+summary(out, brief = FALSE)
+```
+
+
+Furthermore, one can ask for different elements of the output by means of the following commands.
+
+* `out$result` - gives results (i.e., per model / hypothesis the log-likelihood, penalty, GORIC(A), and GORIC(A)-weights).
+* `out$relative.gw` - gives the relative GORIC(A)-weights matrix, which gives the relative support of an hypothesis versus another.
+* `out$ormle` - gives the order / inequality restricted coefficients (order-restricted mle's).
+* `coef(out)` - also gives the order / inequality restricted coefficients (order-restricted mle's).
+* `out$type` - states what type of analysis is used (GORIC or GORICA).
+* `out$comparison` - states what type of comparison is used (none, unconstrained, complement).
+* `out$constraints` - gives the constraints matrices.
+* `out$rhs` - gives the right hand side (rhs) of the constraints.
+* `out$neq` - gives the number of equalities (neq) in the constraints, where the first neq are then equalities.
+
+# Many restrictions and many parameters
+
+If one is working with a lot of restrictions, and a lot of parameters, calculations can be slower, which has to do with the calculation of the level probability. In cases like this, there are some options that can help. One can, for example, use the bootstrap method instead (`mix.weights = "boot"`) and use multiple processors. In this case, code may look like the following example.
+
+```{r}
+goric(est, VCOV = VCOV, h1, type = "gorica", comparison = "complement",
+      mix.weights = "boot", parallel = "snow", ncpus = 4, mix.bootstrap = 9999)
+```
+
+In this example, the following additional arguments are used:
+
+* `mix.weights` - method for calculating the level probabilities (options: "none", "pmvnorm", "boot").
+* `mix.bootstrap` - number of bootstrap samples.
+* `parallel` - use of parallel processing. Windows: parallel = 'snow'; unix: parallel = 'multicore'.
+* `ncpus` - number of processors in your pc.
+
+This can also be helpful in case the restriction matrix is not full row-rank. Not full row-rank means one of the following:
+
+1. Redundant restriction, either:
+    1) leave the redundant one out (goric function does this for you), or:
+    2) use another (more time-consuming) way of obtaining the level probabilities for the penalty term:
+    `goric(fit.lm_Lucas, H0, H1, H2, mix.weights = "boot", mix.bootstrap = 9999,`
+    `parallel = "snow" (windows) or "multicore" (unix), ncpus = 4)`.
+2. Range restrictions (e.g., -2 < group1 < 2), which can be evaluated, but there is a sensitivity (like with a prior in a Bayes factor), which currently cannot be checked for.
+3. Conflicting restrictions (e.g., 2 < group1 < -2), which can evidently never hold and is thus impossible to evaluate. In this case, one should delete the incorrect restriction.
+
+
+
+```{r, results = FALSE}
+n <- 10 #sample size
+
+x1 <- rnorm(n) # Iv1: n random draws from a standard normal distributed population
+x2 <- rnorm(n) # IV2
+x3 <- rnorm(n) # 3
+x4 <- rnorm(n) # 4
+x5 <- rnorm(n) # 5
+e <- rnorm(n)  #error term
+
+y <- 1 + x1 + x2 + x3 + x4 + x5 + e # compute the dv
+
+fit.lm <- lm(y ~ x1 + x2 + x3 + x4 + x5) # fit linear regression model
+
+# Specify the hypotheses
+H1 <- 'x1 > 2; x1 > 1' # conflicting hypothesis will be adjusted
+H2 <- 'x1 > 2'
+
+# Calculate the goric
+out <- goric(fit.lm, H1)
+summary(out)
+out <- goric(fit.lm, H1, H2)
+summary(out)
+#
+HypoSet <- noquote(paste0("H", 1:2, collapse = ", "))
+eval(parse(text = paste("out_t <- goric(fit.lm, ",
+                        HypoSet,
+                        ", type = 'gorica')")))
+#
+summary(out_t)
+```
+
+
+```{r}
+out <- goric(fit.lm, H1, H2, mix.weights = "boot", mix.bootstrap = 9999,
+             parallel = "snow", ncpus = 4)
+summary(out)
+```
+
+[//]: #The following line is needed to prevent R Markdown from including a lot of white space below the last content.
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
