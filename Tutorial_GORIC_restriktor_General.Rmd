@@ -13,7 +13,8 @@ output:
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
-knitr::opts_chunk$set(comment = NA)
+knitr::opts_chunk$set(comment = NA,warning=FALSE)
+
 ```
 
 # Introduction
@@ -258,7 +259,7 @@ summary(out)
 
 Now, the exact same weights are obtained. However, the penalties are two points lower than before, which is due to the fact that we left out two unconstrained/free parameters. The log-likelihoods also change, but the differences between them remain the same.
 
-## Numeric vector + character constraints
+## Numeric vector + character constraints (recoding parameter names)
 
 If other names of the parameter make more sense, it might be wise to change the names in the R-code, to prevent future misunderstandings. However, you will also have to specify the hypotheses according to the names of the parameters. In this case, the code could look like the example below.
 
@@ -275,7 +276,7 @@ out <- goric(est, h1, h2, VCOV = VCOV, type = "gorica")
 summary(out)
 ```
 
-## Numeric vector + character constraints
+## Numeric vector + character constraints (including VCOV)
 
 Sometimes, one cannot extract the coefficients and variance-covariance matrix directly from an R-object, for example due to the fact that previous analyses were performed by means of other software, or since it stems from another article. In these situations, it is also possible to manually insert the regression coefficients and the variance-covariance matrix.
 
