@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
-knitr::opts_chunk$set(comment = NA)
+knitr::opts_chunk$set(comment = NA,warning=FALSE)
 ```
 
 This is a tutorial for updating hypotheses and calculating the GORIC(A).
@@ -56,7 +56,8 @@ If you open the data file `Data_Monin.txt` in a text editor, you can see that th
 Monin <- read.table("Data_Monin.txt", header = TRUE)
 ```
 
-Since we loaded a txt file, R does not know the measurment levels of the variables and assumes all to be continuous (so, interval or ratio). Hence, we need to tell R that the variable `group` is a factor (i.e., a grouping / categorical / nominal variable): 
+
+Since we loaded a .txt file, R does not know the measurement levels of the variables and assumes all of them to be continuous, meaning that they are of interval or ratio type. Hence, we need to tell R that the variable `group` is a factor by using the `factor()` function over the `group` variable (i.e., a grouping / categorical / nominal variable):  
 
 ```{r}
 # Make the variable group a factor
@@ -69,7 +70,7 @@ To inspect the dataset, use:
 head(Monin) # Look at first (6) rows of the data
 ```
 
-If you want a more detailed overview of the data, by means of descriptive statistics splitted by `group`, use
+If you want a more detailed overview of the data, by means of descriptive statistics split by `group`, use
 
 ```{r}
 descrstat <- describeBy(Monin$attract, Monin$group, mat = TRUE)
@@ -88,8 +89,8 @@ Note that:
 
   1. `y ~ group - 1` instructs the function `lm` (linear model) to regress y on group.
   
-  2. The `- 1` instructs the function `lm` to drop the intercept and, therefore, estimate the means in each group, resulting here in five group means. 
-On the other hand,  `y ~ group' would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, four) groups and the reference group.
+  2. The `- 1` instructs the function `lm` to drop the intercept and, therefore, estimate the means in each group, resulting here in three group means. 
+On the other hand,  `y ~ group' would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, two) groups and the reference group.
   
   3. The results are collected in, what is called, an R-object, named `lm_fit_Monin`.
 
@@ -103,20 +104,26 @@ names(coef(lm_fit_Monin))
   
  
 ### Set of exploratory hypotheses for Monin
-On the Monin data set, we are going to do an exploratory analysis, which means that we are going to use all combinations with equalities (and no restrictions). We will specify all possibilities using the following:
+On the Monin data set, we are going to do an exploratory analysis, which means that we are going to use all combinations with equalities (and no restrictions). We will specify all possibilities knowing that:
 
-* `restriktor` always needs pairs of restrictions!
-* `restriktor` uses `==` to denote an equality restriction.
-* `restriktor` uses `;` to separate the restrictions within one hypothesis.
+  * It is possible to use the following operators: `>`, `<`, `=`, `== `,`<=`or`>=` within the `restriktor()` and `goric()` functions 
+      + `==` operator is interpreted in the same fashion as the `=`, meaning an equality  
+      + `<=` and `>=` operators are interpreted as respectively: `<` and `>` by the code
+
+  * The `goric()` and the `restriktor` functions can deal with:
+      + pairwise restrictions (eg. "x1>x2;x2==x3" also equivalent to "x1>x2;x2=x3")
+      + combined with more than one operators restrictions(eg. "x1>x2==x3" also equivalent to "x1>x2=x3")
+      
+It is important to remember that all restrictions within one hypothesis has to be separated with a semicolon `;`.
 
 ```{r}
-H00 <- 'group1 == group2; group2 == group3'
+H00 <- 'group1 == group2 == group3'
 H01 <- 'group1 == group2'
 H02 <- 'group1 == group3'
 H03 <- 'group2 == group3'
 ```
 
-In case there are many possibilies, you do not want to write these out. In that case, use automated code, as given at the end of this tutorial.
+In case there are many possibilities, you do not want to write these out. In that case, use automated code, as given at the end of this tutorial.(Note: The code is programmed to generate the pairwise restrictions)
 
 
 ### Calculate GORIC(A) values and weights for Monin
