@@ -68,13 +68,18 @@ names(coef(lm_fit_Lucas))
 # Hypotheses Set
 #
 # NOTES: 
-# - restriktor always needs pairs of restrictions!
-# - restriktor uses "==" to denote an equality restriction
-# - restriktor uses ";" to separate the restrictions within one hypothesis
+# It is possible to use the following operators: `>`, `<`, `=`, `== `,`<=`or`>=` within the `restriktor()` and `goric()` functions. 
+#   *  `==` operator is interpreted in the same fashion as the `=`, meaning an equality  
+#   *  `<=` and `>=` operators are interpreted as respectively: `<` and `>` by the code
+#-----------------------------------------------------------------------------------------------------------
+# The `goric()` and the `restriktor()` functions can deal with:
+#   *   pairwise restrictions (e.g. "x1>x2;x2==x3" also equivalent to *"x1>x2;x2=x3"*)
+#   *   combined with more than one operators restrictions(e.g. *"x1>x2==x3"* also equivalent to *"x1>x2=x3"*)
+# It is important to remember that all restrictions within one hypothesis has to be separated with a semicolon `;`.
 #
-H0 <- 'group1 == group2; group2 == group3; group3 == group4; group4 == group5' # Note: Use of "group1 == ... == group5" is not supported, `restriktor` needs pairs of restrictions.
-H1 <- 'group5 == group3; group3 > group1; group3 > group4; group1 > group2; group4 > group2' # Note: H1 is not full row-rank, see below and the goric tutorial for more details.
-H2 <- 'group3 > group1; group1 > group4; group4 == group5; group5 > group2'
+H0 <- 'group1 == group2 == group3 == group4 == group5' 
+H1 <- 'group5 == group3 > group1 > group2; group3 > group4 > group2'
+H2 <- 'group3 > group1 > group4 == group5 > group2'
 
 
 # Calculate GORIC values and weights
@@ -96,7 +101,7 @@ summary(output)
 # There are two methods that can be used in calculating the penalty. 
 # The default method is often much faster (if number of parameters is smaller than 10) and needs less input specification. 
 # It can, however, not deal with hypotheses that are not of full row-rank (like $H_1$ above). 
-# In that case, `restriktor` uses automatically the other (bootstrap) method. 
+# In that case, `restriktor()` uses automatically the other (bootstrap) method. 
 # In this bootstrap method, one can also more easily change the number of iterations on which the penalty is based (mix.bootstrap). 
 # The computation time of this bootstrap method can be reduced by using multiple cores. 
 # For a windows device, you then have to use 'parallel = "snow"' (see the tutorial for more options). 

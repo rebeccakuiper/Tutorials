@@ -68,14 +68,18 @@ names(coef(lm_fit_Lucas))
 # Hypotheses Set
 #
 # NOTES: 
-# - restriktor always needs pairs of restrictions!
-# - restriktor uses "==" to denote an equality restriction
-# - restriktor uses ";" to separate the restrictions within one hypothesis
+# It is possible to use the following operators: `>`, `<`, `=`, `== `,`<=`or`>=` within the `restriktor()` and `goric()` functions. 
+#   *  `==` operator is interpreted in the same fashion as the `=`, meaning an equality  
+#   *  `<=` and `>=` operators are interpreted as respectively: `<` and `>` by the code
+#-----------------------------------------------------------------------------------------------------------
+# The `goric()` and the `restriktor()` functions can deal with:
+#   *   pairwise restrictions (e.g. "x1>x2;x2==x3" also equivalent to *"x1>x2;x2=x3"*)
+#   *   combined with more than one operators restrictions(e.g. *"x1>x2==x3"* also equivalent to *"x1>x2=x3"*)
+# It is important to remember that all restrictions within one hypothesis has to be separated with a semicolon `;`.
 #
-H0 <- 'group1 == group2; group2 == group3; group3 == group4; group4 == group5' # Note: Use of "group1 == ... == group5" is not supported, `restriktor` needs pairs of restrictions.
-H1 <- 'group5 == group3; group3 > group1; group3 > group4; group1 > group2; group4 > group2' # Note: H1 is not full row-rank, see below and the goric tutorial for more details.
-H2 <- 'group3 > group1; group1 > group4; group4 == group5; group5 > group2'
-
+H0 <- 'group1 == group2 == group3 == group4 == group5' 
+H1 <- 'group5 == group3 > group1 > group2; group3 > group4 > group2'
+H2 <- 'group3 > group1 > group4 == group5 > group2'
 
 # Calculate GORICA values and weights
 # To apply the GORICA instead of the GORIC (default), one should use 'type = "gorica"'.
@@ -101,8 +105,8 @@ summary(output_gorica)
 ## In case of one informative hypothesis (H1) ##
 # H1 vs Hunc 
 #
-#If you have only one informative hypothesis ($H_1$), then evaluate this against its complement (i.e., all other theories, thus exlcusing the one of interest).
-H1 <- 'group5 == group3; group3 > group1; group3 > group4; group1 > group2; group4 > group2' # Note: H1 is not full row-rank, see the goric tutorial for more details.
+#If you have only one informative hypothesis ($H_1$), then evaluate this against its complement (i.e., all other theories, thus excusing the one of interest).
+H1 <- 'group5 == group3 > group1 > group2; group3 > group4 > group2'
 set.seed(123) # Set seed value
 output_gorica_c <- goric(lm_fit_Lucas, H1, comparison = "complement", type = "gorica")
 summary(output_gorica_c)

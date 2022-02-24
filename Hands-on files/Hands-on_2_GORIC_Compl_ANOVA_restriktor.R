@@ -68,11 +68,17 @@ names(coef(lm_fit_Lucas))
 # Hypotheses Set
 #
 # NOTES: 
-# - restriktor always needs pairs of restrictions!
-# - restriktor uses "==" to denote an equality restriction
-# - restriktor uses ";" to separate the restrictions within one hypothesis
+# NOTES: 
+# It is possible to use the following operators: `>`, `<`, `=`, `== `,`<=`or`>=` within the `restriktor()` and `goric()` functions. 
+#   *  `==` operator is interpreted in the same fashion as the `=`, meaning an equality  
+#   *  `<=` and `>=` operators are interpreted as respectively: `<` and `>` by the code
+#-----------------------------------------------------------------------------------------------------------
+# The `goric()` and the `restriktor()` functions can deal with:
+#   *   pairwise restrictions (e.g. "x1>x2;x2==x3" also equivalent to *"x1>x2;x2=x3"*)
+#   *   combined with more than one operators restrictions(e.g. *"x1>x2==x3"* also equivalent to *"x1>x2=x3"*)
+# It is important to remember that all restrictions within one hypothesis has to be separated with a semicolon `;`.
 #
-H1 <- 'group5 == group3; group3 > group1; group3 > group4; group1 > group2; group4 > group2' # Note: H1 is not full row-rank, see the goric tutorial for more details.
+H1 <- 'group5 == group3 > group1 > group2; group3 > group4 > group2'
 
 
 # Calculate GORIC values and weights
@@ -86,8 +92,7 @@ summary(output_c)
 # The order-restricted hypothesis H1 has  13.4 times more support than its complement.             
 
 
-###################################################################################
-
+####################################################################################################
 
 restriktor: generalized order-restriced information criterion: 
   

@@ -9,10 +9,6 @@
 # NOTE 2: Make sure you use the right version of restriktor, namely version 0.2-800 (or higher).
 # So, you should obtain the following:
 library(restriktor)
-#>This is restriktor 0.2-800
-#>restriktor is BETA software! Please report any bugs.
-# Version 0.2-500 might seem to work, but renders wrong results if the complement is used.
-
 
 
 #First, we need to load the required libraries (after installing them once). 
