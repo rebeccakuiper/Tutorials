@@ -1,0 +1,463 @@
+---
+title: "Tutorial for aggregating support obtained from multiple (diverse) studies using the GORIC(A)"
+author: "Rebecca M. Kuiper"
+date: "19-7-2021"
+fontsize: 14pt
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+
+This is a tutorial for aggregating support/evidence obtained from multiple (diverse) studies using the GORIC(A).
+
+
+Three examples will be used:
+
+1. The first is based on Monin and Holubar, a direct replication study of Monin. Here, the study-designs are equal and the evidence regarding the same theory will be aggregated.
+2. The second example is based on four trust studies discussed in Kuiper et al.. Here, the study-designs differ and the evidence regarding the same (central) theory will be aggregated.
+3. The third example is a hypothetical example, which is used to demonstrate the use of the complement. In this example, the hypotheses regard parameter estimates of continuous variables.
+At the end, there if code to show how one can do bootstrap to obtain the covariance matrix of the estimates, which is helpful in case this cannot be extracted from an R object.
+
+
+# Notes
+_**Note 1: This is work in progress. So, please only use the upcoming function yourself, and do not distribute this to others until the package is freely available on GitHub (now, it is 'privately').**_
+
+_**Also, let me know if you think things could be improved (e.g., way of asking for input, what should be reported as output, et cetera).**_
+
+_**Note 2: Make sure you use the right version of restriktor ('library(restriktor)'), namely version 0.2-800 (or higher). Note: Version 0.2-500 might seem to work, but renders wrong results if the complement is used.**_
+
+
+
+
+# Load libraries
+We need to load the required libraries (after installing them once). 
+
+Since the `GoricEvSyn` package is only on GitHub (not on CRAN), we need `devtools` to install it. 
+
+```{r, message = FALSE, warning = FALSE}
+# Needed in GoricEvSyn()
+if (!require("restriktor")) install.packages("restriktor")
+library(restriktor) # check version!
+#if (!require("bain")) install.packages("bain")
+#library(bain)
+
+# GoricEvSyn()
+if (!require("devtools")) install.packages("devtools")
+library(devtools)
+install_github("rebeccakuiper/GoricEvSyn")
+library(GoricEvSyn)
+```
+
+If you want to see the help/description files of this function, you can use the following code:
+
+```{r, results = FALSE}
+#?GoricEvSyn
+#?GoricEvSyn_IC
+#?GoricEvSyn_LLandPT
+#?GoricEvSyn_weights
+#?IC.weights
+#?BayesianEvSyn    # should check code once more
+#?BayesianEvSyn_BF # should check code once more
+```
+
+
+# Example 1: Monin and Holubar
+
+Let us assume that on forehand there was a theory about the group mean ordering.
+In case there is one theory, one can evaluate this against its complement.
+We now assume that there are two competing theories and as safeguard we include the unconstrained hypothesis.
+
+## Data
+```{r}
+S <- 2 # Set the number of primary studies for which the evidence for a central theory should be determined and synthesized:
+#
+# Load the data
+Monin <- read.table("Data_Monin.txt", header = TRUE)
+# Make the variable group a factor
+Monin$group <- factor(Monin$group) 
+# Make lm object (Estimate ANOVA model)
+lm_fit_Monin <- lm(attract ~ group - 1, data = Monin)
+#
+Holubar <- read.table("Data_Holubar.txt", header = TRUE) # load the data
+Holubar$gr <- factor(Holubar$gr) # tell R that gr is a factor
+lm_fit_Holubar <- lm(at ~ gr - 1, data = Holubar)
+```
+
+
+## Input for evidence synthesis 
+
+### Estimates and their covariance matrix
+In this example, all studies have the same number of parameters of interest. In that case, we can collect the study-specific estimates in one matrix: The estimates of the studies are placed in separated rows, while the parameter estimates are placed in the columns. In this example, there are $S = 2$ rows and $nrParam = 3$ columns. We also specify the names of these columns accordingly. Please make sure to name the column the same way as in the hypotheses below.
+
+```{r}
+est_1 <- coef(lm_fit_Monin)
+est_2 <- coef(lm_fit_Holubar)
+vcov_est_1 <- vcov(lm_fit_Monin)
+vcov_est_2 <- vcov(lm_fit_Holubar)
+#
+NrParam <- length(est_1)
+# Parameter estimate values from the S primary studies:
+Param_studies <- matrix(c(est_1, est_2), byrow = T, nrow = S, ncol = NrParam)
+colnames(Param_studies) <- names(est_1) # Use the names as used in Monin and use these in the hypotheses below.
+Param_studies
+# Covariance matrix of the beta's (from the S primary studies):
+CovMx_studies <- matrix(c(vcov_est_1, vcov_est_2), byrow = T, nrow = S*NrParam, ncol = NrParam) # Note: no names needed
+CovMx_studies
+```
+
+### Set of hypotheses for each study 
+Here, we specify the hypotheses used in the $S$ studies. In this example, both studies use the same ('SameHypo <- 1') set of hypotheses contain two hypotheses ('NrHypos <- 2'):
+```{r}
+SameHypo <- 1 # Note: In this example, the set is the same for each study
+# colnames(est) # Specify restrictions using those names
+H1 <- 'group1 == group2 > group3'  
+H2 <- 'group2 > group1 > group3'   
+NrHypos <- 2
+Hypo_studies <- c(H1, H2)
+```
+Note that by default the safeguard-hypothesis is the unconstrained. Therefore, we do not need to specify it.
+
+
+## Evidence synthesis
+Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis. In this case, we will set it to 1 ('type_ev <- 1'), the added-evidence approach.
+```{r}
+TypeEv <- 1 # Added-evidence approach
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies)
+```
+From the last line in 'Cumulative.GORICA.weights', it can be seen that $H_1$ and $H_2$ are not weak hypotheses and that both render about the same amount of support.
+From 'Final.rel.GORICA.weights', you can also see this since their relative support is close to 1.
+
+
+## Alternative input for evidence synthesis 1
+In this example, the study-specific hypotheses and number of parameters of interest is the same. In cae it is not, one should specify the input differently. Notably, this type of input can also be used when these numbers are the same.
+
+### Estimates and their covariance matrix
+```{r}
+## If number of parameters differ per study (but can also be used when they are the same)
+#
+# beta values from the analyses 
+Param_studies <- list(est_1, est_2)
+Param_studies
+#
+# standard error of the beta's (from the S primary studies)
+CovMx_studies <- list(vcov_est_1, vcov_est_2)
+CovMx_studies
+```
+
+### Set of hypotheses for each study 
+Note: in this case we could make the names of the estimates in est_1 and est_2 the same.
+In general, when not same number of parameters they names will not be the same and/or the set of hypotheses, so we use that here.
+```{r}
+SameHypo <- 0 
+NrHypos <- 2
+# names(est_1) # Specify restrictions using those names
+H11 <- 'group1 == group2 > group3'  
+H12 <- 'group2 > group1 > group3'   
+# names(est_2) # Specify restrictions using those names
+H21 <- 'gr1 ==  > gr3'  
+H22 <- 'gr2 > gr1 > gr3'   
+Hypo_studies <- c(H11, H12, H21, H22)
+```
+
+## Evidence synthesis
+```{r}
+TypeEv <- 1 # Added-evidence approach
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies)
+```
+
+
+## Alternative input for evidence synthesis 2
+Instead of using the estimates and their covariance matrix as input, one can also use:
+
+* Log likelihood and penalty values from an information criterion, like AIC, BIC, GORIC, or GORICA.
+* Information criterion values, e.g., AIC, BIC, GORIC, or GORICA values. In that case, only the added-evidence synthesis approach possible.
+* Weight values, which can be information criterion weights (like the AIC or GORIC(A) weights) but also the (Bayesian) posterior model probabilities.
+
+### Data
+```{r}
+if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
+library(restriktor) # for goric function
+# Use input from above
+set.seed(123) # Set seed value
+goric_M <- goric(lm_fit_Monin, H11, H12) # By default, the unconstrained is added
+set.seed(123) # Set seed value
+goric_H <- goric(lm_fit_Holubar, H21, H22)
+```
+
+#### Log likelihood (LL) and penalty values (PT) of the GORIC
+```{r}
+LL <- matrix(c(goric_M$result[,2], goric_H$result[,2]), nrow = S, ncol = (NrHypos+1))
+PT <- matrix(c(goric_M$result[,3], goric_H$result[,3]), nrow = S, ncol = (NrHypos+1))
+GoricEvSyn_LLandPT(TypeEv, S, LL, PT)
+```
+
+#### GORIC values
+```{r}
+GORIC <- matrix(c(goric_M$result[,4], goric_H$result[,4]), nrow = S, ncol = (NrHypos+1))
+GoricEvSyn_IC(S, GORIC)
+```
+
+
+
+
+# Example 2: Four trust studies
+In this example, we will use the data and hypotheses used in Kuiper et al. (2013). This article describes four diverse trust studies where each have a theory about the sign of the parameter of interest ($H_0$, $H_{pos}$ and $H_{neg}$). Please note the following:
+* You could also choose to discard the uninformative hypothesis $H_0$.
+* The GORICA only requires the structural parameters! Hence, we do not need to use all the parameters, but only the one of interest.
+
+## Data
+Below, we set the number of primary studies for which the evidence for a central theory should be determined and synthesized:
+
+```{r}
+S <- 4
+```
+
+## Input for evidence synthesis 
+
+### Estimates and their covariance matrix
+In this example, all studies have the same number of parameters of interest (namely 1; i.e., the hypotheses below address only one parameter). In that case, we can collect the study-specific estimates (i.e., the $\beta$-values from the studies) in one matrix: The estimates of the studies are placed in separated rows, while the parameter estimates are placed in the columns. In this example, there are $S = 4$ rows and $nrParam = 1$ column. We also specify the name of this column accordingly to what it represents, namely `beta1`. Please make sure to name the column the same way as in the hypotheses below.
+
+```{r}
+nrParam <- 1
+param_studies <- matrix(c(0.09, 0.14, 1.09, 1.781), nrow = S, ncol = nrParam)
+colnames(param_studies) <- "beta1"
+param_studies # To check the resulting matrix
+```
+
+Furthermore, we need to specify the covariance matrix of the parameter estimates; for this matrix it is not necessary to specify the column names. 
+Since there is only one parameter in the example, we only need the squared standard errors of the $\beta$-values. 
+
+```{r}
+covmx_studies <- matrix(c(0.029^2, 0.054^2, 0.093^2, 0.179^2), nrow = S, ncol = nrParam)
+```
+
+
+### Set of hypotheses for each study 
+Now, we need to specify the hypotheses for all studies. In this example, all studies have the same set of hypotheses ('same_hypo <- 1'), consisting of three hypotheses ('nrHypos <- 3').
+
+```{r}
+same_hypo <- 1
+nrHypos <- 3
+
+H0 <- "beta1 == 0"
+Hpos <- "beta1 > 0"
+Hneg <- "beta1 < 0"
+
+hypo_studies <- c(H0, Hpos, Hneg)
+```
+
+Then, we also need to set a safeguard-hypothesis, to prevent choosing a best hypothesis from a set of weak hypotheses. In this example, the whole space of theories is covered by the three hypotheses. Therefore, we do not need a safeguard-hypothesis here.
+
+```{r}
+safeguard <- "none"
+```
+
+
+## Evidence synthesis
+Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis. In this case, we will set it to 1 ('type_ev <- 1'), the added-evidence approach.
+
+```{r}
+type_ev <- 1
+GoricEvSyn(type_ev, S, param_studies, covmx_studies, same_hypo, nrHypos, hypo_studies, safeguard)
+```
+
+From the last line 'Cumulative.GORICA.weights', it can be seen that 'H2' (i.e., $H_{pos}$) is the most supported hypothesis and even has the maximum support.
+From 'Final.rel.GORICA.weights', you can also see that $H_{pos}$ is many more times supported than the other hypotheses.
+
+
+## Alternative input for evidence synthesis 1
+
+### Estimates and their covariance matrix
+```{r}
+# If number of parameters differ per study (but can also be used when they are the same)
+#
+# beta values from the analyses 
+est_1 <- matrix(c(0.09), nrow = 1)
+colnames(est_1) <- "beta1" 
+est_2 <- matrix(c(0.14), nrow = 1)
+colnames(est_2) <- "beta1" 
+est_3 <- matrix(c(1.09), nrow = 1)
+colnames(est_3) <- "beta1" 
+est_4 <- matrix(c(1.781), nrow = 1)
+colnames(est_4) <- "beta1" 
+Param_studies <- list(est_1, est_2, est_3, est_4)
+Param_studies
+#
+# standard error of the beta's (from the S primary studies)
+vcov_est_1 <- matrix(c(0.029^2), nrow = 1)
+vcov_est_2 <- matrix(c(0.054^2), nrow = 1)
+vcov_est_3 <- matrix(c(0.093^2), nrow = 1)
+vcov_est_4 <- matrix(c(0.179^2), nrow = 1)
+CovMx_studies <- list(vcov_est_1, vcov_est_2, vcov_est_3, vcov_est_4)
+CovMx_studies
+```
+
+### Set of hypotheses for each study 
+```{r}
+# Set of hypotheses for each study 
+# Note: in this case the same for each study
+SameHypo <- 1
+NrHypos <- 3
+H0 <- "beta1 == 0"
+Hpos <- "beta1 > 0"
+Hneg <- "beta1 < 0"
+Hypo_studies <- c(H0, Hpos, Hneg)
+# Since this covers the whole space / covers all theories, we do not need a safeguard-hypothesis
+Safeguard <- "none"
+```
+
+## Evidence synthesis
+```{r}
+TypeEv <- 1 # Added-evidence approach
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies, Safeguard)
+```
+
+
+# Example 3: Four 'fictional' studies
+In this example, we will evaluate $H_1$ (comparing estimates of continuous variables) vs its complement.
+
+## Data
+```{r}
+S <- 3
+ratio <- c(1,1.1,1.2)
+
+# Generate data1
+n1 <- 30
+x11 <- rnorm(n1)
+x12 <- rnorm(n1)
+x13 <- rnorm(n1)
+data <- cbind(x11, x12, x13)
+# Standardize data - since parameters for continuous variables will be compared
+data1 <- as.data.frame(scale(data))
+y1 <- ratio[1]*data1$x11 + ratio[2]*data1$x12 + ratio[3]*data1$x13 + rnorm(n1)
+# Note: since there is one outcome, the outcome does not need to be standardized
+# Fit regression model
+fit.lm1 <- lm(y1 ~ 1 + x11 + x12 + x13, data = data1)
+
+# Generate data2
+n2 <- 50
+x21 <- rnorm(n2)
+x22 <- rnorm(n2)
+x23 <- rnorm(n2)
+data <- cbind(x21, x22, x23)
+# Standardize data - since parameters for continuous variables will be compared
+data2 <- as.data.frame(scale(data))
+y2 <- ratio[1]*data2$x21 + ratio[2]*data2$x22 + ratio[3]*data2$x23 + rnorm(n2)
+# Note: since there is one outcome, the outcome does not need to be standardized
+# Fit regression model
+fit.lm2 <- lm(y2 ~ 1 + x21 + x22 + x23, data = data2)
+
+# Generate data3
+n3 <- 100
+x31 <- rnorm(n3)
+x32 <- rnorm(n3)
+x33 <- rnorm(n3)
+data <- cbind(x31, x32, x33)
+# Standardize data - since parameters for continuous variables will be compared
+data3 <- as.data.frame(scale(data))
+y3 <- ratio[1]*data3$x31 + ratio[2]*data3$x32 + ratio[3]*data3$x33 + rnorm(n3)
+# Note: since there is one outcome, the outcome does not need to be standardized
+# Fit regression model
+fit.lm3 <- lm(y3 ~ 1 + x31 + x32 + x33, data = data3)
+```
+
+
+## Input for evidence synthesis 
+
+### Estimates and their covariance matrix
+```{r}
+# Extract estimates and their covariance matrix (per study)
+est_1 <- coef(fit.lm1)
+est_2 <- coef(fit.lm2)
+est_3 <- coef(fit.lm3)
+vcov_est_1 <- vcov(fit.lm1)
+vcov_est_2 <- vcov(fit.lm2)
+vcov_est_3 <- vcov(fit.lm3)
+#
+#
+## If same number and type of parameters per study (since they will obtain the same name)
+#
+NrParam <- length(est_1)
+# Parameter estimate values from the S primary studies
+Param_studies <- matrix(c(est_1, est_2, est_3), byrow = T, nrow = S, ncol = NrParam)
+colnames(Param_studies) <- c("intercept", "x1", "x2", "x3")
+Param_studies
+# standard error of the beta's (from the S primary studies)
+CovMx_studies <- matrix(c(vcov_est_1, vcov_est_2, vcov_est_3), byrow = T, nrow = S*NrParam, ncol = NrParam) # Note: no names needed
+CovMx_studies
+```
+
+### Set of hypotheses for each study 
+```{r}
+# Note: in this case the same for each study
+SameHypo <- 1 
+# colnames(est) # Specify restrictions using those names
+H1 <- 'x1 < x2 < x3'  
+# Since estimates of continuous variables are compared in our theory, we standardized the data before to obtain comparable estimates.
+NrHypos <- 1
+# Since we have only one theory-based hypothesis, we will use the (more powerful) complement of the hypothesis (Vanbrabant, Van Loey, Kuiper, 2019)
+# The complement represents the remaing 11 theories, while the unconstrained reflects all 12 possible theories including H1.
+Safeguard <- "complement" 
+```
+
+## Evidence synthesis
+```{r}
+TypeEv <- 1 # Added-evidence approach
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies = H1, Safeguard)
+```
+From the last line in 'Cumulative.GORICA.weights', it can be seen that $H_1$ is much more supported than its complement (and thus not a weak hypothesis).
+From 'Final.rel.GORICA.weights', you can see that $H_1$ is 10.6 more times supported than its complement.
+
+
+# Note: How to do bootstrap
+Here, the third data set from Example 3 will be used.
+```{r}
+if (!require("peperr")) install.packages("peperr") # install this package first (once)
+library(peperr) # to bootstrap
+
+sample <- cbind(y3, data3)
+nr.var <- ncol(sample)
+n <- nrow(sample)
+nr.boots <- 500
+
+betas <- matrix(data=NA, nrow=nr.boots, ncol=nr.var-1)
+for (b in 1:nr.boots){
+  
+  # Bootstrap from data set called 'sample'
+  indices <- resample.indices(n=n, sample.n=nr.boots, method="boot")
+  boot.sample <- sample[indices$sample.index[[1]],]
+  
+  # Standardizing independent (continuous) variables (and make dataframe, which is needed in lm object)
+  boot.sample <- data.frame( cbind(boot.sample[,1], scale(boot.sample[,2:nr.var])) ) 
+  # Since above we do not standardize y, we also do not do it here
+  # Note: now the first column is called V1
+  colnames(boot.sample)[1] <- "y3"
+  
+  # Regression Model
+  fit.lm <- lm(y3~-1+x31+x32+x33, data=boot.sample)
+  betas[b,] <- coef(fit.lm)
+}
+
+# Obtain covariance matrix of estimates
+betahat <- colMeans(betas)
+vectorbetahat <- rep(1, nr.boots) %*% t(betahat)
+VCovMatrix <- (1 / (nr.boots)) * t(betas - vectorbetahat) %*% (betas - vectorbetahat) #(1 / (nr.boots-1)) * t(betas - vectorbetahat) %*% (betas - vectorbetahat)
+# compare
+VCovMatrix 
+vcov(fit.lm3)
+#VCovMatrix / vcov(fit.lm3)
+#
+# beta-hat compare
+betahat
+coef(fit.lm3)
+```
+
+[//]: #The following line is needed to prevent R Markdown from including a lot of white space below the last content.
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
