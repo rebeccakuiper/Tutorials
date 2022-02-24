@@ -373,16 +373,8 @@ H2 &lt;- &#39;group3 &gt; group1 &gt; group4 == group5 &gt; group2&#39;
 <div id="example-1.1a-using-the-unconstrained-as-failsafe" class="section level3">
 <h3>Example 1.1a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
-output &lt;- goric(lm_fit_Lucas, H0, H1, H2)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output)</code></pre>
+output &lt;- goric(lm_fit_Lucas, H0, H1, H2)
+summary(output)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -410,10 +402,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <div id="example-1.1b-using-the-complement-as-failsafe" class="section level3">
 <h3>Example 1.1b: Using the complement as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
-output_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_c)</code></pre>
+output_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;)
+summary(output_c)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -443,16 +433,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <div id="example-1.2a-using-the-unconstrained-as-failsafe" class="section level3">
 <h3>Example 1.2a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
-output_gorica &lt;- goric(lm_fit_Lucas, H0, H1, H2, type = &quot;gorica&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_gorica)</code></pre>
+output_gorica &lt;- goric(lm_fit_Lucas, H0, H1, H2, type = &quot;gorica&quot;)
+summary(output_gorica)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion approximation:
 
@@ -482,16 +464,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <pre class="r"><code>set.seed(123) # Set seed value
 est &lt;- coef(lm_fit_Lucas)
 VCOV &lt;- vcov(lm_fit_Lucas)
-output_gorica_alt &lt;- goric(est, VCOV = VCOV, H0, H1, H2, type = &quot;gorica&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_gorica_alt)</code></pre>
+output_gorica_alt &lt;- goric(est, VCOV = VCOV, H0, H1, H2, type = &quot;gorica&quot;)
+summary(output_gorica_alt)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion approximation:
 
@@ -521,10 +495,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <pre class="r"><code>H1 &lt;- &#39;group5 == group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # Note: H1 is not full row-rank, see the goric tutorial for more details.
 
 set.seed(123) # Set seed value
-output_gorica_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;, type = &quot;gorica&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_gorica_c)</code></pre>
+output_gorica_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+summary(output_gorica_c)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion approximation:
 
@@ -626,16 +598,8 @@ H2 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4;
 <div id="example-2.1a-using-the-unconstrained-as-failsafe" class="section level3">
 <h3>Example 2.1a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
-output_B &lt;- goric(lm_fit_BerzEtAl, H0, H1, H2) </code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_B)</code></pre>
+output_B &lt;- goric(lm_fit_BerzEtAl, H0, H1, H2) 
+summary(output_B)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -663,10 +627,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <div id="example-2.1b-using-the-complement-as-failsafe" class="section level3">
 <h3>Example 2.1b: Using the complement as failsafe</h3>
 <pre class="r"><code>set.seed(123) 
-output_B_c &lt;- goric(lm_fit_BerzEtAl, H1, comparison = &quot;complement&quot;) </code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_B_c)</code></pre>
+output_B_c &lt;- goric(lm_fit_BerzEtAl, H1, comparison = &quot;complement&quot;) 
+summary(output_B_c)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -694,16 +656,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <div id="example-2.2a-using-the-unconstrained-as-failsafe" class="section level3">
 <h3>Example 2.2a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
-output_B_gorica &lt;- goric(lm_fit_BerzEtAl, H0, H1, H2, type = &quot;gorica&quot;) </code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_B_gorica)</code></pre>
+output_B_gorica &lt;- goric(lm_fit_BerzEtAl, H0, H1, H2, type = &quot;gorica&quot;) 
+summary(output_B_gorica)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion approximation:
 
@@ -731,10 +685,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <div id="example-2.2b-using-the-unconstrained-as-failsafe" class="section level3">
 <h3>Example 2.2b: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) 
-output_B_gorica_c &lt;- goric(lm_fit_BerzEtAl, H1, comparison = &quot;complement&quot;, type = &quot;gorica&quot;) </code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_B_gorica_c)</code></pre>
+output_B_gorica_c &lt;- goric(lm_fit_BerzEtAl, H1, comparison = &quot;complement&quot;, type = &quot;gorica&quot;) 
+summary(output_B_gorica_c)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion approximation:
 
@@ -774,10 +726,8 @@ H2 &lt;- &#39;group3 &gt; group1 &gt; group4 == group5 &gt; group2&#39;</code></
 <p>One cannot compare the support of hypotheses when comparing them to their complements. Instead, one should evaluate them simultaneously in one set to get desirable outcomes (like done above):</p>
 <pre class="r"><code># Calculate goric for H1 and its complement
 set.seed(123) # Set seed value
-output_c_H1 &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_c_H1)</code></pre>
+output_c_H1 &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;)
+summary(output_c_H1)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -801,10 +751,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 #
 # Calculate goric for H2 and its complement
 set.seed(123) # Set seed value
-output_c_H2 &lt;- goric(lm_fit_Lucas, H2, comparison = &quot;complement&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_c_H2)</code></pre>
+output_c_H2 &lt;- goric(lm_fit_Lucas, H2, comparison = &quot;complement&quot;)
+summary(output_c_H2)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -824,13 +772,8 @@ The order-restricted hypothesis &#39;H2&#39; has  0.370 times more support than 
 #
 # Calculate goric for H1 and H2 (and Hu):
 set.seed(123) # Set seed value
-output_H1H2 &lt;- goric(lm_fit_Lucas, H1, H2) # Note: by default against the unconstrained</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_H1H2)</code></pre>
+output_H1H2 &lt;- goric(lm_fit_Lucas, H1, H2) # Note: by default against the unconstrained
+summary(output_H1H2)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -859,10 +802,8 @@ output_c_H1$relative.gw[1,2] / output_c_H2$relative.gw[1,2] # approx 13.4 / 0.37
 
 # Notably, you could derive the support from H1 vs H2 from their support versus that of Hu:
 set.seed(123) # Set seed value
-output_u_H1 &lt;- goric(lm_fit_Lucas, H1)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_u_H1)</code></pre>
+output_u_H1 &lt;- goric(lm_fit_Lucas, H1)
+summary(output_u_H1)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -883,10 +824,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 <pre class="r"><code>#
 set.seed(123) # Set seed value
-output_u_H2 &lt;- goric(lm_fit_Lucas, H2)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_u_H2)</code></pre>
+output_u_H2 &lt;- goric(lm_fit_Lucas, H2)
+summary(output_u_H2)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -935,10 +874,8 @@ lm_fit_Lucas2 &lt;-  lm(Influence ~ group-1, data = Lucas2)
 # Now, from the three hypotheses H1_gr, H1_sm, and H1, the first (H_gr) is correct, so that one is used to illustrate our point:
 H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # not full row-rank
 set.seed(123) # Set seed value
-output_u_gr &lt;- goric(lm_fit_Lucas2, H1_gr)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_u_gr)</code></pre>
+output_u_gr &lt;- goric(lm_fit_Lucas2, H1_gr)
+summary(output_u_gr)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -961,10 +898,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 <pre class="r"><code>#The order-restricted hypothesis &#39;H1&#39; has 13 times more support than Hu (unconstrained). Notably, this is the maximum support H1 can receive versus Hu (because LL&#39;s are the same).
 set.seed(123) # Set seed value
-output_c_gr &lt;- goric(lm_fit_Lucas2, H1_gr, comparison = &quot;complement&quot;)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_c_gr)</code></pre>
+output_c_gr &lt;- goric(lm_fit_Lucas2, H1_gr, comparison = &quot;complement&quot;)
+summary(output_c_gr)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
@@ -997,16 +932,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
 set.seed(123) # Set seed value
 output_b &lt;- goric(lm_fit_Lucas, H0, H1, H2,
-                  mix.weights = &quot;boot&quot;, parallel = &quot;snow&quot;, ncpus = nrCPUcores, mix.bootstrap = 99999)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>summary(output_b)</code></pre>
+                  mix.weights = &quot;boot&quot;, parallel = &quot;snow&quot;, ncpus = nrCPUcores, mix.bootstrap = 99999)
+summary(output_b)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
 
