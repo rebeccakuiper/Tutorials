@@ -58,10 +58,10 @@ lm_fit_Monin <-  lm(attract ~ group-1, data = Monin)
 # Note that:
 # 1. `y ~ group - 1` instructs the function `lm` (linear model) to regress y on group.
 # 2. The `- 1` instructs the function `lm` to drop the intercept and, therefore, 
-#    estimate the means in each group, resulting here in five group means. 
+#    estimate the means in each group, resulting here in three group means. 
 #    On the other hand,  `y ~ group' would estimate an intercept, 
 #    representing the mean of the reference group, and 
-#    the mean differences between the other (here, four) groups and the reference group.
+#    the mean differences between the other (here, two) groups and the reference group.
 # 3. The results are collected in, what is called, an R-object, named `lm_fit_lucas`.
 
 # Check the names used in model
@@ -71,9 +71,14 @@ names(coef(lm_fit_Monin))
 # Hypotheses Set
 #
 # NOTES: 
-# - restriktor always needs pairs of restrictions!
-# - restriktor uses "==" to denote an equality restriction
-# - restriktor uses ";" to separate the restrictions within one hypothesis
+# It is possible to use the following operators: `>`, `<`, `=`, `== `,`<=`or`>=` within the `restriktor()` and `goric()` functions. 
+#   *  `==` operator is interpreted in the same fashion as the `=`, meaning an equality  
+#   *  `<=` and `>=` operators are interpreted as respectively: `<` and `>` by the code
+#
+# The `goric()` and the `restriktor()` functions can deal with:
+#   *   pairwise restrictions (e.g. "x1>x2;x2==x3" also equivalent to *"x1>x2;x2=x3"*)
+#   *   combined with more than one operators restrictions(e.g. *"x1>x2==x3"* also equivalent to *"x1>x2=x3"*)
+# It is important to remember that all restrictions within one hypothesis has to be separated with a semicolon `;`.
 #
 #On the Monin data set, we are going to do an exploratory analysis, which means that we are going to use all combinations with equalities (and no restrictions):
 H00 <- 'group1 == group2; group2 == group3' # Note: cannot use group1 == group2 == group3
@@ -92,7 +97,7 @@ goric(lm_fit_Monin, H00, H01, H02, H03)
 # It can be seen that $H_01$ ($\mu_1 = \mu_2, \mu_3$) receives the most support. 
 # Based on the means (see `descrstat`), where we see that $\mu_1$ and $\mu_2$ are both larger than $\mu_3$, 
 # we will evaluate the following hypothesis in the Holubar data: $H_1: \mu_1 = \mu_2 > \mu_3$.
-# Since $H_u$ obtained some support as well, we could specify (using the sample means of the Monin data) thw following competing hypothesis: $H_2: \mu_2 > \mu_1 > \mu_3$.
+# Since $H_u$ obtained some support as well, we could specify (using the sample means of the Monin data) the following competing hypothesis: $H_2: \mu_2 > \mu_1 > \mu_3$.
 
 
 # In case you want to use the GORICA values and weights instead, use:
