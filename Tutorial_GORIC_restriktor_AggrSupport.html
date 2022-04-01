@@ -260,14 +260,13 @@ div.tocify {
 </ol>
 <div id="notes" class="section level1">
 <h1>Notes</h1>
-<p><em><strong>Note 1: This is work in progress. So, please only use the upcoming function yourself, and do not distribute this to others until the package is freely available on GitHub (now, it is ‘privately’).</strong></em></p>
+<p><em><strong>Note 1: This is work in progress. So, please only use the upcoming function for applications.</strong></em></p>
 <p><em><strong>Also, let me know if you think things could be improved (e.g., way of asking for input, what should be reported as output, et cetera).</strong></em></p>
 <p><em><strong>Note 2: Make sure you use the right version of restriktor (‘library(restriktor)’), namely version 0.2-800 (or higher). Note: Version 0.2-500 might seem to work, but renders wrong results if the complement is used.</strong></em></p>
 </div>
 <div id="load-libraries" class="section level1">
 <h1>Load libraries</h1>
-<p>We need to load the required libraries (after installing them once).</p>
-<p>Since the <code>GoricEvSyn</code> package is only on GitHub (not on CRAN), we need <code>devtools</code> to install it.</p>
+<p>First, load the required libraries (after installing them once). Since the <code>GoricEvSyn</code> package is only on GitHub (not on CRAN), <code>devtools</code> is needed to install <code>GoricEvSyn</code> using the <code>install_github</code> function.</p>
 <pre class="r"><code># Needed in GoricEvSyn()
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 library(restriktor) # check version!
@@ -285,15 +284,16 @@ library(GoricEvSyn)</code></pre>
 #?GoricEvSyn_LLandPT
 #?GoricEvSyn_weights
 #?IC.weights
-#?BayesianEvSyn    # should check code once more
-#?BayesianEvSyn_BF # should check code once more</code></pre>
+#?BayesianEvSyn    # not properly tested yet
+#?BayesianEvSyn_BF # not properly tested yet</code></pre>
 </div>
 <div id="example-1-monin-and-holubar" class="section level1">
 <h1>Example 1: Monin and Holubar</h1>
-<p>Let us assume that on forehand there was a theory about the group mean ordering. In case there is one theory, one can evaluate this against its complement. We now assume that there are two competing theories and as safeguard we include the unconstrained hypothesis.</p>
+<p>In this example, it is assumed that, on forehand, there was a theory about the group mean ordering. In case there is one theory, one can evaluate this against its complement. Here, it is assumed that there are two competing theories; as safeguard, the unconstrained hypothesis is included.</p>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<pre class="r"><code>S &lt;- 2 # Set the number of primary studies for which the evidence for a central theory should be determined and synthesized:
+<pre class="r"><code>S &lt;- 2 # Set the number of primary studies for which the evidence for 
+       # a central theory should be determined and synthesized:
 #
 # Load the data
 Monin &lt;- read.table(&quot;Data_Monin.txt&quot;, header = TRUE)
@@ -310,7 +310,7 @@ lm_fit_Holubar &lt;- lm(at ~ gr - 1, data = Holubar)</code></pre>
 <h2>Input for evidence synthesis</h2>
 <div id="estimates-and-their-covariance-matrix" class="section level3">
 <h3>Estimates and their covariance matrix</h3>
-<p>In this example, all studies have the same number of parameters of interest. In that case, we can collect the study-specific estimates in one matrix: The estimates of the studies are placed in separated rows, while the parameter estimates are placed in the columns. In this example, there are <span class="math inline">\(S = 2\)</span> rows and <span class="math inline">\(nrParam = 3\)</span> columns. We also specify the names of these columns accordingly. Please make sure to name the column the same way as in the hypotheses below.</p>
+<p>In this example, all studies have the same number of parameters of interest. In that case, the study-specific estimates can be collected in one matrix: The estimates of the studies are placed in separated rows, while the parameter estimates are placed in the columns. In this example, there are <span class="math inline">\(S = 2\)</span> rows and <span class="math inline">\(nrParam = 3\)</span> columns. Next, specify the names of these columns accordingly. Please make sure to name the column the same way as in the hypotheses below.</p>
 <pre class="r"><code>est_1 &lt;- coef(lm_fit_Monin)
 est_2 &lt;- coef(lm_fit_Holubar)
 vcov_est_1 &lt;- vcov(lm_fit_Monin)
@@ -319,13 +319,15 @@ vcov_est_2 &lt;- vcov(lm_fit_Holubar)
 NrParam &lt;- length(est_1)
 # Parameter estimate values from the S primary studies:
 Param_studies &lt;- matrix(c(est_1, est_2), byrow = T, nrow = S, ncol = NrParam)
-colnames(Param_studies) &lt;- names(est_1) # Use the names as used in Monin and use these in the hypotheses below.
+colnames(Param_studies) &lt;- names(est_1) # Use the names as used in Monin and 
+                                        # use these in the hypotheses below.
 Param_studies</code></pre>
 <pre><code>     group1 group2 group3
 [1,]   1.88   2.54   0.02
 [2,]   0.98   0.02   0.27</code></pre>
 <pre class="r"><code># Covariance matrix of the beta&#39;s (from the S primary studies):
-CovMx_studies &lt;- matrix(c(vcov_est_1, vcov_est_2), byrow = T, nrow = S*NrParam, ncol = NrParam) # Note: no names needed
+CovMx_studies &lt;- matrix(c(vcov_est_1, vcov_est_2), byrow = T, nrow = S*NrParam, 
+                        ncol = NrParam) # Note: no names needed
 CovMx_studies</code></pre>
 <pre><code>          [,1]      [,2]      [,3]
 [1,] 0.2149074 0.0000000 0.0000000
@@ -337,32 +339,22 @@ CovMx_studies</code></pre>
 </div>
 <div id="set-of-hypotheses-for-each-study" class="section level3">
 <h3>Set of hypotheses for each study</h3>
-<p>Here, we specify the hypotheses used in the <span class="math inline">\(S\)</span> studies. In this example, both studies use the same (‘SameHypo &lt;- 1’) set of hypotheses contain two hypotheses (‘NrHypos &lt;- 2’):</p>
+<p>Next, the hypotheses used in the <span class="math inline">\(S\)</span> studies are specified. In this example, both studies use the same (‘SameHypo &lt;- 1’) set of hypotheses contain two hypotheses (‘NrHypos &lt;- 2’):</p>
 <pre class="r"><code>SameHypo &lt;- 1 # Note: In this example, the set is the same for each study
 # colnames(est) # Specify restrictions using those names
 H1 &lt;- &#39;group1 = group2 &gt; group3&#39;  
 H2 &lt;- &#39;group2 &gt; group1 &gt; group3&#39;   
 NrHypos &lt;- 2
 Hypo_studies &lt;- c(H1, H2)</code></pre>
-<p>Note that by default the safeguard-hypothesis is the unconstrained. Therefore, we do not need to specify it.</p>
+<p>Note that by default the safeguard-hypothesis is the unconstrained. Therefore, one does not need to specify it.</p>
 </div>
 </div>
 <div id="evidence-synthesis" class="section level2">
 <h2>Evidence synthesis</h2>
-<p>Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis. In this case, we will set it to 1 (‘type_ev &lt;- 1’), the added-evidence approach.</p>
+<p>Before starting the evidence-synthesis, the type of evidence-synthesis needs to be set. In this case, it is set to 1 (‘type_ev &lt;- 1’), reflecting the added-evidence approach.</p>
 <pre class="r"><code>TypeEv &lt;- 1 # Added-evidence approach
-GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, 
+           Hypo_studies)</code></pre>
 <pre><code>$GORICA_m
              H1       H2       Hu
 Study1 4.491590 4.107674 6.478130
@@ -408,14 +400,17 @@ $Final.rel.GORICA.weights
 H1 1.0000000 1.1179881 1.784266
 H2 0.8944639 1.0000000 1.595962
 Hu 0.5604544 0.6265814 1.000000</code></pre>
-<p>From the last line in ‘Cumulative.GORICA.weights’, it can be seen that <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are not weak hypotheses and that both render about the same amount of support. From ‘Final.rel.GORICA.weights’, you can also see this since their relative support is close to 1.</p>
+<p>From the last line in ‘Cumulative.GORICA.weights’, it can be seen that <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are not weak hypotheses, that is, hypotheses not supported by the data, and that both render about the same amount of support. From ‘Final.rel.GORICA.weights’, you can also see this since their relative support is close to 1.</p>
 </div>
-<div id="alternative-input-for-evidence-synthesis-1" class="section level2">
-<h2>Alternative input for evidence synthesis 1</h2>
+<div id="alternative-input-1" class="section level2">
+<h2>Alternative input 1</h2>
 <p>In this example, the study-specific hypotheses and number of parameters of interest is the same. In cae it is not, one should specify the input differently. Notably, this type of input can also be used when these numbers are the same.</p>
-<div id="estimates-and-their-covariance-matrix-1" class="section level3">
-<h3>Estimates and their covariance matrix</h3>
-<pre class="r"><code>## If number of parameters differ per study (but can also be used when they are the same)
+<div id="input-for-evidence-synthesis-1" class="section level3">
+<h3>Input for evidence synthesis</h3>
+<div id="estimates-and-their-covariance-matrix-1" class="section level4">
+<h4>Estimates and their covariance matrix</h4>
+<pre class="r"><code># The following code is suited in case the number of parameters differ per study 
+# (but can also be used when they are the same)
 #
 # beta values from the analyses 
 Param_studies &lt;- list(est_1, est_2)
@@ -443,9 +438,9 @@ gr1 0.1382856 0.0000000 0.0000000
 gr2 0.0000000 0.1024337 0.0000000
 gr3 0.0000000 0.0000000 0.0987754</code></pre>
 </div>
-<div id="set-of-hypotheses-for-each-study-1" class="section level3">
-<h3>Set of hypotheses for each study</h3>
-<p>Note: in this case we could make the names of the estimates in est_1 and est_2 the same. In general, when not same number of parameters they names will not be the same and/or the set of hypotheses, so we use that here.</p>
+<div id="set-of-hypotheses-for-each-study-1" class="section level4">
+<h4>Set of hypotheses for each study</h4>
+<p>Note that, in this case, the names of the estimates in est_1 and est_2 can be the same. In general, in case of a varying number of parameters, the names and/or the set of hypotheses will not be the same for each study. Therefore, the code below reflects the latter scenario.</p>
 <pre class="r"><code>SameHypo &lt;- 0 
 NrHypos &lt;- 2
 # names(est_1) # Specify restrictions using those names
@@ -457,21 +452,10 @@ H22 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;
 Hypo_studies &lt;- c(H11, H12, H21, H22)</code></pre>
 </div>
 </div>
-<div id="evidence-synthesis-1" class="section level2">
-<h2>Evidence synthesis</h2>
+<div id="evidence-synthesis-1" class="section level3">
+<h3>Evidence synthesis</h3>
 <pre class="r"><code>TypeEv &lt;- 1 # Added-evidence approach
 GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
 <pre><code>$GORICA_m
              H1       H2       Hu
 Study1 4.491590 4.107674 6.478130
@@ -518,37 +502,37 @@ H1 1.0000000 1.1179881 1.784266
 H2 0.8944639 1.0000000 1.595962
 Hu 0.5604544 0.6265814 1.000000</code></pre>
 </div>
-<div id="alternative-input-for-evidence-synthesis-2" class="section level2">
-<h2>Alternative input for evidence synthesis 2</h2>
+</div>
+<div id="alternative-input-2" class="section level2">
+<h2>Alternative input 2</h2>
+<div id="input-for-evidence-synthesis-2" class="section level3">
+<h3>Input for evidence synthesis</h3>
 <p>Instead of using the estimates and their covariance matrix as input, one can also use:</p>
 <ul>
 <li>Log likelihood and penalty values from an information criterion, like AIC, BIC, GORIC, or GORICA.</li>
 <li>Information criterion values, e.g., AIC, BIC, GORIC, or GORICA values. In that case, only the added-evidence synthesis approach possible.</li>
 <li>Weight values, which can be information criterion weights (like the AIC or GORIC(A) weights) but also the (Bayesian) posterior model probabilities.</li>
 </ul>
-<div id="data-1" class="section level3">
-<h3>Data</h3>
-<pre class="r"><code>if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) # install this package first (once)
+<div id="data-1" class="section level4">
+<h4>Data</h4>
+<pre class="r"><code>if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) 
 library(restriktor) # for goric function
 # Use input from above
 set.seed(123) # Set seed value
-goric_M &lt;- goric(lm_fit_Monin, H11, H12) # By default, the unconstrained is added</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
-<pre class="r"><code>set.seed(123) # Set seed value
+goric_M &lt;- goric(lm_fit_Monin, H11, H12) # By default, 
+                                         # the unconstrained is added
+set.seed(123) # Set seed value
 goric_H &lt;- goric(lm_fit_Holubar, H21, H22)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
+</div>
+</div>
+<div id="evidence-synthesis-2" class="section level3">
+<h3>Evidence synthesis</h3>
 <div id="log-likelihood-ll-and-penalty-values-pt-of-the-goric" class="section level4">
 <h4>Log likelihood (LL) and penalty values (PT) of the GORIC</h4>
-<pre class="r"><code>LL &lt;- matrix(c(goric_M$result[,2], goric_H$result[,2]), nrow = S, ncol = (NrHypos+1))
-PT &lt;- matrix(c(goric_M$result[,3], goric_H$result[,3]), nrow = S, ncol = (NrHypos+1))
+<pre class="r"><code>LL &lt;- matrix(c(goric_M$result[,2], goric_H$result[,2]), nrow = S, 
+             ncol = (NrHypos+1))
+PT &lt;- matrix(c(goric_M$result[,3], goric_H$result[,3]), nrow = S, 
+             ncol = (NrHypos+1))
 GoricEvSyn_LLandPT(TypeEv, S, LL, PT)</code></pre>
 <pre><code>$LL_m
               H1        H2        H3
@@ -593,7 +577,8 @@ H3 0.0004753532   0.06879586    1.00000</code></pre>
 </div>
 <div id="goric-values" class="section level4">
 <h4>GORIC values</h4>
-<pre class="r"><code>GORIC &lt;- matrix(c(goric_M$result[,4], goric_H$result[,4]), nrow = S, ncol = (NrHypos+1))
+<pre class="r"><code>GORIC &lt;- matrix(c(goric_M$result[,4], goric_H$result[,4]), nrow = S, 
+                ncol = (NrHypos+1))
 GoricEvSyn_IC(S, GORIC)</code></pre>
 <pre><code>$GORICA_m
              H1       H2       H3
@@ -631,17 +616,21 @@ H3 0.0004753532   0.06879586    1.00000</code></pre>
 </div>
 <div id="example-2-four-trust-studies" class="section level1">
 <h1>Example 2: Four trust studies</h1>
-<p>In this example, we will use the data and hypotheses used in Kuiper et al. (2013). This article describes four diverse trust studies where each have a theory about the sign of the parameter of interest (<span class="math inline">\(H_0\)</span>, <span class="math inline">\(H_{pos}\)</span> and <span class="math inline">\(H_{neg}\)</span>). Please note the following: * You could also choose to discard the uninformative hypothesis <span class="math inline">\(H_0\)</span>. * The GORICA only requires the structural parameters! Hence, we do not need to use all the parameters, but only the one of interest.</p>
+<p>In this example, the data and hypotheses employed in Kuiper et al. (2013) are used. This article describes four diverse trust studies where each have a theory about the sign of the parameter of interest (<span class="math inline">\(H_0\)</span>, <span class="math inline">\(H_{pos}\)</span>, and <span class="math inline">\(H_{neg}\)</span>). Please note the following:</p>
+<ul>
+<li>You could also choose to discard the uninformative hypothesis <span class="math inline">\(H_0\)</span>.</li>
+<li>The GORICA only requires the structural parameters. Hence, not all the parameters are needed, but only the one of interest.</li>
+</ul>
 <div id="data-2" class="section level2">
 <h2>Data</h2>
-<p>Below, we set the number of primary studies for which the evidence for a central theory should be determined and synthesized:</p>
+<p>Next, the number of primary studies for which the evidence for a central theory should be determined and synthesized is set:</p>
 <pre class="r"><code>S &lt;- 4</code></pre>
 </div>
-<div id="input-for-evidence-synthesis-1" class="section level2">
+<div id="input-for-evidence-synthesis-3" class="section level2">
 <h2>Input for evidence synthesis</h2>
 <div id="estimates-and-their-covariance-matrix-2" class="section level3">
 <h3>Estimates and their covariance matrix</h3>
-<p>In this example, all studies have the same number of parameters of interest (namely 1; i.e., the hypotheses below address only one parameter). In that case, we can collect the study-specific estimates (i.e., the <span class="math inline">\(\beta\)</span>-values from the studies) in one matrix: The estimates of the studies are placed in separated rows, while the parameter estimates are placed in the columns. In this example, there are <span class="math inline">\(S = 4\)</span> rows and <span class="math inline">\(nrParam = 1\)</span> column. We also specify the name of this column accordingly to what it represents, namely <code>beta1</code>. Please make sure to name the column the same way as in the hypotheses below.</p>
+<p>In this example, all studies have the same number of parameters of interest (namely 1; i.e., the hypotheses below address only one parameter). In that case, the study-specific estimates (i.e., the <span class="math inline">\(\beta\)</span>-values from the studies) can be collected in one matrix: The estimates of the studies are placed in separate rows, while the parameter estimates are placed in the columns. In this example, there are <span class="math inline">\(S = 4\)</span> rows and <span class="math inline">\(nrParam = 1\)</span> column. Specify the name of this column accordingly to what it represents, namely <code>beta1</code>. Please make sure to name the column the same way as in the hypotheses below.</p>
 <pre class="r"><code>nrParam &lt;- 1
 param_studies &lt;- matrix(c(0.09, 0.14, 1.09, 1.781), nrow = S, ncol = nrParam)
 colnames(param_studies) &lt;- &quot;beta1&quot;
@@ -651,12 +640,13 @@ param_studies # To check the resulting matrix</code></pre>
 [2,] 0.140
 [3,] 1.090
 [4,] 1.781</code></pre>
-<p>Furthermore, we need to specify the covariance matrix of the parameter estimates; for this matrix it is not necessary to specify the column names. Since there is only one parameter in the example, we only need the squared standard errors of the <span class="math inline">\(\beta\)</span>-values.</p>
-<pre class="r"><code>covmx_studies &lt;- matrix(c(0.029^2, 0.054^2, 0.093^2, 0.179^2), nrow = S, ncol = nrParam)</code></pre>
+<p>Furthermore, the covariance matrix of the parameter estimates needs to be specified; for this matrix it is not necessary to specify the column names. Since there is only one parameter in the example, only the squared standard errors of the <span class="math inline">\(\beta\)</span>-values are needed.</p>
+<pre class="r"><code>covmx_studies &lt;- matrix(c(0.029^2, 0.054^2, 0.093^2, 0.179^2), 
+                        nrow = S, ncol = nrParam)</code></pre>
 </div>
 <div id="set-of-hypotheses-for-each-study-2" class="section level3">
 <h3>Set of hypotheses for each study</h3>
-<p>Now, we need to specify the hypotheses for all studies. In this example, all studies have the same set of hypotheses (‘same_hypo &lt;- 1’), consisting of three hypotheses (‘nrHypos &lt;- 3’).</p>
+<p>Now, the hypotheses for all studies need to be specified. In this example, all studies have the same set of hypotheses (‘same_hypo &lt;- 1’), consisting of three hypotheses (‘nrHypos &lt;- 3’).</p>
 <pre class="r"><code>same_hypo &lt;- 1
 nrHypos &lt;- 3
 
@@ -665,50 +655,15 @@ Hpos &lt;- &quot;beta1 &gt; 0&quot;
 Hneg &lt;- &quot;beta1 &lt; 0&quot;
 
 hypo_studies &lt;- c(H0, Hpos, Hneg)</code></pre>
-<p>Then, we also need to set a safeguard-hypothesis, to prevent choosing a best hypothesis from a set of weak hypotheses. In this example, the whole space of theories is covered by the three hypotheses. Therefore, we do not need a safeguard-hypothesis here.</p>
+<p>Then, a safeguard-hypothesis needs to be set, to prevent choosing a best hypothesis from a set of weak hypotheses. In this example, the whole space of theories is covered by the three hypotheses. Therefore, a safeguard-hypothesis is not needed here.</p>
 <pre class="r"><code>safeguard &lt;- &quot;none&quot;</code></pre>
 </div>
 </div>
-<div id="evidence-synthesis-2" class="section level2">
+<div id="evidence-synthesis-3" class="section level2">
 <h2>Evidence synthesis</h2>
-<p>Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis. In this case, we will set it to 1 (‘type_ev &lt;- 1’), the added-evidence approach.</p>
+<p>Before evidence-synthesis can be started, set the type of evidence-synthesis. In this case, it will be set to 1 (i.e., ‘type_ev &lt;- 1’), reflecting the added-evidence approach.</p>
 <pre class="r"><code>type_ev &lt;- 1
 GoricEvSyn(type_ev, S, param_studies, covmx_studies, same_hypo, nrHypos, hypo_studies, safeguard)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
 <pre><code>$GORICA_m
                H1         H2         H3
 Study1   4.388349 -4.2430418   5.388349
@@ -761,13 +716,21 @@ $Final.rel.GORICA.weights
 H1 1.000000e+00 9.806100e-55 7.389056e+00
 H2 1.019773e+54 1.000000e+00 7.535163e+54
 H3 1.353353e-01 1.327111e-55 1.000000e+00</code></pre>
-<p>From the last line ‘Cumulative.GORICA.weights’, it can be seen that ‘H2’ (i.e., <span class="math inline">\(H_{pos}\)</span>) is the most supported hypothesis and even has the maximum support. From ‘Final.rel.GORICA.weights’, you can also see that <span class="math inline">\(H_{pos}\)</span> is many more times supported than the other hypotheses.</p>
+<p>From the last line in ‘Cumulative.GORICA.weights’, it can be seen that ‘H2’ (i.e., <span class="math inline">\(H_{pos}\)</span>) is the most supported hypothesis and even has the maximum support. From ‘Final.rel.GORICA.weights’, you can also see that <span class="math inline">\(H_{pos}\)</span> is many more times supported than the other hypotheses.</p>
+<p>Note: There is also a plot, but this is (somehow) not shown in the html. In this plot, you can see</p>
+<ul>
+<li>the evidence/support per hypotheses.</li>
+<li>the Cumulative.GORICA.weights, that is, the aggregated support when adding the next study (x-axis).</li>
+</ul>
 </div>
-<div id="alternative-input-for-evidence-synthesis-1-1" class="section level2">
-<h2>Alternative input for evidence synthesis 1</h2>
-<div id="estimates-and-their-covariance-matrix-3" class="section level3">
-<h3>Estimates and their covariance matrix</h3>
-<pre class="r"><code># If number of parameters differ per study (but can also be used when they are the same)
+<div id="alternative-input" class="section level2">
+<h2>Alternative input</h2>
+<div id="input-for-evidence-synthesis-4" class="section level3">
+<h3>Input for evidence synthesis</h3>
+<div id="estimates-and-their-covariance-matrix-3" class="section level4">
+<h4>Estimates and their covariance matrix</h4>
+<pre class="r"><code># The following code is suited in case the number of parameters differ per study 
+# (but can also be used when they are the same)
 #
 # beta values from the analyses 
 est_1 &lt;- matrix(c(0.09), nrow = 1)
@@ -819,8 +782,8 @@ CovMx_studies</code></pre>
          [,1]
 [1,] 0.032041</code></pre>
 </div>
-<div id="set-of-hypotheses-for-each-study-3" class="section level3">
-<h3>Set of hypotheses for each study</h3>
+<div id="set-of-hypotheses-for-each-study-3" class="section level4">
+<h4>Set of hypotheses for each study</h4>
 <pre class="r"><code># Set of hypotheses for each study 
 # Note: in this case the same for each study
 SameHypo &lt;- 1
@@ -829,49 +792,16 @@ H0 &lt;- &quot;beta1 = 0&quot;
 Hpos &lt;- &quot;beta1 &gt; 0&quot;
 Hneg &lt;- &quot;beta1 &lt; 0&quot;
 Hypo_studies &lt;- c(H0, Hpos, Hneg)
-# Since this covers the whole space / covers all theories, we do not need a safeguard-hypothesis
+# Since this covers the whole space / covers all theories, 
+# a safeguard-hypothesis is not needed.
 Safeguard &lt;- &quot;none&quot;</code></pre>
 </div>
 </div>
-<div id="evidence-synthesis-3" class="section level2">
-<h2>Evidence synthesis</h2>
+<div id="evidence-synthesis-4" class="section level3">
+<h3>Evidence synthesis</h3>
 <pre class="r"><code>TypeEv &lt;- 1 # Added-evidence approach
-GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies, Safeguard)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, 
+           Hypo_studies, Safeguard)</code></pre>
 <pre><code>$GORICA_m
                H1         H2         H3
 Study1   4.388349 -4.2430418   5.388349
@@ -926,9 +856,10 @@ H2 1.019773e+54 1.000000e+00 7.535163e+54
 H3 1.353353e-01 1.327111e-55 1.000000e+00</code></pre>
 </div>
 </div>
+</div>
 <div id="example-3-four-fictional-studies" class="section level1">
 <h1>Example 3: Four ‘fictional’ studies</h1>
-<p>In this example, we will evaluate <span class="math inline">\(H_1\)</span> (comparing estimates of continuous variables) vs its complement.</p>
+<p>In this example, <span class="math inline">\(H_1\)</span> (comparing estimates of continuous variables) will be evaluates versus its complement.</p>
 <div id="data-3" class="section level2">
 <h2>Data</h2>
 <pre class="r"><code>S &lt;- 3
@@ -973,7 +904,7 @@ y3 &lt;- ratio[1]*data3$x31 + ratio[2]*data3$x32 + ratio[3]*data3$x33 + rnorm(n3
 # Fit regression model
 fit.lm3 &lt;- lm(y3 ~ 1 + x31 + x32 + x33, data = data3)</code></pre>
 </div>
-<div id="input-for-evidence-synthesis-2" class="section level2">
+<div id="input-for-evidence-synthesis-5" class="section level2">
 <h2>Input for evidence synthesis</h2>
 <div id="estimates-and-their-covariance-matrix-4" class="section level3">
 <h3>Estimates and their covariance matrix</h3>
@@ -986,11 +917,13 @@ vcov_est_2 &lt;- vcov(fit.lm2)
 vcov_est_3 &lt;- vcov(fit.lm3)
 #
 #
-## If same number and type of parameters per study (since they will obtain the same name)
+# The following code is suited only if each study has the same number and type 
+# of parameters (which will have the same name then)
 #
 NrParam &lt;- length(est_1)
 # Parameter estimate values from the S primary studies
-Param_studies &lt;- matrix(c(est_1, est_2, est_3), byrow = T, nrow = S, ncol = NrParam)
+Param_studies &lt;- matrix(c(est_1, est_2, est_3), byrow = T, nrow = S, 
+                        ncol = NrParam)
 colnames(Param_studies) &lt;- c(&quot;intercept&quot;, &quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;)
 Param_studies</code></pre>
 <pre><code>       intercept        x1        x2       x3
@@ -998,7 +931,8 @@ Param_studies</code></pre>
 [2,] -0.02042125 0.9653351 0.9811869 1.048758
 [3,] -0.09405149 1.0015996 1.0117519 1.372607</code></pre>
 <pre class="r"><code># standard error of the beta&#39;s (from the S primary studies)
-CovMx_studies &lt;- matrix(c(vcov_est_1, vcov_est_2, vcov_est_3), byrow = T, nrow = S*NrParam, ncol = NrParam) # Note: no names needed
+CovMx_studies &lt;- matrix(c(vcov_est_1, vcov_est_2, vcov_est_3), byrow = T, 
+                      nrow = S*NrParam, ncol = NrParam) # Note: no names needed
 CovMx_studies</code></pre>
 <pre><code>               [,1]          [,2]          [,3]          [,4]
  [1,]  3.728443e-02  1.545811e-18  4.555168e-19 -2.821223e-19
@@ -1020,25 +954,21 @@ CovMx_studies</code></pre>
 SameHypo &lt;- 1 
 # colnames(est) # Specify restrictions using those names
 H1 &lt;- &#39;x1 &lt; x2 &lt; x3&#39;  
-# Since estimates of continuous variables are compared in our theory, we standardized the data before to obtain comparable estimates.
+# Since estimates of continuous variables are compared in this theory, 
+# the data was standardized before to obtain comparable estimates.
 NrHypos &lt;- 1
-# Since we have only one theory-based hypothesis, we will use the (more powerful) complement of the hypothesis (Vanbrabant, Van Loey, Kuiper, 2019)
-# The complement represents the remaing 11 theories, while the unconstrained reflects all 12 possible theories including H1.
+# Since there is only one theory-based hypothesis, the (more powerful) 
+# complement of the hypothesis is used (Vanbrabant, Van Loey, Kuiper, 2019).
+# The complement represents the remaining 11 theories, 
+# while the unconstrained reflects all 12 possible theories including H1.
 Safeguard &lt;- &quot;complement&quot; </code></pre>
 </div>
 </div>
-<div id="evidence-synthesis-4" class="section level2">
+<div id="evidence-synthesis-5" class="section level2">
 <h2>Evidence synthesis</h2>
 <pre class="r"><code>TypeEv &lt;- 1 # Added-evidence approach
-GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, Hypo_studies = H1, Safeguard)</code></pre>
-<pre><code>Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored
-
-Warning in gsub(&quot;;&quot;, &quot;\n&quot;, constraint.syntax, perl = TRUE, fixed = TRUE):
-argument &#39;perl = TRUE&#39; will be ignored</code></pre>
+GoricEvSyn(TypeEv, S, Param_studies, CovMx_studies, SameHypo, NrHypos, 
+           Hypo_studies = H1, Safeguard)</code></pre>
 <pre><code>$GORICA_m
                H1        Hc1
 Study1  0.2299555  1.9141122
@@ -1093,10 +1023,10 @@ Hc1 0.08373732  1.00000</code></pre>
 <p>From the last line in ‘Cumulative.GORICA.weights’, it can be seen that <span class="math inline">\(H_1\)</span> is much more supported than its complement (and thus not a weak hypothesis). From ‘Final.rel.GORICA.weights’, you can see that <span class="math inline">\(H_1\)</span> is 10.6 more times supported than its complement.</p>
 </div>
 </div>
-<div id="note-how-to-do-bootstrap" class="section level1">
-<h1>Note: How to do bootstrap</h1>
+<div id="extra-how-to-do-bootstrap" class="section level1">
+<h1>Extra: How to do bootstrap</h1>
 <p>Here, the third data set from Example 3 will be used.</p>
-<pre class="r"><code>if (!require(&quot;peperr&quot;)) install.packages(&quot;peperr&quot;) # install this package first (once)</code></pre>
+<pre class="r"><code>if (!require(&quot;peperr&quot;)) install.packages(&quot;peperr&quot;) </code></pre>
 <pre><code>Loading required package: peperr</code></pre>
 <pre><code>Loading required package: snowfall</code></pre>
 <pre><code>Loading required package: snow</code></pre>
@@ -1115,9 +1045,11 @@ for (b in 1:nr.boots){
   indices &lt;- resample.indices(n=n, sample.n=nr.boots, method=&quot;boot&quot;)
   boot.sample &lt;- sample[indices$sample.index[[1]],]
   
-  # Standardizing independent (continuous) variables (and make dataframe, which is needed in lm object)
-  boot.sample &lt;- data.frame( cbind(boot.sample[,1], scale(boot.sample[,2:nr.var])) ) 
-  # Since above we do not standardize y, we also do not do it here
+  # Standardizing independent (continuous) variables 
+  # (and make da ataframe, which is needed in lm object)
+  boot.sample &lt;- data.frame( cbind(boot.sample[,1], 
+                                   scale(boot.sample[,2:nr.var])) ) 
+  # Since y was not standardized above, it is also not done here
   # Note: now the first column is called V1
   colnames(boot.sample)[1] &lt;- &quot;y3&quot;
   
@@ -1129,7 +1061,9 @@ for (b in 1:nr.boots){
 # Obtain covariance matrix of estimates
 betahat &lt;- colMeans(betas)
 vectorbetahat &lt;- rep(1, nr.boots) %*% t(betahat)
-VCovMatrix &lt;- (1 / (nr.boots)) * t(betas - vectorbetahat) %*% (betas - vectorbetahat) #(1 / (nr.boots-1)) * t(betas - vectorbetahat) %*% (betas - vectorbetahat)
+VCovMatrix &lt;- (1 / (nr.boots)) * t(betas - vectorbetahat) %*% 
+  (betas - vectorbetahat) 
+#(1 / (nr.boots-1)) * t(betas - vectorbetahat) %*% (betas - vectorbetahat)
 # compare
 VCovMatrix </code></pre>
 <pre><code>            [,1]         [,2]         [,3]

@@ -64,6 +64,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -84,6 +85,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -251,9 +255,8 @@ div.tocify {
 <h1>Example 1: Lucas Data</h1>
 <div id="data-preparation" class="section level2">
 <h2>Data preparation</h2>
-<p>First, we need to load the required libraries (after they have been installed). These libraries contain functions, such as <code>goric</code>, that will be used in the R code below. Each time you reopen R, you will have to load the required libraries.</p>
-<pre class="r"><code>## First, we need to install the packages, if you have not done this already:
-
+<p>First, load the required libraries (after they have been installed). These libraries contain functions, such as <code>goric</code>, that will be used in the R code below. Each time you reopen R, you will have to load the required libraries.</p>
+<pre class="r"><code>## First, install the packages, if you have not done this already:
 if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
@@ -271,10 +274,10 @@ library(restriktor) # for the goric function
 <p>If you open the data file <code>Data_Lucas.txt</code> in a text editor, you can see that the variable labels have been inserted (using quotes; i.e., “…”) in the first line of the file, which is called a header. Therefore, you have to specify ‘header = TRUE’ when loading the data:</p>
 <pre class="r"><code># Load the data
 Lucas &lt;- read.table(&quot;Data_Lucas.txt&quot;, header = TRUE)</code></pre>
-<p>Since we loaded a .txt file, R does not know the measurement levels of the variables and assumes all of them to be continuous, meaning that they are of interval or ratio type. Hence, especially when there are more than two groups, we need to tell R that the variable <code>group</code> is a factor by using the <code>factor()</code> function on the <code>group</code> variable (i.e., a grouping / categorical / nominal variable):</p>
+<p>Since a .txt file was loaded, R does not know the measurement levels of the variables and assumes all of them to be continuous, meaning that they are of interval or ratio type. Hence, especially when there are more than two groups, one has to tell R that the variable <code>group</code> is a factor by using the <code>factor()</code> function on the <code>group</code> variable (i.e., a grouping / categorical / nominal variable):</p>
 <pre class="r"><code># Make the variable group a factor
 Lucas$group &lt;- factor(Lucas$group) </code></pre>
-<p>To inspect the first 6 rows of the dataset, we use <code>head()</code> function:</p>
+<p>To inspect the first 6 rows of the dataset, use the <code>head()</code> function:</p>
 <pre class="r"><code>head(Lucas) # Look at first (6) rows of the data</code></pre>
 <pre><code>  group Influence
 1     1      3.58
@@ -283,7 +286,7 @@ Lucas$group &lt;- factor(Lucas$group) </code></pre>
 4     1      2.22
 5     1      2.56
 6     1      1.70</code></pre>
-<p>To see a more detailed overview of the data via descriptive statistics split by <code>group</code> variable, we could use the <code>describeBy()</code> function with <code>Lucas$group</code> set to be a grouping variable, as follows:</p>
+<p>To see a more detailed overview of the data via descriptive statistics split by <code>group</code> variable, use the <code>describeBy()</code> function with <code>Lucas$group</code> set to be a grouping variable, as follows:</p>
 <pre class="r"><code>descrstat &lt;- describeBy(Lucas$Influence, Lucas$group, mat = TRUE)
 descrstat</code></pre>
 <pre><code>    item group1 vars  n     mean       sd median  trimmed      mad   min  max
@@ -303,15 +306,15 @@ X15  6.13 -0.6297692 -0.5632834 0.2738837</code></pre>
 <h2>Preparation for GORIC(A)</h2>
 <div id="anova-model-r-object" class="section level4">
 <h4>ANOVA model: R-object</h4>
-<p>First, we need an R-object with unconstrained estimates, that is, in this example, the five group means and one residual variance.We specify the linear regression model using <code>lm()</code> function, as follows:</p>
+<p>First, an R-object with unconstrained estimates is needed, that is, in this example, the five group means and one residual variance. The linear regression model using <code>lm()</code> function is specified as follows:</p>
 <pre class="r"><code>lm_fit_Lucas &lt;- lm(Influence ~ group - 1, data = Lucas)</code></pre>
 <p>Note that:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>y ~ group - 1</code> instructs the function <code>lm</code> (linear model) to regress y on group variable.</p></li>
-<li><p>The <code>- 1</code> instructs the function <code>lm</code> to drop the intercept and, therefore, estimate the means of each group, resulting here in five group means. On the other hand, if we wouldn’t drop the intercept `y ~ group’ would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, four) groups and the reference group.</p></li>
+<li><p>The <code>- 1</code> instructs the function <code>lm</code> to drop the intercept and, therefore, estimate the means of each group, resulting here in five group means. On the other hand, if the intercept is not dropped, `y ~ group’ would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, four) groups and the reference group.</p></li>
 <li><p>The results are collected in, what is called, an R-object, named <code>lm_fit_Lucas</code>.</p></li>
 </ol>
-<p>Let’s check the names used in this model.</p>
+<p>It can be helpful to check the names used in this model, because these are needed when specifying the hypotheses:</p>
 <pre class="r"><code>names(coef(lm_fit_Lucas))</code></pre>
 <pre><code>[1] &quot;group1&quot; &quot;group2&quot; &quot;group3&quot; &quot;group4&quot; &quot;group5&quot;</code></pre>
 </div>
@@ -336,12 +339,12 @@ VCOV &lt;- vcov(lm_fit_Lucas)</code></pre>
 <p>Note that one should use the labels of the parameter estimates (in the example above: group1-group5).</p></li>
 <li><p>One can also define hypothesis in terms of linear functions of parameters (For more details, see ‘Extra possibility specification hypotheses’ near the end of the goric() tutorial called ‘Tutorial_GORIC_restriktor_General’).</p></li>
 </ul>
-<p>Let’s specify the hypotheses:</p>
+<p>Let us specify the following hypotheses:</p>
 <pre class="r"><code>H0 &lt;- &#39;group1 = group2 = group3 = group4 = group5&#39; 
 H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
 # Note: H1 is not full row-rank (see below and the goric() tutorial for more details).
 H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></pre>
-<p>To prevent from selecting a weak hypothesis, one should include a failsafe/safeguard hypothesis. This can be:</p>
+<p>To prevent from selecting a weak hypothesis, that is, a hypothesis not supported by the data, one should include a failsafe/safeguard hypothesis. This can be:</p>
 <ul>
 <li><p>the unconstrained hypothesis (which includes all possible hypotheses, thus including the one(s) of interest);</p></li>
 <li><p>the complement (which includes all other possible hypotheses, thus excluding the one(s) of interest),</p></li>
@@ -350,10 +353,10 @@ H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></p
 </div>
 <div id="seed-values" class="section level4">
 <h4>Seed values</h4>
-<p>In the calculation of the GORIC, an iterative process is used to calculate the penalty / complexity part. Therefore, one needs to set a seed value using the <code>set.seed()</code>. This will allow us to:</p>
+<p>In the calculation of the GORIC, an iterative process is used to calculate the penalty / complexity part. Therefore, one needs to set a seed value using the <code>set.seed()</code>. This has two advantages:</p>
 <ol style="list-style-type: decimal">
-<li><p>Reproduce the same values for the penalty (we will obtain the same penalty value every time we run this code).</p></li>
-<li><p>Access the sensitivity of the penalty value by checking for different seed values. If it is sensitive, then increase number of iterations used in calculation of the penalty (see below).</p></li>
+<li><p>Using the same seed value leads to the same penalty value every time this code is run.</p></li>
+<li><p>Using different seed values, allows for sensitivity check on the penalty value. If it is sensitive, then increase number of iterations used in calculation of the penalty (see below).</p></li>
 </ol>
 </div>
 </div>
@@ -481,10 +484,13 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 </div>
 <div id="example-1.2b-using-the-complement-as-failsafe" class="section level3">
 <h3>Example 1.2b: Using the complement as failsafe</h3>
-<pre class="r"><code>H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # Note: H1 is not full row-rank, see the goric tutorial for more details.
+<pre class="r"><code>H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+# Note: H1 is not full row-rank; 
+# for more details, see below and/or the goric tutorial.
 
 set.seed(123) # Set seed value
-output_gorica_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+output_gorica_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;, 
+                         type = &quot;gorica&quot;)
 summary(output_gorica_c)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion approximation:
@@ -511,12 +517,13 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 </div>
 <div id="example-2-berzonsky-et-al." class="section level1">
 <h1>Example 2: Berzonsky et al.</h1>
-<p>Next, we present the R code to apply the GORIC(A) to the data of Berzonsky et al.. The instruction on loading and preparing the data are similar to the ones from Lucas example (Example 1). Hence, for more comments and details, see that example.</p>
+<p>Next, the R code to apply the GORIC(A) to the data of Berzonsky et al. is shown. The instruction on loading and preparing the data are similar to the ones from Lucas example (Example 1). Hence, for more comments and details, see that example.</p>
 <div id="data-preparation-1" class="section level2">
 <h2>Data preparation</h2>
 <pre class="r"><code># Read Data. 
 BerzEtAl &lt;- read.table(&quot;Data_BerzEtAl.txt&quot;, header = TRUE)
-BerzEtAl$group &lt;- factor(BerzEtAl$group) # this command tells R that group is a factor and not a continuous variable
+BerzEtAl$group &lt;- factor(BerzEtAl$group) 
+# this command tells R that group is a factor and not a continuous variable
 
 # Inspect data
 head(BerzEtAl)</code></pre>
@@ -572,14 +579,18 @@ names(coef(lm_fit_BerzEtAl))</code></pre>
 <pre class="r"><code>H0 &lt;- &#39;group1 = group2 = group3 = group4 = group5 = group6 = group7 = group8&#39; 
 
 H1 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
-      group5 &gt; group6; group5 &gt; group7; group5 &gt; group8;  
-      group1 &gt; group5; group2 &gt; group6; group3 &gt; group7; group4 &gt; group8;
-      group1 - group5 &gt; group2 - group6; group1 - group5 &gt; group3 - group7; group1 - group5 &gt; group4 - group8;&#39;
+      group5 &gt; group6; group5 &gt; group7; group5 &gt; group8; 
+      group1 &gt; group5; group2 &gt; group6; group3 &gt; group7; group4 &gt; group8; 
+      group1 - group5 &gt; group2 - group6; 
+      group1 - group5 &gt; group3 - group7; 
+      group1 - group5 &gt; group4 - group8;&#39;
 
 H2 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
       group5 &gt; group6; group5 &gt; group7; group5 &gt; group8;  
       group1 &gt; group5; group2 &gt; group6; group3 &gt; group7; group4 &gt; group8;
-      group1 - group5 &gt; 2*(group2 - group6); group1 - group5 &gt; 2*(group3 - group7); group1 - group5 &gt; 2*(group4 - group8);&#39;</code></pre>
+      group1 - group5 &gt; 2*(group2 - group6); 
+      group1 - group5 &gt; 2*(group3 - group7); 
+      group1 - group5 &gt; 2*(group4 - group8);&#39;</code></pre>
 </div>
 </div>
 <div id="goric-examples-1" class="section level2">
@@ -699,12 +710,164 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 </div>
 </div>
 </div>
+<div id="example-3-holubar" class="section level1">
+<h1>Example 3: Holubar</h1>
+<div id="data-preparation-2" class="section level2">
+<h2>Data preparation</h2>
+<p>First, read in the Holubar dataset, and tell R that the variable <code>gr</code> (group) is a factor instead of a continuous variable (although it is not necessary because it consists of only two groups).</p>
+<pre class="r"><code>Holubar &lt;- read.table(&quot;Data_Holubar.txt&quot;, header = TRUE) # load the data
+Holubar$gr &lt;- factor(Holubar$gr) # tell R that gr is a factor</code></pre>
+<p>If you want a more detailed overview of the data, also by means of descriptive statistics splitted by <code>group</code>, use</p>
+<pre class="r"><code>head(Holubar)</code></pre>
+<pre><code>         at gr
+1 0.5549239  1
+2 3.6167880  1
+3 0.8071903  1
+4 1.2733173  1
+5 2.3898220  1
+6 0.1910118  1</code></pre>
+<pre class="r"><code>descrstat &lt;- describeBy(Holubar$at, Holubar$gr, mat = TRUE)
+descrstat</code></pre>
+<pre><code>    item group1 vars  n mean   sd      median   trimmed      mad        min
+X11    1      1    1 20 0.98 1.20  1.17727435 0.9304373 1.117780 -0.7185251
+X12    2      2    1 27 0.02 1.88  0.16871405 0.1110419 1.950842 -4.9614603
+X13    3      3    1 28 0.27 1.72 -0.09890765 0.2030397 2.435392 -2.2764939
+         max    range       skew   kurtosis        se
+X11 3.616788 4.335313  0.1900155 -0.7778894 0.2683282
+X12 2.921103 7.882563 -0.5166569 -0.1041621 0.3618062
+X13 3.796158 6.072652  0.2923302 -1.0251005 0.3250494</code></pre>
+</div>
+<div id="preparation-for-gorica-2" class="section level2">
+<h2>Preparation for GORIC(A)</h2>
+<div id="anova-model-r-object-1" class="section level3">
+<h3>ANOVA model: R-object</h3>
+<p>Then, fit an ANOVA-model by means of the <code>lm()</code> function (linear model) and directly check the names that are used in this model:</p>
+<pre class="r"><code>lm_fit_Holubar &lt;- lm(at ~ gr - 1, data = Holubar)
+names(coef(lm_fit_Holubar))</code></pre>
+<pre><code>[1] &quot;gr1&quot; &quot;gr2&quot; &quot;gr3&quot;</code></pre>
+</div>
+<div id="set-of-hypotheses-2" class="section level3">
+<h3>Set of hypotheses</h3>
+<p>The following hypothesis will be evaluated:</p>
+<pre class="r"><code>H1 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;</code></pre>
+</div>
+</div>
+<div id="model-selection-using-goric" class="section level2">
+<h2>Model selection using GORIC</h2>
+<p>Calculate the GORIC values and weights:</p>
+<pre class="r"><code>set.seed(123) # Set seed value
+output_Hol &lt;- goric(lm_fit_Holubar, H1, comparison = &quot;complement&quot;)
+summary(output_Hol)</code></pre>
+<pre><code>
+restriktor: generalized order-restricted information criterion: 
+
+Results:
+        model    loglik  penalty    goric  goric.weights
+1          H1  -144.981    2.803  295.569          0.259
+2  complement  -143.038    3.697  293.469          0.741
+---
+
+Ratio GORIC-weights:
+            vs. H1  vs. complement
+H1          1.000   0.350         
+complement  2.857   1.000         
+---
+The order-restricted hypothesis &#39;H1&#39; has  0.350 times more support than its complement.</code></pre>
+</div>
+</div>
+<div id="example-4-sesame" class="section level1">
+<h1>Example 4: Sesame</h1>
+<pre class="r"><code># read in the sesame data from a text file
+dat &lt;- read.table(&quot;sesamesimANOVA.txt&quot;, header=TRUE)
+
+# make viewcat a factor, that is, a categorical variable
+dat$viewcat &lt;- factor(dat$viewcat)
+
+# Inspect data
+head(dat)</code></pre>
+<pre><code>  viewcat postnumb
+1       1 14.51050
+2       3 35.30549
+3       3 22.68280
+4       1 39.82436
+5       4 40.42370
+6       3 22.87055</code></pre>
+<pre class="r"><code># estimate the parameters of the statistical model at hand 
+prepSesame &lt;- lm(postnumb~viewcat-1, data=dat)
+
+# Check names used in model
+names(coef(prepSesame))</code></pre>
+<pre><code>[1] &quot;viewcat1&quot; &quot;viewcat2&quot; &quot;viewcat3&quot; &quot;viewcat4&quot;</code></pre>
+<pre class="r"><code># Specify restrictions using those names
+
+
+# create a vector containing the mean estimates
+estimate &lt;- coef(prepSesame)
+
+
+# Example Hypotheses Set 1 (only equalities restrictions; 
+# and use all possibilities for exploration)
+H0 &lt;- &#39;viewcat1 == viewcat2 == viewcat3==viewcat4&#39; 
+H1 &lt;- &#39;viewcat1 == viewcat2 &lt; viewcat3 &lt; viewcat4&#39;  
+H2 &lt;- &#39;viewcat1 &lt; viewcat2 &lt; viewcat3 &lt; viewcat4&#39;   
+H3 &lt;- &#39;viewcat1 == viewcat2 &lt; viewcat3 == viewcat4&#39;   
+
+# Calculate GORIC values and weights
+set.seed(123) 
+goric(prepSesame, H0, H1, H2, H3)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion: 
+
+Results:
+           model    loglik  penalty     goric  goric.weights
+1             H0  -955.042    2.000  1914.084          0.000
+2             H1  -918.485    2.810  1842.590          0.134
+3             H2  -916.540    3.094  1839.269          0.704
+4             H3  -919.644    2.500  1844.287          0.057
+5  unconstrained  -916.540    5.000  1843.080          0.105
+---</code></pre>
+<pre class="r"><code># Calculate GORIC for H1 and its complement
+set.seed(123) 
+goric(prepSesame, H1, comparison = &quot;complement&quot;)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion: 
+
+Results:
+        model    loglik  penalty     goric  goric.weights
+1          H1  -918.485    2.810  1842.590          0.484
+2  complement  -916.540    4.690  1842.460          0.516
+---
+The order-restricted hypothesis &#39;H1&#39; has  0.937 times more support than its complement.</code></pre>
+<pre class="r"><code># Calculate GORICa values and weights
+set.seed(123) 
+goric(prepSesame, H0, H1, H2, H3, type = &quot;gorica&quot;)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
+
+Results:
+           model   loglik  penalty   gorica  gorica.weights
+1             H0  -49.763    1.000  101.527           0.000
+2             H1   -7.052    1.810   17.725           0.136
+3             H2   -5.125    2.094   14.438           0.702
+4             H3   -8.216    1.500   19.432           0.058
+5  unconstrained   -5.125    4.000   18.249           0.104
+---</code></pre>
+<pre class="r"><code># Calculate GORIC for H1 and its complement
+set.seed(123) 
+goric(prepSesame, H1, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
+
+Results:
+        model  loglik  penalty  gorica  gorica.weights
+1          H1  -7.052    1.810  17.725           0.488
+2  complement  -5.125    3.690  17.629           0.512
+---
+The order-restricted hypothesis &#39;H1&#39; has  0.953 times more support than its complement.</code></pre>
+</div>
 <div id="notes-on-weights" class="section level1">
 <h1>Notes on weights</h1>
-<p>Here, the example of Lucas is used again. We will use the following hypotheses of interest:</p>
+<p>Here, the example of Lucas is used again, consequently, using the following hypotheses of interest:</p>
 <pre class="r"><code>H0 &lt;- &#39;group1 = group2 = group3 = group4 = group5&#39; 
 H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
-# Note: H1 is not full row-rank, see below and the goric tutorial for more details.
+# Note: H1 is not full row-rank; 
+# for more details, see below and/or the goric tutorial.
 H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></pre>
 <div id="note-1-goric-weights-versus-gorica-weights" class="section level3">
 <h3>Note 1: GORIC weights versus GORICA weights</h3>
@@ -736,7 +899,8 @@ The order-restricted hypothesis &#39;H1&#39; has 13.431 times more support than 
 Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
  are calculated using mix.weights = &quot;boot&quot; (the default is mix.weights = &quot;pmvnorm&quot;).
  For more information see ?restriktor.</code></pre>
-<pre class="r"><code># The order-restricted hypothesis H1 has  13.4 times more support than its complement.</code></pre>
+<pre class="r"><code># The order-restricted hypothesis H1 has  13.4 times more support than 
+#                                                       its complement.</code></pre>
 <pre class="r"><code># Calculate goric for H2 and its complement
 set.seed(123) # Set seed value
 output_c_H2 &lt;- goric(lm_fit_Lucas, H2, comparison = &quot;complement&quot;)
@@ -756,10 +920,12 @@ H2          1.000   0.370
 complement  2.706   1.000         
 ---
 The order-restricted hypothesis &#39;H2&#39; has  0.370 times more support than its complement.</code></pre>
-<pre class="r"><code>#The order-restricted hypothesis H1 has  0.37 times more support than its complement.</code></pre>
+<pre class="r"><code>#The order-restricted hypothesis H1 has  0.37 times more support than 
+#                                                      its complement.</code></pre>
 <pre class="r"><code># Calculate goric for H1 and H2 (and Hu):
 set.seed(123) # Set seed value
-output_H1H2 &lt;- goric(lm_fit_Lucas, H1, H2) # Note: by default against the unconstrained
+output_H1H2 &lt;- goric(lm_fit_Lucas, H1, H2) # Note: by default, 
+                                           # against the unconstrained
 summary(output_H1H2)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 
@@ -788,7 +954,8 @@ output_c_H1$ratio.gw[1,2] / output_c_H2$ratio.gw[1,2] </code></pre>
 <pre><code>[1] 36.3384</code></pre>
 <pre class="r"><code># approx 13.4 / 0.37
 # 36.34</code></pre>
-<pre class="r"><code># Notably, you could derive the support from H1 vs H2 from their support versus that of Hu:
+<pre class="r"><code># Notably, you could derive the support from H1 vs H2 from their support versus 
+# that of Hu:
 set.seed(123) # Set seed value
 output_u_H1 &lt;- goric(lm_fit_Lucas, H1)
 summary(output_u_H1)</code></pre>
@@ -829,13 +996,13 @@ H2             1.000   0.428
 unconstrained  2.336   1.000            
 ---</code></pre>
 <pre class="r"><code>#
-output_u_H1$ratio.gw[1,2] / output_u_H2$ratio.gw[1,2] # approx (0.943/0.057) / (0.3/0.7) = 16.481 / 0.428</code></pre>
+output_u_H1$ratio.gw[1,2] / output_u_H2$ratio.gw[1,2] </code></pre>
 <pre><code>[1] 38.49661</code></pre>
-<pre class="r"><code># 38.49661
+<pre class="r"><code># approx (0.943/0.057) / (0.3/0.7) = 16.481 / 0.428 =
+# 38.49661
 # which (approximately) equals:
 output_H1H2$ratio.gw[1,2]</code></pre>
 <pre><code>[1] 38.49665</code></pre>
-<pre class="r"><code># 38.49665</code></pre>
 </div>
 <div id="note-3-weights-when-using-complement-not-per-se-higher" class="section level3">
 <h3>Note 3: weights when using complement not per se higher</h3>
@@ -849,9 +1016,12 @@ output_H1H2$ratio.gw[1,2]</code></pre>
 <div id="some-more-explanation" class="section level4">
 <h4>Some more explanation</h4>
 <p>This is because for this particular example the mean of group 3 and 5 are close (and they are compared in Hypothesis <span class="math inline">\(H_1\)</span>). Notably, it will hold for all of the following three hypothesis:</p>
-<pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # not full row-rank
-H1_sm &lt;- &#39;group5 &lt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # not full row-rank
-H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # not full row-rank</code></pre>
+<pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+# not full row-rank
+H1_sm &lt;- &#39;group5 &lt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+# not full row-rank
+H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+# not full row-rank</code></pre>
 <p>Because the means of groups 3&amp;5 are similar (and the other restrictions are in agreement with the data), the log likelihood values (LL’s) of <span class="math inline">\(H_1\)</span>, <span class="math inline">\(H_u\)</span> and Hc (i.e., the complement of <span class="math inline">\(H_1\)</span>) will be close - since the restricted/bounded solution (which is in agreement with <span class="math inline">\(H_1\)</span>) is near the (unconstrained) maximum likelihood estimate (mle). Since the penalty for the complement is (always) lower than for <span class="math inline">\(H_u\)</span>, it will receive more support than <span class="math inline">\(H_u\)</span> - thus <span class="math inline">\(H_1\)</span> receives less. Notably, when <span class="math inline">\(H_1\)</span> is very specific (as in Berzonsky et al Example below), the penalty of <span class="math inline">\(H_u\)</span> and Hcomplement are almost the same.</p>
 <p>When the means of groups 3 and 5 differ more, then evaluating against the complement does render a higher weight (than if <span class="math inline">\(H_u\)</span> were used): Let us increase the mean of group 5 with 0.5 points (and change the name of the data &amp; the analysis):</p>
 <pre class="r"><code>Lucas2 &lt;- Lucas
@@ -859,8 +1029,11 @@ Lucas2$Influence[Lucas$group == 5] &lt;- Lucas$Influence[Lucas$group == 5] + 0.5
 #describeBy(Lucas$Influence, Lucas$group, mat = TRUE)
 #describeBy(Lucas2$Influence, Lucas$group, mat = TRUE)
 lm_fit_Lucas2 &lt;-  lm(Influence ~ group-1, data = Lucas2)
-# Now, from the three hypotheses H1_gr, H1_sm, and H1, the first (H_gr) is correct, so that one is used to illustrate our point:</code></pre>
-<pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; # not full row-rank
+# Now, from the three hypotheses H1_gr, H1_sm, and H1, # the first (H_gr) is 
+# correct. Hence, that one is used to illustrate the case where # a correct 
+# hypothesis obtains more support when it is evaluated against its complement:</code></pre>
+<pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+# not full row-rank
 set.seed(123) # Set seed value
 output_u_gr &lt;- goric(lm_fit_Lucas2, H1_gr)
 summary(output_u_gr)</code></pre>
@@ -884,7 +1057,9 @@ Note: In case of equal log-likelihood (loglik) values, the
 Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
  are calculated using mix.weights = &quot;boot&quot; (the default is mix.weights = &quot;pmvnorm&quot;).
  For more information see ?restriktor.</code></pre>
-<pre class="r"><code>#The order-restricted hypothesis &#39;H1&#39; has 13 times more support than Hu (unconstrained). Notably, this is the maximum support H1 can receive versus Hu (because LL&#39;s are the same).</code></pre>
+<pre class="r"><code># The order-restricted hypothesis &#39;H1&#39; has 13 times more support than Hu 
+# (the unconstrained hypothesis). Notably, this is the maximum support H1 can 
+# receive versus Hu (because the log likelihoods (LLs) are the same).</code></pre>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_c_gr &lt;- goric(lm_fit_Lucas2, H1_gr, comparison = &quot;complement&quot;)
 summary(output_c_gr)</code></pre>
@@ -907,15 +1082,16 @@ The order-restricted hypothesis &#39;H1_gr&#39; has 29.273 times more support th
 Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
  are calculated using mix.weights = &quot;boot&quot; (the default is mix.weights = &quot;pmvnorm&quot;).
  For more information see ?restriktor.</code></pre>
-<pre class="r"><code>#The order-restricted hypothesis &#39;H1&#39; has 29 times more support than its complement.</code></pre>
+<pre class="r"><code>#The order-restricted hypothesis &#39;H1&#39; has 29 times more support than 
+#                                                     its complement.</code></pre>
 <p>Now, when the means of groups 3 and 5 differ more, then evaluating against the complement does render a higher weight (29) than if Hu were used (13).</p>
 </div>
 </div>
 </div>
-<div id="two-methods-to-calculate-the-penalty" class="section level1">
-<h1>Two methods to calculate the penalty</h1>
+<div id="extra-two-methods-to-calculate-the-penalty" class="section level1">
+<h1>Extra: Two methods to calculate the penalty</h1>
 <p>There are two methods that can be used in calculating the penalty. The default method is often much faster (if the number of parameters is not too high) and needs less input specification. It can, however, not deal with hypotheses that are not of full row-rank (like <span class="math inline">\(H_1\)</span> above). In that case, <code>restriktor</code> uses automatically the other (bootstrap) method. In this bootstrap method, one can also more easily change the number of iterations on which the penalty is based (mix.bootstrap). The computation time of this bootstrap method can be reduced by using multiple cores. For a windows device, you then have to use ‘parallel = “snow”’ (see the goric tutorial for more options). To use this bootstrap method (on a windows machine), use:</p>
-<pre class="r"><code>if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) # install this package first (once)</code></pre>
+<pre class="r"><code>if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) </code></pre>
 <pre><code>Loading required package: parallel</code></pre>
 <pre class="r"><code>library(parallel)
 nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)

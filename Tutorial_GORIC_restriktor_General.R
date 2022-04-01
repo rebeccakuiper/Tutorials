@@ -27,7 +27,8 @@
 # c. complement.
 #
 # If "none", then only hypotheses of interest are inspected. 
-# This can lead to choosing the best out of a set of weak hypotheses. 
+# This can lead to choosing the best out of a set of weak hypotheses,
+# that is, hypotheses not supported by the data.
 # Therefore, this is only recommended when the hypotheses of interest cover 
 # the full parameter space / cover the whole set of possible theories.
 #
@@ -93,9 +94,9 @@
 # See also the example below.
 
 
-# In the examples below, we will show 'full output'.
+# In the examples below, 'full output' will be shown.
 # At the end, in the last example for the three types of comparisons, 
-# we will show how one can ask for specific output parts.
+# it will be shown how one can ask for specific output parts.
 
 
 ################################################################################
@@ -108,6 +109,9 @@
 # If from CRAN:
 if (!require("restriktor")) install.packages("restriktor") 
 library(restriktor) # for goric function
+#
+#Note that one needs to install the package only once, 
+#but has to load the package each time the R script is run.
 
 
 # Generate example data
@@ -224,7 +228,7 @@ out <- goric(est, H1, H2, VCOV = VCOV, type = "gorica")
 summary(out)
 # Now, the exact same weights are obtained
 # The penalties are now 2 points lower 
-#                       (because we left out two unconstrained/free parameters).
+#                       (because 2 unconstrained/free parameters are left out).
 # The log likelihoods also change. 
 # But the differences in those between the hypotheses remain the same.
 
@@ -245,7 +249,8 @@ names(est) <- c("beta1", "beta2", "beta3", "beta4") # Label estimates
 VCOV <- matrix(c(0.143354252,  0.031582705,  0.049881853,  0.006769526,
                  0.031582705,  0.10707347,  -0.034664495, -0.033094646,
                  0.049881853, -0.034664495,  0.146597544,  0.008185565,
-                 0.006769526, -0.033094646,  0.008185565,  0.116578062), byrow = T, ncol = 4)
+                 0.006769526, -0.033094646,  0.008185565,  0.116578062), 
+               byrow = T, ncol = 4)
 H1 <- "beta1 > 0" # use same names/labels as the ones of the estimates
 H2 <- "beta1 > 0; beta2 > 0"
 set.seed(123) # Set seed value
@@ -270,10 +275,15 @@ summary(out)
 # Generate data
 # To demonstrate this, new data will be generated, where the variables in the 
 # data are going to differ in their contribution to the dependent variable. 
-# Below we set a vector of ratios to c(1,1.5,2), which then reflects the 
-# population regression coefficient values. It means that the contribution to 
-# the outcome variable `y`, increases from x1 to x3, where that of x2 is 1.5 and
-# that of x3 is 2 times as large as that of x1.
+# Below, the vector of ratios is to c(1,1.5,2), which then reflects the 
+# population regression coefficient values. 
+
+# To demonstrate this, new data will be generated. In the data, the contribution 
+# of the variables to the dependent variable will differ. Below, the vector of 
+# ratios of these contributions is set to c(1,1.5,2). This, then reflects 
+# (the ratios of) the population regression coefficient values. It means that 
+# the contribution to the outcome variable y, increases from x1 to x3, where 
+# that of x2 is 1.5 and that of x3 is 2 times as large as that of x1.
 ratio <- c(1, 1.5, 2)
 n <- 30
 x1 <- rnorm(n)
@@ -316,8 +326,8 @@ summary(out_s)
 #m2 < m4
 #m3 < m4 '
 ## For more detail, see Vanbrabant, Van Loey, and Kuiper (2020).
-# Note: This code cannot be run now, since our variables and more importantly 
-# parameters are labeled differently. One can run:
+# Note: This code cannot be run now, since the variables and, more importantly, 
+# the parameters are labeled differently. One can run:
 H1 <- "
 m1 := .Intercept.
 m2 := .Intercept. + x1
@@ -338,7 +348,7 @@ summary(out)
 
 
 # There are three types of comparisons: none, unconstrained, and complement.
-# Subsequently, we also show, for the last type, what output can be asked for, 
+# Subsequently, it is shown, for the last type, what output can be asked for, 
 # which of course holds for all examples.
 
 # 1) If "none", then only hypotheses of interest are inspected. 
@@ -395,7 +405,8 @@ summary(out, brief = FALSE)
 #
 # Ask for different elements of the output by:
 out$result      # gives Results 
-                # (i.e., per model/hypothesis the log likelihood, penalty, goric(a), and goric(a) weights)
+                # (i.e., per model/hypothesis the log likelihood, penalty, 
+                # goric(a), and goric(a) weights).
 out$ratio.gw    # gives the Relative GORIC(A)-weights matrix, which gives 
                 # the relative support of a hypothesis versus another.
 out$ormle       # gives the order-/inequality-restricted coefficients (ormle's).

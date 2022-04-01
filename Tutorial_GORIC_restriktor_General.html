@@ -64,6 +64,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -84,6 +85,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -263,7 +267,7 @@ div.tocify {
 <li><code>&quot;unconstrained&quot;</code> (default)</li>
 <li><code>&quot;complement&quot;</code></li>
 </ul>
-<p>If you choose <code>&quot;none&quot;</code>, only the hypotheses of interest are inspected. This can lead to choosing the best out of a set of weak hypotheses. Therefore, this is only recommended when the hypotheses of interest cover the full parameter space / cover the whole set of possible theories. If <code>&quot;unconstrained&quot;</code> is chosen, then the unconstrained / unrestricted / classical alternative hypothesis is included in the set. This safeguards from choosing a weak hypothesis as the best one. If at least one of the theory-based / informative hypotheses is not weak, one can compare those to all other hypotheses in the set. Currently, <code>&quot;complement&quot;</code> only works for one hypothesis and not for a whole set. Then, the complement of the hypothesis of interest is evaluated and acts like a competing hypothesis. Since there is per definition no overlap between the hypothesis and its complement, this is more powerful then including the unconstrained hypothesis. Please note that in the example below, the default <code>comparison = &quot;unconstrained&quot;</code> is used. At the end of the file, there are three examples for the three types of comparisons.</p>
+<p>If you choose <code>&quot;none&quot;</code>, only the hypotheses of interest are inspected. This can lead to choosing the best out of a set of weak hypotheses. Therefore, this is only recommended when the hypotheses of interest cover the full parameter space / cover the whole set of possible theories. If <code>&quot;unconstrained&quot;</code> is chosen, then the unconstrained / unrestricted / classical alternative hypothesis is included in the set. This safeguards from choosing a weak hypothesis, that is, a hypothesis not supported by the data, as the best one. If at least one of the theory-based / informative hypotheses is not weak, one can compare those to all other hypotheses in the set. Currently, <code>&quot;complement&quot;</code> only works for one hypothesis and not for a whole set. Then, the complement of the hypothesis of interest is evaluated and acts like a competing hypothesis. Since there is per definition no overlap between the hypothesis and its complement, this is more powerful then including the unconstrained hypothesis. Please note that in the example below, the default <code>comparison = &quot;unconstrained&quot;</code> is used. At the end of the file, there are three examples for the three types of comparisons.</p>
 <p>The <code>goric()</code> function of <code>restriktor</code> takes different forms of input (for model parameter estimates and constraints).</p>
 <ol class="example" style="list-style-type: decimal">
 <li>Fitted unconstrained (<code>lm</code> or <code>glm</code>) object* + character constraints.</li>
@@ -301,35 +305,39 @@ div.tocify {
 </div>
 <div id="preparation" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Preparation</h1>
-<p>Before we can start with the analyses, it is necessary to install and load the packages.</p>
+<p>Before starting the analyses, it is necessary to install and load the packages. Note that one needs to install the package only once, but has to load the package each time the R script is run.</p>
 <pre class="r"><code># If you want to use restriktor from github:
 #if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
 #library(devtools) 
 #install_github(&quot;LeonardV/restriktor&quot;)
 #library(restriktor) # for goric function
 # If from CRAN:
-if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) # install this package first (once)
+if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) 
 library(restriktor) # for goric function
 #
-# In case one wants to use and improve computtaion time of bootstrapping (see &#39;mix.bootstrap&#39; below):
-if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) # install this package first (once)
+# In case one wants to use and improve computation time of bootstrapping 
+# (see &#39;mix.bootstrap&#39; below):
+if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) 
 library(parallel)</code></pre>
-<p>Next, we generate data as example data to illustrate the functionality of the goric() function. If you want to obtain the same results as obtained here, it is necessary to set the seed at a fixed number.</p>
+<p>Next, data is generated as example data to illustrate the functionality of the goric() function. If you want to obtain the same results as obtained here, it is necessary to set the seed at a fixed number.</p>
 <pre class="r"><code>set.seed(123)
 
 n &lt;- 10        # sample size
-x1 &lt;- rnorm(n) # predictor 1, where n random draws are taken from a standard normal distributed population
+x1 &lt;- rnorm(n) # predictor 1, where n random draws are taken from a standard 
+               #                               normal distributed population
 x2 &lt;- rnorm(n) # predictor 2
 x3 &lt;- rnorm(n) # predictor 3
 e &lt;- rnorm(n)  # error term
-y &lt;- 1 + x1 + x2 + x3 + e # outcome, obtained by filling in the regression equation with an intercept of 1 and regression coefficients of 1.</code></pre>
-<p>Then, we can fit a regression model using the <code>lm()</code> function:</p>
+y &lt;- 1 + x1 + x2 + x3 + e # outcome, obtained by filling in the regression 
+                          # equation with an intercept of 1 and 
+                          # regression coefficients of 1.</code></pre>
+<p>Then, a regression model can be fit using the <code>lm()</code> function:</p>
 <pre class="r"><code>fit.lm &lt;- lm(y ~ x1 + x2 + x3)</code></pre>
-<p>Below, we will apply the GORIC and GORICA to this model.</p>
-<p>When applying the GORIC(A), we also specify hypotheses. Normally, these would be based on theory. However, since we generated (hypothetical) data, we just quasi-randomly specify two hypotheses.</p>
+<p>Below, the GORIC and GORICA are applied to this model.</p>
+<p>To apply the GORIC(A), hypotheses need to be specified. Normally, these would be based on theory. However, since (hypothetical) data is generated, quasi-randomly two hypotheses are specified.</p>
 <p>Notes on specifying hypotheses:</p>
 <ul>
-<li><p>Hypotheses in R are in terms of the labeling used for the estimates (instead of the names for the population parameters, say, beta0, …, beta3). Thus, in our case, we should use: .Intercept., x1, x2, and/or x3.</p></li>
+<li><p>Hypotheses in R are in terms of the labeling used for the estimates (instead of the names for the population parameters, say, beta0, …, beta3). Thus, here: .Intercept., x1, x2, and/or x3.</p></li>
 <li><p>In case estimates of continuous predictor variables are compared (e.g., <code>&quot;x1 &lt; x2&quot;</code>), one should standardize the data (this is shown in more detail below) or use the standarized parameter estimates.</p></li>
 </ul>
 </div>
@@ -344,10 +352,10 @@ y &lt;- 1 + x1 + x2 + x3 + e # outcome, obtained by filling in the regression eq
 </ul>
 <div id="fitted-unconstrained-glm-object-character-constraints" class="section level3" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Fitted unconstrained (g)lm object + character constraints</h3>
-<p>We have to specify the hypotheses first. Note that the <code>;</code> separates the restrictions within one hypothesis.</p>
+<p>Next, the hypotheses need to be specified. Note that the <code>;</code> separates the restrictions within one hypothesis.</p>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
-<p>Since we have the data and the hypotheses, we can now calculate the GORIC values and weights.</p>
+<p>Now, the GORIC values and weights can be calculated.</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, H1, H2)
 summary(out)</code></pre>
@@ -497,10 +505,10 @@ unconstrained  91.977  2.364   1.000
 <p>After specifying the hypotheses:</p>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
-<p>we can fit the <code>restriktor</code> objects as follows:</p>
+<p>the <code>restriktor</code> objects can be fitted as follows:</p>
 <pre class="r"><code>fit1.restr &lt;- restriktor(fit.lm, H1)
 fit2.restr &lt;- restriktor(fit.lm, H2)</code></pre>
-<p>Now, we can once again use the GORIC for model selection:</p>
+<p>Now, use the GORIC for model selection:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 out &lt;- goric(fit1.restr, fit2.restr)
 summary(out)</code></pre>
@@ -554,10 +562,10 @@ Note: In case of equal log-likelihood (loglik) values, the
 <p>One needs to extract the estimates (of interest), as well as their variance-covariance matrix. Both can be extracted from the <code>fit.lm</code> object (also from non-(g)lm objects).</p>
 <pre class="r"><code>est &lt;- coef(fit.lm)
 VCOV &lt;- vcov(fit.lm)</code></pre>
-<p>Next, we have to specify the hypotheses using the labels of ‘est’ (which can also be re-labelled as is done in the next subsection).</p>
+<p>Next, the hypotheses need to be specified using the labels of ‘est’ (which can also be re-labelled as is done in the next subsection).</p>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
-<p>Then, we can use the <code>goric()</code> function to select the best model.</p>
+<p>Then, use the <code>goric()</code> function to select the best model.</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 out &lt;- goric(est, H1, H2, VCOV = VCOV, type = &quot;gorica&quot;)
 summary(out)</code></pre>
@@ -607,7 +615,7 @@ unconstrained  0.607   0.316   1.000
 ---
 Note: In case of equal log-likelihood (loglik) values, the 
       ratio weights are solely based on the difference in penalty values.</code></pre>
-<p>Now, the exact same weights are obtained. However, the penalties are two points lower than before, which is due to the fact that we left out two unconstrained/free parameters. The log-likelihoods also change. But, when comparing the support for the hypotheses, these differences cancel out.</p>
+<p>Now, the exact same weights are obtained. However, the penalties are two points lower than before, which is due to the fact that two unconstrained/free parameters are left out. The log-likelihoods also change. But, when comparing the support for the hypotheses, these differences cancel out.</p>
 </div>
 <div id="relabeled-numeric-vector-character-constraints" class="section level3" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Relabeled numeric vector + character constraints</h3>
@@ -713,12 +721,13 @@ Note: In case of equal log-likelihood (loglik) values, the
 </div>
 <div id="standardized-data" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Standardized data</h2>
-<p>If estimates of continuous predictor variables are compared (e.g., <em>“x1 &lt; x2”</em>), then one should standardize the data. To demonstrate this, new data will be generated, where the variables in the data are going to differ in their contribution to the dependent variable. Below we set a vector of ratios to <span class="math inline">\(=c(1,1.5,2)\)</span>, which then reflects the population regression coefficient values. It means that the contribution to the outcome variable <code>y</code>, increases from <code>x1</code> to <code>x3</code>, where that of <code>x2</code> is <span class="math inline">\(1.5\)</span> and that of <code>x3</code> is <span class="math inline">\(2\)</span> times as large as that of <code>x1</code>.</p>
+<p>If estimates of continuous predictor variables are compared (e.g., <em>“x1 &lt; x2”</em>), then one should standardize the data. To demonstrate this, new data will be generated. In the data, the contribution of the variables to the dependent variable will differ. Below, the vector of ratios of these contributions is set to <span class="math inline">\(=c(1,1.5,2)\)</span>. This, then reflects (the ratios of) the population regression coefficient values. It means that the contribution to the outcome variable <code>y</code>, increases from <code>x1</code> to <code>x3</code>, where that of <code>x2</code> is <span class="math inline">\(1.5\)</span> and that of <code>x3</code> is <span class="math inline">\(2\)</span> times as large as that of <code>x1</code>.</p>
 <pre class="r"><code>ratio &lt;- c(1, 1.5, 2) # ratio between population effects of the predictors
 
 n &lt;- 30 # sample size
 
-x1 &lt;- rnorm(n) # predictor1: n draws from a standard normal distributed population
+x1 &lt;- rnorm(n) # predictor1: 
+               # n draws from a standard normal distributed population
 x2 &lt;- rnorm(n) # predictor2
 x3 &lt;- rnorm(n) # predictor3
 e &lt;- rnorm(n)
@@ -728,11 +737,11 @@ data_s &lt;- as.data.frame(scale(data))
 
 y &lt;- ratio[1] * data_s$x1 + ratio[2] * data_s$x2 + ratio[3] * data_s$x3 + e</code></pre>
 <p><em>Note.</em> Since there is only one outcome, the outcome does not need to be standardized.</p>
-<p>Now, we can again fit the regression model, and specify a hypothesis by means of character constraints.</p>
+<p>Now, fit the regression model, and specify a hypothesis by means of character constraints.</p>
 <pre class="r"><code>fit.lm_s &lt;- lm(y ~ -1 + x1 + x2 + x3, data = data_s)
 
 H1 &lt;- &quot;x1 &lt; x2&quot;</code></pre>
-<p>Then, we can calculate the GORIC values and weights:</p>
+<p>Then, calculate the GORIC values and weights:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 out_s &lt;- goric(fit.lm, H1, comparison = &quot;complement&quot;)
 summary(out_s)</code></pre>
@@ -766,7 +775,7 @@ The order-restricted hypothesis &#39;H1&#39; has  0.116 times more support than 
         m1 &lt; m4
         m2 &lt; m4
         m3 &lt; m4 &#39;</code></pre>
-<p>For more details, please see Vanbrabant, Van Loey, and Kuiper 2020). However, please note that this code cannot be run now, since our variables and more importantly parameters are labeled differently. One can run:</p>
+<p>For more details, please see Vanbrabant, Van Loey, and Kuiper 2020). However, please note that this code cannot be run now, since the variables and, more importantly, the parameters are labeled differently. One can run:</p>
 <pre class="r"><code>H1 &lt;- &#39; m1 := .Intercept.
         m2 := .Intercept. + x1
         m3 := .Intercept. + x2
@@ -796,7 +805,7 @@ unconstrained  8.972   1.000
 </div>
 <div id="types-of-comparisons" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Types of comparisons</h1>
-<p>There are three types of comparisons: <code>&quot;none&quot;</code>, <code>&quot;unconstrained&quot;</code>, and <code>&quot;complement&quot;</code>. Subsequently, we also show, for the last type, what output can be asked for, which of course holds for all examples.</p>
+<p>There are three types of comparisons: <code>&quot;none&quot;</code>, <code>&quot;unconstrained&quot;</code>, and <code>&quot;complement&quot;</code>. Subsequently, it is shown, for the last type, what output can be asked for, which of course holds for all examples.</p>
 <div id="comparison-none" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Comparison = “none””</h2>
 <p>If <code>comparison = &quot;none&quot;</code>, then only the hypotheses of interest are inspected. This can lead to choosing the best hypothesis out of a set of weak hypotheses. Hence, one should only use this if the hypotheses cover the whole parameter space, that is, cover all possible theories/hypotheses.</p>
@@ -831,7 +840,8 @@ H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;
 
 set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, H1, H2, comparison = &quot;unconstrained&quot;)
-# or: out &lt;- goric(fit.lm, H1, H2, type = &quot;gorica&quot;, comparison = &quot;unconstrained&quot;)
+# or: 
+# out &lt;- goric(fit.lm, H1, H2, type = &quot;gorica&quot;, comparison = &quot;unconstrained&quot;)
 summary(out)</code></pre>
 <pre><code>
 restriktor: generalized order-restricted information criterion: 

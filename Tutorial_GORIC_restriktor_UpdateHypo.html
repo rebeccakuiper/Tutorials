@@ -64,6 +64,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -84,6 +85,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -247,22 +251,23 @@ div.tocify {
 </div>
 
 
-<p>This is a tutorial for updating hypotheses and calculating the GORIC(A). It uses the goric() function of the restriktor package to calculate the GORIC and the GORICA.</p>
+<p>This is a tutorial for updating hypotheses using the GORIC(A). It uses the goric() function of the restriktor package to calculate the GORIC and the GORICA.</p>
 <p>Updating hypotheses, consists of the following three steps:</p>
 <ol style="list-style-type: decimal">
 <li>Conduct (exploratory) model selection to the first study.</li>
-<li>Specify the (confirmatory/informative) hypotheses for the second study (the replication study) using the results from Step 1.</li>
+<li>Specify the (confirmatory/informative) hypotheses for the second/replication study using the results from Step 1, that is, update your hypotheses.</li>
 <li>Conduct model selection to the second study.</li>
 </ol>
 <p>Two examples will be used:</p>
 <ol style="list-style-type: decimal">
-<li>The first is based on Monin and Holubar, a replication study of Monin. Here, the study of Monin is used to update the explortaory hypotheses used Monin to theory-based, order-restricted hypotheses for Holubar. By examining these, one can check whether Holubar replicated the findings of Monin or not. Both these studies use an ANOVA model.</li>
-<li>The second example is based on Altinisik et al.. Here, theory-based hypotheses are based on theories and on previous findings. In this example, the GORICA is applied to the results of a logistic regression model. At the end, there if code to automatically create all possible explorative hypotheses, which can be helpful when there are a lot of parameters.</li>
+<li>The first is based on Monin and Holubar, a replication study of Monin. Here, the study of Monin is used to update the exploratory hypotheses evaluated in Monin to theory-based, order-restricted hypotheses to be evaluated in Holubar. By examining these, one can check whether Holubar replicated the findings of Monin or not. Both these studies use an ANOVA model.</li>
+<li>The second example is based on Altinisik et al.. Here, theory-based hypotheses are based on theories and on findings of previous studies. In this example, the GORICA is applied to the results of a logistic regression model.</li>
 </ol>
+<p>At the end, there is code to automatically create all possible exploratory hypotheses, which can be helpful when there are a lot of parameters.</p>
 <div id="load-libraries" class="section level1">
 <h1>Load libraries</h1>
-<p>We need to load the required libraries (after they have been installed). These libraries contain functions, such as <code>goric</code>, that will be used in the R code below. Each time you reopen R, you will have to load the required libraries.</p>
-<pre class="r"><code>## First, we need to install the packages, if you have not done this already:
+<p>Start with loading the required libraries (after they have been installed). These libraries contain functions, such as <code>goric</code>, that will be used in the R code below. Each time you reopen R, you will have to load the required libraries.</p>
+<pre class="r"><code>## First, install the packages, if you have not done this already:
 if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
@@ -272,17 +277,28 @@ library(restriktor) # for the goric function</code></pre>
 </div>
 <div id="example-1-anova" class="section level1">
 <h1>Example 1: ANOVA</h1>
-<p>In this example, the study of Monin will be used to render order-constrained hypotheses for the Holubar study, which is a (direct) replication study of Monin. For this, we will do an exploratory analysis on the Monin data and inspect the sample means.</p>
-<div id="load-data-of-monin" class="section level2">
-<h2>Load data of Monin</h2>
+<p>In this example, the study of Monin will be used to render order-constrained hypotheses for the Holubar study, which is a (direct) replication study of Monin. For this, an exploratory analysis will be performed on the Monin data and inspect the sample means.</p>
+<div id="step-1-model-selection-1st-study" class="section level2">
+<h2>Step 1: Model selection 1st study</h2>
+<div id="data-preparation" class="section level3">
+<h3>Data preparation</h3>
+<p>First, load the required libraries (after they have been installed). These libraries contain functions, such as <code>goric</code>, that will be used in the R code below. Each time you reopen R, you will have to load the required libraries.</p>
+<pre class="r"><code>## First, install the packages, if you have not done this already:
+if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
+if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+
+## Then, load the packages:
+library(psych) # for the function describeBy
+library(restriktor) # for the goric function</code></pre>
+<p>Second, it is necessary to load the data.</p>
 <p>Notably, it is only possible to load the data if you are using the correct working directory (with both your R script and data file). The command <code>getwd()</code> shows you your current working directory. You can change the working directory to the one you prefer using the function <code>setwd()</code> by specifying the correct location between parentheses. Alternatively, in Rstudio, you can use the “Session” tab (on top) or you can use the “Files”-pane (on top of probably the right lower box of your Rstudio-screen, this pane is located next to the panes for “Plots”, “Packages”, “Help” and “Viewer”).</p>
 <p>If you open the data file <code>Data_Monin.txt</code> in a text editor, you can see that the variable labels have been inserted (using quotes; i.e., “…”) in the first line of the file, which is called a header. Therefore, you have to specify ‘header = TRUE’ when loading the data:</p>
 <pre class="r"><code># Load the data
 Monin &lt;- read.table(&quot;Data_Monin.txt&quot;, header = TRUE)</code></pre>
-<p>Since we loaded a .txt file, R does not know the measurement levels of the variables and assumes all of them to be continuous, meaning that they are of interval or ratio type. Hence, especially when there are more than two groups, we need to tell R that the variable <code>group</code> is a factor by using the <code>factor()</code> function over the <code>group</code> variable (i.e., a grouping / categorical / nominal variable):</p>
+<p>Since a .txt file was loaded, R does not know the measurement levels of the variables and assumes all of them to be continuous, meaning that they are of interval or ratio type. Hence, especially when there are more than two groups, one has to tell R that the variable <code>group</code> is a factor by using the <code>factor()</code> function on the <code>group</code> variable (i.e., a grouping / categorical / nominal variable):</p>
 <pre class="r"><code># Make the variable group a factor
 Monin$group &lt;- factor(Monin$group) </code></pre>
-<p>To inspect the dataset, use:</p>
+<p>To inspect the first 6 rows of the dataset, use the <code>head()</code> function:</p>
 <pre class="r"><code>head(Monin) # Look at first (6) rows of the data</code></pre>
 <pre><code>      attract group
 1  1.19560213     1
@@ -291,7 +307,7 @@ Monin$group &lt;- factor(Monin$group) </code></pre>
 4  1.78095312     1
 5  1.86726943     1
 6  1.12279975     1</code></pre>
-<p>If you want a more detailed overview of the data, by means of descriptive statistics split by <code>group</code>, use</p>
+<p>To see a more detailed overview of the data via descriptive statistics split by <code>group</code> variable, use the <code>describeBy()</code> function with <code>Monin$group</code> set to be a grouping variable, as follows:</p>
 <pre class="r"><code>descrstat &lt;- describeBy(Monin$attract, Monin$group, mat = TRUE)
 descrstat</code></pre>
 <pre><code>    item group1 vars  n mean   sd    median      trimmed       mad       min
@@ -303,22 +319,25 @@ X11 5.050421 6.151343 0.20074159  0.1351877 0.3165937
 X12 6.745590 7.844595 0.02372038 -0.5144330 0.4473607
 X13 4.916406 8.827808 0.02759103 -1.0338883 0.4419549</code></pre>
 </div>
-<div id="model-selection-using-goric-on-monin-data" class="section level2">
-<h2>Model Selection using GORIC on Monin data</h2>
-<p>First, we need an R-object with unconstrained estimates, that is, in this example, the group means and one residual variance.</p>
+<div id="preparation-for-gorica" class="section level3">
+<h3>Preparation for GORIC(A)</h3>
+<div id="anova-model-r-object" class="section level4">
+<h4>ANOVA model: R-object</h4>
+<p>First, an R-object with unconstrained estimates is needed, that is, in this example, the three group means and one residual variance. The linear regression model using <code>lm()</code> function is specified as follows:</p>
 <pre class="r"><code>lm_fit_Monin &lt;- lm(attract ~ group - 1, data = Monin)</code></pre>
 <p>Note that:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>y ~ group - 1</code> instructs the function <code>lm</code> (linear model) to regress y on group.</p></li>
-<li><p>The <code>- 1</code> instructs the function <code>lm</code> to drop the intercept and, therefore, estimate the means in each group, resulting here in three group means. On the other hand, `y ~ group’ would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, two) groups and the reference group.</p></li>
+<li><p>The <code>- 1</code> instructs the function <code>lm</code> to drop the intercept and, therefore, estimate the means of each group, resulting here in five group means. On the other hand, if the intercept is not dropped, `y ~ group’ would estimate an intercept, representing the mean of the reference group, and the mean differences between the other (here, two) groups and the reference group.</p></li>
 <li><p>The results are collected in, what is called, an R-object, named <code>lm_fit_Monin</code>.</p></li>
 </ol>
-<p>Let’s check the names used in this model.</p>
+<p>It can be helpful to check the names used in this model, because these are needed when specifying the hypotheses:</p>
 <pre class="r"><code>names(coef(lm_fit_Monin))</code></pre>
 <pre><code>[1] &quot;group1&quot; &quot;group2&quot; &quot;group3&quot;</code></pre>
-<div id="set-of-exploratory-hypotheses-for-monin" class="section level3">
-<h3>Set of exploratory hypotheses for Monin</h3>
-<p>On the Monin data set, we are going to do an exploratory analysis, which means that we are going to use all combinations with equalities (and no restrictions). To specify hypotheses, we need to remember the following:</p>
+</div>
+<div id="set-of-exploratory-hypotheses" class="section level4">
+<h4>Set of (exploratory) hypotheses</h4>
+<p>On the Monin data set, an exploratory analysis will be performed, which means evaluating all combinations with equalities (and no restrictions). To specify hypotheses, remember the following:</p>
 <ul>
 <li><p>Within the <code>restriktor()</code> and <code>goric()</code> functions, it is possible to use the following operators: <code>&gt;</code>, <code>&lt;</code>, <code>=</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code> (where the last three denote the same constraint as the first three).</p></li>
 <li><p>The <code>goric()</code> and the <code>restriktor()</code> functions can deal with:</p>
@@ -326,29 +345,34 @@ X13 4.916406 8.827808 0.02759103 -1.0338883 0.4419549</code></pre>
 <li>pairwise restrictions separated by a semicolon <code>;</code> (e.g., <em>“beta1 &gt; beta2; beta2 = beta3”</em>).</li>
 <li>combined restrictions consisting of more than one operator (e.g., <em>“beta1 &gt; beta2 = beta3”</em>).</li>
 </ul>
-<p>Note that one should use the labels of the parameter estimates (in the example above: group1-group5).</p></li>
+<p>Note that one should use the labels of the parameter estimates (in the example above: group1-group3).</p></li>
 <li><p>One can also define hypothesis in terms of linear functions of parameters (For more details, see ‘Extra possibility specification hypotheses’ near the end of the goric() tutorial called ‘Tutorial_GORIC_restriktor_General’).</p></li>
 </ul>
-<p>Let’s specify the exploratory hypotheses:</p>
+<p>All possible exploratory hypotheses are denoted by:</p>
 <pre class="r"><code>H00 &lt;- &#39;group1 = group2 = group3&#39; 
 H01 &lt;- &#39;group1 = group2&#39; 
 H02 &lt;- &#39;group1 = group3&#39; 
 H03 &lt;- &#39;group2 = group3&#39;</code></pre>
-<p>To prevent from selecting a weak hypothesis, one should include a failsafe/safeguard hypothesis. This can be:</p>
+<p>To prevent from selecting a weak hypothesis, that is, a hypothesis not supported by the data, one should include a failsafe/safeguard hypothesis. This can be:</p>
 <ul>
 <li><p>the unconstrained hypothesis (which includes all possible hypotheses, thus including the one(s) of interest);</p></li>
 <li><p>the complement (which includes all other possible hypotheses, thus excluding the one(s) of interest),</p></li>
 </ul>
 <p>where the first option is the default. Notably, currently, the complement can only be used for one hypothesis of interest.</p>
-<p>In case there are many possibilities, you do not want to write all pairwise restrictions out. In that case, use automated code, as given at the end of this tutorial.</p>
 </div>
-<div id="calculate-gorica-values-and-weights-for-monin" class="section level3">
-<h3>Calculate GORIC(A) values and weights for Monin</h3>
-<p>In the calculation of the GORIC, an iterative process is needed to calculate the penalty / complexity part. Therefore, one needs to set a seed value:</p>
+<div id="seed-values" class="section level4">
+<h4>Seed values</h4>
+<p>In the calculation of the GORIC, an iterative process is used to calculate the penalty / complexity part. Therefore, one needs to set a seed value using the <code>set.seed()</code>. This has two advantages:</p>
 <ol style="list-style-type: decimal">
-<li><p>Then, you will obtain the same penalty value every time you run this code.</p></li>
-<li><p>Then, you can change the seed value to check the sensitivity of the penalty value. If it is sensitive, then increase number of iterations used in calculation of the penalty (see below).</p></li>
+<li><p>Using the same seed value leads to the same penalty value every time this code is run.</p></li>
+<li><p>Using different seed values, allows for sensitivity check on the penalty value. If it is sensitive, then increase number of iterations used in calculation of the penalty (see below).</p></li>
 </ol>
+</div>
+</div>
+<div id="model-selection-using-gorica" class="section level3">
+<h3>Model selection using GORIC(A)</h3>
+<div id="calculate-goric-values-and-weights" class="section level4">
+<h4>Calculate GORIC values and weights</h4>
 <pre class="r"><code>set.seed(123) # Set seed value
 goric(lm_fit_Monin, H00, H01, H02, H03)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion: 
@@ -361,15 +385,24 @@ Results:
 4            H03  -148.907    3.000  303.815          0.000
 5  unconstrained  -140.665    4.000  289.330          0.380
 ---</code></pre>
-<p>It can be seen that <span class="math inline">\(H_01\)</span> (<span class="math inline">\(\mu_1 = \mu_2, \mu_3\)</span>) receives the most support. Based on the means (see <code>descrstat</code>), where we see that <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are both larger than <span class="math inline">\(\mu_3\)</span>, we will evaluate the following hypothesis in the Holubar data: <span class="math display">\[H_1: \mu_1 = \mu_2 &gt; \mu_3.\]</span> Since <span class="math inline">\(H_u\)</span> obtained some support as well, we could specify (using the sample means of the Monin data) thw following competing hypothesis: <span class="math display">\[H_2: \mu_2 &gt; \mu_1 &gt; \mu_3.\]</span></p>
-<p>In case you want to use the GORICA values and weights instead, use:</p>
+</div>
+<div id="calculate-gorica-values-and-weights" class="section level4">
+<h4>Calculate GORICA values and weights</h4>
+<p>In case you want to use the GORICA values and weights instead, use: type = “gorica”. Thus:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
-goric(lm_fit_Monin, H0, H1, H2, H3, type = &quot;gorica&quot;)</code></pre>
+goric(lm_fit_Monin,H00, H01, H02, H03, type = &quot;gorica&quot;)</code></pre>
 </div>
 </div>
-<div id="load-data-of-holubar-replication-study" class="section level2">
-<h2>Load data of Holubar (replication study)</h2>
-<p>First, we have to read in the Holubar dataset, and tell R that the variable <code>gr</code> (group) is a factor instead of a continuous variable (although it is not necessary becaue it only consists of two groups).</p>
+</div>
+<div id="step-2-update-hypotheses" class="section level2">
+<h2>Step 2: Update hypotheses</h2>
+<p>It can be seen that <span class="math inline">\(H_01\)</span> (<span class="math inline">\(\mu_1 = \mu_2, \mu_3\)</span>) receives the most support. From the sample means (see <code>descrstat</code>), it is concluded that <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are both larger than <span class="math inline">\(\mu_3\)</span>. Therefore, the following hypothesis will be evaluated in the Holubar data: <span class="math display">\[H_1: \mu_1 = \mu_2 &gt; \mu_3.\]</span> Since <span class="math inline">\(H_u\)</span> obtained some support as well, one could specify (using the sample means of the Monin data) the following competing hypothesis: <span class="math display">\[H_2: \mu_2 &gt; \mu_1 &gt; \mu_3.\]</span></p>
+</div>
+<div id="step-3-model-selection-2nd-study" class="section level2">
+<h2>Step 3: Model selection 2nd study</h2>
+<div id="data-preparation-1" class="section level3">
+<h3>Data preparation</h3>
+<p>First, read in the Holubar dataset (the replication study of Monin), and tell R that the variable <code>gr</code> (group) is a factor instead of a continuous variable (although it is not necessary because it consists of only two groups).</p>
 <pre class="r"><code>Holubar &lt;- read.table(&quot;Data_Holubar.txt&quot;, header = TRUE) # load the data
 Holubar$gr &lt;- factor(Holubar$gr) # tell R that gr is a factor</code></pre>
 <p>If you want a more detailed overview of the data, also by means of descriptive statistics splitted by <code>group</code>, use</p>
@@ -391,18 +424,28 @@ X13    3      3    1 28 0.27 1.72 -0.09890765 0.2030397 2.435392 -2.2764939
 X11 3.616788 4.335313  0.1900155 -0.7778894 0.2683282
 X12 2.921103 7.882563 -0.5166569 -0.1041621 0.3618062
 X13 3.796158 6.072652  0.2923302 -1.0251005 0.3250494</code></pre>
-<p>Then, we fit an ANOVA-model by means of the <code>lm</code>-function (linear model) and directly check the names that are used in this model:</p>
+</div>
+<div id="preparation-for-gorica-1" class="section level3">
+<h3>Preparation for GORIC(A)</h3>
+<div id="anova-model-r-object-1" class="section level4">
+<h4>ANOVA model: R-object</h4>
+<p>Then, fit an ANOVA-model by means of the <code>lm()</code> function (linear model) and directly check the names that are used in this model:</p>
 <pre class="r"><code>lm_fit_Holubar &lt;- lm(at ~ gr - 1, data = Holubar)
 names(coef(lm_fit_Holubar))</code></pre>
 <pre><code>[1] &quot;gr1&quot; &quot;gr2&quot; &quot;gr3&quot;</code></pre>
-<div id="set-of-hypotheses-for-holubar-based-on-results-of-monin" class="section level3">
-<h3>Set of hypotheses for Holubar based on results of Monin</h3>
-<p>Based on the results and sample means of Monin, we created two competing hypotheses:</p>
-<pre class="r"><code>H1 &lt;- &#39;gr1 = gr2 &gt; gr3&#39; # or: gr1 = gr2; gr2 &gt; gr3
-H2 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;  </code></pre>
 </div>
-<div id="calculate-gorica-values-and-weights-for-holubar" class="section level3">
-<h3>Calculate GORIC(A) values and weights for Holubar</h3>
+<div id="set-of-hypotheses" class="section level4">
+<h4>Set of hypotheses</h4>
+<p>Based on the results and sample means of Monin, the following two competing hypotheses were created:</p>
+<pre class="r"><code>H1 &lt;- &#39;gr1 = gr2 &gt; gr3&#39; 
+H2 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;</code></pre>
+</div>
+</div>
+<div id="model-selection-using-gorica-1" class="section level3">
+<h3>Model selection using GORIC(A)</h3>
+</div>
+<div id="calculate-goric-values-and-weights-1" class="section level3">
+<h3>Calculate GORIC values and weights</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_repl &lt;- goric(lm_fit_Holubar, H1, H2)
 summary(output_repl)</code></pre>
@@ -424,7 +467,9 @@ unconstrained  1.557   2.109   1.000
 ---
 Note: In case of equal log-likelihood (loglik) values, the 
       ratio weights are solely based on the difference in penalty values.</code></pre>
-<p>Since the support for <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> is lower than for <span class="math inline">\(H_u\)</span>, both are weak hypotheses. Hence, the study of Holubar did not replicate the findings of Monin.</p>
+<p>Since the support for <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> is lower than for <span class="math inline">\(H_u\)</span>, it can be concluded that both are weak hypotheses. Hence, the study of Holubar did not replicate the findings of Monin.</p>
+<div id="alternative-set" class="section level4">
+<h4>Alternative set</h4>
 <p>In case you are only interested in the ‘main hypothesis’ <span class="math inline">\(H_1\)</span> found in Monin, you could also evaluate this against its complement:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 goric(lm_fit_Holubar, H1, comparison = &quot;complement&quot;)</code></pre>
@@ -437,6 +482,9 @@ Results:
 ---
 The order-restricted hypothesis &#39;H1&#39; has  0.390 times more support than its complement.</code></pre>
 <p>Since <span class="math inline">\(H_1\)</span> has only 0.39 (lower than 1) times more support than its complement, it is a weak hypothesis. Hence, the study of Holubar did not replicate the findings of Monin.</p>
+</div>
+<div id="calculate-gorica-values-and-weights-1" class="section level4">
+<h4>Calculate GORICA values and weights</h4>
 <p>Notably, in case you want to use the GORICA, you can use the following commands:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 goric(lm_fit_Holubar, H0, H1, H2, type = &quot;gorica&quot;)</code></pre>
@@ -446,14 +494,16 @@ goric(lm_fit_Holubar, H1, type = &quot;gorica&quot;, comparison = &quot;compleme
 </div>
 </div>
 </div>
-<div id="example-1-logistic-regression-example" class="section level1">
-<h1>Example 1: Logistic regression example</h1>
+</div>
+<div id="example-2-logistic-regression-example" class="section level1">
+<h1>Example 2: Logistic regression example</h1>
 <p>In this example, the order-constrained hypotheses for a replication data set are based on the results of the original study and based on theories from two previous studies. More details can be found in Altinisik et al. (2021). Since the data cannot be shared, the estimates of the parameters of interest and their covariance matrix are used, which can serve as input for the GORICA.</p>
-<div id="load-data" class="section level2">
-<h2>Load data</h2>
+<div id="load-data" class="section level3">
+<h3>Load data</h3>
 <p>The estimates of structural parameters (i.e., the parameters of interest, that is, the parameters used in the hypotheses) are</p>
 <pre class="r"><code>est &lt;- c(0.4765484,  0.2759022,  0.8669835, -0.4430030,  0.8066336, -0.2462610)
-names(est) &lt;- c(&quot;RS_Gr1&quot;, &quot;RSES_Gr1&quot;, &quot;RS_Gr2&quot;, &quot;RSES_Gr2&quot;, &quot;RS_Gr3&quot;, &quot;RSES_Gr3&quot;)</code></pre>
+names(est) &lt;- c(&quot;RS_Gr1&quot;, &quot;RSES_Gr1&quot;, &quot;RS_Gr2&quot;, &quot;RSES_Gr2&quot;, &quot;RS_Gr3&quot;, 
+                                                                    &quot;RSES_Gr3&quot;)</code></pre>
 <p>Notably, the parameters need to be labelled such that those can be used in specifying the hypotheses.</p>
 <p>Their covariance matrix is:</p>
 <pre class="r"><code>VCOV &lt;- matrix(c(
@@ -462,11 +512,13 @@ names(est) &lt;- c(&quot;RS_Gr1&quot;, &quot;RSES_Gr1&quot;, &quot;RS_Gr2&quot;,
  0.0000000,  0.0000000,  0.2094106, -0.2094106,  0.0000000,  0.0000000,
  0.0000000,  0.0000000, -0.2094106,  0.3740883,  0.0000000,  0.0000000,
  0.0000000,  0.0000000,  0.0000000,  0.0000000,  0.1351709, -0.1351709,
- 0.0000000,  0.0000000,  0.0000000,  0.0000000, -0.1351709,  0.1829996), byrow = TRUE, ncol = 6)</code></pre>
+ 0.0000000,  0.0000000,  0.0000000,  0.0000000, -0.1351709,  0.1829996), 
+byrow = TRUE, ncol = 6)</code></pre>
 <p>Notably, the covariance matrix does not need to be labelled.</p>
-<div id="set-of-hypotheses-based-on-theories-and-findings-from-previous-studies" class="section level3">
-<h3>Set of hypotheses based on theories and findings from previous studies</h3>
-<p>Note that we use the names we used as labels above.</p>
+</div>
+<div id="set-of-updated-hypotheses" class="section level3">
+<h3>Set of (updated) hypotheses</h3>
+<p>As discussed in Altinisik et al. (2021), the set of hypotheses is based on theories which are updated by findings from previous studies. Note that the same names/labels as the ones above are used.</p>
 <pre class="r"><code>H1 &lt;- &quot;RS_Gr1 + RSES_Gr1 = 0; RS_Gr1 &gt; 0;
        RS_Gr2 + RSES_Gr2 = 0; RS_Gr2 &gt; 0;
        RSES_Gr3 = 0; RS_Gr3 &gt; 0&quot;
@@ -474,8 +526,9 @@ H2 &lt;- &quot;RS_Gr1 + RSES_Gr1 = 0; RS_Gr1 &gt; 0;
        RSES_Gr2 = 0; RS_Gr2 = 0;
        RSES_Gr3 = 0; RS_Gr3 &gt; 0&quot;</code></pre>
 </div>
-<div id="calculate-gorica-values-and-weights" class="section level3">
-<h3>Calculate GORICA values and weights</h3>
+<div id="model-selection-using-gorica-2" class="section level3">
+<h3>Model selection using GORICA</h3>
+<p>Next, the GORICA values and weights are calculated:</p>
 <pre class="r"><code>set.seed(123)
 output_gorica_Altinisik &lt;- goric(est, H1, H2, VCOV = VCOV, type = &quot;gorica&quot;)
 summary(output_gorica_Altinisik)</code></pre>
@@ -495,21 +548,21 @@ H1             1.000   3.650   23.847
 H2             0.274   1.000   6.534            
 unconstrained  0.042   0.153   1.000            
 ---</code></pre>
-<p>It can be seen that both <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are not weak hypotheses and that <span class="math inline">\(H_1\)</span> is the preferrerd one: It is 3.65 times more supported than <span class="math inline">\(H_2\)</span>. Hence, the support for these theories is also found in this replication and based on this replication study we conclude that <span class="math inline">\(H_1\)</span> is more supported.</p>
+<p>It can be seen that both <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are not weak hypotheses and that <span class="math inline">\(H_1\)</span> is the preferred one: It is 3.65 times more supported than <span class="math inline">\(H_2\)</span>. Hence, the support for these theories is also found in this replication and, based on this replication study, it is concluded that <span class="math inline">\(H_1\)</span> is more supported.</p>
 </div>
 </div>
-</div>
-<div id="autmated-way-of-making-all-exploratory-restrictions-constraints" class="section level1">
-<h1>Autmated way of making all exploratory (=) restrictions / constraints</h1>
+<div id="extra-generating-all-exploratory-restrictions" class="section level1">
+<h1>Extra: Generating all exploratory (=) restrictions</h1>
 <pre class="r"><code>#make columns per number of variables in hypothesis
 h &lt;- paste(names(coef(lm_fit_Monin)), &quot; = 0&quot;)
 col &lt;- NULL
 for(i in 1:length(h)){
-  col &lt;- c(col, combn(h, i, FUN = function(x){return(paste(x, collapse = &#39;; &#39;))}))
+  col &lt;- c(col, combn(h, i, 
+                      FUN = function(x){return(paste(x, collapse = &#39;; &#39;))}))
 }
 hypotheses &lt;- data.frame(col)
 #make dataframe without the missings and split in two columns
-if (!require(&quot;tidyr&quot;)) install.packages(&quot;tidyr&quot;) # install this package first (once)</code></pre>
+if (!require(&quot;tidyr&quot;)) install.packages(&quot;tidyr&quot;)</code></pre>
 <pre><code>Loading required package: tidyr</code></pre>
 <pre class="r"><code>library(tidyr)
 hypotheses &lt;- gather(hypotheses, na.rm = TRUE, factor_key = TRUE)
