@@ -778,13 +778,13 @@ The order-restricted hypothesis &#39;H1&#39; has  0.350 times more support than 
 <div id="example-4-sesame" class="section level1">
 <h1>Example 4: Sesame</h1>
 <pre class="r"><code># read in the sesame data from a text file
-dat &lt;- read.table(&quot;sesamesimANOVA.txt&quot;, header=TRUE)
+Sesame &lt;- read.table(&quot;sesamesimANOVA.txt&quot;, header=TRUE)
 
 # make viewcat a factor, that is, a categorical variable
-dat$viewcat &lt;- factor(dat$viewcat)
+Sesame$viewcat &lt;- factor(Sesame$viewcat)
 
 # Inspect data
-head(dat)</code></pre>
+head(Sesame)</code></pre>
 <pre><code>  viewcat postnumb
 1       1 14.51050
 2       3 35.30549
@@ -793,41 +793,53 @@ head(dat)</code></pre>
 5       4 40.42370
 6       3 22.87055</code></pre>
 <pre class="r"><code># estimate the parameters of the statistical model at hand 
-prepSesame &lt;- lm(postnumb~viewcat-1, data=dat)
+fit_Sesame &lt;- lm(postnumb~viewcat-1, data=Sesame)
 
 # Check names used in model
-names(coef(prepSesame))</code></pre>
+names(coef(fit_Sesame))</code></pre>
 <pre><code>[1] &quot;viewcat1&quot; &quot;viewcat2&quot; &quot;viewcat3&quot; &quot;viewcat4&quot;</code></pre>
 <pre class="r"><code># Specify restrictions using those names
 
 
-# create a vector containing the mean estimates
-estimate &lt;- coef(prepSesame)
-
-
-# Example Hypotheses Set 1 (only equalities restrictions; 
-# and use all possibilities for exploration)
-H0 &lt;- &#39;viewcat1 == viewcat2 == viewcat3==viewcat4&#39; 
-H1 &lt;- &#39;viewcat1 == viewcat2 &lt; viewcat3 &lt; viewcat4&#39;  
+# Example hypotheses: 
+H1 &lt;- &#39;viewcat1 = viewcat2 &lt; viewcat3 &lt; viewcat4&#39;  
 H2 &lt;- &#39;viewcat1 &lt; viewcat2 &lt; viewcat3 &lt; viewcat4&#39;   
-H3 &lt;- &#39;viewcat1 == viewcat2 &lt; viewcat3 == viewcat4&#39;   
-
-# Calculate GORIC values and weights
-set.seed(123) 
-goric(prepSesame, H0, H1, H2, H3)</code></pre>
+H3 &lt;- &#39;viewcat1 = viewcat2 &lt; viewcat3 = viewcat4&#39;   </code></pre>
+<div id="calculate-goric-values-and-weights" class="section level2">
+<h2>Calculate GORIC values and weights</h2>
+<p>Here, we assume that the interest lies in H1 to H3. Since these do not cover all possibilities, the unconstrained hypotheses is included in the set.</p>
+<pre class="r"><code>set.seed(123) 
+goric(fit_Sesame, H1, H2, H3)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty     goric  goric.weights
-1             H0  -955.042    2.000  1914.084          0.000
-2             H1  -918.485    2.810  1842.590          0.134
-3             H2  -916.540    3.094  1839.269          0.704
-4             H3  -919.644    2.500  1844.287          0.057
-5  unconstrained  -916.540    5.000  1843.080          0.105
+1             H1  -918.485    2.810  1842.590          0.134
+2             H2  -916.540    3.094  1839.269          0.704
+3             H3  -919.644    2.500  1844.287          0.057
+4  unconstrained  -916.540    5.000  1843.080          0.105
 ---</code></pre>
-<pre class="r"><code># Calculate GORIC for H1 and its complement
-set.seed(123) 
-goric(prepSesame, H1, comparison = &quot;complement&quot;)</code></pre>
+<p>From the output, it is concluded that H2 is not a weak hypothesis (nor is H1). Thus, its support can be compared to that of the other hypotheses: H2 is 0.704/0.134 times more supported than H1 and 0.704/0.057 times more than H3. Hence, H2 is the preferred hypothesis and has quite some evidence.</p>
+<div id="calculate-gorica-values-and-weights" class="section level3">
+<h3>Calculate GORICa values and weights</h3>
+<pre class="r"><code>set.seed(123) 
+goric(fit_Sesame, H1, H2, H3, type = &quot;gorica&quot;)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
+
+Results:
+           model  loglik  penalty  gorica  gorica.weights
+1             H1  -7.052    1.810  17.725           0.136
+2             H2  -5.125    2.094  14.438           0.702
+3             H3  -8.216    1.500  19.432           0.058
+4  unconstrained  -5.125    4.000  18.249           0.104
+---</code></pre>
+</div>
+</div>
+<div id="calculate-goric-for-h1-and-its-complement" class="section level2">
+<h2>Calculate GORIC for H1 and its complement</h2>
+<p>Here, we assume that the interest lies only in H1. In that case, it should be evaluated against its complement.</p>
+<pre class="r"><code>set.seed(123) 
+goric(fit_Sesame, H1, comparison = &quot;complement&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion: 
 
 Results:
@@ -836,22 +848,11 @@ Results:
 2  complement  -916.540    4.690  1842.460          0.516
 ---
 The order-restricted hypothesis &#39;H1&#39; has  0.937 times more support than its complement.</code></pre>
-<pre class="r"><code># Calculate GORICa values and weights
-set.seed(123) 
-goric(prepSesame, H0, H1, H2, H3, type = &quot;gorica&quot;)</code></pre>
-<pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
-
-Results:
-           model   loglik  penalty   gorica  gorica.weights
-1             H0  -49.763    1.000  101.527           0.000
-2             H1   -7.052    1.810   17.725           0.136
-3             H2   -5.125    2.094   14.438           0.702
-4             H3   -8.216    1.500   19.432           0.058
-5  unconstrained   -5.125    4.000   18.249           0.104
----</code></pre>
-<pre class="r"><code># Calculate GORIC for H1 and its complement
-set.seed(123) 
-goric(prepSesame, H1, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
+<p>From the output, it is concluded that the support for H1 is comparable to that of its complement, with a slight preference for the complement. Note that the complement has the highest (log) likelihood but also the highest complexity/penalty, when balancing fit and complexity this results in a slight preference for the complement of H1.</p>
+<div id="calculate-goric-for-h1-and-its-complement-1" class="section level3">
+<h3>Calculate GORIC for H1 and its complement</h3>
+<pre class="r"><code>set.seed(123) 
+goric(fit_Sesame, H1, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
 
 Results:
@@ -860,6 +861,36 @@ Results:
 2  complement  -5.125    3.690  17.629           0.512
 ---
 The order-restricted hypothesis &#39;H1&#39; has  0.953 times more support than its complement.</code></pre>
+</div>
+</div>
+<div id="calculate-goric-for-h2-and-its-complement" class="section level2">
+<h2>Calculate GORIC for H2 and its complement</h2>
+<p>Here, we assume that the interest lies only in H2. In that case, it should be evaluated against its complement.</p>
+<pre class="r"><code>set.seed(123) 
+goric(fit_Sesame, H2, comparison = &quot;complement&quot;)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion: 
+
+Results:
+        model    loglik  penalty     goric  goric.weights
+1          H2  -916.540    3.095  1839.270          0.950
+2  complement  -917.718    4.870  1845.176          0.050
+---
+The order-restricted hypothesis &#39;H2&#39; has 19.166 times more support than its complement.</code></pre>
+<p>From the output, it is concluded that H1 is about 19 times more likely than its complement, showing quite some support for H2.</p>
+<div id="calculate-goric-for-h2-and-its-complement-1" class="section level3">
+<h3>Calculate GORIC for H2 and its complement</h3>
+<pre class="r"><code>set.seed(123) 
+goric(fit_Sesame, H2, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
+<pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
+
+Results:
+        model  loglik  penalty  gorica  gorica.weights
+1          H2  -5.125    2.095  14.438           0.950
+2  complement  -6.288    3.870  20.317           0.050
+---
+The order-restricted hypothesis &#39;H2&#39; has 18.901 times more support than its complement.</code></pre>
+</div>
+</div>
 </div>
 <div id="notes-on-weights" class="section level1">
 <h1>Notes on weights</h1>
