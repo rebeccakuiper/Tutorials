@@ -793,7 +793,7 @@ head(Sesame)</code></pre>
 5       4 40.42370
 6       3 22.87055</code></pre>
 <pre class="r"><code># estimate the parameters of the statistical model at hand 
-fit_Sesame &lt;- lm(postnumb~viewcat-1, data=Sesame)
+fit_Sesame &lt;- lm(postnumb ~ viewcat - 1, data = Sesame)
 
 # Check names used in model
 names(coef(fit_Sesame))</code></pre>
