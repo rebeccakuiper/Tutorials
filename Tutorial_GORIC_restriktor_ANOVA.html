@@ -821,7 +821,7 @@ Results:
 ---</code></pre>
 <p>From the output, it is concluded that H2 is not a weak hypothesis (nor is H1). Thus, its support can be compared to that of the other hypotheses: H2 is 0.704/0.134 times more supported than H1 and 0.704/0.057 times more than H3. Hence, H2 is the preferred hypothesis and has quite some evidence.</p>
 <div id="calculate-gorica-values-and-weights" class="section level3">
-<h3>Calculate GORICa values and weights</h3>
+<h3>Calculate GORICA values and weights</h3>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, H2, H3, type = &quot;gorica&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
@@ -835,8 +835,8 @@ Results:
 ---</code></pre>
 </div>
 </div>
-<div id="calculate-goric-for-h1-and-its-complement" class="section level2">
-<h2>Calculate GORIC for H1 and its complement</h2>
+<div id="calculate-goric-values-and-weights-for-h1-and-its-complement" class="section level2">
+<h2>Calculate GORIC values and weights for H1 and its complement</h2>
 <p>Here, we assume that the interest lies only in H1. In that case, it should be evaluated against its complement.</p>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, comparison = &quot;complement&quot;)</code></pre>
@@ -849,8 +849,8 @@ Results:
 ---
 The order-restricted hypothesis &#39;H1&#39; has  0.937 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that the support for H1 is comparable to that of its complement, with a slight preference for the complement. Note that the complement has the highest (log) likelihood but also the highest complexity/penalty, when balancing fit and complexity this results in a slight preference for the complement of H1.</p>
-<div id="calculate-goric-for-h1-and-its-complement-1" class="section level3">
-<h3>Calculate GORIC for H1 and its complement</h3>
+<div id="calculate-gorica-values-and-weights-for-h1-and-its-complement" class="section level3">
+<h3>Calculate GORICA values and weights for H1 and its complement</h3>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
@@ -863,8 +863,8 @@ Results:
 The order-restricted hypothesis &#39;H1&#39; has  0.953 times more support than its complement.</code></pre>
 </div>
 </div>
-<div id="calculate-goric-for-h2-and-its-complement" class="section level2">
-<h2>Calculate GORIC for H2 and its complement</h2>
+<div id="calculate-goric-values-and-weights-for-h2-and-its-complement" class="section level2">
+<h2>Calculate GORIC values and weights for H2 and its complement</h2>
 <p>Here, we assume that the interest lies only in H2. In that case, it should be evaluated against its complement.</p>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H2, comparison = &quot;complement&quot;)</code></pre>
@@ -877,8 +877,8 @@ Results:
 ---
 The order-restricted hypothesis &#39;H2&#39; has 19.166 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that H1 is about 19 times more likely than its complement, showing quite some support for H2.</p>
-<div id="calculate-goric-for-h2-and-its-complement-1" class="section level3">
-<h3>Calculate GORIC for H2 and its complement</h3>
+<div id="calculate-gorica-values-and-weights-for-h2-and-its-complement" class="section level3">
+<h3>Calculate GORICA values and weights for H2 and its complement</h3>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H2, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
