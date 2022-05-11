@@ -251,10 +251,10 @@ div.tocify {
 </div>
 
 
-<div id="example-1-lucas-data" class="section level1">
-<h1>Example 1: Lucas Data</h1>
-<div id="data-preparation" class="section level2">
-<h2>Data preparation</h2>
+<div id="example-1-lucas-data" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Example 1: Lucas Data</h1>
+<div id="data-preparation" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Data preparation</h2>
 <p>First, load the required libraries (after they have been installed). These libraries contain functions, such as <code>goric</code>, that will be used in the R code below. Each time you reopen R, you will have to load the required libraries.</p>
 <pre class="r"><code>## First, install the packages, if you have not done this already:
 if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
@@ -302,10 +302,10 @@ X13  7.15 -0.1489421 -0.5563249 0.3267830
 X14  4.65  0.7236871 -0.8668109 0.2648144
 X15  6.13 -0.6297692 -0.5632834 0.2738837</code></pre>
 </div>
-<div id="preparation-for-gorica" class="section level2">
-<h2>Preparation for GORIC(A)</h2>
-<div id="anova-model-r-object" class="section level4">
-<h4>ANOVA model: R-object</h4>
+<div id="preparation-for-gorica" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Preparation for GORIC(A)</h2>
+<div id="anova-model-r-object" class="section level4" number="1.2.0.1">
+<h4><span class="header-section-number">1.2.0.1</span> ANOVA model: R-object</h4>
 <p>First, an R-object with unconstrained estimates is needed, that is, in this example, the five group means and one residual variance. The linear regression model using <code>lm()</code> function is specified as follows:</p>
 <pre class="r"><code>lm_fit_Lucas &lt;- lm(Influence ~ group - 1, data = Lucas)</code></pre>
 <p>Note that:</p>
@@ -318,16 +318,16 @@ X15  6.13 -0.6297692 -0.5632834 0.2738837</code></pre>
 <pre class="r"><code>names(coef(lm_fit_Lucas))</code></pre>
 <pre><code>[1] &quot;group1&quot; &quot;group2&quot; &quot;group3&quot; &quot;group4&quot; &quot;group5&quot;</code></pre>
 </div>
-<div id="anova-model-coef-and-vcov" class="section level4">
-<h4>ANOVA model: coef() and vcov()</h4>
+<div id="anova-model-coef-and-vcov" class="section level4" number="1.2.0.2">
+<h4><span class="header-section-number">1.2.0.2</span> ANOVA model: coef() and vcov()</h4>
 <p>Note that goric() can use lm or glm objects (even most lavaan objects) as input. Since the GORICA can be applied to a broad range of models, the GORICA has another input option as well: One can enter the (structural) parameter estimates and their covariance matrix. For most R-objects, these can be obtained using coef() and vcov().</p>
 <p>E.g.,</p>
 <pre class="r"><code>est &lt;- coef(lm_fit_Lucas)
 VCOV &lt;- vcov(lm_fit_Lucas)</code></pre>
 <p>This will be illustrated in an GORICA example below.</p>
 </div>
-<div id="set-of-hypotheses" class="section level4">
-<h4>Set of hypotheses</h4>
+<div id="set-of-hypotheses" class="section level4" number="1.2.0.3">
+<h4><span class="header-section-number">1.2.0.3</span> Set of hypotheses</h4>
 <p>To evaluate the hypotheses of interest, it is necessary to specify the restrictions in these hypotheses correctly:</p>
 <ul>
 <li><p>Within the <code>restriktor()</code> and <code>goric()</code> functions, it is possible to use the following operators: <code>&gt;</code>, <code>&lt;</code>, <code>=</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code> (where the last three denote the same constraint as the first three).</p></li>
@@ -351,8 +351,8 @@ H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></p
 </ul>
 <p>where the first option is the default. Notably, currently, the complement can only be used for one hypothesis of interest. Therefore, the examples w.r.t the use of the complement only evaluate H1 (and not the whole set).</p>
 </div>
-<div id="seed-values" class="section level4">
-<h4>Seed values</h4>
+<div id="seed-values" class="section level4" number="1.2.0.4">
+<h4><span class="header-section-number">1.2.0.4</span> Seed values</h4>
 <p>In the calculation of the GORIC, an iterative process is used to calculate the penalty / complexity part. Therefore, one needs to set a seed value using the <code>set.seed()</code>. This has two advantages:</p>
 <ol style="list-style-type: decimal">
 <li><p>Using the same seed value leads to the same penalty value every time this code is run.</p></li>
@@ -360,11 +360,11 @@ H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></p
 </ol>
 </div>
 </div>
-<div id="goric-examples" class="section level2">
-<h2>GORIC examples</h2>
+<div id="goric-examples" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> GORIC examples</h2>
 <p>The GORIC can be used for normal linear models, like ANOVA and regression models. The <code>goric()</code> function calculates the <em>GORIC</em> value by default (type = “goric”). To calculate the <em>GORICA</em> values, the argument <code>type</code> has to be set to <code>gorica</code> (type = “gorica”, see example below).</p>
-<div id="example-1.1a-using-the-unconstrained-as-failsafe" class="section level3">
-<h3>Example 1.1a: Using the unconstrained as failsafe</h3>
+<div id="example-1.1a-using-the-unconstrained-as-failsafe" class="section level3" number="1.3.1">
+<h3><span class="header-section-number">1.3.1</span> Example 1.1a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
 output &lt;- goric(lm_fit_Lucas, H0, H1, H2)
 summary(output)</code></pre>
@@ -392,8 +392,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 <p>It can be seen that the order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 16.5 times more support than <span class="math inline">\(H_u\)</span> (the unconstrained hypothesis). Hence, <span class="math inline">\(H_1\)</span> is not a weak hypotheses and can thus be compared to the other (weak and non-weak) competing hypotheses: <span class="math inline">\(H_1\)</span> is much more (4.52e+05 times more) supported than <span class="math inline">\(H_0\)</span> and 38.5 times more likely than <span class="math inline">\(H_2\)</span>.</p>
 </div>
-<div id="example-1.1b-using-the-complement-as-failsafe" class="section level3">
-<h3>Example 1.1b: Using the complement as failsafe</h3>
+<div id="example-1.1b-using-the-complement-as-failsafe" class="section level3" number="1.3.2">
+<h3><span class="header-section-number">1.3.2</span> Example 1.1b: Using the complement as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_c &lt;- goric(lm_fit_Lucas, H1, comparison = &quot;complement&quot;)
 summary(output_c)</code></pre>
@@ -419,11 +419,11 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 13.4 times more support than its complement.</p>
 </div>
 </div>
-<div id="gorica-examples" class="section level2">
-<h2>GORICA examples</h2>
+<div id="gorica-examples" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> GORICA examples</h2>
 <p>The <em>GORICA</em> can be used for a broad range of models. Besides normal linear models (e.g., ANOVA and regression models) it can be applied also to logisctic regression and SEM models and much more. To calculate the <em>GORICA</em> values, one should use <code>type = &quot;gorica&quot;</code>.</p>
-<div id="example-1.2a-using-the-unconstrained-as-failsafe" class="section level3">
-<h3>Example 1.2a: Using the unconstrained as failsafe</h3>
+<div id="example-1.2a-using-the-unconstrained-as-failsafe" class="section level3" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> Example 1.2a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_gorica &lt;- goric(lm_fit_Lucas, H0, H1, H2, type = &quot;gorica&quot;)
 summary(output_gorica)</code></pre>
@@ -451,8 +451,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 <p>In Example 1, the same analysis is done with the GORIC, you can see that the (relative) weights are (about) the same for the GORIC and GORICA.</p>
 <p>From this output, it can be seen that the order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 16.5 times more support than <span class="math inline">\(H_u\)</span> (the unconstrained hypothesis). Hence, <span class="math inline">\(H_1\)</span> is not a weak hypotheses and can thus be compared to the other (weak and non-weak) competing hypotheses: <span class="math inline">\(H_1\)</span> is much more (1.13e+06 times more) supported than <span class="math inline">\(H_0\)</span> and 37.2 times more likely than <span class="math inline">\(H_2\)</span>.</p>
-<div id="alternative-input" class="section level4">
-<h4>Alternative input</h4>
+<div id="alternative-input" class="section level4" number="1.4.1.1">
+<h4><span class="header-section-number">1.4.1.1</span> Alternative input</h4>
 <pre class="r"><code>set.seed(123) # Set seed value
 est &lt;- coef(lm_fit_Lucas)
 VCOV &lt;- vcov(lm_fit_Lucas)
@@ -482,8 +482,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 </div>
 </div>
-<div id="example-1.2b-using-the-complement-as-failsafe" class="section level3">
-<h3>Example 1.2b: Using the complement as failsafe</h3>
+<div id="example-1.2b-using-the-complement-as-failsafe" class="section level3" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> Example 1.2b: Using the complement as failsafe</h3>
 <pre class="r"><code>H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
 # Note: H1 is not full row-rank; 
 # for more details, see below and/or the goric tutorial.
@@ -515,11 +515,11 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 </div>
 </div>
 </div>
-<div id="example-2-berzonsky-et-al." class="section level1">
-<h1>Example 2: Berzonsky et al.</h1>
+<div id="example-2-berzonsky-et-al." class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Example 2: Berzonsky et al.</h1>
 <p>Next, the R code to apply the GORIC(A) to the data of Berzonsky et al. is shown. The instruction on loading and preparing the data are similar to the ones from Lucas example (Example 1). Hence, for more comments and details, see that example.</p>
-<div id="data-preparation-1" class="section level2">
-<h2>Data preparation</h2>
+<div id="data-preparation-1" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Data preparation</h2>
 <pre class="r"><code># Read Data. 
 BerzEtAl &lt;- read.table(&quot;Data_BerzEtAl.txt&quot;, header = TRUE)
 BerzEtAl$group &lt;- factor(BerzEtAl$group) 
@@ -565,8 +565,8 @@ X16 0.002672612
 X17 0.024053510
 X18 0.056124855</code></pre>
 </div>
-<div id="preparation-for-gorica-1" class="section level2">
-<h2>Preparation for GORIC(A)</h2>
+<div id="preparation-for-gorica-1" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Preparation for GORIC(A)</h2>
 <pre class="r"><code># Using the R package lm
 lm_fit_BerzEtAl &lt;-  lm(Influence ~ group-1, data=BerzEtAl)
 
@@ -574,8 +574,8 @@ lm_fit_BerzEtAl &lt;-  lm(Influence ~ group-1, data=BerzEtAl)
 names(coef(lm_fit_BerzEtAl))</code></pre>
 <pre><code>[1] &quot;group1&quot; &quot;group2&quot; &quot;group3&quot; &quot;group4&quot; &quot;group5&quot; &quot;group6&quot; &quot;group7&quot; &quot;group8&quot;</code></pre>
 <pre class="r"><code># Specify restrictions using those names</code></pre>
-<div id="set-of-hypotheses-1" class="section level4">
-<h4>Set of hypotheses</h4>
+<div id="set-of-hypotheses-1" class="section level4" number="2.2.0.1">
+<h4><span class="header-section-number">2.2.0.1</span> Set of hypotheses</h4>
 <pre class="r"><code>H0 &lt;- &#39;group1 = group2 = group3 = group4 = group5 = group6 = group7 = group8&#39; 
 
 H1 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
@@ -593,10 +593,10 @@ H2 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4;
       group1 - group5 &gt; 2*(group4 - group8);&#39;</code></pre>
 </div>
 </div>
-<div id="goric-examples-1" class="section level2">
-<h2>GORIC examples</h2>
-<div id="example-2.1a-using-the-unconstrained-as-failsafe" class="section level3">
-<h3>Example 2.1a: Using the unconstrained as failsafe</h3>
+<div id="goric-examples-1" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> GORIC examples</h2>
+<div id="example-2.1a-using-the-unconstrained-as-failsafe" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Example 2.1a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_B &lt;- goric(lm_fit_BerzEtAl, H0, H1, H2) 
 summary(output_B)</code></pre>
@@ -624,8 +624,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 17.4 times more support than <span class="math inline">\(H_u\)</span> (unconstrained). Hence, <span class="math inline">\(H_1\)</span> is not a weak hypotheses and can thus be compared to the other (weak and non-weak) competing hypotheses: <span class="math inline">\(H_1\)</span> is much more (8.55e+56 and 4.73e+10 times more) supported than <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_2\)</span> (respectively).</p>
 </div>
-<div id="example-2.1b-using-the-complement-as-failsafe" class="section level3">
-<h3>Example 2.1b: Using the complement as failsafe</h3>
+<div id="example-2.1b-using-the-complement-as-failsafe" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Example 2.1b: Using the complement as failsafe</h3>
 <pre class="r"><code>set.seed(123) 
 output_B_c &lt;- goric(lm_fit_BerzEtAl, H1, comparison = &quot;complement&quot;) 
 summary(output_B_c)</code></pre>
@@ -651,10 +651,10 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 <p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 17.2 times more support than its complement.</p>
 </div>
 </div>
-<div id="gorica-examples-1" class="section level2">
-<h2>GORICA examples</h2>
-<div id="example-2.2a-using-the-unconstrained-as-failsafe" class="section level3">
-<h3>Example 2.2a: Using the unconstrained as failsafe</h3>
+<div id="gorica-examples-1" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> GORICA examples</h2>
+<div id="example-2.2a-using-the-unconstrained-as-failsafe" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Example 2.2a: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_B_gorica &lt;- goric(lm_fit_BerzEtAl, H0, H1, H2, type = &quot;gorica&quot;) 
 summary(output_B_gorica)</code></pre>
@@ -682,8 +682,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
  For more information see ?restriktor.</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 18.6 times more support than <span class="math inline">\(H_u\)</span> (unconstrained). Hence, <span class="math inline">\(H_1\)</span> is not a weak hypotheses and can thus be compared to the other (weak and non-weak) competing hypotheses: <span class="math inline">\(H_1\)</span> is much more (3.68e+205 and 4.46e+12 times more) supported than <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_2\)</span> (respectively).</p>
 </div>
-<div id="example-2.2b-using-the-unconstrained-as-failsafe" class="section level3">
-<h3>Example 2.2b: Using the unconstrained as failsafe</h3>
+<div id="example-2.2b-using-the-unconstrained-as-failsafe" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Example 2.2b: Using the unconstrained as failsafe</h3>
 <pre class="r"><code>set.seed(123) 
 output_B_gorica_c &lt;- goric(lm_fit_BerzEtAl, H1, comparison = &quot;complement&quot;, type = &quot;gorica&quot;) 
 summary(output_B_gorica_c)</code></pre>
@@ -710,10 +710,10 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 </div>
 </div>
 </div>
-<div id="example-3-holubar" class="section level1">
-<h1>Example 3: Holubar</h1>
-<div id="data-preparation-2" class="section level2">
-<h2>Data preparation</h2>
+<div id="example-3-holubar" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Example 3: Holubar</h1>
+<div id="data-preparation-2" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Data preparation</h2>
 <p>First, read in the Holubar dataset, and tell R that the variable <code>gr</code> (group) is a factor instead of a continuous variable (although it is not necessary because it consists of only two groups).</p>
 <pre class="r"><code>Holubar &lt;- read.table(&quot;Data_Holubar.txt&quot;, header = TRUE) # load the data
 Holubar$gr &lt;- factor(Holubar$gr) # tell R that gr is a factor</code></pre>
@@ -737,23 +737,23 @@ X11 3.616788 4.335313  0.1900155 -0.7778894 0.2683282
 X12 2.921103 7.882563 -0.5166569 -0.1041621 0.3618062
 X13 3.796158 6.072652  0.2923302 -1.0251005 0.3250494</code></pre>
 </div>
-<div id="preparation-for-gorica-2" class="section level2">
-<h2>Preparation for GORIC(A)</h2>
-<div id="anova-model-r-object-1" class="section level3">
-<h3>ANOVA model: R-object</h3>
+<div id="preparation-for-gorica-2" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Preparation for GORIC(A)</h2>
+<div id="anova-model-r-object-1" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> ANOVA model: R-object</h3>
 <p>Then, fit an ANOVA-model by means of the <code>lm()</code> function (linear model) and directly check the names that are used in this model:</p>
 <pre class="r"><code>lm_fit_Holubar &lt;- lm(at ~ gr - 1, data = Holubar)
 names(coef(lm_fit_Holubar))</code></pre>
 <pre><code>[1] &quot;gr1&quot; &quot;gr2&quot; &quot;gr3&quot;</code></pre>
 </div>
-<div id="set-of-hypotheses-2" class="section level3">
-<h3>Set of hypotheses</h3>
+<div id="set-of-hypotheses-2" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Set of hypotheses</h3>
 <p>The following hypothesis will be evaluated:</p>
 <pre class="r"><code>H1 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;</code></pre>
 </div>
 </div>
-<div id="model-selection-using-goric" class="section level2">
-<h2>Model selection using GORIC</h2>
+<div id="model-selection-using-goric" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Model selection using GORIC</h2>
 <p>Calculate the GORIC values and weights:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_Hol &lt;- goric(lm_fit_Holubar, H1, comparison = &quot;complement&quot;)
@@ -775,8 +775,8 @@ complement  2.857   1.000
 The order-restricted hypothesis &#39;H1&#39; has  0.350 times more support than its complement.</code></pre>
 </div>
 </div>
-<div id="example-4-sesame" class="section level1">
-<h1>Example 4: Sesame</h1>
+<div id="example-4-sesame" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Example 4: Sesame</h1>
 <pre class="r"><code># read in the sesame data from a text file
 Sesame &lt;- read.table(&quot;sesamesimANOVA.txt&quot;, header=TRUE)
 
@@ -805,8 +805,8 @@ names(coef(fit_Sesame))</code></pre>
 H1 &lt;- &#39;viewcat1 = viewcat2 &lt; viewcat3 &lt; viewcat4&#39;  
 H2 &lt;- &#39;viewcat1 &lt; viewcat2 &lt; viewcat3 &lt; viewcat4&#39;   
 H3 &lt;- &#39;viewcat1 = viewcat2 &lt; viewcat3 = viewcat4&#39;   </code></pre>
-<div id="calculate-goric-values-and-weights" class="section level2">
-<h2>Calculate GORIC values and weights</h2>
+<div id="calculate-goric-values-and-weights" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Calculate GORIC values and weights</h2>
 <p>Here, we assume that the interest lies in H1 to H3. Since these do not cover all possibilities, the unconstrained hypotheses is included in the set.</p>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, H2, H3)</code></pre>
@@ -820,8 +820,8 @@ Results:
 4  unconstrained  -916.540    5.000  1843.080          0.105
 ---</code></pre>
 <p>From the output, it is concluded that H2 is not a weak hypothesis (nor is H1). Thus, its support can be compared to that of the other hypotheses: H2 is 0.704/0.134 times more supported than H1 and 0.704/0.057 times more than H3. Hence, H2 is the preferred hypothesis and has quite some evidence.</p>
-<div id="calculate-gorica-values-and-weights" class="section level3">
-<h3>Calculate GORICA values and weights</h3>
+<div id="calculate-gorica-values-and-weights" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Calculate GORICA values and weights</h3>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, H2, H3, type = &quot;gorica&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
@@ -835,8 +835,8 @@ Results:
 ---</code></pre>
 </div>
 </div>
-<div id="calculate-goric-values-and-weights-for-h1-and-its-complement" class="section level2">
-<h2>Calculate GORIC values and weights for H1 and its complement</h2>
+<div id="calculate-goric-values-and-weights-for-h1-and-its-complement" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Calculate GORIC values and weights for H1 and its complement</h2>
 <p>Here, we assume that the interest lies only in H1. In that case, it should be evaluated against its complement.</p>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, comparison = &quot;complement&quot;)</code></pre>
@@ -849,8 +849,8 @@ Results:
 ---
 The order-restricted hypothesis &#39;H1&#39; has  0.937 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that the support for H1 is comparable to that of its complement, with a slight preference for the complement. Note that the complement has the highest (log) likelihood but also the highest complexity/penalty, when balancing fit and complexity this results in a slight preference for the complement of H1.</p>
-<div id="calculate-gorica-values-and-weights-for-h1-and-its-complement" class="section level3">
-<h3>Calculate GORICA values and weights for H1 and its complement</h3>
+<div id="calculate-gorica-values-and-weights-for-h1-and-its-complement" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Calculate GORICA values and weights for H1 and its complement</h3>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H1, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
@@ -863,8 +863,8 @@ Results:
 The order-restricted hypothesis &#39;H1&#39; has  0.953 times more support than its complement.</code></pre>
 </div>
 </div>
-<div id="calculate-goric-values-and-weights-for-h2-and-its-complement" class="section level2">
-<h2>Calculate GORIC values and weights for H2 and its complement</h2>
+<div id="calculate-goric-values-and-weights-for-h2-and-its-complement" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Calculate GORIC values and weights for H2 and its complement</h2>
 <p>Here, we assume that the interest lies only in H2. In that case, it should be evaluated against its complement.</p>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H2, comparison = &quot;complement&quot;)</code></pre>
@@ -877,8 +877,8 @@ Results:
 ---
 The order-restricted hypothesis &#39;H2&#39; has 19.166 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that H1 is about 19 times more likely than its complement, showing quite some support for H2.</p>
-<div id="calculate-gorica-values-and-weights-for-h2-and-its-complement" class="section level3">
-<h3>Calculate GORICA values and weights for H2 and its complement</h3>
+<div id="calculate-gorica-values-and-weights-for-h2-and-its-complement" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Calculate GORICA values and weights for H2 and its complement</h3>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, H2, type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
 <pre><code>restriktor (0.3-400): generalized order-restricted information criterion approximation:
@@ -892,20 +892,20 @@ The order-restricted hypothesis &#39;H2&#39; has 18.901 times more support than 
 </div>
 </div>
 </div>
-<div id="notes-on-weights" class="section level1">
-<h1>Notes on weights</h1>
+<div id="notes-on-weights" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Notes on weights</h1>
 <p>Here, the example of Lucas is used again, consequently, using the following hypotheses of interest:</p>
 <pre class="r"><code>H0 &lt;- &#39;group1 = group2 = group3 = group4 = group5&#39; 
 H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
 # Note: H1 is not full row-rank; 
 # for more details, see below and/or the goric tutorial.
 H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></pre>
-<div id="note-1-goric-weights-versus-gorica-weights" class="section level3">
-<h3>Note 1: GORIC weights versus GORICA weights</h3>
+<div id="note-1-goric-weights-versus-gorica-weights" class="section level3" number="5.0.1">
+<h3><span class="header-section-number">5.0.1</span> Note 1: GORIC weights versus GORICA weights</h3>
 <p>The GORICA weights (asymptotically) equal the GORIC weights. The differences are minor and often not notable with 2 decimals. Because of these minor differences, the relative weights (i.e., ratio of weights) can differ. Those differences in relative weights can even be large (as is in the Berzonsky et al Example), when dividing a very large number by a very small number with minor differences in these values.</p>
 </div>
-<div id="note-2-complement-in-case-of-two-hypotheses-of-interest" class="section level3">
-<h3>Note 2: complement in case of two hypotheses of interest</h3>
+<div id="note-2-complement-in-case-of-two-hypotheses-of-interest" class="section level3" number="5.0.2">
+<h3><span class="header-section-number">5.0.2</span> Note 2: complement in case of two hypotheses of interest</h3>
 <p>One cannot compare the support of hypotheses when comparing them to their complements. Instead, one should evaluate them simultaneously in one set to get desirable outcomes (like done above):</p>
 <pre class="r"><code># Calculate goric for H1 and its complement
 set.seed(123) # Set seed value
@@ -1035,8 +1035,8 @@ output_u_H1$ratio.gw[1,2] / output_u_H2$ratio.gw[1,2] </code></pre>
 output_H1H2$ratio.gw[1,2]</code></pre>
 <pre><code>[1] 38.49665</code></pre>
 </div>
-<div id="note-3-weights-when-using-complement-not-per-se-higher" class="section level3">
-<h3>Note 3: weights when using complement not per se higher</h3>
+<div id="note-3-weights-when-using-complement-not-per-se-higher" class="section level3" number="5.0.3">
+<h3><span class="header-section-number">5.0.3</span> Note 3: weights when using complement not per se higher</h3>
 <p>In the Lucas example:</p>
 <ul>
 <li>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 16.5 times more support than <span class="math inline">\(H_u\)</span> (unconstrained).</li>
@@ -1044,8 +1044,8 @@ output_H1H2$ratio.gw[1,2]</code></pre>
 </ul>
 <p>Now, the complement does not render higher weight than if <span class="math inline">\(H_u\)</span> was used.</p>
 <p>If <span class="math inline">\(H_m\)</span> is not in agreement with the data, the complement does not always render a higher weight. This is actually a good thing: Against <span class="math inline">\(H_u\)</span>, <span class="math inline">\(H_m\)</span> might obtain too much support then.</p>
-<div id="some-more-explanation" class="section level4">
-<h4>Some more explanation</h4>
+<div id="some-more-explanation" class="section level4" number="5.0.3.1">
+<h4><span class="header-section-number">5.0.3.1</span> Some more explanation</h4>
 <p>This is because for this particular example the mean of group 3 and 5 are close (and they are compared in Hypothesis <span class="math inline">\(H_1\)</span>). Notably, it will hold for all of the following three hypothesis:</p>
 <pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
 # not full row-rank
@@ -1119,8 +1119,8 @@ Restriktor message: Since the constraint matrix is not full row-rank, the level 
 </div>
 </div>
 </div>
-<div id="extra-two-methods-to-calculate-the-penalty" class="section level1">
-<h1>Extra: Two methods to calculate the penalty</h1>
+<div id="extra-two-methods-to-calculate-the-penalty" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Extra: Two methods to calculate the penalty</h1>
 <p>There are two methods that can be used in calculating the penalty. The default method is often much faster (if the number of parameters is not too high) and needs less input specification. It can, however, not deal with hypotheses that are not of full row-rank (like <span class="math inline">\(H_1\)</span> above). In that case, <code>restriktor</code> uses automatically the other (bootstrap) method. In this bootstrap method, one can also more easily change the number of iterations on which the penalty is based (mix.bootstrap). The computation time of this bootstrap method can be reduced by using multiple cores. For a windows device, you then have to use ‘parallel = “snow”’ (see the goric tutorial for more options). To use this bootstrap method (on a windows machine), use:</p>
 <pre class="r"><code>if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) </code></pre>
 <pre><code>Loading required package: parallel</code></pre>
@@ -1149,8 +1149,8 @@ H2             1.17e+04  2.60e-02  1.00e+00  4.28e-01
 unconstrained  2.74e+04  6.07e-02  2.34e+00  1.00e+00         
 ---</code></pre>
 <p>This, of course, renders the same results as above (if there is a difference, it is in the second decimal of the penalty).</p>
-<div id="note-on-not-full-row-rank" class="section level3">
-<h3>Note on not full row-rank</h3>
+<div id="note-on-not-full-row-rank" class="section level3" number="6.0.1">
+<h3><span class="header-section-number">6.0.1</span> Note on not full row-rank</h3>
 <p>If the restriction matrix is not of full row-rank, this means one of the following:</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>There is at least one redundant restriction.</p>
