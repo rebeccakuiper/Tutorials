@@ -34,6 +34,7 @@
 # Install and load pacakges
 
 #if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
+#install.packages("restriktor", force = T)
 #library(restriktor)
 #
 # If you want to use restriktor from github:
@@ -48,13 +49,11 @@ library(restriktor) # for goric function
 # Example Palmer & Gough
 
 # Data
-PandG_data <- read.table("Data_PalmerAndGough.txt", 
-                         header=TRUE)
+PandG_data <- read.table("data/Data_PalmerAndGough.txt", header=TRUE)
 PandG_data$group <- factor(PandG_data$group) 
 
 # NHST: pairwise testing
-pairwise.t.test(PandG_data$Importance, PandG_data$group, 
-                p.adj = 'bonferroni')
+pairwise.t.test(PandG_data$Importance, PandG_data$group, p.adj = 'bonferroni')
 
 # Fit object, also NHST
 fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
@@ -69,16 +68,17 @@ H1 <- 'group1 > group2 > group3'
 # GORIC
 set.seed(123) # Set seed value
 goric.PandG <- goric(fit.PandG, constraints = list(H0, H1))
-goric.PandG$result[,1] <- c("H0","H1","Hu")
+#goric.PandG$result[,1] <- c("H0","H1","Hu")
+#goric.PandG <- goric(fit.PandG, constraints = list(H0 = H0, H1 = H1))
 goric.PandG$result
+#summary(goric.PandG)
 
 
 
 # Example Lucas
 
 # Data
-Lucas_data <- read.table("Data_Lucas.txt", 
-                         header=TRUE)
+Lucas_data <- read.table("data/Data_Lucas.txt", header=TRUE)
 Lucas_data$group <- factor(Lucas_data$group) 
 
 # NHST: pairwise testing
@@ -98,4 +98,10 @@ H1 <- 'group5 = group3 > group1 > group2, group3 > group4 > group2'
 set.seed(123) # Set seed value
 goric.Lucas <- goric(fit.Lucas, constraints = list(H1), comparison = 'complement')
 goric.Lucas$result
+summary(goric.Lucas)
 
+# GORICA
+set.seed(123) # Set seed value
+goric.Lucas <- goric(fit.Lucas, constraints = list(H1), comparison = 'complement', type = 'gorica')
+goric.Lucas$result
+summary(goric.Lucas)
