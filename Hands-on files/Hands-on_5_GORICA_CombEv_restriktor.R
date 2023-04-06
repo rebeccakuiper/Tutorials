@@ -1,9 +1,10 @@
 
-#### Updating/Aggregating evidence obtained with GORIC and GORICA: GORIC Evidence Synthesis Example
+#### Updating/Aggregating evidence obtained with GORIC and GORICA: 
+# GORIC Evidence Synthesis Example
 
 
 # NOTE 1: This is work in progress. 
-# So, please only use the upcoming function yourself, and do not distribute this to others untill the package is freely available on GitHub (now, it is 'privately').
+# So, please only use the upcoming function yourself, and do not distribute this to others until the package is freely available on GitHub (now, it is 'privately').
 # Also, let me know if you think things could be improved (e.g., way of asking for input, what should be reported as output, et cetera).
 
 # NOTE 2: Make sure you use the right version of restriktor, namely version 0.2-800 (or higher).
@@ -44,7 +45,7 @@ S <- 4
 
 # In this example, all studies have the same number of parameters of interest (namely 1; i.e., the hypotheses below address only one parameter).
 # In that case, we can collect the study-specific estimates (i.e., the $\beta$-values from the studies) in one matrix: 
-# The estimates of the studies are placed in seperated rows, while the parameter estimates are placed in the columns. 
+# The estimates of the studies are placed in separated rows, while the parameter estimates are placed in the columns. 
 # In this example, there are $S = 4$ rows and $nrParam = 1$ column. 
 # We also specify the name of this column accordingly to what it represents, namely `beta1`. Please make sure to name the column the same way as in the hypotheses below.
 nrParam <- 1
@@ -66,7 +67,7 @@ covmx_studies <- matrix(c(0.029^2, 0.054^2, 0.093^2, 0.179^2), nrow = S, ncol = 
 same_hypo <- 1
 nrHypos <- 3
 #
-H0 <- "beta1 == 0"
+H0 <- "beta1 = 0"
 Hpos <- "beta1 > 0"
 Hneg <- "beta1 < 0"
 #
