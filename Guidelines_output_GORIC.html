@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-04-13" />
+<meta name="date" content="2023-04-17" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1494,7 +1494,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">13 April 2023</h4>
+<h4 class="date">17 April 2023</h4>
 
 </div>
 
@@ -1508,23 +1508,26 @@ margin: 0 auto;
 <div id="goal-gorica" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Goal GORIC(A)</h1>
 <p>The information criteria GORIC and GORICA - referred to as GORIC(A) -
-can evaluate one or more informative, theory-based hypotheses. Hence,
-you do not have to specify a null hypothesis nor (only) equality
-restrictions. You can (also) compare the size and/or ordering of mean
-parameters or of (standardized) regression-type parameters. You could,
-for example, evaluate the hypothesis <span class="math inline">\(H_m:
-\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> (mean parameters) or <span class="math inline">\(H_m: \beta_1 - \beta_2 &gt; \beta_3 -
-\beta_4\)</span> (regression parameters; a possible representation of an
-interaction effect). The goal of the GORIC(A) is to select the best from
-a set of candidate hypotheses/models.</p>
+are AIC-type information criteria and can evaluate one or more
+informative, theory-based hypotheses. Hence, you do not have to specify
+a null hypothesis nor (only) equality restrictions. You can (also)
+compare the size and/or ordering of mean parameters or of (standardized)
+regression-type parameters. You could, for example, evaluate the
+hypothesis <span class="math inline">\(H_m: \mu_1 &gt; \mu_2 &gt;
+\mu_3\)</span> (mean parameters) or <span class="math inline">\(H_m:
+\beta_1 - \beta_2 &gt; \beta_3 - \beta_4\)</span> (regression
+parameters; a possible representation of an interaction effect). The
+goal of the GORIC(A) is to select the best from a set of candidate
+hypotheses/models.</p>
 </div>
 <div id="gorica-output" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> GORIC(A) output</h1>
 <p>The GORIC(A) is an information criterion and, therefore, balances fit
-and complexity. Fit denotes the compatibility of the hypothesis with the
-data, expressed by the maximum log likelihood part. Complexity reflects
-the size of the hypothesis in terms of (expected) number of parameters,
-expressed by the penalty part. Stated otherwise, GORIC(A) selects the
+and complexity. <strong>Fit</strong> denotes the compatibility of the
+hypothesis with the data, expressed by the <em>maximum log
+likelihood</em> part. <strong>Complexity</strong> reflects the size of
+the hypothesis in terms of (expected) number of parameters, expressed by
+the <em>penalty</em> part. Stated otherwise, GORIC(A) selects the
 hypothesis that describes the data best with the fewest number of
 parameters, out of a set of candidate hypotheses.</p>
 <div id="gorica-values" class="section level2" number="2.1">
@@ -1536,20 +1539,21 @@ themselves are not interpretable; only the differences between the
 values can be inspected (i.e., the smaller, the better). To improve the
 interpretation, GORIC(A) weights can be computed.</p>
 </div>
-</div>
-<div id="gorica-weights-and-ratios" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> GORIC(A) weights and
-ratios</h1>
-<p>A GORIC(A) weight (<span class="math inline">\(w_m\)</span>)
-represent the relative likelihood of a hypothesis (<span class="math inline">\(H_m\)</span>) given the data and the set of
-hypotheses. The hypothesis with the largest GORIC(A) weight is the
-preferred one in the set of candidate hypotheses. Additionally, the
-ratio of two GORICA weights (<span class="math inline">\(w_m/w_{m&#39;}\)</span>) can be used to quantify
-their relative support. This leads to conclusions like Hypothesis <span class="math inline">\(H_1\)</span> is <span class="math inline">\(w_1/w_2\)</span> more supported than the competing
+<div id="gorica-weights-and-ratios" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> GORIC(A) weights and
+ratios</h2>
+<p>A <strong>GORIC(A) weight (<span class="math inline">\(w_m\)</span>)</strong> represent the relative
+likelihood of a hypothesis (<span class="math inline">\(H_m\)</span>)
+given the data and the set of hypotheses. The hypothesis with the
+largest GORIC(A) weight is the preferred one in the set of candidate
+hypotheses. Additionally, the <strong>ratio of two GORICA weights (<span class="math inline">\(w_m/w_{m&#39;}\)</span>)</strong> can be used to
+quantify their relative support. This leads to conclusions like
+Hypothesis <span class="math inline">\(H_1\)</span> is <span class="math inline">\(w_1/w_2\)</span> more supported than the competing
 hypothesis <span class="math inline">\(H_2\)</span>.</p>
 </div>
-<div id="hypotheses-sets" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Hypotheses sets</h1>
+</div>
+<div id="hypotheses-sets" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Hypotheses sets</h1>
 <p>The set of hypotheses should consist of the hypotheses of interest
 (reflecting one or more theories from the literature of based on
 expertise), possibly with a failsafe hypothesis (to prevent from
@@ -1573,20 +1577,20 @@ investigation.</p></li>
 <p>Consequently, be aware of specifying overlapping hypotheses and
 hypotheses containing one or more equality restrictions.</p>
 </div>
-<div id="interpretation-output" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Interpretation
+<div id="interpretation-output" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Interpretation
 output</h1>
-<div id="general" class="section level2" number="5.1">
-<h2><span class="header-section-number">5.1</span> General</h2>
+<div id="general" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> General</h2>
 <p>In general, the GORIC(A) output is interpreted as follows:</p>
 <ul>
-<li><p>The hypothesis with the highest GORIC(A) weight is the preferred
-one: the best from the set.</p></li>
+<li><p>The hypothesis with the <strong>highest GORIC(A) weight</strong>
+is the preferred one: the best from the set.</p></li>
 <li><p>The GORIC(A) weight of that hypothesis denotes its relative
 strength in the set (given the data).<br />
-The weights reflect the (un)certainty regarding that hypothesis being
-the best - but be aware that it is conditional on the other hypotheses
-in the set.</p></li>
+The <em>GORIC(A) weights reflect the (un)certainty regarding that
+hypothesis being the best</em> - but be aware that it is conditional on
+the other hypotheses in the set.</p></li>
 <li><p>Additionally, one can compare the strength of that hypothesis
 versus a competing hypothesis using the ratio of their GORIC(A)
 weights.</p></li>
@@ -1594,22 +1598,22 @@ weights.</p></li>
 <p>As discussed later on, you need to inspect a bit more output to check
 for special cases (like support for overlap of the hypotheses of
 interest). Generally good advise - as will become clear later on -
-before interpreting the ratios of GORIC(A) weights, one needs to check
-the fit/loglik values of the preferred hypotheses with that of the other
-hypotheses in the set. Additionally, you may want to take into account
-the sample size you have.</p>
+<strong>before interpreting the ratios of GORIC(A) weights, one needs to
+check the (ratio of) fit/loglik values of the preferred hypotheses with
+that of the other hypotheses in the set</strong>. Additionally, you may
+want to take into account the sample size you have.</p>
 <p>Next, I will go into more detail for each type of hypothesis set.</p>
 </div>
-<div id="one-informative-hypothesis" class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> One informative
+<div id="one-informative-hypothesis" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> One informative
 hypothesis</h2>
 <p>Here, I assume you have one informative hypothesis, that is, there
 are no competing hypotheses of interest. Then, I would advise you to
 evaluate it with its complement (an option in the software), as opposed
 to the unconstrained hypothesis. I will describe both situations
 next.</p>
-<div id="vs-complement" class="section level3" number="5.2.1">
-<h3><span class="header-section-number">5.2.1</span> vs Complement</h3>
+<div id="vs-complement" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> vs Complement</h3>
 <p>The complement of a hypothesis denotes all the other possible
 hypotheses (i.e., all the other possible orderings); so, excluding the
 one of interest. The complement acts like a competing hypothesis. Either
@@ -1618,20 +1622,21 @@ ratio of their GORIC(A) weights denotes the relative strength.</p>
 <p>Say, your hypothesis of interest has a GORIC(A) weight of <span class="math inline">\(w_m\)</span> and, thus, its complement of <span class="math inline">\(w_c = 1 - w_m\)</span>. Then, your hypothesis has
 <span class="math inline">\(w_m/(1-w_m)\)</span> more support than its
 complement. This relative support can go from (approximately) zero to
-infinity - the first denoting infinite support for the complement and
-the latter infinite support your hypothesis. When the ratio is close to
-1, then both hypotheses are (approximately) equally good (in terms of
-balancing fit and complexity). Notably, the ratio of GORIC(A) weights
-(and other output) can also denote support for their boundary, which is
-discussed in the Special cases Section.</p>
+infinity - the first denoting <em>infinite support for the
+complement</em> and the latter <em>infinite support your
+hypothesis</em>. When the ratio is close to 1, then <em>both hypotheses
+are (approximately) equally good</em> (in terms of balancing fit and
+complexity). Notably, the ratio of GORIC(A) weights together with other
+output can also denote support for their boundary, which is discussed in
+the Special cases Section.</p>
 <p>When inspecting a hypothesis versus its complement, one can interpret
 <span class="math inline">\(1 - w_m = w_c\)</span> as a (conditional)
 error probability. That is, the probability that <span class="math inline">\(H_m\)</span> is not the best one is <span class="math inline">\(w_c*100\%\)</span>. Note that in case of multiple
 hypotheses, especially in case of overlapping hypotheses, I would not
 advise on using this interpretation, since <span class="math inline">\(w_m\)</span> and thus <span class="math inline">\(1-w_m\)</span> depends on the other hypotheses in
 the set.</p>
-<div id="example" class="section level4" number="5.2.1.1">
-<h4><span class="header-section-number">5.2.1.1</span> Example</h4>
+<div id="example" class="section level4" number="4.2.1.1">
+<h4><span class="header-section-number">4.2.1.1</span> Example</h4>
 <pre class="r"><code># H1 vs complement
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
 
@@ -1650,24 +1655,26 @@ The order-restricted hypothesis &#39;H1&#39; has 4.880 times more support than i
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is <span class="math inline">\(.83/.17 \approx 4.88\)</span> time more supported
 than its complement.<br />
-Additionally, one could say that the probably that <span class="math inline">\(H_1\)</span> is not the best is 17%.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. Note that Cohen’s <span class="math inline">\(d\)</span>
-is approximately .266; thus, there is a small to medium population
-effect size. I then sampled 100 observations, ran an ANOVA, and applied
-the GORIC.<br />
+Additionally, one could say that the probability that <span class="math inline">\(H_1\)</span> is not the best is 17%.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:1;
+implying that <span class="math inline">\(H_1\)</span> is correct. More
+specifically, I used population mean values of approximately 0.98, 0.65,
+and 0.33. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .27; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the GORIC(A) weight for <span class="math inline">\(H_1\)</span> converges to 1 (denoting full support
 for <span class="math inline">\(H_1\)</span>).</p>
 <p>Note: As will become clear in the Special cases Section, one should
-first check the fit and/or penalty part, since there could be support
-for the boundary of these two hypotheses. Since the loglik.weights
-differ, there is no support for the boundary of these hypotheses; only
-support for <span class="math inline">\(H_1\)</span>.</p>
+first check the ratio of fit values (i.e. ratio of loglik.weights),
+since there could be support for the boundary of these two hypotheses.
+Since the loglik.weights differ (i.e., the ratio of loglik.weights is
+not close to 1), there is no support for the boundary of these
+hypotheses; only support for <span class="math inline">\(H_1\)</span>.</p>
 </div>
 </div>
-<div id="vs-unconstrained" class="section level3" number="5.2.2">
-<h3><span class="header-section-number">5.2.2</span> vs
+<div id="vs-unconstrained" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> vs
 Unconstrained</h3>
 <p>The unconstrained hypothesis denotes all the possible hypotheses
 (i.e., all the possible orderings); so, including the one of interest.
@@ -1675,21 +1682,24 @@ Since it covers the hypothesis of interest, it cannot act like a
 competing hypothesis. The unconstrained can only be used as a
 failsafe:</p>
 <ul>
-<li><p>If the unconstrained is better, then your hypothesis of interest
-is weak, that is, it is not supported by the data.</p></li>
-<li><p>If your hypothesis is better, then it is not weak. In this case,
-the ratio of GORIC(A) weights is bounded (as described in the Example
+<li><p>If the unconstrained is better (i.e., has a higher weight), then
+your hypothesis of interest is weak, that is, it is not supported by the
+data.</p></li>
+<li><p>If <em>your hypothesis</em> is better (i.e., <em>has a higher
+weight</em>), then it is <strong>not weak</strong>. In this case, the
+ratio of GORIC(A) weights is bounded (as described in the Example
 section below) and should, therefore, not be interpreted. Stated
 otherwise, in this case, the ratio of GORIC(A) weights will never go to
 infinity; as is the case when using the complement. Here, a ratio equal
-to its bounds denotes full support; even when the sample size is small.
-Therefore, I advise using the complement in case of one informative
-hypothesis; namely, the resulting ratio of GORIC(A) weights is then not
-bounded, and the weights reflect the uncertainty there is (due to a
-small sample size).</p></li>
+to its bounds denotes full support; even when the sample size is
+small.<br />
+Therefore, I advise using the <em>complement</em> in case of one
+informative hypothesis; because, then, the resulting ratio of GORIC(A)
+weights is not bounded, and the <em>weights reflect the uncertainty
+there is</em> (due to a small sample size).</p></li>
 </ul>
-<div id="example-1" class="section level4" number="5.2.2.1">
-<h4><span class="header-section-number">5.2.2.1</span> Example</h4>
+<div id="example-1" class="section level4" number="4.2.2.1">
+<h4><span class="header-section-number">4.2.2.1</span> Example</h4>
 <pre class="r"><code># H1 vs unconstrained (default)
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
 
@@ -1705,11 +1715,12 @@ Results:
 2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is more supported than the
-unconstrained (since <span class="math inline">\(.763/.237) &gt;
+unconstrained (since <span class="math inline">\(.763/.237 &gt;
 1\)</span>) and is, therefore, not a weak hypothesis.</p>
 <p>When you look at the fit/loglik value, you can see that they are the
-same for both hypotheses (also reflected by the loglik.weights). The
-unconstrained has, by definition, the maximum fit. Here, <span class="math inline">\(H_1\)</span> also has maximum fit, meaning that
+same for both hypotheses (also reflected by the loglik.weights; leading
+to a ratio of loglik.weights of 1). The unconstrained has, by
+definition, the maximum fit. Here, <span class="math inline">\(H_1\)</span> also has maximum fit, meaning that
 its restrictions are in agreement with the data. Since both have the
 same fit, their GORIC(A) weights solely depend on the penalty values
 and, thus, are bounded: they equal the penalty.weights (and thus not 1
@@ -1717,14 +1728,18 @@ and 0, what you otherwise would find in case of full support). Finding
 equal fit (or GORIC(A) weights being equal to the penalty weights) means
 that there is support for the overlap (see also the Special cases
 Section).<br />
-In this case, the informative hypothesis <span class="math inline">\(H_1\)</span> is completely contained in the
-unconstrained (by definition). Hence, the overlap is <span class="math inline">\(H_1\)</span>. Therefore, we can say that <span class="math inline">\(H_1\)</span> has (full) support: it has the
+The informative hypothesis <span class="math inline">\(H_1\)</span> is
+completely contained in the unconstrained (by definition). Hence, the
+overlap of the two hypotheses is <span class="math inline">\(H_1\)</span>. Therefore, we can say that <span class="math inline">\(H_1\)</span> has (full) support: it has the
 maximum fit and is (by definition) more parsimonious than the
 unconstrained.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:1;
+implying that <span class="math inline">\(H_1\)</span> is correct. More
+specifically, I used population mean values of approximately 0.98, 0.65,
+and 0.33. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .27; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the GORIC(A) weight for <span class="math inline">\(H_1\)</span> remains the same. When I would have
 samples less observations, the fit/loglik values may differ. Then, the
 GORIC(A) weight of <span class="math inline">\(H_1\)</span> is less than
@@ -1732,7 +1747,7 @@ the penalty weight of <span class="math inline">\(H_1\)</span>.</p>
 <p>Note: In case of one informative hypothesis of interest, I would
 advise on using the complement instead (as done in the previous
 section). Then, the support for a true hypothesis increases with sample
-size (and/or effect size). Moreover, you have information regrading the
+size (and/or effect size). Moreover, you have information regarding the
 uncertainty of your decision: In the example above, one would conclude
 that <span class="math inline">\(H_1\)</span> has full support; while
 using the complement (in the previous example), one would conclude that
@@ -1740,8 +1755,8 @@ there is an uncertainty of 17%, namely a 17% chance that <span class="math inlin
 </div>
 </div>
 </div>
-<div id="multiple-informative-hypotheses" class="section level2" number="5.3">
-<h2><span class="header-section-number">5.3</span> Multiple informative
+<div id="multiple-informative-hypotheses" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Multiple informative
 hypotheses</h2>
 <p>Let us assume that the literature states two competing informative
 hypotheses. Then, a safeguard hypothesis is needed if these informative
@@ -1750,43 +1765,43 @@ all possible theories/orderings. Namely, when both informative
 hypotheses are weak hypotheses, GORIC(A) selects the best out of a set
 of weak hypotheses (i.e., best of the worst). To refrain from this, one
 should then include a safeguard hypothesis.</p>
-<div id="complement-as-failsafe" class="section level3" number="5.3.1">
-<h3><span class="header-section-number">5.3.1</span> Complement as
+<div id="complement-as-failsafe" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Complement as
 failsafe</h3>
 <p>The complement of a set of hypotheses denotes all the other possible
 hypotheses (i.e., all the other possible orderings); so, excluding the
-ones of interest. The complement acts like another competing hypothesis.
-One can also compare its strength to that of the hypotheses of
-interest.</p>
+ones of interest. The <strong>complement acts like another competing
+hypothesis</strong>. One can also compare its strength to that of the
+hypotheses of interest.</p>
 <p>As always, the hypothesis with the highest GORIC(A) weight is the
 preferred one.</p>
 <ul>
 <li><p>If the best hypothesis is the complement of the set, then the
 hypotheses of interest are weak. One should not compare the strength of
-the hypotheses of interest (to avoid choosing the best from worst).
-Notably, one can compare the strength of the complement versus each of
-the hypotheses of interest by inspecting their ratio of GORIC(A)
+the hypotheses of interest (to avoid choosing the best from worst). Bear
+in mind that one can compare the strength of the complement versus each
+of the hypotheses of interest by inspecting their ratio of GORIC(A)
 weights.<br />
 Notably, one can take on an additional exploratory approach to create
 one or more new hypotheses for future research.</p></li>
 <li><p>If the best hypothesis is one of the hypotheses of interest, then
 it is not weak and can be compared to the other hypothesis/-es of
 interest (including the complement). Note that one can compare all the
-non-weak hypotheses to all the hypotheses of interest. Be aware of the
-special cases, as will be discussed in the Special cases
+non-weak hypotheses to all the hypotheses of interest.<br />
+Be aware of the special cases, as will be discussed in the Special cases
 Section.</p></li>
 </ul>
 <p>Important: This option is unfortunately not yet available in GORIC(A)
 software.</p>
 </div>
-<div id="unconstrained-as-failsafe" class="section level3" number="5.3.2">
-<h3><span class="header-section-number">5.3.2</span> Unconstrained as
+<div id="unconstrained-as-failsafe" class="section level3" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Unconstrained as
 failsafe</h3>
 <p>The unconstrained hypothesis denotes all the possible hypotheses
 (i.e., all the possible orderings); so, including the ones of interest.
 Since it covers the hypotheses of interest, it cannot act like a
-competing hypothesis. The unconstrained can only be used as a
-failsafe:</p>
+competing hypothesis. The <strong>unconstrained can only be used as a
+failsafe</strong>:</p>
 <ul>
 <li><p>If the best hypothesis is the unconstrained is, then your
 hypotheses of interest are weak, that is, they are not supported by the
@@ -1797,11 +1812,12 @@ one or more new hypotheses for future research.</p></li>
 <li><p>If the best hypothesis is one of the hypotheses of interest, then
 it is not weak and can be compared to the other hypothesis/-es of
 interest. Note that one can compare all the non-weak hypotheses to all
-the hypotheses of interest. Be aware of the special cases, as will be
-discussed in the Special cases Section.</p></li>
+the hypotheses of interest.<br />
+Be aware of the special cases, as will be discussed in the Special cases
+Section.</p></li>
 </ul>
-<div id="example-2" class="section level4" number="5.3.2.1">
-<h4><span class="header-section-number">5.3.2.1</span> Example</h4>
+<div id="example-2" class="section level4" number="4.3.2.1">
+<h4><span class="header-section-number">4.3.2.1</span> Example</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default)
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
 H2 &lt;- &quot;D1 &lt; D2 &lt; D3&quot;
@@ -1834,13 +1850,17 @@ better.</p>
 <p>From the GORIC weights (or their ratios in results_12u$ratio.gw - H1
 vs. H2), you can conclude that <span class="math inline">\(H_1\)</span>
 is .763/.000 = an infinite times (or 2871.23 times) more supported than
-<span class="math inline">\(H_2\)</span>. Notably, if you would
-calculate the GORIC(A) weights for the set consisting of solely <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>, you would obtain GORIC weights of
+<span class="math inline">\(H_2\)</span>.<br />
+Notably, if you would calculate the GORIC(A) weights for the set
+consisting of solely <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>, you would obtain GORIC weights of
 1.000 and .000, respectively.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:1;
+implying that <span class="math inline">\(H_1\)</span> is correct. More
+specifically, I used population mean values of approximately 0.98, 0.65,
+and 0.33. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .27; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, it does not affect the results in
 this case. In case <span class="math inline">\(H_2\)</span> did receive
 some support (i.e., had a GORIC(A) weight larger than 0), increasing the
@@ -1848,22 +1868,26 @@ same size would lead to GORIC(A) weights as reported here, where the
 ratio of GORIC(A) weights for <span class="math inline">\(H_1\)</span>
 and the unconstrained is fixed and the ratio of GORIC(A) weights for
 <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> is infinite.</p>
-<p>Note: <span class="math inline">\(H_1\)</span> and its competing
-(non-overlapping) hypothesis <span class="math inline">\(H_2\)</span> do
-not have the same fit/loglik value. Hence, there is no support for the
-boundary of these hypotheses; only support for <span class="math inline">\(H_1\)</span>. This will become clear in the
-Special cases Section.</p>
+<p>Note: As will become clear in the Special cases Section, one should
+first check the ratio of fit values (i.e. ratio of loglik.weights) of
+the best hypothesis <span class="math inline">\(H_1\)</span> and the
+other hypotheses, since there could be support for the boundary of <span class="math inline">\(H_1\)</span> and one of the other hypotheses.
+Since the loglik.weights of <span class="math inline">\(H_1\)</span> and
+its competing (non-overlapping) hypothesis <span class="math inline">\(H_2\)</span> differ (i.e., their ratio of
+loglik.weights is not close to 1), there is no support for the boundary
+of these hypotheses; only support for <span class="math inline">\(H_1\)</span>.</p>
 </div>
 </div>
-<div id="no-failsafe" class="section level3" number="5.3.3">
-<h3><span class="header-section-number">5.3.3</span> No failsafe</h3>
+<div id="no-failsafe" class="section level3" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> No failsafe</h3>
 <p>Only if your hypotheses of interest cover all theories/orderings
 (i.e., cover the whole parameter space), then you do not need a failsafe
-hypothesis. Namely, the truth is covered in one or more hypotheses. Be
-ware of the special cases, like overlapping hypotheses, as will be
+hypothesis. Namely, the truth is covered in one or more
+hypotheses.<br />
+Be ware of the special cases, like overlapping hypotheses, as will be
 discussed in the Special cases Section.</p>
-<div id="example-3" class="section level4" number="5.3.3.1">
-<h4><span class="header-section-number">5.3.3.1</span> Example</h4>
+<div id="example-3" class="section level4" number="4.3.3.1">
+<h4><span class="header-section-number">4.3.3.1</span> Example</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default)
 H1 &lt;- &quot;D1 &gt; D2&quot; # # =&gt; H1: D1 &gt; D2, D3
 H2 &lt;- &quot;D1 &lt; D2&quot; # # =&gt; H2: D1 &lt; D2, D3
@@ -1883,28 +1907,31 @@ Results:
 H1  1.000 44.682
 H2  0.022  1.000</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2, \mu_3\)</span> is <span class="math inline">\(.978/.022 \approx 45\)</span> times more supported
-than <span class="math inline">\(H_2: \mu_1 &lt; \mu_2,
-\mu_3\)</span>.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+\mu_1 &gt; \mu_2, \ \mu_3\)</span> is <span class="math inline">\(.978/.022\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(45\)</span> times more supported than <span class="math inline">\(H_2: \mu_1 &lt; \mu_2, \ \mu_3\)</span>.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:1;
+implying that <span class="math inline">\(H_1\)</span> is correct. More
+specifically, I used population mean values of approximately 0.98, 0.65,
+and 0.33. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .27; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the GORIC(A) weights of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> will converge to 1 and 0,
 respectively, leading to an infinite support for <span class="math inline">\(H_1\)</span> versus <span class="math inline">\(H_2\)</span>; stated otherwise, leading to full
 support for <span class="math inline">\(H_1\)</span>.</p>
 <p>Note: As will become clear in the Special cases Section, one should
-first check the fit and/or penalty part, since there could be support
-for the boundary of these two hypotheses. Since the loglik.weights
-differ, there is no support for the boundary of these hypotheses; only
-support for <span class="math inline">\(H_1\)</span>.</p>
+first check the ratio of fit values (i.e. ratio of loglik.weights) of
+the best hypothesis <span class="math inline">\(H_1\)</span> and one of
+the other hypotheses, since there could be support for the boundary of
+<span class="math inline">\(H_1\)</span> and the other hypotheses. Since
+the loglik.weights differ (i.e., the ratio of loglik.weights is not
+close to 1), there is no support for the boundary of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>; only support for <span class="math inline">\(H_1\)</span>.</p>
 </div>
 </div>
 </div>
-<div id="note-hypothesis-specification" class="section level2" number="5.4">
-<h2><span class="header-section-number">5.4</span> Note: Hypothesis
+<div id="note-hypothesis-specification" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Note: Hypothesis
 specification</h2>
-<p>A hypothesis is considered the best of the set of it has the highest
+<p>A hypothesis is considered the best of the set if it has the highest
 GORIC(A) weight. In that case, all ratios of GORIC(A) weights of that
 hypothesis versus another one is 1 or higher. In case of decision
 making, you may want to pre-specify a benchmark for the ratio of
@@ -1933,8 +1960,8 @@ check) that Treatment B (and then also A) does better than the placebo:
 \mu_A - \mu_B &gt; 0, \ \mu_B &gt; \mu_P\)</span>. In <span class="math inline">\(H_{1m}\)</span>, the (minimum)
 difference/bound/threshold of 0 is replaced by .1, the minimum
 difference in treatments you would like to find.</p>
-<div id="example-4" class="section level3" number="5.4.1">
-<h3><span class="header-section-number">5.4.1</span> Example</h3>
+<div id="example-4" class="section level3" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Example</h3>
 <pre class="r"><code># General hypothesis vs complement
 H1g &lt;- &quot;D1 &gt; D2 &gt; D3&quot; 
 
@@ -1957,8 +1984,9 @@ complement   0.088          1.000</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_{1g}:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is <span class="math inline">\(.919/.081 \approx 11.4\)</span> times more
 supported than its complement. Since the ratio is larger than 1, <span class="math inline">\(H_{1g}\)</span> is the best.<br />
-[Note: Since the fit values differ, there is no support for the boundary
-- as discussed in the Special cases Section - but solely for <span class="math inline">\(H_{1g}\)</span>.]</p>
+[Note: Since the fit values differ (i.e., the ratio of loglik.weights is
+not close to 1), there is no support for the boundary - as discussed in
+the Special cases Section - but solely for <span class="math inline">\(H_{1g}\)</span>.]</p>
 <p>Sometimes you may want a minimum support for your hypothesis of
 interest. You could do this by pre-specifying a benchmark value for the
 ratio: when the ratio of GORIC(A) weights is higher than that benchmark,
@@ -1989,12 +2017,17 @@ complement   0.155          1.000</code></pre>
 supported than its complement. Since the difference in treatment means
 is at least as large as pre-specified, you can now convincingly go for
 Treatment A.<br />
-[Note: Since the fit values differ, there is no support for the boundary
-- as discussed in the Special cases Section - but solely for <span class="math inline">\(H_{1m}\)</span>.]</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.8855591, 0.7379659, and 0.2951864 and thus a ratio of
-means of 3:2.5:1. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+[Note: Since the fit values differ (i.e., the ratio of loglik.weights is
+not close to 1), there is no support for the boundary - as discussed in
+the Special cases Section - but solely for <span class="math inline">\(H_{1m}\)</span>.]</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2.5:1;
+implying that both <span class="math inline">\(H_{1g}\)</span> and <span class="math inline">\(H_{1m}\)</span> are correct. More specifically, I
+used population mean values of approximately 0.89, 0.74, and 0.30. This
+implies that Cohen’s <span class="math inline">\(d\)</span> is
+approximately .25; thus, there is a small to medium population effect
+size. I then sampled 100 observations, ran an ANOVA, and applied the
+GORIC.<br />
 When I would sample more observations, the GORIC(A) weight of both <span class="math inline">\(H_{1g}\)</span> and <span class="math inline">\(H_{1m}\)</span> will converge to 1; reflecting
 full support.</p>
 <p>Notes:</p>
@@ -2003,65 +2036,65 @@ full support.</p>
 in the example above), you should use the minimum difference you would
 like to find. If you use a higher bound/threshold then needed, the
 complexity does not change, while the fit decreases; which leads to less
-support for your hypothesis of interest. Likewise, you should specify a
-maximum</p></li>
+support for your hypothesis of interest.</p></li>
 <li><p>In case you want to inspect absolute difference, you can make use
 of the abs() function (e.g., <span class="math inline">\(|\beta_1| &gt;
 |\beta_2|\)</span> can be reflected in the code via, for example,
-abs(b1) &gt; abs(b2); or, when using bounds, abs(b1) - abs(b2) &gt; .1);
-as is explained in GORIC(A) tutorials.</p></li>
+abs(b1) &gt; abs(b2); or, when using bounds/thresholds, abs(b1) -
+abs(b2) &gt; .1); as is explained in GORIC(A) tutorials.</p></li>
 </ul>
 </div>
 </div>
 </div>
-<div id="special-cases" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Special cases</h1>
-<div id="equal-fit" class="section level2" number="6.1">
-<h2><span class="header-section-number">6.1</span> Equal fit</h2>
-<div id="overlapping-hypotheses" class="section level3" number="6.1.1">
-<h3><span class="header-section-number">6.1.1</span> Overlapping
+<div id="special-cases" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Special cases</h1>
+<div id="equal-fit" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Equal fit</h2>
+<div id="overlapping-hypotheses" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Overlapping
 hypotheses</h3>
 <p>You should be aware when some of the hypotheses overlap. Note that
 all hypotheses overlap with the unconstrained hypotheses (per
-definition). Also, competing hypotheses can overlap; e.g., <span class="math inline">\(\beta_1 &gt; \beta_2, \beta_3\)</span> and <span class="math inline">\(\beta_1 &gt; \beta_2 &gt; \beta_3\)</span>
+definition). Also, competing hypotheses can overlap; e.g., <span class="math inline">\(\beta_1 &gt; \beta_2, \ \beta_3\)</span> and <span class="math inline">\(\beta_1 &gt; \beta_2 &gt; \beta_3\)</span>
 overlap, since the latter is a subset / special case of the first.</p>
-<p>When hypotheses overlap and the truth lies in this overlapping part
-(i.e., in the subset):</p>
+<p><strong>When hypotheses overlap and the truth lies in this
+overlapping part (i.e., in the subset)</strong>:</p>
 <ul>
-<li><p>Then, the hypotheses share support, that is, they divide the
-support. Consequently, none of them will obtain full support (i.e., a
-GORIC(A) weight of 1) and their relative support (i.e., ratio of
-GORIC(A) weights) is even bounded. Bear in mind that the most
+<li><p>Then, the overlapping hypotheses share support, that is, they
+divide the support. Consequently, none of them will obtain full support
+(i.e., a GORIC(A) weight of 1) and their relative support (i.e., ratio
+of GORIC(A) weights) is even bounded. Bear in mind that the most
 parsimonious hypothesis will be the best one.</p></li>
-<li><p>Then, their fit/loglik values will be equal (i.e., these
-hypotheses will have the same maximum log likelihood) and their ratio of
-GORIC(A) weights will be solely based on the penalty part (and thus
-equal the so-called penalty weights).</p></li>
-<li><p>Then, it does not make sense to interpret their ratio of GORIC(A)
-weights, you just know that there is support for the overlap of the
-hypothesis. If possible and if of interest, you can specify the overlap
-and evaluate that versus its complement (to obtain the support for the
-overlapping part). This can be of interest for future research.</p></li>
+<li><p>Then, the fit/loglik values of the overlapping hypotheses will be
+equal (i.e., the ratio of loglik.weights will be 1), that is, these
+overlapping hypotheses will have the same maximum log likelihood. In
+that case, the ratio of GORIC(A) weights will be solely based on the
+penalty part (and thus equal the so-called penalty weights).</p></li>
+<li><p>Then, it does not make sense to interpret the ratio of GORIC(A)
+weights of these overlapping hypotheses, you just know that there is
+support for the overlap of the hypotheses.<br />
+If possible and if of interest, you can specify the overlap and evaluate
+that versus its complement (to obtain the support for the overlapping
+part). This can be of interest for future research.</p></li>
 </ul>
 <p>Thus, when hypotheses have the same fit values (and thus when the
-ratio of their GORIC(A) weights equal the ratio of corresponding penalty
-weights), you know that there is support for the overlap of the
-hypotheses. Note that, when one hypothesis is a subset of another, this
-implies support for the subset. Note further that, in some cases, this
-implies support for the boundary of hypotheses, as will be discussed in
-a section later on.</p>
-<p>In contrast, when there is support for only one of the overlapping
-hypotheses, this implies support for the non-overlapping part (bear in
-mind that the GORIC(A) weight itself addresses the support for the
-complete hypothesis).</p>
+ratio of their loglik.weights equal 1), you know that there is support
+for the overlap of the hypotheses. Note that, when one hypothesis is a
+subset of another, this implies support for the subset. Note further
+that, in some cases, this implies support for the boundary of
+hypotheses, as will be discussed in a section later on.</p>
+<p>In contrast, <strong>when there is support for only one of the
+overlapping hypotheses</strong>, this implies support for the
+non-overlapping part. Bear in mind that the GORIC(A) weight itself
+addresses the support for the complete hypothesis, not the overlap.</p>
 <p>If possible and if of interest, you can specify the (non-)overlapping
 part and evaluate that versus its complement (to obtain the support for
 this (non-)overlapping part). This can be of interest for future
 research: You then create a more specific hypothesis or more adjusted
 set of hypotheses to be evaluated in future research which aids in
 theory building.</p>
-<div id="example-subset-true" class="section level4" number="6.1.1.1">
-<h4><span class="header-section-number">6.1.1.1</span> Example: Subset
+<div id="example-subset-true" class="section level4" number="5.1.1.1">
+<h4><span class="header-section-number">5.1.1.1</span> Example: Subset
 true</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default) - subset true
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
@@ -2084,17 +2117,18 @@ H1             1.000  1.950             3.216
 H2             0.513  1.000             1.649
 unconstrained  0.311  0.607             1.000</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \mu_3\)</span> are not
+\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \ \mu_3\)</span> are not
 weak, since they are <span class="math inline">\(.548/.171 &gt;
 1\)</span> and <span class="math inline">\(.281/.171 &gt; 1\)</span>,
 respectively, times more supported than the unconstrained. Therefore,
 <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.
 <!-- From the GORIC weights goric.weights (or their ratios in results_12u\$ratio.gw - H1 vs. H2), you can conclude that $H_1$ is $.548/.281$ times (or $1.95$ times) more supported than $H_2$. -->
 <!-- Notably, if you would calculate the GORIC(A) weight for the set consisting of solely $H_1$ and $H_2$, you would obtain $.548/(.548+.281) \approx .66$ and $.34$. --></p>
-<p>From the GORIC value or GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. Before we look at the
+<p>From the GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. Before we interpret the
 ratio of GORIC weights (i.e., goric.weights), we need to check the
-fit/loglik values of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>. These are the same. Hence, the
-relative support is bounded and, now, attains the maximum value. Thus,
+fit/loglik values of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>. These are the same, that is, the
+ratio of loglik.weights is 1. Hence, the relative support (denoted by
+the GORIC weight) is bounded and, now, attains the maximum value. Thus,
 there is support for the overlap of the hypotheses, which is <span class="math inline">\(H_1\)</span> here (since <span class="math inline">\(H_1\)</span> is a subset of <span class="math inline">\(H_2\)</span>).</p>
 <p>You could choose to investigate the support for this overlap, by
 evaluating <span class="math inline">\(H_1\)</span> versus its
@@ -2103,15 +2137,18 @@ we found that <span class="math inline">\(H_1\)</span> is 4.88 times
 more supported than its complement. For future research, you could
 advise to evaluate <span class="math inline">\(H_1\)</span> versus its
 complement.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:1;
+implying that <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are both correct (where <span class="math inline">\(H_1\)</span> is the most parsimonious one). More
+specifically, I used population mean values of approximately 0.98, 0.65,
+and 0.33. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .27; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, it does not affect the GORIC(A)
 weights for <span class="math inline">\(H_1\)</span>, <span class="math inline">\(H_2\)</span>, and the unconstrained.</p>
 </div>
-<div id="example-non-overlapping-part-true" class="section level4" number="6.1.1.2">
-<h4><span class="header-section-number">6.1.1.2</span> Example:
+<div id="example-non-overlapping-part-true" class="section level4" number="5.1.1.2">
+<h4><span class="header-section-number">5.1.1.2</span> Example:
 Non-overlapping part true</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default) - non-overlapping part true
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
@@ -2134,35 +2171,39 @@ H1             1.000  0.767             1.265
 H2             1.303  1.000             1.649
 unconstrained  0.790  0.607             1.000</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \mu_3\)</span> are not
+\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \ \mu_3\)</span> are not
 weak, since since they are <span class="math inline">\(.323/.255 &gt;
 1\)</span> and <span class="math inline">\(.421/.255 &gt; 1\)</span>,
 respectively, times more supported than the unconstrained. Therefore,
 <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.</p>
-<p>From the GORIC value or GORIC weights, we can conclude that <span class="math inline">\(H_2\)</span> is the best. Since the fit/loglik
-values of <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_1\)</span> are not the same, there is no support
-for their overlap. From the GORIC weights goric.weights (or their ratios
-in results_12u$ratio.gw - H1 vs. H2), you can conclude that <span class="math inline">\(H_2\)</span> is <span class="math inline">\(.421/.323\)</span> times (or <span class="math inline">\(1.30\)</span> times) more supported than <span class="math inline">\(H_1\)</span>. Notably, if you would calculate the
+<p>From the GORIC weights, we can conclude that <span class="math inline">\(H_2\)</span> is the best. Since the fit/loglik
+values of <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_1\)</span> are not the same (i.e., the ratio of
+loglik.weights is not close to 1), there is no support for their
+overlap. From the GORIC weights goric.weights (or their ratios in
+results_12u$ratio.gw - H1 vs. H2), you can conclude that <span class="math inline">\(H_2\)</span> is <span class="math inline">\(.421/.323\)</span> times (or <span class="math inline">\(1.30\)</span> times) more supported than <span class="math inline">\(H_1\)</span>. Notably, if you would calculate the
 GORIC(A) weight for the set consisting of solely <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>, you would obtain <span class="math inline">\(.323/(.323+.421) \approx .43\)</span> and <span class="math inline">\(.57\)</span>.</p>
 <p>Since we know/see that <span class="math inline">\(H_1\)</span> and
 <span class="math inline">\(H_2\)</span> overlap, we can take it one
 step further. The support for <span class="math inline">\(H_2\)</span>
 indicates support for the non-overlapping part of <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_1\)</span>. In this case, it is possible to
 specify the the non-overlapping part, namely <span class="math inline">\(\mu_1 &gt; \mu_2 &lt; \mu_3\)</span>. If of
-interest, you could evaluate that versus its complement. For future
-research, you could advise to evaluate this non-overlapping part versus
-its complement.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.6186005, 0.4124004, and 0.6186005 and thus a ratio of
-means of 3:2:3. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+interest, you could evaluate that versus its complement (as done below).
+For future research, you could advise to evaluate this non-overlapping
+part versus its complement.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:3;
+implying that <span class="math inline">\(H_2\)</span> is correct. More
+specifically, I used population mean values of approximately 0.62, 0.41,
+and 0.62. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .107; thus, there is a
+small population effect size. I then sampled 100 observations, ran an
+ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the ratio of GORIC(A) weights for
 <span class="math inline">\(H_2\)</span> versus <span class="math inline">\(H_1\)</span> would go to infinity. Note that the
 GORIC(A) weight of <span class="math inline">\(H_1\)</span> would go to
 0, but that of <span class="math inline">\(H_2\)</span> not to 1 since
 the unconstrained always obtains support (because it also includes <span class="math inline">\(H_2\)</span> / the true ordering).</p>
-<div id="follow-up-exploratory-analysis-for-non-overlapping-part" class="section level5" number="6.1.1.2.1">
-<h5><span class="header-section-number">6.1.1.2.1</span> Follow-up
+<div id="follow-up-exploratory-analysis-for-non-overlapping-part" class="section level5" number="5.1.1.2.1">
+<h5><span class="header-section-number">5.1.1.2.1</span> Follow-up
 exploratory analysis for non-overlapping part</h5>
 <pre class="r"><code># non-overlapping part vs  its complement
 Hn &lt;- &quot;D1 &gt; D2 &lt; D3&quot; 
@@ -2182,8 +2223,8 @@ The order-restricted hypothesis &#39;Hn&#39; has 2.994 times more support than i
 </div>
 </div>
 </div>
-<div id="support-for-boundary" class="section level3" number="6.1.2">
-<h3><span class="header-section-number">6.1.2</span> Support for
+<div id="support-for-boundary" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Support for
 boundary</h3>
 <p>When hypotheses do not overlap, there can mathematically still be
 overlap, namely the boundary of these hypotheses. This is always the
@@ -2192,11 +2233,11 @@ but can also be the case for other pairs of hypotheses. As a very simple
 example: The overlap/boundary of <span class="math inline">\(\beta_1
 &gt; 0\)</span> and its complement (here, <span class="math inline">\(\beta_1 &lt; 0\)</span>) is <span class="math inline">\(\beta_1 = 0\)</span>.</p>
 <p>Consequently, when non-overlapping hypotheses have (approximately)
-the same fit values (and thus when the ratio of their GORIC(A) weights
-(approximately) equal the ratio of corresponding penalty weights), you
-know that there is support for the boundary of these hypotheses.</p>
-<div id="example-h_1-versus-its-complement" class="section level4" number="6.1.2.1">
-<h4><span class="header-section-number">6.1.2.1</span> Example: <span class="math inline">\(H_1\)</span> versus its complement</h4>
+the same fit values (and thus when the ratio of loglik.weights
+(approximately) equal 1), you know that there is support for the
+boundary of these hypotheses.</p>
+<div id="example-h_1-versus-its-complement" class="section level4" number="5.1.2.1">
+<h4><span class="header-section-number">5.1.2.1</span> Example: <span class="math inline">\(H_1\)</span> versus its complement</h4>
 <pre class="r"><code># H1 vs complement
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
 
@@ -2217,7 +2258,7 @@ coef(fit)</code></pre>
 <pre><code>       D1        D2        D3 
 0.9342210 0.4515234 0.5260562 </code></pre>
 <!-- From this, you can conclude that $H_1: \mu_1 > \mu_2 > \mu_3$ is $.683/.317 \approx 2.16$ time more supported than its complement. -->
-<p>From the GORIC value or GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. Before looking at the
+<p>From the GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. Before interpreting the
 ratio of GORIC(A) weights, one needs to check the fit/loglik. From this,
 you can see that the fit values of <span class="math inline">\(H_1\)</span> and its complement resemble and,
 thus, their loglik.weights are almost the same (i.e., their ratio is
@@ -2225,31 +2266,37 @@ close to 1). Likewise, you can see that the GORICA weights resemble the
 penalty weights. This indicates that there is support for the boundary
 of the hypotheses. Bear in mind that the overlap of a hypothesis and its
 complement is the boundary of them.<br />
-In this example, the boundaries are: <span class="math inline">\(\mu_1 =
-\mu_2 &gt; \mu_3\)</span>,  <span class="math inline">\(\mu_1 &gt; \mu_2
-= \mu_3\)</span>, and <span class="math inline">\(\mu_1 = \mu_2 =
-\mu_3\)</span>. You can take two approaches now: i) do an exploratory
-evaluation of these hypotheses (as done below) or ii) inspect the sample
-means (by looking at coef(fit)). Here, based on both approaches, you can
-conclude that there is support for <span class="math inline">\(\mu_1
-&gt; \mu_2 = \mu_3\)</span>. This hypothesis can then be proposed to be
-evaluated in future research. If of interest, one can also evaluate this
-boundary hypothesis versus its complement. Notably, such a boundary
-hypothesis contains at least one equality, which you may want to
-rephrase as an about-equality, as discusses in a next section; and
-exemplified in the the follow-up analysis in the next section.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.7139568, 0.4759712, and 0.4759712 and thus a ratio of
-means of 3:2:2. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+In this example, the boundaries are:<br />
+<span class="math inline">\(\mu_1 = \mu_2 &gt; \mu_3\)</span>,<br />
+<span class="math inline">\(\mu_1 &gt; \mu_2 = \mu_3\)</span>, and<br />
+<span class="math inline">\(\mu_1 = \mu_2 = \mu_3\)</span>.<br />
+You can take two approaches now: i) do an exploratory evaluation of
+these hypotheses (as done below) or ii) inspect the sample means (by
+looking at coef(fit)). Here, based on both approaches, you can conclude
+that there is support for <span class="math inline">\(\mu_1 &gt; \mu_2 =
+\mu_3\)</span>. This hypothesis can then be proposed to be evaluated in
+future research.<br />
+If of interest, one can also evaluate this boundary hypothesis versus
+its complement. Notably, such a boundary hypothesis contains at least
+one equality, which you may want to rephrase as an about-equality, as
+discusses in a next section; and exemplified in the the follow-up
+analysis in a next section.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:2;
+implying that (the boundaries of) <span class="math inline">\(H_1\)</span> and its complement are both correct
+(where <span class="math inline">\(H_1\)</span> is the most parsimonious
+one). More specifically, I used population mean values of approximately
+0.71, 0.482, and 0.48. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .11; thus, there is a
+small population effect size. I then sampled 100 observations, ran an
+ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the fit values will become more
 closer and the GORIC(A) weights will converge to the penalty weights,
 but they will never exactly equate because of how the output for the
 complement is calculated (but it will asymptotically equate within, say,
 3 decimals).</p>
-<div id="example-follow-up-exploratory-analysis-for-boundary" class="section level5" number="6.1.2.1.1">
-<h5><span class="header-section-number">6.1.2.1.1</span> Example:
-Follow-up exploratory analysis for boundary</h5>
+<div id="follow-up-exploratory-analysis-for-boundary" class="section level5" number="5.1.2.1.1">
+<h5><span class="header-section-number">5.1.2.1.1</span> Follow-up
+exploratory analysis for boundary</h5>
 <pre class="r"><code># Check on three boundary hypotheses
 Hb1 &lt;- &quot;D1 = D2 &gt; D3&quot;
 Hb2 &lt;- &quot;D1 &gt; D2 = D3&quot;
@@ -2269,8 +2316,8 @@ Results:
 4  unconstrained  -123.384    4.000  254.767           0.490            0.058          0.173</code></pre>
 </div>
 </div>
-<div id="example-h_1-h_2-and-the-unconstrained" class="section level4" number="6.1.2.2">
-<h4><span class="header-section-number">6.1.2.2</span> Example: <span class="math inline">\(H_1\)</span>, <span class="math inline">\(H_2\)</span>, and the unconstrained</h4>
+<div id="example-h_1-h_2-and-the-unconstrained" class="section level4" number="5.1.2.2">
+<h4><span class="header-section-number">5.1.2.2</span> Example: <span class="math inline">\(H_1\)</span>, <span class="math inline">\(H_2\)</span>, and the unconstrained</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default) - non-overlapping part true
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;
 H2 &lt;- &quot;D1 &gt; D2 &lt; D3&quot;
@@ -2303,30 +2350,35 @@ weak, since since they are <span class="math inline">\(.477/.159 &gt;
 respectively, times more supported than the unconstrained. Therefore,
 <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.
 <!-- From the GORIC weights goric.weights (or their ratios in results_12u\$ratio.gw - H1 vs. H2), you can conclude that $H_1$ is $.477/.364$ times (or $1.31$ times) more supported than $H_1$. --></p>
-<p>From the GORIC value or GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. When checking the
+<p>From the GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. When checking the
 fit/loglik, you can see that the fit values of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> resemble and, thus, their
-loglik.weights are almost the same. Likewise, you can see that the
-GORICA weights of <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span> (in results_12u$ratio.gw - H1 vs. H2)
+loglik.weights are almost the same (i.e., the ratio of loglik.weights is
+close to 1). Likewise, you can see that the GORICA weights of <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span> (in results_12u$ratio.gw - H1 vs. H2)
 resemble the penalty weights of <span class="math inline">\(H_1\)</span>
 vs <span class="math inline">\(H_2\)</span> (in results_12u$ratio.pw -
 H1 vs. H2). This indicates that there is support for the overlap of
-these hypotheses. In this case, the overlap means <span class="math inline">\(\mu_1 &gt; \mu_2\)</span> together with the
+these hypotheses. In this case, the overlap means <span class="math inline">\(\mu_1 &gt; \mu_2\)</span> (i.e., the part <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> have in common) together with the
 boundary of <span class="math inline">\(\mu_2 &gt; \mu_3\)</span> and
 <span class="math inline">\(\mu_2 &lt; \mu_3\)</span>, which is <span class="math inline">\(\mu_2 = \mu_3\)</span>; hence, <span class="math inline">\(\mu_1 &gt; \mu_2 = \mu_3\)</span>. This hypothesis
-can then be proposed to be evaluated in future research. If of interest,
-one can evaluate this new hypothesis versus its complement. Notably,
-this hypothesis contains an equality, which you may want to rephrase as
-an about-equality, as discusses in a next section.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.7139568, 0.4759712, and 0.4759712 and thus a ratio of
-means of 3:2:2. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+can then be proposed to be evaluated in future research.<br />
+If of interest, one can evaluate this new hypothesis versus its
+complement. Notably, this hypothesis contains an equality, which you may
+want to rephrase as an about-equality, as discusses in a next section
+and exemplified in the next subsection.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2:2;
+implying that (the boundaries of) <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H2\)</span> are both correct (where both
+hypotheses are equally parsimonious). More specifically, I used
+population mean values of approximately 0.71, 0.482, and 0.48. This
+implies that Cohen’s <span class="math inline">\(d\)</span> is
+approximately .11; thus, there is a small population effect size. I then
+sampled 100 observations, ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the fit values will become more
 closer and the GORIC(A) weights will converge to the penalty
 weights.</p>
-<div id="example-follow-up-exploratory-analysis-for-boundary-1" class="section level5" number="6.1.2.2.1">
-<h5><span class="header-section-number">6.1.2.2.1</span> Example:
-Follow-up exploratory analysis for boundary</h5>
+<div id="follow-up-exploratory-analysis-for-boundary-1" class="section level5" number="5.1.2.2.1">
+<h5><span class="header-section-number">5.1.2.2.1</span> Follow-up
+exploratory analysis for boundary</h5>
 <pre class="r"><code># overlap H1 and H2 versus its complement
 Hb &lt;- &quot;D1 &gt; D2, -.1 &lt; D2 - D3 &lt; .1&quot;
 
@@ -2345,53 +2397,52 @@ The order-restricted hypothesis &#39;Hb&#39; has 4.528 times more support than i
 </div>
 </div>
 </div>
-<div id="notes" class="section level3" number="6.1.3">
-<h3><span class="header-section-number">6.1.3</span> Notes</h3>
+<div id="notes" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Notes</h3>
 <p>Note 1:<br />
-In many situations, the ratio of penalty weights does not equal 1. A
-ratio of GORIC(A) weights of 1 means that the hypotheses are equally
-likely (in terms of balancing fit and complexity); then, both hypotheses
+A ratio of GORIC(A) weights of 1 means that the hypotheses are equally
+likely (in terms of balancing fit and complexity). Then, both hypotheses
 are equally supported. This does not per se mean that there is support
 for their overlap (or boundary). Only when the penalty values of the
 hypotheses are the same, this coincides. For example, the penalty of
 <span class="math inline">\(\beta_1 &gt; 0\)</span> equals that of its
 complement (here, <span class="math inline">\(\beta_1 &lt; 0\)</span>),
-thus their ratio of GORIC(A) weights will equal 1 when <span class="math inline">\(\beta_1 = 0\)</span>. See also the example below
-for more insight.<br />
-Bear in mind that when the ratio of GORIC(A) weights equal the ratio of
+thus their ratio of GORIC(A) weights will equal 1 when <span class="math inline">\(\beta_1 = 0\)</span>.<br />
+Bear in mind that when the ratio of GORIC(A) weights equals the ratio of
 penalty weights (which does not need to be 1), then there is support for
-the overlap (or boundary). Likewise, one can look for equal fit values,
-as done in all the examples.</p>
+the overlap (or boundary). Likewise, one can look for equal fit values
+(reflected by a ratio of loglik.weights of 1), as done in all the
+examples.</p>
 <p>Note 2:<br />
 There are no cut-off values for fit values to resemble or for the ratio
-of loglik weights being close to 1 (only gut feelings). Since the fit
+of loglik.weights being close to 1 (only gut feelings). Since the fit
 values depend on sample size, it is probably better to look the ratio of
-loglik weights. Additionally, it could help to check the estimates that
-belong to those hypotheses (using results_0c$ormle) and see if they
-meaningfully differ.</p>
+loglik.weights. Additionally, it could help to check the estimates that
+belong to those hypotheses (using, e.g., results_0c$ormle) and see if
+they meaningfully differ.</p>
 </div>
 </div>
-<div id="just-below-maxmimum-fit" class="section level2" number="6.2">
-<h2><span class="header-section-number">6.2</span> Just below maxmimum
+<div id="just-below-maxmimum-fit" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Just below maxmimum
 fit</h2>
-<div id="equality-restriction" class="section level3" number="6.2.1">
-<h3><span class="header-section-number">6.2.1</span> Equality
+<div id="equality-restriction" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Equality
 restriction (=)</h3>
-<p>Even if, in the population, the equality is true (e.g., <span class="math inline">\(\beta_1 = \beta_2\)</span>, that is, <span class="math inline">\(\beta_1 - \beta_2 = 0\)</span>), the probability
-of finding this in your data is 0. In your data, the relationship will
-never be exactly 0. Therefore, the fit value (i.e., the maximum log
-likelihood) of a true hypothesis with equality restriction will never
-equate the maximum fit (i.e., the maximum log likelihood of the
-unconstrained), but a value (just) below this maximum. Consequently, a
-true hypothesis with equality restriction will never obtain a GORIC(A)
-weight of 1, but one lower than 1.</p>
+<p>Even if an equality restriction (e.g., <span class="math inline">\(\beta_1 = \beta_2\)</span>, that is, <span class="math inline">\(\beta_1 - \beta_2 = 0\)</span>) is true in the
+population, the probability of finding this in your data is 0. In your
+data, the relationship will never be exactly equal. Therefore, the fit
+value (i.e., the maximum log likelihood) of a true hypothesis with
+equality restriction will never equate the maximum fit (i.e., the
+maximum log likelihood of the unconstrained), but a value (just) below
+this maximum. Consequently, a true hypothesis with equality restriction
+will never obtain a GORIC(A) weight of 1, but one lower than 1.</p>
 <p>Hence, be aware of interpreting your results when there is at least
 one equality restriction in the set. Moreover, only include an equality
 restriction when you are really interested in it. If possible, I would
 advise you to specify an about-equality restriction instead, as
-discussed next.</p>
-<div id="example-5" class="section level4" number="6.2.1.1">
-<h4><span class="header-section-number">6.2.1.1</span> Example</h4>
+discussed next (after the example).</p>
+<div id="example-5" class="section level4" number="5.2.1.1">
+<h4><span class="header-section-number">5.2.1.1</span> Example</h4>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 = D2 &gt; 0, D3 &gt; 0&quot; 
 
@@ -2413,53 +2464,58 @@ H1          1.000          4.469
 complement  0.224          1.000</code></pre>
 <!-- From this, you can conclude that $H_1: \mu_1 = \mu_2 > 0, \mu_3 > 0$ is $.817/.183 \approx 4.4$ times more supported than its complement. -->
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 = \mu_2 &gt; 0, \mu_3 &gt; 0\)</span> is more supported than its
+\mu_1 = \mu_2 &gt; 0, \ \mu_3 &gt; 0\)</span> is more supported than its
 complement. When you look at the fit/loglik part, you see that both
-fit/loglik values resemble. Thus, you can conclude that there is support
-for the overlap/boundary of these hypotheses, which is <span class="math inline">\(H_1\)</span>.</p>
+fit/loglik values resemble; that is, the ratio of loglik.weights is
+close to 1. Thus, you can conclude that there is support for the
+overlap/boundary of these hypotheses, which is <span class="math inline">\(H_1\)</span>.</p>
 <p>Here, the complement receives the highest fit; that is, the estimates
 are in agreement with the complement. In this case, the fit of the
 complement is based on the fit for <span class="math inline">\(\mu_1
 &gt; 0, \mu_2 &gt; 0, \mu_3 &gt; 0\)</span> (so, the hypothesis that
-does not restrict the first two means to be equal). Hence, the preferred
-hypothesis <span class="math inline">\(H_1\)</span> does not have the
-highest fit/loglik. Since <span class="math inline">\(H_1\)</span>
-contains an equality, it will also never have maximum fit. Moreover, the
-weight for a true equality hypothesis will never be 1. This could be a
-reason to evaluate an about-equality hypothesis instead, as discussed in
-the next section.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.6967672, 0.6967672, and 0.3483836 and thus a ratio of
-means of 3:3:1.5. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+does not restrict the first two means to be equal). Consequently, the
+preferred hypothesis <span class="math inline">\(H_1\)</span> does not
+have the highest fit/loglik. Since <span class="math inline">\(H_1\)</span> contains an equality, it will also
+never have maximum fit. Moreover, the weight for a true equality
+hypothesis will never be 1. This could be a reason to evaluate an
+about-equality hypothesis instead, as discussed in the next section.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:3:1.5;
+implying that (the boundaries of) <span class="math inline">\(H_1\)</span> and its complement are both correct
+(where <span class="math inline">\(H_1\)</span> is the most parsimonious
+one). More specifically, I used population mean values of approximately
+0.70, 0.70, and 0.35. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .16; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied the GORIC.<br />
 When I would sample more observations, the results are conclusion-wise
 the same and, more importantly, the weight for <span class="math inline">\(H_1\)</span> will not converge to 1.</p>
 </div>
 </div>
-<div id="about-equality-restrictions" class="section level3" number="6.2.2">
-<h3><span class="header-section-number">6.2.2</span> About-equality
+<div id="about-equality-restrictions" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> About-equality
 restrictions</h3>
 <p>Instead of equality restrictions (e.g., <span class="math inline">\(\beta_1 = \beta_2\)</span>, that is, <span class="math inline">\(\beta_1 - \beta_2 = 0\)</span>) one can specify
-about-equality restrictions (e.g., <span class="math inline">\(-0.2 &lt;
-\beta_1 - \beta_2 &lt; 0.2\)</span>). In this case, the hypothesis can
-have a maximum fit and a GORIC(A) weight of 1. In practice, it can be
-hard to specify such a range. Notably, when the range is too broad, the
-hypothesis will per definition have maximum fit. In addition, the
-broader the range, the lower the fit for the complement. Thus, you
-should specify the range meaningfully; preferably based on literature
-and/or expertise or perhaps data-based.</p>
-<p>When using a data-based approach to specify the range, it is best to
-use a training set (when the sample size is large enough). In that case,
-one uses one part of the data to come up with a range value for the
-about-equality restriction and the other part of the data to evaluate
-the about-equality restriction. When sample size is not large enough,
-you could for example use a cut-off value from the literature together
-with the standard deviation (i.e., the standard errors of the mean
-difference times the square root of the sample size). Bear in mind that
-you use the data twice, so only use this when creating a training set is
-not possible.</p>
-<div id="example-6" class="section level4" number="6.2.2.1">
-<h4><span class="header-section-number">6.2.2.1</span> Example</h4>
+about-equality restrictions (e.g., <span class="math inline">\(-0.2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(\beta_1
+- \beta_2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(0.2\)</span>). In this case, the hypothesis can
+have a maximum fit and a GORIC(A) weight of 1.<br />
+In practice, it can be hard to specify such a range. Notably, when the
+range is too broad, the hypothesis will per definition have maximum fit.
+In addition, the broader the range, the lower the fit for the
+complement. Thus, you should specify the range meaningfully; preferably
+based on literature and/or expertise or perhaps data-based.</p>
+<p><strong>If</strong> you use a <strong>data-based approach</strong> to
+specify the range, it is best to use a <strong>training set</strong>
+(when the sample size is large enough). In that case, one uses one part
+of the data to come up with a range value for the about-equality
+restriction and the other part of the data to evaluate the
+about-equality restriction.<br />
+When the sample size is not large enough, you could for example use a
+cut-off value from the literature together with the standard deviation
+(i.e., the standard errors of the mean difference times the square root
+of the sample size). Bear in mind that you use the data twice, so only
+use this when creating a training set is not possible.</p>
+<div id="example-6" class="section level4" number="5.2.2.1">
+<h4><span class="header-section-number">5.2.2.1</span> Example</h4>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;-0.2 &lt; D1 - D2 &lt; .2, D1 &gt; 0, D2 &gt; 0, D3 &gt; 0&quot;
 
@@ -2483,28 +2539,35 @@ complement  0.101          1.000</code></pre>
 <pre><code>       D1        D2        D3 
 0.8073380 0.8251897 0.3860030 </code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
--0.2 &lt; \mu_1 - \mu_2 &lt; .2, \mu_1 &gt; 0, \mu_2 &gt; 0, \mu_3 &gt;
-0\)</span> is <span class="math inline">\(.908/.092 \approx
-9.89\)</span> times more supported than its complement. Now, the
-fit/loglik value of this about-equality hypothesis <span class="math inline">\(H_1\)</span> is the highest (while it will never
-be the case for an equality hypothesis). The fit values of <span class="math inline">\(H_1\)</span> and its complement are still close
-(and will always be, unless you change the range), but the weight for
-the about-equality hypothesis will converge to 1.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. I then sampled 100 observations, ran an ANOVA, and
-applied the GORIC.<br />
+-0.2 &lt; \mu_1 - \mu_2 &lt; .2,\)</span> <span class="math inline">\(\mu_1\)</span> <span class="math inline">\(&gt; 0,
+\ \mu_2 &gt; 0, \mu_3 &gt; 0\)</span> is <span class="math inline">\(.908/.092 \approx 9.89\)</span> times more
+supported than its complement. Now, the fit/loglik value of this
+about-equality hypothesis <span class="math inline">\(H_1\)</span> is
+the highest (while it will never be the case for an equality
+hypothesis).<br />
+Note that the fit values of <span class="math inline">\(H_1\)</span> and
+its complement are less close and perhaps even not close: the ratio of
+loglik.weights is <span class="math inline">\(.573/.427 \approx
+1.34\)</span> (this ratio changes with the choice of range). Moreover,
+the weight for the about-equality hypothesis will converge to 1.</p>
+<p>Population information: In the data generation, I used a ratio of
+population means of 3:3:1.5; implying that <span class="math inline">\(H_1\)</span> is correct. More specifically, I used
+population mean values of approximately 0.70, 0.70, and 0.35. This
+implies that Cohen’s <span class="math inline">\(d\)</span> is
+approximately .16; thus, there is a small to medium population effect
+size. I then sampled 100 observations, ran an ANOVA, and applied the
+GORIC.<br />
 When I would sample more observations, the fit/loglik values of <span class="math inline">\(H_1\)</span> and its complement will remain close
 (with the highest value for <span class="math inline">\(H_1\)</span>)
 and the weight of <span class="math inline">\(H_1\)</span> will converge
-to 1.</p>
+to 1. TO DO ratio of loglik weights same for all N???</p>
 </div>
 </div>
 </div>
-<div id="not-highest-fit" class="section level2" number="6.3">
-<h2><span class="header-section-number">6.3</span> Not highest fit</h2>
+<div id="not-highest-fit" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Not highest fit</h2>
 <p>The GORIC(A), like the AIC or any other information criterion,
-balances fit and complexity. You are looking for a trade-off: The
+balances fit and complexity. You are thus looking for a trade-off: The
 hypothesis that describes the data best with the fewest number of
 parameters. Consequently, the preferred/best hypothesis does not need to
 have the highest fit - then, the difference in complexity outweighs the
@@ -2516,20 +2579,21 @@ maximum fit. Per definition, this scenario goes hand in hand with a
 GORIC(A) weight for the preferred hypothesis being lower than 1.</p>
 <p>It is probably the case that the sample size is not large enough. In
 such a case, the GORIC(A) weights will also denote this uncertainty,
-since none of them will be close to 1 (and perhaps even be close
-together).</p>
+since none of them will be close to 1 (and perhaps the weights will even
+be close together).</p>
 <p>When you encounter such a situation, you may want to additionally
 take on an additional exploratory approach to come up with a few
 hypotheses for future research (by looking at sample means/estimates
 taking into account what theoretically makes sense or by specifying some
 plausible hypotheses which theoretically make sense). Then, in future
 research, one can evaluate the new set of hypotheses with a larger
-sample size. When you believe the lower fit is solely because of a small
-sample or cannot create other theoretically meaningful hypotheses, you
+sample size.<br />
+When you believe the lower fit is solely because of a small sample or
+when you cannot create other theoretically meaningful hypotheses, you
 should advise to inspect the same hypothesis with a larger sample size
 in future research.</p>
-<div id="example-correct-hypothesis" class="section level3" number="6.3.1">
-<h3><span class="header-section-number">6.3.1</span> Example: Correct
+<div id="example-correct-hypothesis" class="section level3" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Example: Correct
 hypothesis</h3>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; 
@@ -2551,27 +2615,28 @@ The order-restricted hypothesis &#39;H1&#39; has 2.548 times more support than i
 H1          1.000          2.548
 complement  0.392          1.000</code></pre>
 <p>Here, we see that our informative hypothesis <span class="math inline">\(H_1\)</span> is the preferred one, but it does not
-have the best fit (ratio of loglik.weights is <span class="math inline">\(.419 / .581 \approx .72 &lt; 1\)</span>).</p>
+have the best fit (ratio of loglik.weights is <span class="math inline">\(.419 / .581\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(.72\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(1\)</span>).</p>
 <p>Based on the sample size (<span class="math inline">\(N=100\)</span>,
 that is, approximately 33 observations per group), one could decide to
 leave the hypothesis like it is and only advise to increase the sample
-size in future research. You could also go for an additional exploratory
-approach to come up with a few competing hypotheses or a new hypothesis
-for future research.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.5668791, 0.5335333, and 0.5001875 and thus a ratio of
-means of 1.7:1.6:1.5; implying that <span class="math inline">\(H_1\)</span> is correct. Note that Cohen’s <span class="math inline">\(d\)</span> is approximately .027; thus, there is a
-very small population effect size.<br />
-I then sampled 100 observations, ran an ANOVA, and applied the
-GORIC.<br />
+size in future research. Alternatively, you could also go for an
+additional exploratory approach to come up with a few competing
+hypotheses or a new hypothesis for future research.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of
+1.7:1.6:1.5; implying that <span class="math inline">\(H_1\)</span> is
+correct. More specifically, I used population mean values of
+approximately 0.57, 0.53, and 0.50. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .03; thus, there is a
+very small population effect size. I then sampled 100 observations, ran
+an ANOVA, and applied the GORIC.<br />
 Notably, I sampled multiple times 100 observations (by using a different
-seed value every time) until I found this situation: Support for correct
-<span class="math inline">\(H_1\)</span>, but <span class="math inline">\(H_1\)</span> does not have highest fit.<br />
+seed value every time) until I found this situation: Support for the
+correct <span class="math inline">\(H_1\)</span>, but <span class="math inline">\(H_1\)</span> does not have highest fit.<br />
 When I would sample more observations, the GORIC(A) weight for <span class="math inline">\(H_1\)</span> converges to 1 (denoting full support
 for <span class="math inline">\(H_1\)</span>).</p>
 </div>
-<div id="example-incorrect-hypothesis" class="section level3" number="6.3.2">
-<h3><span class="header-section-number">6.3.2</span> Example: Incorrect
+<div id="example-incorrect-hypothesis" class="section level3" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Example: Incorrect
 hypothesis</h3>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 - D2 &gt; .5, D2 &gt; D3&quot; 
@@ -2593,37 +2658,41 @@ The order-restricted hypothesis &#39;H1&#39; has 1.667 times more support than i
 H1            1.0          1.667
 complement    0.6          1.000</code></pre>
 <p>Here, we see that our informative hypothesis <span class="math inline">\(H_1\)</span> is the preferred one, but it does not
-have the best fit (ratio of loglik.weights is <span class="math inline">\(.419 / .581 \approx .72 &lt; 1\)</span>).</p>
+have the best fit (ratio of loglik.weights is <span class="math inline">\(.419 / .581\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(.72\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(1\)</span>).</p>
 <p>Based on your sample size, you could decide to leave the hypothesis
 like it is and only advise to increase the sample size in future
-research. You could also go for an additional exploratory approach to
-come up with a few competing hypotheses or a new hypothesis for future
-research.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.9776818, 0.6517879, and 0.3258939 and thus a ratio of
-means of 3:2:1. Note that the difference between the first two
-population means is approximately <span class="math inline">\(.33 &lt;
-.5\)</span>. Hence, <span class="math inline">\(H_1\)</span> is
-incorrect. I then sampled 100 observations, ran an ANOVA, and applied
-the GORIC.<br />
+research. Alternatively, you could also go for an additional exploratory
+approach to come up with a few competing hypotheses or a new hypothesis
+for future research.</p>
+<p>Population information:<br />
+TO DO In the data generation, I used a ratio of population means of
+3:2:1 and population mean values of approximately 0.98, 0.65, and 0.33.
+Note that Cohen’s <span class="math inline">\(d\)</span> is
+approximately .27; thus, there is a small to medium population effect
+size. Note further that the difference between the first two population
+means is approximately <span class="math inline">\(.33 &lt; .5\)</span>.
+Hence, <span class="math inline">\(H_1\)</span> is incorrect (and, thus,
+its complement is correct). I then sampled 100 observations, ran an
+ANOVA, and applied the GORIC.<br />
 Notably, I sampled two times 100 observations (by using a different seed
-value) to find this situation: Support for incorrect <span class="math inline">\(H_1\)</span>, and incorrect <span class="math inline">\(H_1\)</span> does not have highest fit.<br />
-When I would sample more observations, the GORIC(A) weight for <span class="math inline">\(H_3\)</span> converges to 0 (denoting no support
-for <span class="math inline">\(H_3\)</span>).</p>
+value) to find this situation: Support for the incorrect <span class="math inline">\(H_1\)</span>, and the incorrect <span class="math inline">\(H_1\)</span> does not have the highest fit.<br />
+When I would sample more observations, the GORIC(A) weight for <span class="math inline">\(H_1\)</span> converges to 0 (denoting no support
+for <span class="math inline">\(H_1\)</span>).</p>
 </div>
-<div id="note-on-sample-size" class="section level3" number="6.3.3">
-<h3><span class="header-section-number">6.3.3</span> Note on Sample
+<div id="note-on-sample-size" class="section level3" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Note on Sample
 size</h3>
-<p>When the preferred hypothesis does not has the highest fit, this is
+<p>When the preferred hypothesis does not have the highest fit, this is
 an indication for having a too small sample - whether the hypothesis is
 correct or not. In case of a small sample, the GORIC(A) weights will
-also reflect this uncertainty - which can also be seen at the end of the
-next section.</p>
+also reflect this uncertainty - which can also be seen (indirectly) at
+the end of the next section, where I inspect cases for various sample
+sizes.</p>
 </div>
 </div>
 </div>
-<div id="remarks-bayesian-model-selection" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> Remarks Bayesian model
+<div id="remarks-bayesian-model-selection" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Remarks Bayesian model
 selection</h1>
 <p>All of the above also holds true for model selection using Bayes
 factors (BFs; comparable to ratio of GORIC(A) weights) and posterior
@@ -2637,11 +2706,11 @@ example below.</p>
 bain are (often if not always) the same. In terms of the amount of
 support, bain renders more support for hypotheses with equality
 restrictions than the GORIC(A) does. This is the case when the equality
-restrictions are true but also when they are incorrect; where the first
-is shown in the first example below and the latter in the second example
-below.</p>
-<div id="example-prior-sensitivity-bain" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> Example: Prior
+restrictions are correct but also when they are incorrect; where the
+first is shown in the first example below and the latter in the second
+example below.</p>
+<div id="example-prior-sensitivity-bain" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Example: Prior
 sensitivity bain</h2>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; 
@@ -2691,19 +2760,24 @@ Hypotheses:
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 <p>From this, you can see (from BF.c) that the equality hypothesis <span class="math inline">\(H_1\)</span> is approximately <span class="math inline">\(23\)</span>, <span class="math inline">\(16\)</span>, and <span class="math inline">\(13\)</span> times more supported than its
 complement when using a fraction of <span class="math inline">\(1\)</span>, <span class="math inline">\(2\)</span>, and <span class="math inline">\(3\)</span>, respectively.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.6967672, 0.6967672, and 0.3483836 and thus a ratio of
-means of 3:3:1.5. I then sampled 100 observations, ran an ANOVA, and
-applied bain.</p>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:3:1.5;
+implying that <span class="math inline">\(H_1\)</span> is correct. More
+specifically, I used population mean values of approximately 0.70, 0.70,
+and 0.35. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .16; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied bain.</p>
 <p>In terms of conclusions (i.e., there is support for <span class="math inline">\(H_1\)</span> or not), the output of GORIC(A) and
 bain are the same. In terms of the amount of support, bain renders more
-support for equality restrictions than the GORIC(A). This is the case
-when the equality restrictions are true but also when they are
+support for equality restrictions than the GORIC(A). This happens when
+the equality restrictions are true/correct but also when they are
 incorrect:</p>
 </div>
-<div id="example-support-for-incorrect-equality-n-100" class="section level2" number="7.2">
-<h2><span class="header-section-number">7.2</span> Example: Support for
-incorrect equality (N = 100)</h2>
+<div id="example-support-for-incorrect-equality" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Example: Support for
+incorrect equality</h2>
+<div id="n-100" class="section level3" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> N = 100</h3>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; 
 
@@ -2740,25 +2814,28 @@ approximately <span class="math inline">\(19.5\)</span> times more
 supported than its complement (when using a fraction of <span class="math inline">\(1\)</span>). From the GORIC output, you can see
 that the incorrect equality hypothesis <span class="math inline">\(H_1\)</span> is approximately <span class="math inline">\(3.8\)</span> times more supported than its
 complement.</p>
-<p>Population information: In the data generation, I used population
-mean values of 0.8855591, 0.7379659, and 0.29518646 and thus a ratio of
-means of 3:2.5:1. I then sampled 100 observations, ran an ANOVA, and
-applied bain and the GORIC.</p>
-<p>Note: When I would sample more observations, the support for <span class="math inline">\(H_1\)</span> will go to 0, for both methods; thus,
-rendering full support for the complement.<br />
-Below, you can find output for a sample size (<span class="math inline">\(N\)</span>) of 1000 and 10000. In case of <span class="math inline">\(N = 1000\)</span>, GORIC already shows support for
-the complement: The complement is .825/.175 (or 1/.212) times more
-supported than <span class="math inline">\(H_1\)</span>; while bain
-still favors the equality restriction: <span class="math inline">\(H_1\)</span> is .776/.224 times more supported
-than its complement. In case of <span class="math inline">\(N =
-10000\)</span>, both methods show full support for the complement of
-<span class="math inline">\(H_1\)</span>.</p>
-<div id="n-1000" class="section level3" number="7.2.1">
-<h3><span class="header-section-number">7.2.1</span> N = 1000</h3>
+<p>Population information:<br />
+In the data generation, I used a ratio of population means of 3:2.5:1;
+implying that <span class="math inline">\(H_1\)</span> is correct. More
+specifically, I used population mean values of approximately 0.89, 0.74,
+and 0.30. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .25; thus, there is a
+small to medium population effect size. I then sampled 100 observations,
+ran an ANOVA, and applied bain and the GORIC.<br />
+When I would sample more observations, the support for <span class="math inline">\(H_1\)</span> will go to 0, for both methods; thus,
+rendering full support for the complement.</p>
+<p>Below, you can find output for a sample size (<span class="math inline">\(N\)</span>) of 1000 and 10000. In case of <span class="math inline">\(N = 1000\)</span>, GORIC already shows support for
+the correct complement: The complement is <span class="math inline">\(.825/.175\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(4.71\)</span> (or <span class="math inline">\(1/.212\)</span>) times more supported than <span class="math inline">\(H_1\)</span>; while bain still favors the
+incorrect equality restriction: <span class="math inline">\(H_1\)</span>
+is <span class="math inline">\(.776/.224\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(3.46\)</span> times more supported than its
+complement. In case of <span class="math inline">\(N = 10000\)</span>,
+both methods show full support for the complement of <span class="math inline">\(H_1\)</span>.</p>
+</div>
+<div id="n-1000" class="section level3" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> N = 1000</h3>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; </code></pre>
-<div id="bain" class="section level4" number="7.2.1.1">
-<h4><span class="header-section-number">7.2.1.1</span> bain</h4>
+<div id="bain" class="section level4" number="6.2.2.1">
+<h4><span class="header-section-number">6.2.2.1</span> bain</h4>
 <pre class="r"><code># Apply bain
 set.seed(123)
 bain1_1_N1000 &lt;- bain(fit, H1)
@@ -2775,8 +2852,8 @@ Hypotheses:
 
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 </div>
-<div id="goric" class="section level4" number="7.2.1.2">
-<h4><span class="header-section-number">7.2.1.2</span> GORIC</h4>
+<div id="goric" class="section level4" number="6.2.2.2">
+<h4><span class="header-section-number">6.2.2.2</span> GORIC</h4>
 <pre class="r"><code># Apply GORIC #
 set.seed(123) 
 results_12_N1000 &lt;- goric(fit, constraints = list(H1), comparison = &quot;complement&quot;)
@@ -2791,12 +2868,12 @@ Results:
 The order-restricted hypothesis &#39;H1&#39; has 0.212 times more support than its complement.</code></pre>
 </div>
 </div>
-<div id="n-10000" class="section level3" number="7.2.2">
-<h3><span class="header-section-number">7.2.2</span> N = 10000</h3>
+<div id="n-10000" class="section level3" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> N = 10000</h3>
 <pre class="r"><code># Equality versus its complement
 H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; </code></pre>
-<div id="bain-1" class="section level4" number="7.2.2.1">
-<h4><span class="header-section-number">7.2.2.1</span> bain</h4>
+<div id="bain-1" class="section level4" number="6.2.3.1">
+<h4><span class="header-section-number">6.2.3.1</span> bain</h4>
 <pre class="r"><code># Apply bain
 set.seed(123)
 bain1_1_N10000 &lt;- bain(fit, H1)
@@ -2813,8 +2890,8 @@ Hypotheses:
 
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 </div>
-<div id="goric-1" class="section level4" number="7.2.2.2">
-<h4><span class="header-section-number">7.2.2.2</span> GORIC</h4>
+<div id="goric-1" class="section level4" number="6.2.3.2">
+<h4><span class="header-section-number">6.2.3.2</span> GORIC</h4>
 <pre class="r"><code># Apply GORIC #
 set.seed(123) 
 results_12_N10000 &lt;- goric(fit, constraints = list(H1), comparison = &quot;complement&quot;)
