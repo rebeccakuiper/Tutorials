@@ -2737,24 +2737,28 @@ other hypotheses in the set). This is especially helpful when you found
 support for one hypothesis, as opposed to support for the overlap or a
 boundary of two or more hypotheses. Notably, the benchmarks can help in
 noticing support for overlap (if you forgot to check the fit values),
-since the benchmarks will show that there is maximum support; as will
-exemplified in the second example below.</p>
-<p>The benchmarks are based on user-specified sets of populations
-values. For an ANOVA, these can be obtained by specifying population
-effect size and a specific ratio of population means (which can be the
-one in the data). The benchmarks come from several percentiles of sets
-of GORIC(A) weights when such a set of populations values would be true
-(for the sample size under consideration); namely, based on the 5%, 35%,
-50%, 65%, and 95% percentiles of the GORIC(A) weights for the preferred
-hypothesis and of the ratios of the GORIC(A) weights for the preferred
-hypothesis with the other hypotheses.</p>
+since the benchmarks will show that there is maximum/bounded support; as
+will exemplified in the second example below.</p>
+<p>The benchmarks are based on user-specified sets of populations values
+(as is also used in a power analysis when performing a null hypothesis
+test). For an ANOVA, the set of populations values can be obtained by
+specifying population effect size and a specific ratio of population
+means (which can be the ratio of sample means, that is, the ratio of
+means found in the data). The benchmarks come from several percentiles
+of sets of GORIC(A) weights assuming that the specified set of
+populations values is true (for the sample size under consideration).
+More specifically, the benchmarks are based on the 5%, 35%, 50%, 65%,
+and 95% percentiles of the GORIC(A) weights for the preferred hypothesis
+and of the ratios of the GORIC(A) weights for the preferred hypothesis
+with the other hypotheses.</p>
 <p>You can compare your GORIC(A) weight and ratios of GORIC(A) weights
 of the preferred hypothesis to these benchmarks to come up with a
 conclusion regarding the strength of support for the hypothesis (given
-the assumed set of population parameter estimates). If the benchmarks
-show a maximum support (see second example below), then this is another
-indication that there is support for overlap; otherwise, the benchmarks
-can be used to qualify the support (see first example below).<br />
+the assumed set of population parameter estimates and given the sample
+size). If the benchmarks show a maximum/bounded support (see second
+example below), this is another indication that there is support for the
+overlap of two or more hypotheses; otherwise, the benchmarks can be used
+to qualify the support (see first example below).<br />
 I am not in favor of cut-off points, but we need them when we want to
 label the benchmarks, I propose the following:</p>
 <table>
@@ -2793,10 +2797,10 @@ size, as do the GORIC(A) weights themselves). If of interest (e.g., as a
 sensitivity analysis), you can do this for multiple sets of population
 parameter estimates (but this may also complicate drawing conclusions,
 especially when the assumed sets of population parameter estimates
-differ much). Especially when your preferred hypothesis does not have
-the highest fit, I would advise on inspecting multiple ratios of
-population parameter estimates (where some are in agreement with your
-hypothesis and others in agreement with the data).</p>
+differ much). If your preferred hypothesis does not have the highest fit
+and you want to inspect benchmarks, I advise on inspecting multiple
+ratios of population parameter estimates (where some are in agreement
+with your hypothesis and others in agreement with the data).</p>
 <p>Next, I will inspect the case-specific benchmarks values (using the
 ratio of means as in the data). I will look at the example where we
 evaluated <span class="math inline">\(H_1: \mu_1 &gt; \mu_2 &gt;
@@ -2853,7 +2857,8 @@ of GORIC weights of <span class="math inline">\(H_1\)</span> versus its
 complement (cf. <code>benchmarks.ratios</code>). Using the table with
 cut-off values above, this would indicate that there is high (to very
 high) support, when assuming a small population effect size and a
-population mean ratio as found in the data.</p>
+population mean ratio as equal to the sample mean ratio (give a total
+sample size of 100).</p>
 <p>Next, I show that the benchmarks depend on your assumed
 population:</p>
 <pre class="r"><code>benchmarks_1c$benchmarks.weight$`pop.es = 0.5`</code></pre>
@@ -2870,7 +2875,8 @@ and 50% and thus 65% percentiles. The same holds true for the ratio of
 GORIC weights of <span class="math inline">\(H_1\)</span> versus its
 complement. Using the table with cut-off values above, this indicates
 that there is medium support, when assuming a medium population effect
-size and a population mean ratio as found in the data.</p>
+size and a population mean ratio as equal to the sample mean ratio (give
+a total sample size of 100).</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
