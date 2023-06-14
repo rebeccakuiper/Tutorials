@@ -130,7 +130,7 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 #   of the penalty (see below).
 #
 set.seed(123) # Set seed value
-output <- goric(lm_fit_Lucas, constraints = list(H0, H1, H2))
+output <- goric(lm_fit_Lucas, hypotheses = list(H0 = H0, H1 = H1, H2 = H2))
 summary(output)
 #
 # It can be seen that the order-restricted hypothesis $H_1$ has 16.5 (1.65e+01) 
@@ -163,7 +163,7 @@ set.seed(123) # Set seed value:
 #1) Every time same PT value; 
 #2) Change it to check sensitivity of PT value 
 #  (if sensitive, then increase number of iterations used in calculation of PT).
-output_b <- goric(lm_fit_Lucas, constraints = list(H0, H1, H2),
+output_b <- goric(lm_fit_Lucas, hypotheses = list(H0, H1, H2),
                   mix.weights = "boot", parallel = "snow", ncpus = nrCPUcores, 
                   mix.bootstrap = 99999)
 summary(output_b)
