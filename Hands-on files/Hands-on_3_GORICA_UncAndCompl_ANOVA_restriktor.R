@@ -137,7 +137,7 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 # A set of hypotheses vs Hunc
 #
 set.seed(123) # Set seed value
-output_gorica <- goric(lm_fit_Lucas, constraints = list(H0, H1, H2), type = "gorica")
+output_gorica <- goric(lm_fit_Lucas, hypotheses = list(H0 = H0, H1 = H1, H2 = H2), type = "gorica")
 summary(output_gorica)
 #
 # If you did the same analysis with the GORIC, you will see that the (relative) 
@@ -159,7 +159,7 @@ summary(output_gorica)
 H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 # Note: H1 is not full row-rank, see the goric tutorial for more details.
 set.seed(123) # Set seed value
-output_gorica_c <- goric(lm_fit_Lucas, constraints = list(H1), comparison = "complement", 
+output_gorica_c <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement", 
                          type = "gorica")
 summary(output_gorica_c)
 # The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
