@@ -133,7 +133,7 @@ H03 <- 'group2 = group3'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-goric(lm_fit_Monin, constraints = list(H00, H01, H02, H03))
+goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03))
 #
 # It can be seen that $H_01$ ($\mu_1 = \mu_2, \mu_3$) receives the most support. 
 # Based on the means (see `descrstat`), 
@@ -183,7 +183,7 @@ H2 <- 'gr2 > gr1 > gr3'
 # Calculate GORIC values and weights
 #
 set.seed(123) # Set seed value
-output_repl <- goric(lm_fit_Holubar, constraints = list(H1, H2))
+output_repl <- goric(lm_fit_Holubar, hypotheses = list(H1, H2))
 summary(output_repl)
 #
 # Since the support for $H_1$ and $H_2$ is lower than for $H_u$, 
@@ -193,7 +193,7 @@ summary(output_repl)
 # In case you are only interested in the 'main hypothesis' $H_1$ found in Monin, 
 # you could also evaluate this against its complement:
 set.seed(123) # Set seed value
-goric(lm_fit_Holubar, constraints = list(H1), comparison = "complement")
+goric(lm_fit_Holubar, hypotheses = list(H1), comparison = "complement")
 # Since $H_1$ has only 0.39 (lower than 1) times more support than its 
 # complement, it is a weak hypothesis. 
 # Hence, the study of Holubar did not replicate the findings of Monin.
@@ -212,11 +212,11 @@ goric(lm_fit_Holubar, constraints = list(H1), comparison = "complement")
 ###################################################################################
 
 
-# restriktor (0.3-100): generalized order-restricted information criterion: 
+# restriktor (0.4-60): generalized order-restricted information criterion: 
 #   
-#   Results:
-#   model    loglik  penalty    goric  goric.weights
-# 1          H1  -144.981    2.500  294.962          0.280
-# 2  complement  -143.038    3.500  293.076          0.720
-# ---
-#   The order-restricted hypothesis ‘H1’ has  0.390 times more support than its complement.
+# Results:
+#         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
+# 1          H1  -144.981    2.500  294.962           0.125            0.731          0.280
+# 2  complement  -143.038    3.500  293.076           0.875            0.269          0.720
+# --- 
+# The order-restricted hypothesis ‘H1’ has 0.390 times more support than its complement.
