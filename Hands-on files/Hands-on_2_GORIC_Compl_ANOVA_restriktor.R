@@ -127,7 +127,7 @@ H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-output_c <- goric(lm_fit_Lucas, constraints = list(H1), comparison = "complement")
+output_c <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement")
 summary(output_c)
 #
 # The order-restricted hypothesis H1 has  13.4 times more support 
