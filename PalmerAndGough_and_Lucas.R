@@ -26,7 +26,7 @@
 
 # Difference:
 # CRAN:   goric(fit.object, H1, H2)
-# Github: goric(fit.object, constraints = list(H1, H2))
+# Github: goric(fit.object, hypotheses = list(H1, H2))
 
 
 ##############################
@@ -67,9 +67,9 @@ H1 <- 'group1 > group2 > group3'
 
 # GORIC
 set.seed(123) # Set seed value
-goric.PandG <- goric(fit.PandG, constraints = list(H0, H1))
+goric.PandG <- goric(fit.PandG, hypotheses = list(H0, H1))
 #goric.PandG$result[,1] <- c("H0","H1","Hu")
-#goric.PandG <- goric(fit.PandG, constraints = list(H0 = H0, H1 = H1))
+#goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
 goric.PandG$result
 #summary(goric.PandG)
 
@@ -96,12 +96,12 @@ H1 <- 'group5 = group3 > group1 > group2, group3 > group4 > group2'
 
 # GORIC
 set.seed(123) # Set seed value
-goric.Lucas <- goric(fit.Lucas, constraints = list(H1), comparison = 'complement')
+goric.Lucas <- goric(fit.Lucas, hypotheses = list(H1), comparison = 'complement')
 goric.Lucas$result
 summary(goric.Lucas)
 
-# GORICA
+# GORICAs
 set.seed(123) # Set seed value
-goric.Lucas <- goric(fit.Lucas, constraints = list(H1), comparison = 'complement', type = 'gorica')
+goric.Lucas <- goric(fit.Lucas, hypotheses = list(H1), comparison = 'complement', type = 'gorica')
 goric.Lucas$result
 summary(goric.Lucas)
