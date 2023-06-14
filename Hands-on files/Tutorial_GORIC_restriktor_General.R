@@ -146,11 +146,11 @@ H2 <- "x1 > 0; x2 > 0"
 #
 # goric (default)
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2)) # or: out <- goric(fit.lm, H1, H2, type = "goric")
+out <- goric(fit.lm, hypotheses = list(H1, H2)) # or: out <- goric(fit.lm, H1, H2, type = "goric")
 summary(out) 
 # gorica
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2), type = "gorica")
+out <- goric(fit.lm, hypotheses = list(H1, H2), type = "gorica")
 summary(out)
 
 #2a.	Fitted unconstrained (lm or glm) object + list with constraints matrix
@@ -164,11 +164,11 @@ H2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0))) #"x1 > 0; x2 > 0"
 #
 # goric (default)
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2))
+out <- goric(fit.lm, hypotheses = list(H1, H2))
 summary(out) 
 # gorica
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2), type = "gorica")
+out <- goric(fit.lm, hypotheses = list(H1, H2), type = "gorica")
 summary(out)
 
 #2b.	Fitted unconstrained (lm or glm) object + list with constraints matrix
@@ -181,17 +181,21 @@ H2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)), rhs = c(1, 0), neq = 1)
 #
 # goric (default)
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2))
+out <- goric(fit.lm, hypotheses = list(H1, H2))
 summary(out) 
 # gorica
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2), type = "gorica")
+out <- goric(fit.lm, hypotheses = list(H1, H2), type = "gorica")
 summary(out)
 
 
 #3.	Fitted restriktor object(s).
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0" # the ';' separates the restrictions in one hypothesis.
+
+# Please note that the hypotheses argument in the goric function serves the same 
+# purpose as the constraints argument utilized in the restriktor function. 
+# The distinction between them is solely semantic.
 fit1.restr <- restriktor(fit.lm, constraints = H1)
 fit2.restr <- restriktor(fit.lm, constraints = H2)
 #
@@ -213,7 +217,7 @@ VCOV <- vcov(fit.lm)
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0"
 set.seed(123) # Set seed value
-out <- goric(est, constraints = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
 summary(out)
 # one could also use only the structural parameters, that is, 
 # the ones used in all the hypotheses in the set:
@@ -224,7 +228,7 @@ est <- coef(fit.lm)[2:3] # these are the structural parameters,
 VCOV <- vcov(fit.lm)[2:3,2:3] # now, you also need this submatrix to obtain the 
 #                               corresponding covariance matrix
 set.seed(123) # Set seed value
-out <- goric(est, constraints = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
 summary(out)
 # Now, the exact same weights are obtained
 # The penalties are now 2 points lower 
@@ -239,7 +243,7 @@ VCOV <- vcov(fit.lm)
 H1 <- "beta1 > 0" # use same names/labels as the ones of the estimates
 H2 <- "beta1 > 0; beta2 > 0"
 set.seed(123) # Set seed value
-out <- goric(est, VCOV = VCOV, constraints = list(H1, H2), type = "gorica")
+out <- goric(est, VCOV = VCOV, hypotheses = list(H1, H2), type = "gorica")
 summary(out)
 
 #4c.	'Manual' numeric vector + character constraints
@@ -254,7 +258,7 @@ VCOV <- matrix(c(0.143354252,  0.031582705,  0.049881853,  0.006769526,
 H1 <- "beta1 > 0" # use same names/labels as the ones of the estimates
 H2 <- "beta1 > 0; beta2 > 0"
 set.seed(123) # Set seed value
-out <- goric(est, constraints = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
 summary(out)
 
 #5.	Numeric vector + list with constraints matrix
@@ -263,7 +267,7 @@ VCOV <- vcov(fit.lm)
 H1 <- list(constraints = c(0,1,0,0))
 H2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)))
 set.seed(123) # Set seed value
-out <- goric(est, constraints = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
 summary(out)
 
 
@@ -302,7 +306,7 @@ H1 <- "x1 < x2"
 #
 # goric (default)
 set.seed(123) # Set seed value
-out_s <- goric(fit.lm_s, constraints = list(H1), comparison = "complement")
+out_s <- goric(fit.lm_s, hypotheses = list(H1), comparison = "complement")
 summary(out_s) 
 
 
@@ -340,7 +344,7 @@ m3 < m4
 #
 # goric (default)
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1)) # or: out <- goric(fit.lm, H1, H2, type = "goric")
+out <- goric(fit.lm, hypotheses = list(H1)) # or: out <- goric(fit.lm, H1, H2, type = "goric")
 summary(out) 
 
 
@@ -358,7 +362,7 @@ summary(out)
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0"
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2), comparison = "none")
+out <- goric(fit.lm, hypotheses = list(H1, H2), comparison = "none")
 summary(out)
 
 # 2) If "unconstrained", then the unconstrained / unrestricted / classical 
@@ -367,7 +371,7 @@ summary(out)
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0"
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1, H2), comparison = "unconstrained")
+out <- goric(fit.lm, hypotheses = list(H1, H2), comparison = "unconstrained")
 summary(out)
 # Since at least one of, even both, H1 and H2 are not weak, one can compare
 # the support for H1 versus H2 (where H2 is 1.921 times more supported).
@@ -379,14 +383,14 @@ summary(out)
 #    complement, this is more powerful then including the unconstrained.
 H1 <- "x1 > 0"
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H1), comparison = "complement")
+out <- goric(fit.lm, hypotheses = list(H1), comparison = "complement")
 out
 summary(out)
 summary(out, brief = FALSE)
 #
 H2 <- "x1 > 0; x2 > 0"
 set.seed(123) # Set seed value
-out <- goric(fit.lm, constraints = list(H2), comparison = "complement")
+out <- goric(fit.lm, hypotheses = list(H2), comparison = "complement")
 summary(out)
 # Note that the obtained weights for the two hypotheses cannot be compared. 
 # Then, one should evaluate them simultaneously in one set, as done above.
@@ -501,21 +505,21 @@ out$neq         # gives the number of equalities (neq) in the constraints,
 #
 # Calculate goric for H1 and its complement
 #set.seed(123) # Set seed value
-#output_c_H1 <- goric(lm_fit_Lucas, H1, comparison = "complement")
+#output_c_H1 <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement")
 #summary(output_c_H1)
 # The order-restricted hypothesis H1 has  13.4 times more support 
 #                                                           than its complement.
 #
 # Calculate goric for H2 and its complement
 #set.seed(123) # Set seed value
-#output_c_H2 <- goric(lm_fit_Lucas, H2, comparison = "complement")
+#output_c_H2 <- goric(lm_fit_Lucas, hypotheses = list(H2), comparison = "complement")
 #summary(output_c_H2)
 #The order-restricted hypothesis H1 has  0.37 times more support 
 #                                                           than its complement.
 #
 # Calculate goric for H1 and H2 (and Hu):
 #set.seed(123) # Set seed value
-#output_H1H2 <- goric(lm_fit_Lucas, H1, H2) # Note: default = vs unconstrained
+#output_H1H2 <- goric(lm_fit_Lucas, hypotheses = list(H1, H2)) # Note: default = vs unconstrained
 #summary(output_H1H2)
 # H1 has 38.5 times more support than H2.
 # This is not equal to:
@@ -526,11 +530,11 @@ out$neq         # gives the number of equalities (neq) in the constraints,
 # Notably, you could derive the support from H1 vs H2 from 
 # their support versus that of Hu:
 #set.seed(123) # Set seed value
-#output_u_H1 <- goric(lm_fit_Lucas, H1)
+#output_u_H1 <- goric(lm_fit_Lucas, hypotheses = list(H1))
 #summary(output_u_H1)
 #
 #set.seed(123) # Set seed value
-#output_u_H2 <- goric(lm_fit_Lucas, H2)
+#output_u_H2 <- goric(lm_fit_Lucas, hypotheses = list(H2))
 #summary(output_u_H2)
 #
 #output_u_H1$relative.gw[1,2] / output_u_H2$relative.gw[1,2] 
