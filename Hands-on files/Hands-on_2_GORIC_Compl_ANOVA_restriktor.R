@@ -40,7 +40,7 @@ library(restriktor) # for goric function
 # you can see that the variable labels have been inserted (using quotes; i.e., 
 # "...") in the first line of the file, which is called a header. 
 # Therefore, you have to specify 'header = TRUE' when loading the data:
-Lucas <- read.table("data/Data_Lucas.txt", header=TRUE)
+Lucas <- read.table("Data_Lucas.txt", header=TRUE)
 
 # Make the variable 'group' a factor #
 #
@@ -127,7 +127,7 @@ H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-output_c <- goric(lm_fit_Lucas, constraints = list(H1), comparison = "complement")
+output_c <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement")
 summary(output_c)
 #
 # The order-restricted hypothesis H1 has  13.4 times more support 
@@ -137,20 +137,18 @@ summary(output_c)
 ################################################################################
 
 
-# restriktor: generalized order-restricted information criterion: 
+# restriktor (0.4-60): generalized order-restricted information criterion: 
 #   
-#   Results:
-#   model    loglik  penalty    goric  goric.weights
-# 1          H1  -278.051    3.195  562.493          0.931
-# 2  complement  -278.048    5.795  567.688          0.069
-# ---
-#   
-#   Relative GORIC-weights:
-#   vs. H1  vs. complement
-# H1          1.000   13.431        
-# complement  0.074   1.000         
-# ---
-#   The order-restricted hypothesis ‘H1’ has 13.431 times more support than its complement.
+# Level probabilities:
+#   Number of requested bootstrap draws 99999 
+#   Number of successful bootstrap draws for H1: 99999
+# 
+# Results:
+#         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
+# 1          H1  -278.051    3.195  562.493           0.499            0.931          0.931
+# 2  complement  -278.048    5.795  567.688           0.501            0.069          0.069
+# --- 
+# The order-restricted hypothesis ‘H1’ has 13.431 times more support than its complement.
 # 
 # Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
 # are calculated using mix.weights = "boot" (the default is mix.weights = "pmvnorm").

@@ -130,8 +130,9 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 #   of the penalty (see below).
 #
 set.seed(123) # Set seed value
-output <- goric(lm_fit_Lucas, constraints = list(H0, H1, H2))
-summary(output)
+output <- goric(lm_fit_Lucas, hypotheses = list(H0 = H0, H1 = H1, H2 = H2))
+output
+#summary(output)
 #
 # It can be seen that the order-restricted hypothesis $H_1$ has 16.5 (1.65e+01) 
 # times more support than $H_u$ (the unconstrained hypothesis). 
@@ -151,22 +152,25 @@ summary(output)
 # In that case, `restriktor` uses automatically the other (bootstrap) method. 
 # In this bootstrap method, one can also more easily change the number of 
 # iterations on which the penalty is based (mix.bootstrap). 
-# The computation time of this bootstrap method can be reduced 
-# by using multiple cores. 
+#
+# The computation time of this bootstrap method can in some instances be reduced 
+# by using multiple cores (but often it takes more time to use all cores). 
 # For a windows device, you then have to use 'parallel = "snow"' 
-# (see the tutorial for more options). 
+# (see the tutorial for more options); see some code after '#' below. 
+#
 # To use this bootstrap method (on a windows machine), use:
-if (!require("parallel")) install.packages("parallel") 
-library(parallel)
-nrCPUcores <- detectCores(all.tests = FALSE, logical = TRUE)
+#if (!require("parallel")) install.packages("parallel") 
+#library(parallel)
+#nrCPUcores <- detectCores(all.tests = FALSE, logical = TRUE)
 set.seed(123) # Set seed value: 
 #1) Every time same PT value; 
 #2) Change it to check sensitivity of PT value 
 #  (if sensitive, then increase number of iterations used in calculation of PT).
-output_b <- goric(lm_fit_Lucas, constraints = list(H0, H1, H2),
-                  mix.weights = "boot", parallel = "snow", ncpus = nrCPUcores, 
+output_b <- goric(lm_fit_Lucas, hypotheses = list(H0, H1, H2),
+                  mix.weights = "boot", #parallel = "snow", ncpus = nrCPUcores, 
                   mix.bootstrap = 99999)
-summary(output_b)
+output_b
+#summary(output_b)
 # This, of course, renders the same results as above (if there is a difference, 
 # it is in the second decimal of the penalty).
 

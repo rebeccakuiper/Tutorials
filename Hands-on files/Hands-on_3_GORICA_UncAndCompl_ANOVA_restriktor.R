@@ -40,7 +40,7 @@ library(restriktor) # for goric function
 # you can see that the variable labels have been inserted (using quotes; i.e., 
 # "...") in the first line of the file, which is called a header. 
 # Therefore, you have to specify 'header = TRUE' when loading the data:
-Lucas <- read.table("data/Data_Lucas.txt", header=TRUE)
+Lucas <- read.table("Data_Lucas.txt", header=TRUE)
 
 # Make the variable 'group' a factor #
 #
@@ -137,7 +137,7 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 # A set of hypotheses vs Hunc
 #
 set.seed(123) # Set seed value
-output_gorica <- goric(lm_fit_Lucas, constraints = list(H0, H1, H2), type = "gorica")
+output_gorica <- goric(lm_fit_Lucas, hypotheses = list(H0, H1, H2), type = "gorica")
 summary(output_gorica)
 #
 # If you did the same analysis with the GORIC, you will see that the (relative) 
@@ -159,7 +159,7 @@ summary(output_gorica)
 H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 # Note: H1 is not full row-rank, see the goric tutorial for more details.
 set.seed(123) # Set seed value
-output_gorica_c <- goric(lm_fit_Lucas, constraints = list(H1), comparison = "complement", 
+output_gorica_c <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement", 
                          type = "gorica")
 summary(output_gorica_c)
 # The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
@@ -168,21 +168,19 @@ summary(output_gorica_c)
 
 ################################################################################
 
-
-# restriktor: generalized order-restricted information criterion approximation:
+# 
+# restriktor (0.4-60): generalized order-restricted information criterion approximation:
 #   
-#   Results:
-#   model  loglik  penalty  gorica  gorica.weights
-# 1          H1   1.647    2.195   1.096           0.931
-# 2  complement   1.650    4.795   6.291           0.069
-# ---
-#   
-#   Relative GORICA-weights:
-#   vs. H1  vs. complement
-# H1          1.000   13.432        
-# complement  0.074   1.000         
-# ---
-#   The order-restricted hypothesis ‘H1’ has 13.432 times more support than its complement.
+#   Level probabilities:
+#   Number of requested bootstrap draws 99999 
+#   Number of successful bootstrap draws for H1: 99999
+# 
+# Results:
+#         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
+# 1          H1   1.647    2.195   1.096           0.499            0.931           0.931
+# 2  complement   1.650    4.795   6.291           0.501            0.069           0.069
+# --- 
+# The order-restricted hypothesis ‘H1’ has 13.432 times more support than its complement.
 # 
 # Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
 # are calculated using mix.weights = "boot" (the default is mix.weights = "pmvnorm").
