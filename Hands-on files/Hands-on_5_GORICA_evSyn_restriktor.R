@@ -11,9 +11,10 @@
 #if (!require("devtools")) install.packages("devtools")
 #library(devtools) 
 #install_github("LeonardV/restriktor")
+#install_github("LeonardV/restriktor", force = T)
 #library(restriktor) # for goric function
 # If from CRAN:
-#if (!require("restriktor")) install.packages("restriktor")
+if (!require("restriktor")) install.packages("restriktor")
 #
 # Load 
 library(restriktor) # for evSyn and also goric function
@@ -80,7 +81,7 @@ evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies,
                           comparison = safeguard)
 
 evSyn_trust
-
+summary(evSyn_trust)
 plot(evSyn_trust)
 
 ###################################################################################
