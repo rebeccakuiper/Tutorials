@@ -1,0 +1,5 @@
+study	year	estimate	se
+Batenburg et al.	2003	0.090	0.029
+Buskens and Raub	2002	0.140	0.054
+Buskens and Weesie	2000	1.090	0.093
+Buskens et al.	2010	1.781	0.179
