@@ -1,8 +1,13 @@
 ###
-# NOTE: Make sure you use the right version of restriktor, namely version 0.2-800 (or higher).
-if (!require("devtools")) install.packages("devtools") # gorica
-library(devtools)
-library(restriktor) # for goric function
+# If you want to use restriktor from github:
+#if (!require("devtools")) install.packages("devtools")
+#library(devtools) 
+#install_github("LeonardV/restriktor")
+#install_github("LeonardV/restriktor", force = TRUE)
+#
+# If you want to use restriktor from CRAN:
+if (!require("restriktor")) install.packages("restriktor")
+library(restriktor) # for evSyn and goric function
 ###
 
 

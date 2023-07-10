@@ -3,7 +3,7 @@
     "path": "C:/WERK/Git/Tutorials---Source-files/Examples evSyn/Example WtC/GES_Subgroup_2.R",
     "project_path": "GES_Subgroup_2.R",
     "type": "r_source",
-    "hash": "1026322725",
+    "hash": "1101218028",
     "contents": "",
     "dirty": false,
     "created": 1688732254008.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "62,0",
-        "scrollLine": "24"
+        "cursorPosition": "9,50",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1688732907,
+    "lastKnownWriteTime": 1688927980,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1688732907964,
+    "last_content_update": 1688927980245,
     "read_only": false,
     "read_only_alternatives": []
 }

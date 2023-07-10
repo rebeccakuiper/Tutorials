@@ -3,7 +3,7 @@
     "path": "C:/WERK/Git/Tutorials---Source-files/Examples evSyn/Example corona GGD/Ev syn - GGD - equal.R",
     "project_path": "Ev syn - GGD - equal.R",
     "type": "r_source",
-    "hash": "1766819501",
+    "hash": "908360908",
     "contents": "",
     "dirty": false,
     "created": 1688732949097.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "42,0",
-        "scrollLine": "24"
+        "cursorPosition": "14,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1688733167,
+    "lastKnownWriteTime": 1688927971,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1688733167858,
+    "last_content_update": 1688927971908,
     "read_only": false,
     "read_only_alternatives": []
 }

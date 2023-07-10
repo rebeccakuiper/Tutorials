@@ -1,28 +1,13 @@
-
-#### Updating/Aggregating evidence obtained with GORIC and GORICA: 
-# GORIC Evidence Synthesis Example
-
-
-# NOTE 1: This is work in progress. 
-# So, please only use the upcoming function yourself, and do not distribute this to others until the package is freely available on GitHub (now, it is 'privately').
-# Also, let me know if you think things could be improved (e.g., way of asking for input, what should be reported as output, et cetera).
-
-# NOTE 2: Make sure you use the right version of restriktor, namely version 0.2-800 (or higher).
-# So, you should obtain the following:
-# use restriktor from github:
-if (!require("devtools")) install.packages("devtools") # gorica
-library(devtools)
-library(restriktor) # for goric function
-#>This is restriktor 0.2-800
-#>restriktor is BETA software! Please report any bugs.
-# Version 0.2-500 might seem to work, but renders wrong results if the complement is used.
-
-
 ###
-# NOTE: Make sure you use the right version of restriktor, namely version 0.2-800 (or higher).
-if (!require("devtools")) install.packages("devtools") # gorica
-library(devtools)
-library(restriktor) # for goric function
+# If you want to use restriktor from github:
+#if (!require("devtools")) install.packages("devtools")
+#library(devtools) 
+#install_github("LeonardV/restriktor")
+#install_github("LeonardV/restriktor", force = TRUE)
+#
+# If you want to use restriktor from CRAN:
+if (!require("restriktor")) install.packages("restriktor")
+library(restriktor) # for evSyn and goric function
 ###
 
 
