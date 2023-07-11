@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-07-09" />
+<meta name="date" content="2023-07-11" />
 
 <title>Tutorial for GORIC(A) evidence aggregation</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for GORIC(A) evidence
 aggregation</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">09 July 2023</h4>
+<h4 class="date">11 July 2023</h4>
 
 </div>
 
@@ -1544,8 +1544,10 @@ central theory. Using GORICA evidence aggregation, the
 combined/aggregated/synthesized support/evidence for the central theory
 over all four diverse studies is obtained. Next, the corresponding R
 code is given.</p>
+<div id="data-preparation" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Data preparation</h2>
 <p>Load the data and inspect it.</p>
-<pre class="r"><code>dat &lt;- read.table(&#39;Kuiper2012estimates.txt&#39;, 
+<pre class="r"><code>dat &lt;- read.table(&#39;data/Kuiper2012estimates.txt&#39;, 
                   header = TRUE, sep = &#39;\t&#39;)
 dat</code></pre>
 <pre><code>               study year estimate    se
@@ -1564,27 +1566,23 @@ find code to load the <code>evSyn()</code> function from the
 <code>restriktor</code> package, which is needed to perform the
 analysis. You can find also code to show the documentation for the
 function in the help-tab.</p>
-<pre class="r"><code># install GoricEvSyn if not already installed
-# Load libraries. 
-# This contains the &#39;evSyn&#39; function that will be used in this R code. 
-# Each time you re-open this R file you have to execute this step.
-#
-# Install the packages (once) 
+<pre class="r"><code>## First, install the package, if you have not done this already:
+if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+
+## Then, load the packages:
+library(restriktor) # for the goric function
+
 # If you want to use restriktor from github:
 #if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
 #library(devtools) 
 #install_github(&quot;LeonardV/restriktor&quot;)
 #library(restriktor) # for goric function
-# If from CRAN:
-if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
-#
-# Load 
-library(restriktor) # for evSyn and also goric function
 
 # print docs in the help-tab to view arguments and explanations for the function
 #?evSyn</code></pre>
-<div id="data" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Data</h2>
+<div id="data-for-evsyn" class="section level3" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> Data for
+evSyn()</h3>
 <p>The <code>evSyn()</code> function requires some pre-processing of the
 data. Namely, it needs the estimates and their variances as a list of
 named vectors and as a list of (unnamed) covariance matrices,
@@ -1596,6 +1594,7 @@ estimates &lt;- lapply(dat$estimate, setNames, &quot;beta_past&quot;)
 # store variances (i.e., the square of the standard errors) 
 # in list of matrices.
 covmats &lt;- lapply(dat$se^2, as.matrix)</code></pre>
+</div>
 </div>
 <div id="hypotheses" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Hypotheses</h2>
