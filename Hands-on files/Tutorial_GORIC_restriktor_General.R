@@ -101,15 +101,18 @@
 
 ################################################################################
 
+## First, install the package, if you have not done this already:
+if (!require("restriktor")) install.packages("restriktor")
+
+## Then, load the package:
+library(restriktor) # for goric function
+
 # If you want to use restriktor from github:
 #if (!require("devtools")) install.packages("devtools")
 #library(devtools) 
 #install_github("LeonardV/restriktor")
 #library(restriktor) # for goric function
-# If from CRAN:
-if (!require("restriktor")) install.packages("restriktor") 
-library(restriktor) # for goric function
-#
+
 #Note that one needs to install the package only once, 
 #but has to load the package each time the R script is run.
 

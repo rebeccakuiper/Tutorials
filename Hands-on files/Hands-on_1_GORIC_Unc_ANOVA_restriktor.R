@@ -5,19 +5,19 @@
 # These contain functions such as 'goric' that will be used in this R code. 
 # Each time you re-open this R file you have to execute this step.
 #
-# Install the packages (once) 
-if (!require("psych")) install.packages("psych") 
+## First, install the packages, if you have not done this already:
+if (!require("psych")) install.packages("psych")
+if (!require("restriktor")) install.packages("restriktor")
+
+## Then, load the packages:
+library(psych) # for the function describeBy
+library(restriktor) # for the goric function
+
 # If you want to use restriktor from github:
 #if (!require("devtools")) install.packages("devtools")
 #library(devtools) 
 #install_github("LeonardV/restriktor")
 #library(restriktor) # for goric function
-# If from CRAN:
-if (!require("restriktor")) install.packages("restriktor")
-#
-# Load 
-library(psych) # for the function describeBy
-library(restriktor) # for goric function
 
 ################################################################################
 
@@ -40,7 +40,7 @@ library(restriktor) # for goric function
 # you can see that the variable labels have been inserted (using quotes; i.e., 
 # "...") in the first line of the file, which is called a header. 
 # Therefore, you have to specify 'header = TRUE' when loading the data:
-Lucas <- read.table("data/Data_Lucas.txt", header=TRUE)
+Lucas <- read.table("Data_Lucas.txt", header=TRUE)
 
 # Make the variable 'group' a factor #
 #

@@ -5,19 +5,19 @@
 # These contain functions such as 'goric' that will be used in this R code. 
 # Each time you re-open this R file you have to execute this step.
 #
-# Install the packages (once) 
-if (!require("psych")) install.packages("psych") 
+## First, install the packages, if you have not done this already:
+if (!require("psych")) install.packages("psych")
+if (!require("restriktor")) install.packages("restriktor")
+
+## Then, load the packages:
+library(psych) # for the function describeBy
+library(restriktor) # for the goric function
+
 # If you want to use restriktor from github:
 #if (!require("devtools")) install.packages("devtools")
 #library(devtools) 
 #install_github("LeonardV/restriktor")
 #library(restriktor) # for goric function
-# If from CRAN:
-if (!require("restriktor")) install.packages("restriktor")
-#
-# Load 
-library(psych) # for the function describeBy
-library(restriktor) # for goric function
 
 ################################################################################
 
@@ -127,7 +127,7 @@ H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-output_c <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement")
+output_c <- goric(lm_fit_Lucas, hypotheses = list(Htheory1 = H1), comparison = "complement")
 summary(output_c)
 #
 # The order-restricted hypothesis H1 has  13.4 times more support 
