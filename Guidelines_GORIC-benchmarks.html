@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-06-27" />
+<meta name="date" content="2023-11-22" />
 
 <title>Guidelines GORIC(A) benchmarks</title>
 
@@ -1481,7 +1481,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Guidelines GORIC(A) benchmarks</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">27 June 2023</h4>
+<h4 class="date">22 November 2023</h4>
 
 </div>
 
@@ -1492,29 +1492,33 @@ width: 100%;
 margin: 0 auto;
 }
 </style>
-<div id="benchmarks" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Benchmarks</h1>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
 <p>To aid qualifying/labeling the height of support for the preferred
 hypothesis, one can inspect case-specific benchmarks for the GORIC(A)
 weights (and the ratio of weights of the preferred hypothesis versus the
 other hypotheses in the set). This is especially helpful when you found
 support for one hypothesis, as opposed to support for the overlap or a
-boundary of two or more hypotheses. Notably, the benchmarks can help in
-noticing support for overlap (if you forgot to check the fit values),
-since the benchmarks will show that there is maximum/bounded support; as
-will exemplified in the second example below.</p>
+boundary of two or more hypotheses (cf. ‘Guidelines_output_GORIC’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>). Notably,
+the benchmarks can help in noticing support for overlap (if you forgot
+to check the fit values), since the benchmarks will show that there is
+maximum/bounded support; as will exemplified in the second example
+below.</p>
 <p>The benchmarks are based on user-specified sets of populations values
 (as is also used in a power analysis when performing a null hypothesis
 test). For an ANOVA, the set of populations values can be obtained by
 specifying population effect size and a specific ratio of population
 means (which can be the ratio of sample means, that is, the ratio of
-means found in the data). The benchmarks come from several percentiles
-of sets of GORIC(A) weights assuming that the specified set of
-populations values is true (for the sample size under consideration).
-More specifically, the benchmarks are based on the 5%, 35%, 50%, 65%,
-and 95% percentiles of the GORIC(A) weights for the preferred hypothesis
-and of the ratios of the GORIC(A) weights for the preferred hypothesis
-with the other hypotheses.</p>
+means found in the data).<br />
+One can also use the null as a reference, that is, assuming that the
+equalities (instead of inequalities) hold true in the population.</p>
+<p>The benchmarks come from several percentiles of sets of GORIC(A)
+weights assuming that the specified set of populations values is true
+(for the sample size under consideration). More specifically, the
+benchmarks are based on the 5%, 35%, 50%, 65%, and 95% percentiles of
+the GORIC(A) weights for the preferred hypothesis and of the ratios of
+the GORIC(A) weights for the preferred hypothesis with the other
+hypotheses.</p>
 <p>You can compare your GORIC(A) weight and ratios of GORIC(A) weights
 of the preferred hypothesis to these benchmarks to come up with a
 conclusion regarding the strength of support for the hypothesis (given
@@ -1561,17 +1565,30 @@ size, as do the GORIC(A) weights themselves). If of interest (e.g., as a
 sensitivity analysis), you can do this for multiple sets of population
 parameter estimates (but this may also complicate drawing conclusions,
 especially when the assumed sets of population parameter estimates
-differ much). If your preferred hypothesis does not have the highest fit
-and you want to inspect benchmarks, I advise on inspecting multiple
-ratios of population parameter estimates (where some are in agreement
-with your hypothesis and others in agreement with the data).</p>
+differ much).<br />
+If your preferred hypothesis does not have the highest fit and you want
+to inspect benchmarks, I advise on inspecting multiple ratios of
+population parameter estimates (where some are in agreement with your
+hypothesis and others in agreement with the data).</p>
+<p>To use the benchmark function, first install and load it:</p>
+<pre class="r"><code># Install and load benchmark function
+if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
+library(devtools)
+install_github(&quot;rebeccakuiper/benchmarks&quot;)
+library(benchmarks)
+# For more information regarding the included functions:
+#?benchmarks
+#?benchmarks_ANOVA</code></pre>
 <p>Next, I will inspect the case-specific benchmarks values (using the
-ratio of means as in the data). I will look at the example where we
-evaluated <span class="math inline">\(H_1: \mu_1 &gt; \mu_2 &gt;
-\mu_3\)</span> versus its complement and the example where we evaluated
-two overlapping hypotheses, namely <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \ \mu_3\)</span>, together
-with the unconstrained.</p>
+ratio of means as in the data). I will look at<br />
+- the example where we evaluated <span class="math inline">\(H_1: \mu_1
+&gt; \mu_2 &gt; \mu_3\)</span> versus its complement; and<br />
+- the example where we evaluated two overlapping hypotheses, namely
+<span class="math inline">\(H_1: \mu_1 &gt; \mu_2 &gt; \mu_3\)</span>
+and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \ \mu_3\)</span>,
+together with the unconstrained.</p>
+<p>For a description of interpreting GORIC(A) output, see
+‘Guidelines_output_GORIC’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 <div id="example-h_1-vs-its-complement" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Example: <span class="math inline">\(H_1\)</span> vs its complement</h2>
 <pre class="r"><code># H1 vs complement
@@ -1581,7 +1598,45 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c</code></pre>
-<pre><code>restriktor (0.4-60): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-20): generalized order-restricted information criterion: 
+
+Results:
+        model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
+1          H1  -123.384    2.832  252.431           0.679            0.698          0.830
+2  complement  -124.133    3.668  255.601           0.321            0.302          0.170
+--- 
+The order-restricted hypothesis &#39;H1&#39; has 4.880 times more support than its complement.</code></pre>
+<pre class="r"><code># Benchmarks based on null
+pop.es &lt;- c(0)
+benchmarks_1c &lt;- benchmarks_ANOVA(results_1c, pop.es)
+benchmarks_1c$error.prob.pref.hypo</code></pre>
+<pre><code>[1] 0.1700569</code></pre>
+<pre class="r"><code>benchmarks_1c$benchmarks.weight</code></pre>
+<pre><code>$`pop.es = 0`
+      Sample        5%       35%      50%       65%       95%
+H1 0.8299431 0.1905254 0.5761572 0.644275 0.6819728 0.7141905</code></pre>
+<pre class="r"><code>benchmarks_1c$benchmarks.ratios</code></pre>
+<pre><code>$`pop.es = 0`
+                    Sample        5%      35%      50%      65%      95%
+H1 vs. H1         1.000000 1.0000000 1.000000 1.000000 1.000000 1.000000
+H1 vs. complement 4.880384 0.2353701 1.359366 1.811168 2.144385 2.498835</code></pre>
+<pre class="r"><code># Benchmarks based on 3 effect sizes (null/no, small, medium)
+pop.es &lt;- c(0, .2, .5)
+benchmarks_1c &lt;- benchmarks_ANOVA(results_1c, pop.es)
+benchmarks_1c$error.prob.pref.hypo</code></pre>
+<pre><code>[1] 0.1700569</code></pre>
+<pre class="r"><code>benchmarks_1c$benchmarks.weight$`pop.es = 0.2`</code></pre>
+<pre><code>      Sample        5%       35%       50%       65%       95%
+H1 0.8299431 0.5471092 0.6976378 0.7064523 0.7336471 0.8699218</code></pre>
+<pre class="r"><code>benchmarks_1c$benchmarks.ratios$`pop.es = 0.2`</code></pre>
+<pre><code>                    Sample       5%      35%      50%      65%      95%
+H1 vs. H1         1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+H1 vs. complement 4.880384 1.208038 2.307291 2.406602 2.754418 6.687681</code></pre>
+<pre class="r"><code># Apply GORIC #
+set.seed(123) 
+results_1c_1000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_1c_1000</code></pre>
+<pre><code>restriktor (0.5-20): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1590,57 +1645,83 @@ Results:
 --- 
 The order-restricted hypothesis &#39;H1&#39; has 4.880 times more support than its complement.</code></pre>
 <pre class="r"><code># Benchmarks
-pop.es &lt;- c(.2, .5)
-benchmarks_1c &lt;- benchmarks_ANOVA(results_1c, pop.es)
-benchmarks_1c$error.prob.pref.hypo</code></pre>
-<pre><code>[1] 0.1700569</code></pre>
-<pre class="r"><code>benchmarks_1c$benchmarks.weight$`pop.es = 0.2`</code></pre>
-<pre><code>      Sample       5%       35%       50%       65%       95%
-H1 0.8299431 0.543994 0.6975388 0.7065138 0.7302983 0.8542522</code></pre>
-<pre class="r"><code>benchmarks_1c$benchmarks.ratios$`pop.es = 0.2`</code></pre>
-<pre><code>                    Sample       5%     35%      50%    65%      95%
-H1 vs. H1         1.000000 1.000000 1.00000 1.000000 1.0000 1.000000
-H1 vs. complement 4.880384 1.192955 2.30621 2.407316 2.7078 5.861191</code></pre>
+pop.es &lt;- c(0, .2, .5)
+benchmarks_1c_1000 &lt;- benchmarks_ANOVA(results_1c_1000, pop.es)
+#benchmarks_1c_1000$error.prob.pref.hypo
+#benchmarks_1c_1000$benchmarks.weight
+benchmarks_1c_1000$benchmarks.ratios</code></pre>
+<pre><code>$`pop.es = 0`
+                    Sample        5%      35%      50%      65%      95%
+H1 vs. H1         1.000000 1.0000000 1.000000 1.000000 1.000000 1.000000
+H1 vs. complement 4.880384 0.2353701 1.359366 1.811168 2.144385 2.498835
+
+$`pop.es = 0.2`
+                    Sample       5%      35%      50%      65%      95%
+H1 vs. H1         1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+H1 vs. complement 4.880384 1.208038 2.307291 2.406602 2.754418 6.687681
+
+$`pop.es = 0.5`
+                    Sample      5%      35%      50%     65%      95%
+H1 vs. H1         1.000000 1.00000 1.000000 1.000000  1.0000  1.00000
+H1 vs. complement 4.880384 2.24469 4.202446 6.476797 10.8203 83.84509</code></pre>
 <p>As discussed before, you can conclude that there is support for <span class="math inline">\(H_1: \mu_1 &gt; \mu_2 &gt; \mu_3\)</span>, and
-<span class="math inline">\(H_1\)</span> is <span class="math inline">\(.83/.17 \approx 4.88\)</span> time more supported
-than its complement.<br />
+<span class="math inline">\(H_1\)</span> is <span class="math inline">\(0.83\)</span> <span class="math inline">\(/\)</span> <span class="math inline">\(0.17\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(4.88\)</span> times more supported than its
+complement.<br />
 The probability that <span class="math inline">\(H_1\)</span> is not the
-best is 17% (namely, <code>error.prob.pref.hypo</code> <span class="math inline">\(\approx .17\)</span>). This already gives insight
-into the (un)certainty and, therefore, helps in qualifying the results.
-Additionally, the benchmarks can help:</p>
-<!-- Based on the benchmarks, one can conclude that - given the ratio of means in the data - we would expect that our finding belongs to an effect size between .2 (small) and .5 (medium), since the GORIC weight of $H_1$ (i.e., .84) lies in between the benchmarks weights of $H_1$ for `pop.es = 0.2` and `pop.es = 0.5`.  -->
+best is 17.0056931% (namely, <code>error.prob.pref.hypo</code> <span class="math inline">\(\approx 0.1700569\)</span>). This already gives
+insight into the (un)certainty and, therefore, helps in qualifying the
+results. Additionally, the benchmarks can help:</p>
+<!-- Based on the benchmarks, one can conclude that - given the ratio of means in the data - we would expect that our finding belongs to an effect size between .2 (small) and .5 (medium), since the GORIC weight of $H_1$ (i.e., $0.83$) lies in between the benchmarks weights of $H_1$ for `pop.es = 0.2` and `pop.es = 0.5`.  -->
 <!-- This indicates small to medium support for $H_1$ (given the ratio of means in the data and given the sample size). NB DIT IS NIET LOGISCH, vgl met onderstaande! -->
 <p>Based on the benchmarks, you can check how plausible your finding is
 (given the assumed population parameter estimates and given the sample
 size). The output shows that, when assuming that there is a small effect
 in the population (i.e., <code>pop.es</code> = .2) and that the ratio of
-population means is the same as in the data, the GORIC weight of <span class="math inline">\(H_1\)</span> (i.e., .84) lies in between the 65%
-and 95% percentiles and is very close to the 95%
+population means is the same as in the data, the GORIC weight of <span class="math inline">\(H_1\)</span> (i.e., <span class="math inline">\(0.83\)</span>) lies in between the 65% and 95%
+percentiles and is very close to the 95%
 (cf. <code>benchmarks.weight</code>). The same holds true for the ratio
 of GORIC weights of <span class="math inline">\(H_1\)</span> versus its
 complement (cf. <code>benchmarks.ratios</code>). Using the table with
 cut-off values above, this would indicate that there is high (to very
 high) support, when assuming a small population effect size and a
-population mean ratio as equal to the sample mean ratio (give a total
+population mean ratio as equal to the sample mean ratio (given a total
 sample size of 100).</p>
 <p>Next, I show that the benchmarks depend on your assumed
 population:</p>
 <pre class="r"><code>benchmarks_1c$benchmarks.weight$`pop.es = 0.5`</code></pre>
 <pre><code>      Sample        5%       35%       50%       65%       95%
-H1 0.8299431 0.6954684 0.8140248 0.8743329 0.9255619 0.9895298</code></pre>
+H1 0.8299431 0.6918041 0.8077821 0.8662529 0.9153995 0.9882138</code></pre>
 <pre class="r"><code>benchmarks_1c$benchmarks.ratios$`pop.es = 0.5`</code></pre>
-<pre><code>                    Sample       5%      35%      50%      65%      95%
-H1 vs. H1         1.000000 1.000000 1.000000 1.000000  1.00000  1.00000
-H1 vs. complement 4.880384 2.283732 4.377075 6.957535 12.43399 94.50907</code></pre>
+<pre><code>                    Sample      5%      35%      50%     65%      95%
+H1 vs. H1         1.000000 1.00000 1.000000 1.000000  1.0000  1.00000
+H1 vs. complement 4.880384 2.24469 4.202446 6.476797 10.8203 83.84509</code></pre>
 <p>When assuming that there a medium effect in the population (i.e.,
 <code>pop.es</code> = .5) and that the ratio of population means is the
-same as in the data, the GORIC weight of <span class="math inline">\(H_1\)</span> (i.e., .84) lies in between the 35%
-and 50% and thus 65% percentiles. The same holds true for the ratio of
-GORIC weights of <span class="math inline">\(H_1\)</span> versus its
-complement. Using the table with cut-off values above, this indicates
-that there is medium support, when assuming a medium population effect
-size and a population mean ratio as equal to the sample mean ratio (give
-a total sample size of 100).</p>
+same as in the data, the GORIC weight of <span class="math inline">\(H_1\)</span> (i.e., <span class="math inline">\(0.83\)</span>) lies in between the 35% and 50% and
+thus 65% percentiles. The same holds true for the ratio of GORIC weights
+of <span class="math inline">\(H_1\)</span> versus its complement. Using
+the table with cut-off values above, this indicates that there is medium
+support, when assuming a medium population effect size and a population
+mean ratio as equal to the sample mean ratio (given a total sample size
+of 100).</p>
+<p>If you do not have prior knowledge regarding the expected population
+effect size, or if you just want to compare your results with the
+situation in which the equalities hold true, use a null population
+(here, an effect size of 0). Then, you obtain insight into how likely
+the inequalities are.</p>
+<pre class="r"><code>benchmarks_1c$benchmarks.weight$`pop.es = 0`</code></pre>
+<pre><code>      Sample        5%       35%      50%       65%       95%
+H1 0.8299431 0.1905254 0.5761572 0.644275 0.6819728 0.7141905</code></pre>
+<pre class="r"><code>benchmarks_1c$benchmarks.ratios$`pop.es = 0`</code></pre>
+<pre><code>                    Sample        5%      35%      50%      65%      95%
+H1 vs. H1         1.000000 1.0000000 1.000000 1.000000 1.000000 1.000000
+H1 vs. complement 4.880384 0.2353701 1.359366 1.811168 2.144385 2.498835</code></pre>
+<p>When assuming that there is no effect in the population (i.e.,
+<code>pop.es</code> = 0), the GORIC weight of <span class="math inline">\(H_1\)</span> (i.e., <span class="math inline">\(0.83\)</span>) is higher than the 95% percentile.
+The same holds true for the ratio of GORIC weights of <span class="math inline">\(H_1\)</span> versus its complement. Using the
+table with cut-off values above, this indicates that there is very large
+(tremendous) support, when assuming no population effect size (given a
+total sample size of 100).</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1667,7 +1748,7 @@ H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.4-60): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-20): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1681,38 +1762,50 @@ H1             1.000  1.950             3.216
 H2             0.513  1.000             1.649
 unconstrained  0.311  0.607             1.000</code></pre>
 <pre class="r"><code># Benchmarks
-pop.es &lt;- c(.2, .5)
+pop.es &lt;- c(0, .2, .5)
 benchmarks_12u &lt;- benchmarks_ANOVA(results_12u, pop.es)
 benchmarks_12u$error.prob.pref.hypo</code></pre>
 <pre><code>[1] 0.1700569</code></pre>
 <pre class="r"><code>benchmarks_12u$benchmarks.weight</code></pre>
-<pre><code>$`pop.es = 0.2`
-     Sample        5%      35%      50%      65%      95%
-H1 0.548338 0.3864452 0.548338 0.548338 0.548338 0.548338
+<pre><code>$`pop.es = 0`
+     Sample       5%       35%       50%       65%      95%
+H1 0.548338 0.129804 0.4557295 0.5061509 0.5356164 0.548338
+
+$`pop.es = 0.2`
+     Sample        5%       35%      50%      65%      95%
+H1 0.548338 0.4013116 0.5483277 0.548338 0.548338 0.548338
 
 $`pop.es = 0.5`
      Sample        5%      35%      50%      65%      95%
-H1 0.548338 0.5443604 0.548338 0.548338 0.548338 0.548338</code></pre>
+H1 0.548338 0.5481983 0.548338 0.548338 0.548338 0.548338</code></pre>
 <pre class="r"><code>benchmarks_12u$benchmarks.ratios</code></pre>
-<pre><code>$`pop.es = 0.2`
+<pre><code>$`pop.es = 0`
+                       Sample        5%      35%      50%      65%      95%
+H1 vs. H1            1.000000 1.0000000 1.000000 1.000000 1.000000 1.000000
+H1 vs. H2            1.950401 0.3332983 1.686983 1.920856 1.950401 1.950401
+H1 vs. unconstrained 3.215667 0.2670816 1.861925 2.500761 2.958712 3.215667
+
+$`pop.es = 0.2`
                        Sample       5%      35%      50%      65%      95%
 H1 vs. H1            1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
-H1 vs. H2            1.950401 1.020428 1.950401 1.950401 1.950401 1.950401
-H1 vs. unconstrained 3.215667 1.628835 3.215667 3.215667 3.215667 3.215667
+H1 vs. H2            1.950401 1.113707 1.950401 1.950401 1.950401 1.950401
+H1 vs. unconstrained 3.215667 1.629242 3.215503 3.215667 3.215667 3.215667
 
 $`pop.es = 0.5`
                        Sample       5%      35%      50%      65%      95%
 H1 vs. H1            1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
-H1 vs. H2            1.950401 1.919350 1.950401 1.950401 1.950401 1.950401
-H1 vs. unconstrained 3.215667 3.164473 3.215667 3.215667 3.215667 3.215667</code></pre>
+H1 vs. H2            1.950401 1.949300 1.950401 1.950401 1.950401 1.950401
+H1 vs. unconstrained 3.215667 3.213853 3.215667 3.215667 3.215667 3.215667</code></pre>
 <p>As we saw before, both hypotheses are not weak, <span class="math inline">\(H_1\)</span> is the best, and there is support for
 the overlap of the hypotheses which is <span class="math inline">\(H_1\)</span> here (since <span class="math inline">\(H_1\)</span> is a subset of <span class="math inline">\(H_2\)</span>).</p>
 <p>From both types of benchmarks (i.e., <code>benchmarks.weight</code>
-and <code>benchmarks.ratios</code>), we can see that there is maximum
-support, and our support resembles that. Hence, we conclude that there
-is support for the overlap. It is not possible to label this support.
-When you would evaluate the overlap (or the preferred hypothesis) versus
-its complement, you can.</p>
+and <code>benchmarks.ratios</code>) and when the effect size is higher
+than 0, we can see that there is maximum support, and our support
+resembles that. Hence, we conclude that there is support for the
+overlap. It is not possible to label this support (notably, one should
+thus also not compare the results to the benchmarks for a 0 effect
+size). When you would evaluate the overlap (or the preferred hypothesis)
+versus its complement, you can.</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1725,7 +1818,7 @@ When I would sample more observations, it does not (really) affect the
 GORIC(A) weights for <span class="math inline">\(H_1\)</span>, <span class="math inline">\(H_2\)</span>, and the unconstrained: It will
 converge to bounds it can take on. The benchmarks for the GORIC(A)
 weights will also attain the maximum value (here, 0.548) as will the
-ratio of weights (e.g., 1.947761 for <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span>); and it will for each (positive)
+ratio of weights (e.g., 1.950 for <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span>); and it will for each (positive)
 population effect size.</p>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 

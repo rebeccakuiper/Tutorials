@@ -19,7 +19,7 @@
 
 ##############################
 
-# Install and load pacakges
+# Install and load packages
 
 ## First, install the packages, if you have not done this already:
 if (!require("restriktor")) install.packages("restriktor")
@@ -56,7 +56,7 @@ H1 <- 'group1 > group2 > group3'
 
 # GORIC
 set.seed(123) # Set seed value
-goric.PandG <- goric(fit.PandG, hypotheses = list(H0, H1))
+goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
 #goric.PandG$result[,1] <- c("H0","H1","Hu")
 #goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
 goric.PandG$result
