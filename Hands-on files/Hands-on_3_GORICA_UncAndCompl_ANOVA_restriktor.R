@@ -65,7 +65,7 @@ descrstat
 
 
 
-## Compute the GORIC ##
+## Compute GORICA ##
 
 # One needs an R object with unconstrained estimates 
 # (here, five group means and one residual variance)
@@ -137,8 +137,11 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 # A set of hypotheses vs Hunc
 #
 set.seed(123) # Set seed value
-output_gorica <- goric(lm_fit_Lucas, hypotheses = list(H0, H1, H2), type = "gorica")
+output_gorica <- goric(lm_fit_Lucas, 
+                       hypotheses = list(H0 = H0, H1 = H1, H2 = H2), 
+                       type = "gorica")
 summary(output_gorica)
+#output_gorica
 #
 # If you did the same analysis with the GORIC, you will see that the (relative) 
 # weights are (about) the same for the GORIC and GORICA.
@@ -153,17 +156,85 @@ summary(output_gorica)
 
 ## In case of one informative hypothesis (H1) ##
 #
-# H1 vs Hunc 
+# H1 vs its complement 
 #If you have only one informative hypothesis ($H_1$), then evaluate this against 
 # its complement (i.e., all other theories, thus excluding the one of interest).
 H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 # Note: H1 is not full row-rank, see the goric tutorial for more details.
 set.seed(123) # Set seed value
-output_gorica_c <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement", 
+output_gorica_c <- goric(lm_fit_Lucas, 
+                         hypotheses = list(H1), comparison = "complement", 
+                         type = "gorica")
+#summary(output_gorica_c)
+output_gorica_c
+# The order-restricted hypothesis $H_1$ has 13 times more support than its 
+# complement (and the weights are once again the same as compared to the GORIC).
+
+
+
+## In case of estimates and their covariance matrix ##
+#
+# H1 vs its complement 
+#If you have only one informative hypothesis ($H_1$), then evaluate this against 
+# its complement (i.e., all other theories, thus excluding the one of interest).
+H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+# Note: H1 is not full row-rank, see the goric tutorial for more details.
+set.seed(123) # Set seed value
+est <- coef(lm_fit_Lucas)
+VCOV <- vcov(lm_fit_Lucas)
+output_gorica_c <- goric(est, VCOV = VCOV, 
+                         hypotheses = list(H1), comparison = "complement", 
                          type = "gorica")
 summary(output_gorica_c)
-# The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
+# The order-restricted hypothesis $H_1$ has 13 times more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
+
+
+
+## Extra: benchmarks ##
+#
+#I am not in favor of cut-off points, 
+#but when you feel you need them to label the height of the weights and/or their ratios, 
+#you can use benchmarks as proposed and discussed in 
+#'Guidelines_GORIC-benchmarks' on https://github.com/rebeccakuiper/Tutorials.
+#
+#
+#library(devtools)
+#install_github("rebeccakuiper/benchmarks")
+library(benchmarks)
+#?benchmarks
+#
+H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+set.seed(123) # Set seed value
+output_gorica_c <- goric(lm_fit_Lucas, 
+                         hypotheses = list(H1), comparison = "complement", 
+                         type = "gorica")
+#
+pop.es <- c(0) # c(0, .2, .5)
+benchmarks_1c <- benchmarks_ANOVA(output_gorica_c, pop.es, iter = 10)
+benchmarks_1c$error.prob.pref.hypo
+benchmarks_1c$benchmarks.weight
+benchmarks_1c$benchmarks.ratios
+
+# Note: When using the estimates and their covariance matrix
+# in which case you also need to state the group sample size.
+H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+set.seed(123) # Set seed value
+est <- coef(lm_fit_Lucas)
+VCOV <- vcov(lm_fit_Lucas)
+output_gorica_c <- goric(est, VCOV = VCOV, 
+                         hypotheses = list(H1), comparison = "complement", 
+                         type = "gorica")
+pop.es <- c(0) # c(0, .2, .5)
+benchmarks_1c <- benchmarks_ANOVA(output_gorica_c, N = descrstat$n, pop.es, iter = 10)
+# Could also use N = 30 or N = rep(30,5)
+benchmarks_1c$error.prob.pref.hypo
+benchmarks_1c$benchmarks.weight
+benchmarks_1c$benchmarks.ratios
+
+# Alternatively, one can use the benchmarks() function.
+# In that case, one needs to specify the population estimates 
+# (instead of population effect size).
 
 
 ################################################################################
