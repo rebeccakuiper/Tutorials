@@ -2190,23 +2190,23 @@ pop.est &lt;- matrix(c(
                   byrow = TRUE, ncol = length(est))
 benchmarks_1c_allpos &lt;- benchmarks(results_1c, pop.est)
 #benchmarks_1c_allpos$benchmarks.LLratios
-benchmarks_1c_allpos$benchmarks.LLratios_ge1</code></pre>
+#benchmarks_1c_allpos$benchmarks.LLratios_ge1
+benchmarks_1c_allpos$benchmarks.difLL</code></pre>
 <pre><code>$`pop.est.nr. = 1`
-                   Sample       5%      35%      50%      65%      95%
-H1 vs. H1         1.00000 1.000000 1.000000 1.000000 1.000000 1.000000
-H1 vs. complement 2.11521 1.001626 1.102072 1.232758 1.529933 4.672766
+                     Sample        5%         35%           50%        65%       95%
+H1 vs. H1         0.0000000  0.000000  0.00000000  0.000000e+00 0.00000000 0.0000000
+H1 vs. complement 0.7491543 -1.421586 -0.08768385 -4.239415e-05 0.05588663 0.9022461
 
 $`pop.est.nr. = 2`
-                   Sample      5%      35%      50%      65%      95%
-H1 vs. H1         1.00000 1.00000 1.000000 1.000000 1.000000 1.000000
-H1 vs. complement 2.11521 1.00216 1.115449 1.267364 1.593347 5.867315
+                     Sample        5%         35%          50%        65%      95%
+H1 vs. H1         0.0000000  0.000000  0.00000000 0.000000e+00 0.00000000 0.000000
+H1 vs. complement 0.7491543 -1.296229 -0.08355899 4.590777e-05 0.07411278 1.286945
 
 $`pop.est.nr. = 3`
-                   Sample       5%      35%      50%      65%      95%
-H1 vs. H1         1.00000 1.000000 1.000000 1.000000 1.000000  1.00000
-H1 vs. complement 2.11521 1.002044 1.115849 1.298028 1.636077 11.23987</code></pre>
-<pre class="r"><code>#benchmarks_1c_allpos$benchmarks.difLL
-#benchmarks_1c_allpos$benchmarks.absdifLL</code></pre>
+                     Sample        5%        35%        50%         65%        95%
+H1 vs. H1         0.0000000  0.000000  0.0000000  0.0000000  0.00000000 0.00000000
+H1 vs. complement 0.7491543 -2.419411 -0.4900731 -0.2336335 -0.07146743 0.08778951</code></pre>
+<pre class="r"><code>#benchmarks_1c_allpos$benchmarks.absdifLL</code></pre>
 <p>In this example, the difference in log-likelihood values (.75) lies
 between the 65% and the 95% percentile of the loglik benchmarks (so, in
 between the 5% and 95%) of the first two null populations; and it is
@@ -2220,7 +2220,10 @@ I know that in the population (since I sampled the data) not a boundary
 hypothesis but H1 itself is true. Hence, in thus case the loglik
 benchmarks do not help us. Moreover, based on eyeballing, I would have
 said that the loglik values differ. Clearly, more research is needed for
-the loglik benchmarks.</p>
+the loglik benchmarks (e.g., doing a simulation study to see how many
+times it correctly says that the loglik values differ). Nevertheless, if
+the sample size is increased, you do (more often) find that the loglik
+values differ; as illustrated in the next subsection.</p>
 <p>One could also do a likelihood ratio test, using a Chi-square
 distribution. One should actually use a Chi-bar-square distribution, but
 additional research is needed. <!-- TO DO --></p>
@@ -2246,13 +2249,7 @@ specifically, I used population mean values of approximately 0.98, 0.65,
 and 0.33. This implies that Cohen’s <span class="math inline">\(d\)</span> is approximately .27; thus, there is a
 small to medium population effect size (which are in the same order as
 hypothesized). I then sampled 100 observations, ran an ANOVA (with three
-groups), and applied the GORIC.<br />
-When I would sample more observations, the GORIC(A) weight for <span class="math inline">\(H_1\)</span> converges to 1 (denoting full support
-for <span class="math inline">\(H_1\)</span>), as will the benchmarks
-for the GORIC(A) weight for <span class="math inline">\(H_1\)</span>.
-Note that the error probability then goes to 0 and the the ratio of
-GORIC(A) weights of <span class="math inline">\(H_1\)</span> versus its
-complement then goes to infinity.</p>
+groups), and applied the GORIC.</p>
 <div id="higher-sample-size-1" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Higher sample
 size</h3>
