@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-12-06" />
+<meta name="date" content="2023-12-07" />
 
 <title>Guidelines GORIC(A) benchmarks</title>
 
@@ -1481,7 +1481,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Guidelines GORIC(A) benchmarks</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">06 December 2023</h4>
+<h4 class="date">07 December 2023</h4>
 
 </div>
 
@@ -1928,8 +1928,8 @@ the loglik differences are in between the 5% and 95% percentiles of the
 loglik benchmarks for a null population. You can of course use a
 narrower range to be more strict.</p>
 <p>Remarks:<br />
-- The loglik benchmarks need to be more properly investigated. - The
-benchmark function contains four types of loglik benchmarks:<br />
+- The loglik benchmarks need to be more properly investigated.<br />
+- The benchmark function contains four types of loglik benchmarks:<br />
 * the loglik ratios (i.e., ratio of loglik weights), which can take on
 values between 0 and infinity and where 1 means that the loglik values
 are the same;<br />
@@ -1940,19 +1940,18 @@ infinity and infinity and where 0 means that the loglik values are the
 same;<br />
 * the absolute loglik differences, which can take on values between 0
 and infinity and where 0 means that the loglik values are the
-same;<br />
+same.<br />
 Note that the first and the third contain the same information, as do
-the second and the fourth.<br />
-It seems like the difference between two log-likelihoods works best and
-is closely related to the likelihood ratio test. Hence, I will only show
-the output for this one. - One could also do a likelihood ratio test,
-using a Chi-square distribution (using the difference in penalty values
-as the degrees of freedom). Notably, one should actually use a
-Chi-bar-square distribution. This uses Chi-bar-square weights, that is,
-level probabilities, and these can be retrieved from the goric object.
-Further research is needed to find out how this should be done and to
-see how well it works.
-<!-- TO DO zie 'Chi-bar-square_DiffTest.r' in 'ChiBarSq.DiffTest' package --></p>
+the second and the fourth. In these guidelines, I will only show the
+output for the difference between two log-likelihoods.<br />
+- One could think about doing a likelihood ratio test (LRT), using a
+Chi-square distribution or, because of the inequality restrictions, a
+Chi-bar-square distribution. However, the LRT test is appropriate for
+nested models, while we are interested in models that are non-nested and
+even non-overlapping (except for the boundary).</p>
+<!-- It seems like the difference between two log-likelihoods works best and is closely related to the likelihood ratio test. Hence, I will only show the output for this one. -->
+<!-- - One could also do a likelihood ratio test, using a Chi-square distribution (using the difference in penalty values as the degrees of freedom). Notably, one should actually use a Chi-bar-square distribution. This uses Chi-bar-square weights, that is, level probabilities, and these can be retrieved from the goric object. Further research is needed to find out how this should be done and to see how well it works. -->
+<!-- TO DO zie 'Chi-bar-square_DiffTest.r' in 'ChiBarSq.DiffTest' package -->
 <div id="example-3-anova-border-is-true" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Example 3 (ANOVA):
 Border is true</h2>
@@ -2026,24 +2025,18 @@ values of <span class="math inline">\(H_1\)</span> and its complement
 are close (i.e., their loglik weight ratio is close to 1 and their
 (absolute) difference is close to 0); and that there is support for a
 boundary hypothesis in which two means are the same.</p>
-<p>One could also do a likelihood ratio test, using a Chi-square
-distribution. One should actually use a Chi-bar-square distribution, but
-additional research is needed. <!-- TO DO --></p>
-<pre class="r"><code>alpha &lt;- .10 # This corresponds to using the 5% and 95% percentiles
-df_diff = 3.668-2.832 # These are the penalty (df) values for H1 and &#39;Hc&#39;
-LR &lt;- -2*-121.727 + 2*-121.591 # = 2*&#39;benchmarks.difLL&#39;
-#
-# Critical value
-qchisq(alpha, df = df_diff, lower.tail=FALSE)</code></pre>
-<pre><code>[1] 2.342696</code></pre>
-<pre class="r"><code>#2.343
-# LR from sample, to be compared to the critical value
-LR</code></pre>
-<pre><code>[1] 0.272</code></pre>
-<pre class="r"><code># 0.272</code></pre>
-<p>Based on this test, I would also conclude that the loglik values do
-not differ significantly (since the value from the sample is smaller
-that the critical value).</p>
+<!-- <!-- Modellen zijn niet nested, dus kan niet -->
+<p>–&gt; <!-- <!-- En benchmarks geeft juist een null verdeling! -->
+–&gt;
+<!-- One could also do a likelihood ratio test, using a Chi-square distribution: -->
+<!-- ```{r, message = FALSE, warning = FALSE} --> <!-- alpha <- .10  -->
+<!-- df_diff = 3.668-2.832 # These are the penalty (df) values for H1 and 'Hc' -->
+<!-- LR <- -2*-121.727 + 2*-121.591 # = 2*'benchmarks.difLL' -->
+<!-- # --> <!-- # Critical value -->
+<!-- qchisq(alpha, df = df_diff, lower.tail=FALSE) #2.343 -->
+<!-- # LR from sample, to be compared to the critical value -->
+<!-- LR #0.272 --> <!-- ``` -->
+<!-- Based on this test, I would also conclude that the loglik values do not differ significantly (since the value from the sample is smaller that the critical value). --></p>
 <!-- Btw, in qchisq: lower.tail is   -->
 <!-- logical; if TRUE (default), probabilities are P[X≤x], otherwise, P[X>x].  -->
 <p>Population information:<br />
@@ -2135,24 +2128,18 @@ I conclude that the log-likelihood values of <span class="math inline">\(H_1\)</
 their loglik weight ratio is close to 1 and their (absolute) difference
 is close to 0); and that there is support for a boundary hypothesis in
 which two means are the same.</p>
-<p>One could also do a likelihood ratio test, using a Chi-square
-distribution. One should actually use a Chi-bar-square distribution, but
-additional research is needed. <!-- TO DO --></p>
-<pre class="r"><code>alpha &lt;- .10 # This corresponds to using the 5% and 95% percentiles
-df_diff = 3.667-2.833 # These are the penalty (df) values for H1 and &#39;Hc&#39;
-LR &lt;- -2*-1285.046 + 2*-1284.884 # = 2*&#39;benchmarks.difLL&#39;
-#
-# Critical value
-qchisq(alpha, df = df_diff, lower.tail=FALSE)</code></pre>
-<pre><code>[1] 2.338119</code></pre>
-<pre class="r"><code>#2.338
-# LR from sample, to be compared to the critical value
-LR</code></pre>
-<pre><code>[1] 0.324</code></pre>
-<pre class="r"><code># 0.324</code></pre>
-<p>Based on this test, I would also conclude that the loglik values do
-not differ significantly (since the value from the sample is smaller
-that the critical value).</p>
+<!-- One could also do a likelihood ratio test, using a Chi-square distribution:
+<!-- ```{r, message = FALSE, warning = FALSE} -->
+<!-- alpha <- .10  -->
+<!-- df_diff = 3.667-2.833 # These are the penalty (df) values for H1 and 'Hc' -->
+<!-- LR <- -2*-1285.046 + 2*-1284.884 # = 2*'benchmarks.difLL' -->
+<!-- # -->
+<!-- # Critical value -->
+<!-- qchisq(alpha, df = df_diff, lower.tail=FALSE) #2.338 -->
+<!-- # LR from sample, to be compared to the critical value -->
+<!-- LR #0.324 -->
+<!-- ``` -->
+<!-- Based on this test, I would also conclude that the loglik values do not differ significantly (since the value from the sample is smaller that the critical value). -->
 </div>
 </div>
 <div id="example-1-anova-ctd." class="section level2" number="3.2">
@@ -2224,24 +2211,18 @@ the loglik benchmarks (e.g., doing a simulation study to see how many
 times it correctly says that the loglik values differ). Nevertheless, if
 the sample size is increased, you do (more often) find that the loglik
 values differ; as illustrated in the next subsection.</p>
-<p>One could also do a likelihood ratio test, using a Chi-square
-distribution. One should actually use a Chi-bar-square distribution, but
-additional research is needed. <!-- TO DO --></p>
-<pre class="r"><code>alpha &lt;- .10 # This corresponds to using the 5% and 95% percentiles
-df_diff = 3.668-2.832 # These are the penalty (df) values for H1 and &#39;Hc&#39;
-LR &lt;- -2*-124.133 + 2*-123.384 # = 2*&#39;benchmarks.difLL&#39;
-#
-# Critical value
-qchisq(alpha, df = df_diff, lower.tail=FALSE)</code></pre>
-<pre><code>[1] 2.342696</code></pre>
-<pre class="r"><code>#2.343
-# LR from sample, to be compared to the critical value
-LR</code></pre>
-<pre><code>[1] 1.498</code></pre>
-<pre class="r"><code># 1.498</code></pre>
-<p>Based on this test, I would also conclude that the loglik values do
-not differ significantly (since the value from the sample is smaller
-that the critical value).</p>
+<!-- One could also do a likelihood ratio test, using a Chi-square distribution: -->
+<!-- ```{r, message = FALSE, warning = FALSE} -->
+<!-- alpha <- .10 -->
+<!-- df_diff = 3.668-2.832 # These are the penalty (df) values for H1 and 'Hc' -->
+<!-- LR <- -2*-124.133 + 2*-123.384 # = 2*'benchmarks.difLL' -->
+<!-- # -->
+<!-- # Critical value -->
+<!-- qchisq(alpha, df = df_diff, lower.tail=FALSE) #2.343 -->
+<!-- # LR from sample, to be compared to the critical value -->
+<!-- LR #1.498 -->
+<!-- ``` -->
+<!-- Based on this test, I would also conclude that the loglik values do not differ significantly (since the value from the sample is smaller that the critical value). -->
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -2323,24 +2304,18 @@ log-likelihood values (3.04) is higher than the 95% percentile of the
 loglik benchmarks for all three null populations. Based on this, I
 conclude that the log-likelihood values of <span class="math inline">\(H_1\)</span> and its complement are not close.
 Thus, there is no support for a boundary hypothesis, only for <span class="math inline">\(H_1\)</span>.</p>
-<p>One could also do a likelihood ratio test, using a Chi-square
-distribution. One should actually use a Chi-bar-square distribution, but
-additional research is needed. <!-- TO DO --></p>
-<pre class="r"><code>alpha &lt;- .10 # This corresponds to using the 5% and 95% percentiles
-df_diff = 3.667-2.833 # These are the penalty (df) values for H1 and &#39;Hc&#39;
-LR &lt;- -2*-379.462 + 2*-376.425 # = 2*&#39;benchmarks.difLL&#39;
-#
-# Critical value
-qchisq(alpha, df = df_diff, lower.tail=FALSE)</code></pre>
-<pre><code>[1] 2.338119</code></pre>
-<pre class="r"><code>#2.338
-# LR from sample, to be compared to the critical value
-LR</code></pre>
-<pre><code>[1] 6.074</code></pre>
-<pre class="r"><code># 6.074</code></pre>
-<p>Based on this test, I would also conclude that the loglik values do
-differ significantly (since the value from the sample is larger that the
-critical value).</p>
+<!-- One could also do a likelihood ratio test, using a Chi-square distribution: -->
+<!-- ```{r, message = FALSE, warning = FALSE} -->
+<!-- alpha <- .10  -->
+<!-- df_diff = 3.667-2.833 # These are the penalty (df) values for H1 and 'Hc' -->
+<!-- LR <- -2*-379.462 + 2*-376.425 # = 2*'benchmarks.difLL' -->
+<!-- # -->
+<!-- # Critical value -->
+<!-- qchisq(alpha, df = df_diff, lower.tail=FALSE) #2.338 -->
+<!-- # LR from sample, to be compared to the critical value -->
+<!-- LR #6.074 -->
+<!-- ``` -->
+<!-- Based on this test, I would also conclude that the loglik values do differ significantly (since the value from the sample is larger that the critical value). -->
 </div>
 <div id="total-sample-size-of-1000" class="section level4" number="3.2.1.2">
 <h4><span class="header-section-number">3.2.1.2</span> Total sample size
@@ -2383,7 +2358,6 @@ specifications of null populations:</p>
 # using the benchmarks function:
 est &lt;- coef(fit_1000)
 pop.est &lt;- matrix(c(
-                  est[1], est[2], est[3],
                   mean(est[1:2]), mean(est[1:2]), est[3],
                   est[1], mean(est[2:3]), mean(est[2:3]),
                   mean(est[1:3]), mean(est[1:3]), mean(est[1:3])
@@ -2394,48 +2368,37 @@ benchmarks_1c_1000_allpos &lt;- benchmarks(results_1c_1000, pop.est)
 #benchmarks_1c_1000_allpos$benchmarks.LLratios_ge1
 benchmarks_1c_1000_allpos$benchmarks.difLL</code></pre>
 <pre><code>$`pop.est.nr. = 1`
-                    Sample       5%      35%     50%      65%      95%
-H1 vs. H1         0.000000 0.000000 0.000000 0.00000 0.000000  0.00000
-H1 vs. complement 8.113968 3.055875 6.656764 7.66645 8.681848 12.45022
+                    Sample       5%         35%           50%        65%      95%
+H1 vs. H1         0.000000  0.00000  0.00000000  0.000000e+00 0.00000000 0.000000
+H1 vs. complement 8.113968 -1.42333 -0.08873944 -6.073469e-06 0.06184266 1.134347
 
 $`pop.est.nr. = 2`
-                    Sample        5%         35%           50%        65%      95%
-H1 vs. H1         0.000000  0.000000  0.00000000  0.000000e+00 0.00000000 0.000000
-H1 vs. complement 8.113968 -1.371695 -0.08262674 -5.937951e-06 0.05301166 1.370121
+                    Sample        5%         35%          50%        65%      95%
+H1 vs. H1         0.000000  0.000000  0.00000000 0.000000e+00 0.00000000 0.000000
+H1 vs. complement 8.113968 -1.296229 -0.08355899 4.590777e-05 0.07518101 1.448586
 
 $`pop.est.nr. = 3`
-                    Sample        5%        35%          50%        65%      95%
-H1 vs. H1         0.000000  0.000000  0.0000000 0.0000000000 0.00000000 0.000000
-H1 vs. complement 8.113968 -1.391727 -0.0599013 0.0005269092 0.07020758 1.352651
-
-$`pop.est.nr. = 4`
-                    Sample        5%        35%        50%         65%        95%
-H1 vs. H1         0.000000  0.000000  0.0000000  0.0000000  0.00000000 0.00000000
-H1 vs. complement 8.113968 -2.416984 -0.5748742 -0.2858309 -0.08080468 0.08519334</code></pre>
+                    Sample        5%        35%        50%       65%        95%
+H1 vs. H1         0.000000  0.000000  0.0000000  0.0000000  0.000000 0.00000000
+H1 vs. complement 8.113968 -2.419487 -0.4853368 -0.2316165 -0.070985 0.09029137</code></pre>
 <pre class="r"><code>#benchmarks_1c_1000_allpos$benchmarks.absdifLL</code></pre>
 <p>In this example with a much higher sample size, the difference in
 log-likelihood values (3341) is much higher than the 95% percentile of
 the loglik benchmarks for all three null populations. Based on this, I
 conclude that the log-likelihood values of <span class="math inline">\(H_1\)</span> and its complement are not close.
 Thus, there is no support for a boundary hypothesis, only for <span class="math inline">\(H_1\)</span>.</p>
-<p>One could also do a likelihood ratio test, using a Chi-square
-distribution. One should actually use a Chi-bar-square distribution, but
-additional research is needed. <!-- TO DO --></p>
-<pre class="r"><code>alpha &lt;- .10 # This corresponds to using the 5% and 95% percentiles
-df_diff = 3.667-2.833 # These are the penalty (df) values for H1 and &#39;Hc&#39;
-LR &lt;- -2*-1292.998 + 2*-1284.884 # = 2*&#39;benchmarks.difLL&#39;
-#
-# Critical value
-qchisq(alpha, df = df_diff, lower.tail=FALSE)</code></pre>
-<pre><code>[1] 2.338119</code></pre>
-<pre class="r"><code>#2.338
-# LR from sample, to be compared to the critical value
-LR</code></pre>
-<pre><code>[1] 16.228</code></pre>
-<pre class="r"><code># 16.228</code></pre>
-<p>Based on this test, I would also conclude that the loglik values do
-differ significantly (since the value from the sample is larger that the
-critical value).</p>
+<!-- One could also do a likelihood ratio test, using a Chi-square distribution: -->
+<!-- ```{r, message = FALSE, warning = FALSE} -->
+<!-- alpha <- .10  -->
+<!-- df_diff = 3.667-2.833 # These are the penalty (df) values for H1 and 'Hc' -->
+<!-- LR <- -2*-1292.998 + 2*-1284.884 # = 2*'benchmarks.difLL' -->
+<!-- # -->
+<!-- # Critical value -->
+<!-- qchisq(alpha, df = df_diff, lower.tail=FALSE) #2.338 -->
+<!-- # LR from sample, to be compared to the critical value -->
+<!-- LR #16.228 -->
+<!-- ``` -->
+<!-- Based on this test, I would also conclude that the loglik values do differ significantly (since the value from the sample is larger that the critical value). -->
 <!-- # Example 4 (SEM) -->
 <!-- TO DO -->
 <!-- gebruik data van SEM artikel en dan ws kijken naar twee regr coeff en de twee groepen? -->
