@@ -140,8 +140,9 @@ set.seed(123) # Set seed value
 output_gorica <- goric(lm_fit_Lucas, 
                        hypotheses = list(H0 = H0, H1 = H1, H2 = H2), 
                        type = "gorica")
-summary(output_gorica)
-#output_gorica
+output_gorica
+#summary(output_gorica)
+output_gorica$ratio.gw
 #
 # If you did the same analysis with the GORIC, you will see that the (relative) 
 # weights are (about) the same for the GORIC and GORICA.
@@ -150,8 +151,8 @@ summary(output_gorica)
 # has 16.5 times more support than $H_u$ (the unconstrained hypothesis). 
 # Hence, $H_1$ is not a weak hypotheses and can be compared to the other (weak 
 # and non-weak) competing hypotheses: 
-# $H_1$ is much more (1.13e+06 times more) supported than $H_0$ and 37.2 times 
-# more likely than $H_2$.
+# $H_1$ is much more supported than $H_0$ 
+# and 37.2 times more likely than $H_2$.
 
 
 ## In case of one informative hypothesis (H1) ##
@@ -165,9 +166,9 @@ set.seed(123) # Set seed value
 output_gorica_c <- goric(lm_fit_Lucas, 
                          hypotheses = list(H1), comparison = "complement", 
                          type = "gorica")
-#summary(output_gorica_c)
 output_gorica_c
-# The order-restricted hypothesis $H_1$ has 13 times more support than its 
+#summary(output_gorica_c)
+# The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
 
 
@@ -182,11 +183,12 @@ H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2'
 set.seed(123) # Set seed value
 est <- coef(lm_fit_Lucas)
 VCOV <- vcov(lm_fit_Lucas)
-output_gorica_c <- goric(est, VCOV = VCOV, 
-                         hypotheses = list(H1), comparison = "complement", 
-                         type = "gorica")
-summary(output_gorica_c)
-# The order-restricted hypothesis $H_1$ has 13 times more support than its 
+output_gorica_c_est <- goric(est, VCOV = VCOV, 
+                             hypotheses = list(H1), comparison = "complement", 
+                             type = "gorica")
+output_gorica_c_est
+#summary(output_gorica_c_est)
+# The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
 
 
@@ -216,6 +218,7 @@ benchmarks_1c$error.prob.pref.hypo
 benchmarks_1c$benchmarks.weight
 benchmarks_1c$benchmarks.ratios
 
+
 # Note: When using the estimates and their covariance matrix
 # in which case you also need to state the group sample size.
 H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
@@ -238,21 +241,3 @@ benchmarks_1c$benchmarks.ratios
 
 
 ################################################################################
-
-# 
-# restriktor (0.4-60): generalized order-restricted information criterion approximation:
-#   
-#   Level probabilities:
-#   Number of requested bootstrap draws 99999 
-#   Number of successful bootstrap draws for H1: 99999
-# 
-# Results:
-#         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-# 1          H1   1.647    2.195   1.096           0.499            0.931           0.931
-# 2  complement   1.650    4.795   6.291           0.501            0.069           0.069
-# --- 
-# The order-restricted hypothesis ‘H1’ has 13.432 times more support than its complement.
-# 
-# Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
-# are calculated using mix.weights = "boot" (the default is mix.weights = "pmvnorm").
-# For more information see ?restriktor.

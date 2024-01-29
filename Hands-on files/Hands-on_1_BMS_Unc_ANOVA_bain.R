@@ -110,19 +110,11 @@ output <- bain(lm_fit_Lucas, Hypotheses)
 output
 #summary(output)
 
+#Alternative using estimates (x) and covariance matrix (Sigma)
+#(then also sample size (n) is needed):
+#set.seed(123) # Set seed value
+#bain(x = coef(lm_fit_Lucas), Sigma = vcov(lm_fit_Lucas), 
+#     n = nobs(lm_fit_Lucas), hypothesis = Hypotheses)
+
+
 ################################################################################
-
-Bayesian informative hypothesis testing for an object of class lm (ANOVA):
-  
-  Fit   Com   BF.u  BF.c  PMPa  PMPb 
-H1 0.000 0.001 0.000 0.000 0.001 0.000
-H2 0.006 0.008 0.709 0.709 0.999 0.415
-Hu                               0.585
-
-Hypotheses:
-  H1: group1=group2=group3=group4=group5
-  H2: group3>group1>group4=group5>group2
-
-Note: 
-  BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. 
-BF.c denotes the Bayes factor of the hypothesis at hand versus its complement.

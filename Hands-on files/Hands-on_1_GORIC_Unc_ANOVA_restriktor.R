@@ -133,13 +133,14 @@ set.seed(123) # Set seed value
 output <- goric(lm_fit_Lucas, hypotheses = list(H0 = H0, H1 = H1, H2 = H2))
 output
 #summary(output)
+output$ratio.gw
 #
 # It can be seen that the order-restricted hypothesis $H_1$ has 16.5 (1.65e+01) 
 # times more support than $H_u$ (the unconstrained hypothesis). 
 # Hence, $H_1$ is not a weak hypotheses and can be compared to the other (weak 
 # and non-weak) competing hypotheses: 
-# $H_1$ is much more (4.52e+05 times more) supported than $H_0$ and 38.5 times 
-# more likely than $H_2$.
+# $H_1$ is much more (452001.79 times more) supported than $H_0$ 
+# and 38.5 (3.848283e+01) times more likely than $H_2$.
 
 
 
@@ -171,6 +172,7 @@ output_b <- goric(lm_fit_Lucas, hypotheses = list(H0, H1, H2),
                   mix.bootstrap = 99999)
 output_b
 #summary(output_b)
+#output_b$ratio.gw
 # This, of course, renders the same results as above (if there is a difference, 
 # it is in the second decimal of the penalty).
 

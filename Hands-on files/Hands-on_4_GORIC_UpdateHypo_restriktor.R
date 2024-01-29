@@ -184,7 +184,8 @@ H2 <- 'gr2 > gr1 > gr3'
 #
 set.seed(123) # Set seed value
 output_repl <- goric(lm_fit_Holubar, hypotheses = list(H1, H2))
-summary(output_repl)
+output_repl
+#summary(output_repl)
 #
 # Since the support for $H_1$ and $H_2$ is lower than for $H_u$, 
 # both are weak hypotheses. 
@@ -210,13 +211,3 @@ goric(lm_fit_Holubar, hypotheses = list(H1), comparison = "complement")
 
 
 ###################################################################################
-
-
-# restriktor (0.4-60): generalized order-restricted information criterion: 
-#   
-# Results:
-#         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-# 1          H1  -144.981    2.500  294.962           0.125            0.731          0.280
-# 2  complement  -143.038    3.500  293.076           0.875            0.269          0.720
-# --- 
-# The order-restricted hypothesis ‘H1’ has 0.390 times more support than its complement.

@@ -127,29 +127,14 @@ H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-output_c <- goric(lm_fit_Lucas, hypotheses = list(Htheory1 = H1), comparison = "complement")
-summary(output_c)
+output_c <- goric(lm_fit_Lucas, 
+                  hypotheses = list(H_theory1 = H1), comparison = "complement")
+output_c
+#summary(output_c)
 #
-# The order-restricted hypothesis H1 has  13.4 times more support 
+# The order-restricted hypothesis ‘H_theory1’ has  13.4 times more support 
 #                                                           than its complement.             
 
 
 ################################################################################
 
-
-# restriktor (0.4-60): generalized order-restricted information criterion: 
-#   
-# Level probabilities:
-#   Number of requested bootstrap draws 99999 
-#   Number of successful bootstrap draws for H1: 99999
-# 
-# Results:
-#         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-# 1          H1  -278.051    3.195  562.493           0.499            0.931          0.931
-# 2  complement  -278.048    5.795  567.688           0.501            0.069          0.069
-# --- 
-# The order-restricted hypothesis ‘H1’ has 13.431 times more support than its complement.
-# 
-# Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
-# are calculated using mix.weights = "boot" (the default is mix.weights = "pmvnorm").
-# For more information see ?restriktor.

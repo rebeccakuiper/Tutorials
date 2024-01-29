@@ -80,7 +80,7 @@ evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies,
                           comparison = safeguard)
 
 evSyn_trust
-summary(evSyn_trust)
+#summary(evSyn_trust)
 plot(evSyn_trust)
 
 ###################################################################################

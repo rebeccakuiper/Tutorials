@@ -5,14 +5,14 @@
 #which then often contain orderings of (standardized) parameters. 
 #For example, one may hypothesize that a cross-lagged relationship is 
 #higher than another one; often referred to as ‘causal dominance’. 
-#Such a causal dominance hypothesis can be evaluated with the GORICA (Sukpan and Kuiper, accepted 2023).  
+#Such a causal dominance hypothesis can be evaluated with the GORICA (Sukpan and Kuiper, 2023).  
 #Below you find some code to evaluate a causal dominance hypothesis using the GORICA. 
 #
 #Additionally, html tutorials and R scripts for evaluating informative hypotheses 
 #using the GORIC(A) in R can be found on https://github.com/rebeccakuiper/Tutorials.
 #
 #Altinisik, Y., van Lissa, C., Hoijtink, H., Oldehinkel, A. J., & Kuiper, R. (2021). Evaluation of inequality constrained hypotheses using a generalization of the AIC. Psychological Methods, 26(5), 599-621. https://doi.org/10.1037/met0000406
-#Sukpan, C., & Kuiper, R. M. (accepted 2023). How to evaluate causal dominance hypotheses in lagged effects models. Structural Equation Modeling.
+#Sukpan, C., & Kuiper, R. M. (2023). How to evaluate causal dominance hypotheses in lagged effects models. Structural Equation Modeling: A Multidisciplinary Journal 0 (0): 1–16. https://doi.org/10.1080/10705511.2023.2265065.
 
 
 # How to evaluate causal dominance in lagged effects models
@@ -118,6 +118,7 @@ vcov <- vcov_StdEst[index_vcov, index_vcov] # Covariance matrix of standardize p
 #       such that they correspond to the correct estimates.
 
 # Compute GORICA values and weights
+set.seed(123)
 GORICA.Result.ws <- goric(est, VCOV = vcov, 
                           hypotheses = list(H1ws = H1ws), 
                           comparison = "complement", 
