@@ -48,12 +48,14 @@ Overview of the material per statistical model:
 - ANOVA
 	- 'Tutorial_GORIC_restriktor_ANOVA' (pdf or html)
 	- 'PalmerAndGough_and_Lucas.R'
+	- 'Intro_to_GORIC_in_R' (pdf or html)
 	- 'Hands-on_1_GORIC_Unc_ANOVA_restriktor.R' (in Hands-on files folder)
 	- 'Hands-on_2_GORIC_Compl_ANOVA_restriktor.R' (in Hands-on files folder)
 	- 'Hands-on_3_GORICA_UncAndCompl_ANOVA_restriktor.R' (in Hands-on files folder)
 
 - Linear regression
 	- 'Tutorial_GORIC_restriktor_LinRegr' (pdf or html)
+	- 'Intro_to_GORIC_in_R' (pdf or html)
 	- Also: 'Tutorial_GORIC_restriktor_General' (pdf or html)
 
 - SEM:
