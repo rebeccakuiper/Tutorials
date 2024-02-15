@@ -11,7 +11,6 @@
 
 <meta name="author" content="Axel Mayer, Leonard Vanbrabant, and Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-11-14" />
 
 <title>Apply GORICA to EffectLiteR estimates</title>
 
@@ -1482,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Apply GORICA to EffectLiteR estimates</h1>
 <h4 class="author">Axel Mayer, Leonard Vanbrabant, and Rebecca M.
 Kuiper</h4>
-<h4 class="date">14 November 2023</h4>
+<h4 class="date">09 februari 2024</h4>
 
 </div>
 
@@ -1530,14 +1529,13 @@ if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
 
 ## Then, load the packages:
 library(EffectLiteR)
-library(restriktor) # for the goric function
-library(psych) # for the function describeBy
+library(restriktor)  # for the goric function
+library(psych)  # for the function describeBy
 
-# If you want to use restriktor from github:
-#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-#library(devtools) 
-#install_github(&quot;LeonardV/restriktor&quot;)
-#library(restriktor) # for goric function</code></pre>
+# If you want to use restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;) library(restriktor) # for goric
+# function</code></pre>
 <p>Second, it is necessary to load the data.</p>
 <p>For this Tutorial, you can use the data available from the
 <em>EffectLiteR</em> package. Several datasets are available by loading
@@ -1558,7 +1556,7 @@ Means</h1>
 <div id="inspect-the-data" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Inspect the data</h2>
 <p>To inspect the dataset, use the <code>head()</code> function:</p>
-<pre class="r"><code>head(data_AdjMeans) # Look at first (6) rows of the data</code></pre>
+<pre class="r"><code>head(data_AdjMeans)  # Look at first (6) rows of the data</code></pre>
 <pre><code>          x     k1 kateg2          z1         z2          z3         dv
 9    treat2   male      2  0.57664715 -0.4946821  1.51831377  1.5595743
 6    treat2 female      1 -0.05489584 -0.9371025  1.54194766 -0.4078295
@@ -1585,7 +1583,8 @@ GORIC(A)</h2>
 EffectLiteR</h3>
 <p>To use the estimates for the adjusted means with GORICA, an object
 with the main function <code>effectLite</code> needs to be created:</p>
-<pre class="r"><code>model_AdjMeans &lt;- effectLite(y=&quot;dv&quot;, x=&quot;x&quot;, z=c(&quot;z1&quot;,&quot;z2&quot;), data=data_AdjMeans, method=&quot;sem&quot;)</code></pre>
+<pre class="r"><code>model_AdjMeans &lt;- effectLite(y = &quot;dv&quot;, x = &quot;x&quot;, z = c(&quot;z1&quot;, &quot;z2&quot;), data = data_AdjMeans,
+    method = &quot;sem&quot;)</code></pre>
 <p>For input in <code>effectLite</code>:</p>
 <p>y: Dependent variable (character string). Can be the name of a
 manifest variable or of a latent variable.</p>
@@ -1608,9 +1607,9 @@ their covariance matrix. Thus, these must be extracted from the
 <code>model_AdjMeans</code> object.</p>
 <p>For this example, we are interested in the adjusted means for the dv
 and the examined covariates and the covariance between them:</p>
-<pre class="r"><code>parnames &lt;- c(&quot;adjmean0&quot;,&quot;adjmean1&quot;,&quot;adjmean2&quot;) # to have a better overview
+<pre class="r"><code>parnames &lt;- c(&quot;adjmean0&quot;, &quot;adjmean1&quot;, &quot;adjmean2&quot;)  # to have a better overview
 est_AdjMeans &lt;- model_AdjMeans@results@est[parnames]
-VCOV_AdjMeans &lt;- model_AdjMeans@results@vcov.def[parnames,parnames]
+VCOV_AdjMeans &lt;- model_AdjMeans@results@vcov.def[parnames, parnames]
 
 est_AdjMeans</code></pre>
 <pre><code>   adjmean0    adjmean1    adjmean2 
@@ -1629,7 +1628,7 @@ hypotheses</h2>
 <h3><span class="header-section-number">2.3.1</span> Hypotheses</h3>
 <p>In the example, the following could be hypothesized regarding the
 adjusted means (before seeing the data):</p>
-<pre class="r"><code>H1 &lt;- &quot;adjmean1 &lt; adjmean0 &lt; adjmean2&quot; </code></pre>
+<pre class="r"><code>H1 &lt;- &quot;adjmean1 &lt; adjmean0 &lt; adjmean2&quot;</code></pre>
 <p>This hypothesis will be inspected versus its complement, meaning all
 other possible orderings / hypotheses (thus, excluding the one of
 interest).</p>
@@ -1688,20 +1687,20 @@ compared to the complement (as well).</p>
 <h3><span class="header-section-number">2.4.1</span> GORICA</h3>
 <p>To apply the GORICA to the EffectLiteR adjusted means estimates,
 use:</p>
-<pre class="r"><code>set.seed(123) # More information below
-gorica_AdjMeans &lt;- goric(est_AdjMeans, VCOV=VCOV_AdjMeans, hypotheses=list(H1=H1), comparison = &#39;complement&#39;)
+<pre class="r"><code>set.seed(123)  # More information below
+gorica_AdjMeans &lt;- goric(est_AdjMeans, VCOV = VCOV_AdjMeans, hypotheses = list(H1 = H1),
+    comparison = &quot;complement&quot;)
 gorica_AdjMeans</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1          H1   7.005    1.846  -10.318           0.505            0.692           0.696
 2  complement   6.985    2.654   -8.663           0.495            0.308           0.304
---- 
+---
 The order-restricted hypothesis &#39;H1&#39; has 2.288 times more support than its complement.</code></pre>
-<pre><code></code></pre>
 <pre class="r"><code>summary(gorica_AdjMeans)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1712,28 +1711,27 @@ The order-restricted hypothesis &#39;H1&#39; has 2.288 times more support than i
 
 
 Ratio GORICA-weights:
-               vs. H1     vs. complement
-H1             1.000      2.288         
-complement     0.437      1.000         
+            vs. H1  vs. complement
+H1           1.000           2.288
+complement   0.437           1.000
 ---
 
 Ratio loglik-weights:
             vs. H1  vs. complement
-H1          1.00    1.02          
-complement  0.98    1.00          
+H1            1.00            1.02
+complement    0.98            1.00
 ---
 
 Ratio penalty-weights:
             vs. H1  vs. complement
-H1          1.000   2.243         
-complement  0.446   1.000         
+H1           1.000           2.243
+complement   0.446           1.000
 ---
 
 order-restricted hypotheses:
 
 H1:
 adjmean1 &lt; adjmean0 &lt; adjmean2 </code></pre>
-<pre><code></code></pre>
 <p>From the output, one can conclude that the order-restricted
 hypothesis <span class="math inline">\(H_1\)</span> has 2.3 times more
 support than its complement. However, also note that the fit (i.e.,
@@ -1778,7 +1776,7 @@ performed. For more details, see the description above.</p>
 <div id="inspect-the-data-1" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Inspect the data</h2>
 <p>To inspect the dataset, use the <code>head()</code> function:</p>
-<pre class="r"><code>head(data_AvEffects) # Look at first (6) rows of the data</code></pre>
+<pre class="r"><code>head(data_AvEffects)  # Look at first (6) rows of the data</code></pre>
 <pre><code>          y z x
 1 130.98478 2 2
 2 139.44400 2 2
@@ -1808,7 +1806,7 @@ GORIC(A)</h2>
 EffectLiteR</h3>
 <p>To use the estimates for the average effects with GORICA, an object
 with the main function <code>effectLite</code> needs to be created:</p>
-<pre class="r"><code>model_AvEffects &lt;- effectLite(y=&quot;y&quot;, x=&quot;x&quot;, k=&quot;z&quot;, data=data_AvEffects, method=&quot;sem&quot;)</code></pre>
+<pre class="r"><code>model_AvEffects &lt;- effectLite(y = &quot;y&quot;, x = &quot;x&quot;, k = &quot;z&quot;, data = data_AvEffects, method = &quot;sem&quot;)</code></pre>
 <p>Note that now the argument <code>z</code> is no longer used, but the
 argument <code>k</code> is:</p>
 <p>k: Vector of manifest variables treated as categorical covariates
@@ -1819,9 +1817,9 @@ argument <code>k</code> is:</p>
 from the EffectLiteR object</h3>
 <p>For this example, we are interested in the average effect between the
 two categorical variables:</p>
-<pre class="r"><code>parnames &lt;- c(&quot;Eg1&quot;,&quot;Eg2&quot;)
+<pre class="r"><code>parnames &lt;- c(&quot;Eg1&quot;, &quot;Eg2&quot;)
 est_AvEffects &lt;- model_AvEffects@results@est[parnames]
-VCOV_AvEffects &lt;- model_AvEffects@results@vcov.def[parnames,parnames]
+VCOV_AvEffects &lt;- model_AvEffects@results@vcov.def[parnames, parnames]
 
 est_AvEffects</code></pre>
 <pre><code>      Eg1       Eg2 
@@ -1838,7 +1836,8 @@ hypotheses</h2>
 <p>In the example, the following could be hypothesized regarding the
 average effects (before seeing the data):</p>
 <pre class="r"><code>H1 &lt;- &quot;Eg1 &lt; Eg2&quot;
-# Here, we say that the first average effect is smaller than the second average effect</code></pre>
+# Here, we say that the first average effect is smaller than the second average
+# effect</code></pre>
 <p>This hypothesis will be inspected versus its complement, meaning all
 other possible orderings / hypotheses (thus, excluding the one of
 interest).</p>
@@ -1847,20 +1846,20 @@ interest).</p>
 <h2><span class="header-section-number">3.4</span> Apply GORICA</h2>
 <p>To apply the GORICA to the EffectLiteR average effect estimates,
 use:</p>
-<pre class="r"><code>set.seed(123) 
-gorica_AvEffects &lt;- goric(est_AvEffects, VCOV=VCOV_AvEffects, hypotheses=list(H1=H1), comparison = &#39;complement&#39;)
+<pre class="r"><code>set.seed(123)
+gorica_AvEffects &lt;- goric(est_AvEffects, VCOV = VCOV_AvEffects, hypotheses = list(H1 = H1),
+    comparison = &quot;complement&quot;)
 gorica_AvEffects</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
 1          H1  -3.779    1.500  10.558           0.853            0.500           0.853
 2  complement  -5.536    1.500  14.072           0.147            0.500           0.147
---- 
+---
 The order-restricted hypothesis &#39;H1&#39; has 5.797 times more support than its complement.</code></pre>
-<pre><code></code></pre>
 <pre class="r"><code>summary(gorica_AvEffects)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1871,28 +1870,27 @@ The order-restricted hypothesis &#39;H1&#39; has 5.797 times more support than i
 
 
 Ratio GORICA-weights:
-               vs. H1     vs. complement
-H1             1.000      5.797         
-complement     0.173      1.000         
+            vs. H1  vs. complement
+H1           1.000           5.797
+complement   0.173           1.000
 ---
 
 Ratio loglik-weights:
             vs. H1  vs. complement
-H1          1.000   5.797         
-complement  0.173   1.000         
+H1           1.000           5.797
+complement   0.173           1.000
 ---
 
 Ratio penalty-weights:
             vs. H1  vs. complement
-H1          1       1             
-complement  1       1             
+H1               1               1
+complement       1               1
 ---
 
 order-restricted hypotheses:
 
 H1:
 Eg1 &lt; Eg2 </code></pre>
-<pre><code></code></pre>
 <p>From the output, one can conclude that the order-restricted
 hypothesis <span class="math inline">\(H_1\)</span> has 5.8 times more
 support than its complement. Notably, since the fit parts clearly

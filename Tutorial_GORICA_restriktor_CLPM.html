@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-11-09" />
 
 <title>How to evaluate theory-based hypotheses in a (RI-)CLPM using the GORICA</title>
 
@@ -1482,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a (RI-)CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">09 November 2023</h4>
+<h4 class="date">09 februari 2024</h4>
 
 </div>
 
@@ -1529,24 +1528,22 @@ description of the function with the <code>?</code> operator or the
 <code>help()</code> command.</p>
 <p>The code presented here also requires the <code>tidyverse</code>
 package for data manipulation.</p>
-<pre class="r"><code># To install restriktor in R:
-#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
+# install.packages(&#39;restriktor&#39;)
 
-# To install restriktor from github:
-# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-# library(devtools) 
-# install_github(&quot;LeonardV/restriktor&quot;)
+# To install restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;)
 library(restriktor)
 
-# print docs in the help-tab to view arguments and explanations for the function
-#?goric
+# print docs in the help-tab to view arguments and explanations for the
+# function ?goric
 
-# To install lavaan in R:
-# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
+# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
 library(lavaan)
 
-# To install tidyverse in R:
-# if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
+# To install tidyverse in R: if (!require(&#39;tidyverse&#39;))
+# install.packages(&#39;tidyverse&#39;)
 library(tidyverse)</code></pre>
 </div>
 <div id="data" class="section level3" number="1.1.2">
@@ -1556,25 +1553,11 @@ for analysis. The id column is renamed to <span class="math inline">\(ID\)</span
 missing numbers -999.00 is replaced with <code>NAs</code>.</p>
 <pre class="r"><code>data &lt;- read.table(&quot;data/CLPM.dat&quot;, header = T)
 colnames(data)[1] &lt;- &quot;ID&quot;
-data &lt;- replace(data , data == -999.00, NA)
+data &lt;- replace(data, data == -999, NA)
 
-data_subset &lt;- select(data, 
-                  THT1_SS,
-                  TBT1_SS,
-                  ACOMT1_SS,
-                  SATT1_SS,
-                  AB_T1_SS,
-                  DE_T1_SS,
-                  VI_T1_SS,
-                  SLT1_SS,
-                  TH_T2_SS,
-                  TB_T2_SS,
-                  ACOMT2SS,
-                  SAT_T2SS,
-                  ABT2_SS,
-                  DET2_SS,
-                  VIT2_SS,
-                  SLT2SS)</code></pre>
+data_subset &lt;- select(data, THT1_SS, TBT1_SS, ACOMT1_SS, SATT1_SS, AB_T1_SS, DE_T1_SS,
+    VI_T1_SS, SLT1_SS, TH_T2_SS, TB_T2_SS, ACOMT2SS, SAT_T2SS, ABT2_SS, DET2_SS,
+    VIT2_SS, SLT2SS)</code></pre>
 </div>
 <div id="measuremnet-invariance" class="section level3" number="1.1.3">
 <h3><span class="header-section-number">1.1.3</span> Measuremnet
@@ -1583,7 +1566,7 @@ invariance</h3>
 is split into two sub-dimensions (cf. Snijders et al., 2021). Model 1 is
 fit to investigate configural invariance. The model is specified and fit
 in the following two steps.</p>
-<pre class="r"><code>CLPM_M1 &lt;- &#39;
+<pre class="r"><code>CLPM_M1 &lt;- &quot;
   
   #####################
   # MEASUREMENT MODEL #
@@ -1621,8 +1604,8 @@ in the following two steps.</p>
   RQ22 ~~ SE2 + SLT2SS
   SE2 ~~ SLT2SS
 
-&#39;</code></pre>
-<pre class="r"><code>CLPM_M1.fit &lt;- sem(CLPM_M1, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+&quot;</code></pre>
+<pre class="r"><code>CLPM_M1.fit &lt;- sem(CLPM_M1, data = data_subset, missing = &quot;ML&quot;)</code></pre>
 <p>When fitting the model R returns the following warning message:</p>
 <p><code>Warning message:</code>
 <code>In lav_object_post_check(object) :</code>
@@ -1650,14 +1633,14 @@ SE2  0.407 0.523 0.496 0.648 0.881 1.000</code></pre>
 are very high, which is to be expected considered that these two
 sub-dimensions belong to one dimension. Given that the warning does not
 point to a model misspecification, we continue the analysis.</p>
-<pre class="r"><code>fitMeasures(CLPM_M1.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M1.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
 <pre><code>  chisq      df 
 715.867  78.000 </code></pre>
 <p>The output reports the following: <code>chisq      df</code>
 <code>715.867    78.000</code></p>
 <p>Based on these results we continue to Model 2, which investigates
 weak factorial invariance.</p>
-<pre class="r"><code>CLPM_M2 &lt;- &#39;
+<pre class="r"><code>CLPM_M2 &lt;- &quot;
   
   #####################
   # MEASUREMENT MODEL #
@@ -1693,8 +1676,8 @@ weak factorial invariance.</p>
   RQ22 ~~ SE2 + SLT2SS
   SE2 ~~ SLT2SS
   
-&#39;</code></pre>
-<pre class="r"><code>CLPM_M2.fit &lt;- sem(CLPM_M2, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+&quot;</code></pre>
+<pre class="r"><code>CLPM_M2.fit &lt;- sem(CLPM_M2, data = data_subset, missing = &quot;ML&quot;)</code></pre>
 <p>R returns the same warning as before; so, we check the correlations
 again.</p>
 <pre class="r"><code>lavInspect(CLPM_M2.fit, &quot;cov.lv&quot;)</code></pre>
@@ -1714,7 +1697,7 @@ RQ22 0.566 0.968 0.739 1.000
 SE1  0.502 0.425 0.687 0.571 1.000      
 SE2  0.413 0.529 0.503 0.654 0.882 1.000</code></pre>
 <p>Again, there is no sign the model needs revision, so we continue.</p>
-<pre class="r"><code>fitMeasures(CLPM_M2.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M2.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
 <pre><code>  chisq      df 
 721.021  82.000 </code></pre>
 <p>We obtain these results: <code>chisq      df</code>
@@ -1791,7 +1774,7 @@ other words, we can assume weak factorial invariance holds.</p>
   SE2 ~~ SLT2SS
 
 &#39;</code></pre>
-<pre class="r"><code>CLPM_M3.fit &lt;- sem(CLPM_M3, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+<pre class="r"><code>CLPM_M3.fit &lt;- sem(CLPM_M3, data = data_subset, missing = &quot;ML&quot;)</code></pre>
 <p>Given the warning, we investigate correlations again.</p>
 <pre class="r"><code>lavInspect(CLPM_M3.fit, &quot;cov.lv&quot;)</code></pre>
 <pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
@@ -1810,7 +1793,7 @@ RQ22 0.566 0.968 0.739 1.000
 SE1  0.502 0.426 0.687 0.571 1.000      
 SE2  0.413 0.529 0.503 0.654 0.882 1.000</code></pre>
 <p>Then, move on to the results of the model,</p>
-<pre class="r"><code>fitMeasures(CLPM_M3.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M3.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
 <pre><code>   chisq       df 
 725.4913  84.0000 </code></pre>
 <p>which in this case are: <code>chisq       df</code>
@@ -1887,7 +1870,7 @@ as above.</p>
 
 &#39;</code></pre>
 <p>Fit the model:</p>
-<pre class="r"><code>CLPM_M4.fit &lt;- sem(CLPM_M4, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+<pre class="r"><code>CLPM_M4.fit &lt;- sem(CLPM_M4, data = data_subset, missing = &quot;ML&quot;)</code></pre>
 <p>Inspect the correlations:</p>
 <pre class="r"><code>lavInspect(CLPM_M4.fit, &quot;cov.lv&quot;)</code></pre>
 <pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
@@ -1906,7 +1889,7 @@ RQ22 0.570 0.968 0.693 1.000
 SE1  0.502 0.426 0.662 0.568 1.000      
 SE2  0.407 0.530 0.506 0.654 0.883 1.000</code></pre>
 <p>Obtain the results:</p>
-<pre class="r"><code>fitMeasures(CLPM_M4.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M4.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
 <pre><code>   chisq       df 
 757.1568  90.0000 </code></pre>
 <p>We proceed with the Chi-squared difference test with the previous
@@ -1989,7 +1972,7 @@ latent variables.</p>
 
 &#39;</code></pre>
 <p>Next,we fit the model with the lagged relations:</p>
-<pre class="r"><code>clpmUnc &lt;- sem(clpmModel, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+<pre class="r"><code>clpmUnc &lt;- sem(clpmModel, data = data_subset, missing = &quot;ML&quot;)</code></pre>
 <p>Using the <code>summary()</code> function we obtain the results of
 the model fit and estimates. The standardized solution contains the
 p-values of standardized effects.</p>
@@ -1998,10 +1981,9 @@ p-values of standardized effects.</p>
                       68.000                        0.220                      725.491                       84.000                        0.000                    11555.091                      120.000                        0.000                        0.944                        0.920                        0.902                        0.860                        0.920                        0.910                        0.937                        0.656                        0.944                        0.944                        0.860                        0.902                   -35727.898                   -35365.152                    71591.795                    71959.534                     1649.000                    71743.509                        0.068                        0.064                        0.073                        0.900                        0.000                        0.050                        0.000                        0.080                        0.130                        0.119                        0.141                        0.000                        1.000                        0.852                        0.901 
                         srmr                 srmr_bentler          srmr_bentler_nomean                         crmr                  crmr_nomean                   srmr_mplus            srmr_mplus_nomean                        cn_05                        cn_01                          gfi                         agfi                         pgfi                          mfi                         ecvi 
                        0.053                        0.053                        0.056                        0.055                        0.059                        0.053                        0.055                      242.829                      267.063                        0.988                        0.977                        0.546                        0.823                        0.522 </code></pre>
-<pre class="r"><code>stdClpmUnc &lt;- standardizedsolution(clpmUnc, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE, 
-                                   pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, 
-                                   remove.eq = TRUE, remove.ineq = TRUE, remove.def = FALSE, 
-                                   partable = NULL, GLIST = NULL, est = NULL)
+<pre class="r"><code>stdClpmUnc &lt;- standardizedsolution(clpmUnc, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE,
+    pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, remove.eq = TRUE, remove.ineq = TRUE,
+    remove.def = FALSE, partable = NULL, GLIST = NULL, est = NULL)
 stdClpmUnc</code></pre>
 <pre><code>         lhs op       rhs    label est.std    se       z pvalue ci.lower ci.upper
 1       RQ11 =~   THT1_SS       L1   0.860 0.010  87.184  0.000    0.841    0.880
@@ -2099,16 +2081,14 @@ use the <code>goric()</code> function.</p>
 indices &lt;- 37:52
 
 # select estimates from the column &#39;Std.all&#39; in the results summary above
-est &lt;- stdClpmUnc[indices, &#39;est.std&#39;]
+est &lt;- stdClpmUnc[indices, &quot;est.std&quot;]
 
-names(est) &lt;- c(&quot;RQ12_RQ11&quot;, &quot;RQ12_RQ21&quot;, &quot;RQ12_SE1&quot;, &quot;RQ12_SL1&quot;, 
-                &quot;RQ22_RQ11&quot;, &quot;RQ22_RQ21&quot;, &quot;RQ22_SE1&quot;, &quot;RQ22_SL1&quot;, 
-                &quot;SE2_RQ11&quot;, &quot;SE2_RQ21&quot;, &quot;SE2_SE1&quot;, &quot;SE2_SL1&quot;,
-                &quot;SL2_RQ11&quot;, &quot;SL2_RQ21&quot;, &quot;SL2_SE1&quot;, &quot;SL2_SL1&quot;
-)
+names(est) &lt;- c(&quot;RQ12_RQ11&quot;, &quot;RQ12_RQ21&quot;, &quot;RQ12_SE1&quot;, &quot;RQ12_SL1&quot;, &quot;RQ22_RQ11&quot;, &quot;RQ22_RQ21&quot;,
+    &quot;RQ22_SE1&quot;, &quot;RQ22_SL1&quot;, &quot;SE2_RQ11&quot;, &quot;SE2_RQ21&quot;, &quot;SE2_SE1&quot;, &quot;SE2_SL1&quot;, &quot;SL2_RQ11&quot;,
+    &quot;SL2_RQ21&quot;, &quot;SL2_SE1&quot;, &quot;SL2_SL1&quot;)
 
 # the covariance matrix for these estimates
-vcov &lt;- lavInspect(clpmUnc, &quot;vcov.std.all&quot;)[indices-6, indices-6]</code></pre>
+vcov &lt;- lavInspect(clpmUnc, &quot;vcov.std.all&quot;)[indices - 6, indices - 6]</code></pre>
 <p>We specify the hypotheses to test. Note the use of the use of the
 <code>abs()</code> function, that is because we are interested in the
 size of the relations and we want to compare absolute effects. In cases
@@ -2124,7 +2104,6 @@ hypotheses are included in one set, as in <span class="math inline">\(H1\_Q2\)</
 H1_Q1 &lt;- &quot;
 abs(RQ22_RQ11) &gt; abs(RQ12_RQ21)
 &quot;
-#
 # Q2
 H1_Q2 &lt;- &quot;
 abs(SE2_RQ11) &gt; abs(RQ12_SE1);
@@ -2136,36 +2115,36 @@ abs(SL2_RQ21) &gt; abs(RQ22_SL1)
 <code>set.seed()</code> to ensure results are reproducible.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_Q1 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q1=H1_Q1), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+goricaResults_Q1 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q1 = H1_Q1), comparison = &quot;complement&quot;,
+    type = &quot;gorica&quot;)
 
 goricaResults_Q1</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1       H1_Q1  22.439   15.500  -13.878           0.632            0.500           0.632
 2  complement  21.898   15.500  -12.796           0.368            0.500           0.368
---- 
+---
 The order-restricted hypothesis &#39;H1_Q1&#39; has 1.718 times more support than its complement.</code></pre>
-<pre><code></code></pre>
-<pre class="r"><code>#summary(goricaResults_Q1)</code></pre>
+<pre class="r"><code># summary(goricaResults_Q1)</code></pre>
 <p>The output shows that the order-restricted hypothesis <span class="math inline">\(H1\_Q1\)</span> has 1.7 times more support than
 its complement.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_Q2 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q2=H1_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+goricaResults_Q2 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q2 = H1_Q2), comparison = &quot;complement&quot;,
+    type = &quot;gorica&quot;)
 
 goricaResults_Q2</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1       H1_Q2  22.439   14.856  -15.167           0.513            0.568           0.581
 2  complement  22.387   15.131  -14.512           0.487            0.432           0.419
---- 
+---
 The order-restricted hypothesis &#39;H1_Q2&#39; has 1.387 times more support than its complement.</code></pre>
-<pre><code></code></pre>
-<pre class="r"><code>#summary(goricaResults_Q2)</code></pre>
+<pre class="r"><code># summary(goricaResults_Q2)</code></pre>
 <p>Furthermore, the order-restricted hypothesis <span class="math inline">\(H1\_Q2\)</span> has 1.4 times more support than
 its complement.</p>
 <p>Note that the results hold for the chosen time interval. Hence, the
@@ -2185,24 +2164,22 @@ description of the function with the <code>?</code> operator or the
 <code>help()</code> command.</p>
 <p>The code presented here also requires the <code>tidyverse</code>
 package for data manipulation.</p>
-<pre class="r"><code># To install restriktor in R:
-#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
+# install.packages(&#39;restriktor&#39;)
 
-# To install restriktor from github:
-# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-# library(devtools) 
-# install_github(&quot;LeonardV/restriktor&quot;)
+# To install restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;)
 library(restriktor)
 
-# print docs in the help-tab to view arguments and explanations for the function
-#?goric
+# print docs in the help-tab to view arguments and explanations for the
+# function ?goric
 
-# To install lavaan in R:
-# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
+# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
 library(lavaan)
 
-# To install tidyverse in R:
-# if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
+# To install tidyverse in R: if (!require(&#39;tidyverse&#39;))
+# install.packages(&#39;tidyverse&#39;)
 library(tidyverse)</code></pre>
 </div>
 <div id="data-1" class="section level3" number="1.2.2">
@@ -2212,25 +2189,11 @@ for analysis. The id column is renamed to <span class="math inline">\(ID\)</span
 missing numbers -999.00 is replaced with <code>NAs</code>.</p>
 <pre class="r"><code>data &lt;- read.table(&quot;data/CLPM.dat&quot;, header = T)
 colnames(data)[1] &lt;- &quot;ID&quot;
-data &lt;- replace(data , data == -999.00, NA)
+data &lt;- replace(data, data == -999, NA)
 
-data_subset &lt;- select(data, 
-                  THT1_SS,
-                  TBT1_SS,
-                  ACOMT1_SS,
-                  SATT1_SS,
-                  AB_T1_SS,
-                  DE_T1_SS,
-                  VI_T1_SS,
-                  SLT1_SS,
-                  TH_T2_SS,
-                  TB_T2_SS,
-                  ACOMT2SS,
-                  SAT_T2SS,
-                  ABT2_SS,
-                  DET2_SS,
-                  VIT2_SS,
-                  SLT2SS)</code></pre>
+data_subset &lt;- select(data, THT1_SS, TBT1_SS, ACOMT1_SS, SATT1_SS, AB_T1_SS, DE_T1_SS,
+    VI_T1_SS, SLT1_SS, TH_T2_SS, TB_T2_SS, ACOMT2SS, SAT_T2SS, ABT2_SS, DET2_SS,
+    VIT2_SS, SLT2SS)</code></pre>
 </div>
 <div id="clpm-1" class="section level3" number="1.2.3">
 <h3><span class="header-section-number">1.2.3</span> CLPM</h3>
@@ -2275,7 +2238,7 @@ package. Here we specify all the relations of the model.</p>
    
 &#39;</code></pre>
 <p>We fit the model using the <code>sem()</code> function:</p>
-<pre class="r"><code>clpmUnc_2 &lt;- sem(clpmModel_2, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+<pre class="r"><code>clpmUnc_2 &lt;- sem(clpmModel_2, data = data_subset, missing = &quot;ML&quot;)</code></pre>
 <p>Using the <code>summary()</code> function we obtain the results of
 the model fit and estimates. The standardized solution contains the
 p-values of standardized effects.</p>
@@ -2284,10 +2247,9 @@ p-values of standardized effects.</p>
                      152.000                        0.000                        0.000                        0.000                           NA                    11555.091                      120.000                        0.000                        1.000                        1.000                        1.000                        1.000                        1.000                        1.000                        1.000                        0.000                        1.000                        1.000                        1.000                        1.000                   -35365.152                   -35365.152                    71034.304                    71856.308                     1649.000                    71373.428                        0.000                        0.000                        0.000                        0.900                           NA                        0.050                           NA                        0.080                        0.000                        0.000                        0.000                           NA                           NA                        0.000                        0.000 
                         srmr                 srmr_bentler          srmr_bentler_nomean                         crmr                  crmr_nomean                   srmr_mplus            srmr_mplus_nomean                        cn_05                        cn_01                          gfi                         agfi                         pgfi                          mfi                         ecvi 
                        0.000                        0.000                        0.000                        0.000                        0.000                        0.000                        0.000                           NA                           NA                        0.998                        1.000                        0.000                        1.000                        0.184 </code></pre>
-<pre class="r"><code>stdClpmUnc_2 &lt;- standardizedsolution(clpmUnc_2, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE, 
-                                   pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, 
-                                   remove.eq = TRUE, remove.ineq = TRUE, remove.def = FALSE, 
-                                   partable = NULL, GLIST = NULL, est = NULL)
+<pre class="r"><code>stdClpmUnc_2 &lt;- standardizedsolution(clpmUnc_2, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE,
+    pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, remove.eq = TRUE, remove.ineq = TRUE,
+    remove.def = FALSE, partable = NULL, GLIST = NULL, est = NULL)
 stdClpmUnc_2</code></pre>
 <pre><code>          lhs op       rhs est.std    se      z pvalue ci.lower ci.upper
 1    TH_T2_SS  ~   THT1_SS   0.191 0.094  2.033  0.042    0.007    0.374
@@ -2499,56 +2461,49 @@ abs(AB2_SAT1) &gt; abs(SAT2_AB1); abs(DE2_SAT1) &gt; abs(SAT2_DE1); abs(VI2_SAT1
 <code>set.seed()</code> to ensure results are reproducible.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q1=H2_Q1), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q1 = H2_Q1),
+    comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
 
 goricaResults_H2_Q1</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
 1       H2_Q1  134.232   62.451  -143.562           0.483            0.735           0.722
 2  complement  134.301   63.473  -141.656           0.517            0.265           0.278
---- 
+---
 The order-restricted hypothesis &#39;H2_Q1&#39; has 2.594 times more support than its complement.</code></pre>
-<pre><code></code></pre>
-<pre class="r"><code>#summary(goricaResults_H2_Q1)</code></pre>
+<pre class="r"><code># summary(goricaResults_H2_Q1)</code></pre>
 <p>The output shows that the order-restricted hypothesis <span class="math inline">\(H2\_Q1\)</span> has 2.6 times more support than
 its complement.</p>
 <p>We can proceed in the same manner for <span class="math inline">\(H2\_Q1\)</span>; however, because the default
 method takes too long to calculate the penalty of the GORICA, we use the
 bootstrap method. When using the bootstrapping the results do not
-change, but the computation time may decrease. Additionally, using
-multiple cores can decrease the computation time even more.</p>
+change, but the computation time may decrease.</p>
 <pre class="r"><code>set.seed(123)
 
-#goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=H2_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
-#goricaResults_H2_Q2
-##summary(goricaResults_H2_Q2)
+# goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, hypotheses =
+# list(H2_Q2=H2_Q2), comparison = &#39;complement&#39;, type = &#39;gorica&#39;)
+# goricaResults_H2_Q2 summary(goricaResults_H2_Q2)
 
-# if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;)
-library(parallel)
+# if (!require(&#39;parallel&#39;)) install.packages(&#39;parallel&#39;) library(parallel)
 
-nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
+# nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
 
 # NB: there are many restrictions, so the code takes longer to run
-goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=H2_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;, 
-                            mix.weights = &quot;boot&quot;, parallel = &quot;snow&quot;, ncpus = nrCPUcores, mix.bootstrap = 99999)
+goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2 = H2_Q2),
+    comparison = &quot;complement&quot;, type = &quot;gorica&quot;, mix_weights = &quot;boot&quot;)
 
 goricaResults_H2_Q2_b</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
-
-Level probabilities:
-  Number of requested bootstrap draws 99999 
-  Number of successful bootstrap draws for H2_Q2: 99999
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
-1       H2_Q2  130.969   58.032  -145.874           0.034            0.997           0.933
-2  complement  134.301   63.996  -140.610           0.966            0.003           0.067
---- 
-The order-restricted hypothesis &#39;H2_Q2&#39; has 13.898 times more support than its complement.</code></pre>
-<pre><code></code></pre>
-<pre class="r"><code>#summary(goricaResults_H2_Q2_b)</code></pre>
+1       H2_Q2  130.969   58.028  -145.881           0.034            0.997           0.933
+2  complement  134.301   63.995  -140.612           0.966            0.003           0.067
+---
+The order-restricted hypothesis &#39;H2_Q2&#39; has 13.936 times more support than its complement.</code></pre>
+<pre class="r"><code># summary(goricaResults_H2_Q2_b)</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H2\_Q2\)</span> has 14 times more support than its
 complement.</p>
 <p>Note that the results hold for the chosen time interval. Hence, the
@@ -2565,10 +2520,9 @@ can plot the lagged-effects parameter estimates for different choices of
 time intervals. Based on this plot (and/or on other information), one
 can evaluate the hypotheses using the GORICA for different choices of
 time intervals.</p>
-<pre class="r"><code># Install and load packages
-#
-#library(devtools)
-#if (!require(&quot;CTmeta&quot;)) install_github(&quot;rebeccakuiper/CTmeta&quot;) ##install_github(&quot;rebeccakuiper/CTmeta&quot;, force = TRUE)
+<pre class="r"><code># Install and load packages library(devtools) if (!require(&#39;CTmeta&#39;))
+# install_github(&#39;rebeccakuiper/CTmeta&#39;)
+# ##install_github(&#39;rebeccakuiper/CTmeta&#39;, force = TRUE)
 library(CTmeta)</code></pre>
 <pre><code>Loading required package: expm</code></pre>
 <pre><code>Loading required package: Matrix</code></pre>
@@ -2592,10 +2546,10 @@ Attaching package: &#39;expm&#39;</code></pre>
 <pre><code>Loading required package: metadat</code></pre>
 <pre><code>Loading required package: numDeriv</code></pre>
 <pre><code>
-Loading the &#39;metafor&#39; package (version 4.2-0). For an
+Loading the &#39;metafor&#39; package (version 4.4-0). For an
 introduction to the package please type: help(metafor)</code></pre>
 <pre><code>Loading required package: nleqslv</code></pre>
-<pre class="r"><code>#?PhiPlot</code></pre>
+<pre class="r"><code># ?PhiPlot</code></pre>
 <!-- ```{r} -->
 <!-- # Create Phi matrix from this and make Phi plot -->
 <!-- Phi <- matrix(est_2, byrow=T, ncol = sqrt(length(est_2))) -->

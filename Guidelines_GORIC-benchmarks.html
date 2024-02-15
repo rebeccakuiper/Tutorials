@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-12-19" />
 
 <title>Guidelines GORIC(A) benchmarks</title>
 
@@ -1481,7 +1480,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Guidelines GORIC(A) benchmarks</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">19 December 2023</h4>
+<h4 class="date">09 februari 2024</h4>
 
 </div>
 
@@ -1672,7 +1671,7 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1799,7 +1798,7 @@ H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1955,7 +1954,7 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c_border &lt;- goric(fit_border, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c_border</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2068,7 +2067,7 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c_border_200 &lt;- goric(fit_border_200, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c_border_200</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
@@ -2227,7 +2226,7 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c_200 &lt;- goric(fit_200, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c_200</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights

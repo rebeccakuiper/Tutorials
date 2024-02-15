@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-01-31" />
 
 <title>Intro to GORIC in R</title>
 
@@ -1481,7 +1480,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Intro to GORIC in R</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">31 January 2024</h4>
+<h4 class="date">09 februari 2024</h4>
 
 </div>
 
@@ -2008,7 +2007,7 @@ out &lt;- goric(anova2,
              # Default: type = &quot;goric&quot;
 #summary(out) # renders all output
 out           # renders nice overview of important output</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
@@ -2039,7 +2038,7 @@ out_gorica &lt;- goric(anova2,
                     type = &quot;gorica&quot;) # Now, you obtain GORICA output
 #summary(out_gorica) # renders all output
 out_gorica           # renders nice overview of important output</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2285,7 +2284,7 @@ library(restriktor)</code></pre>
                 hypotheses = list(H1_lm = H1_lm), comparison = &quot;complement&quot;)
 #summary(out_lm) 
 out_lm</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2303,7 +2302,7 @@ out2_lm &lt;- goric(lm2_s,
                  hypotheses = list(H2_lm = H2_lm), comparison = &quot;complement&quot;)
 #summary(out2_lm) 
 out2_lm</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2531,7 +2530,7 @@ mu1 &lt; mu2 &lt; mu3 &lt; mu4.</p>
 set.seed(123) # to ensure every time same result 
               # (and to have the option to test the sensitivity of the results)
 goric(anova1, hypotheses = list(H1_2 = H1_2), comparison = &quot;complement&quot;)</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
@@ -2541,7 +2540,7 @@ Results:
 The order-restricted hypothesis &#39;H1_2&#39; has 7.952 times more support than its complement.</code></pre>
 <pre class="r"><code>#
 out # see Section 3.2</code></pre>
-<pre><code>restriktor (0.5-30): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights

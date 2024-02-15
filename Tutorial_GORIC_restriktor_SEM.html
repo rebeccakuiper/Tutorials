@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-11-09" />
 
 <title>How to evaluate theory-based hypotheses in a SEM model using the GORICA</title>
 
@@ -2696,7 +2695,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a SEM model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">09 November 2023</h4>
+<h4 class="date">09 februari 2024</h4>
 
 </div>
 
@@ -2731,43 +2730,41 @@ CFA and the <code>restriktor</code> library to load the goric()
 function. If needed, it is possible to view the description of the
 function with the <code>?</code> operator or the <code>help()</code>
 command.</p>
-<pre class="r"><code># To install restriktor in R:
-#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
+# install.packages(&#39;restriktor&#39;)
 
-# To install restriktor from github:
-# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-# library(devtools) 
-# install_github(&quot;LeonardV/restriktor&quot;)
+# To install restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;)
 library(restriktor)
 
-# print docs in the help-tab to view arguments and explanations for the function
-#?goric
+# print docs in the help-tab to view arguments and explanations for the
+# function ?goric
 
-# To install lavaan in R:
-# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
+# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
 library(lavaan)
 
-# Additionally, load the gorica library to obtain the data set &#39;sesamesim&#39;
-# if (!require(&quot;gorica&quot;)) install.packages(&quot;gorica&quot;)
+# Additionally, load the gorica library to obtain the data set &#39;sesamesim&#39; if
+# (!require(&#39;gorica&#39;)) install.packages(&#39;gorica&#39;)
 library(gorica)</code></pre>
 <p>The second step involves specifying the confirmatory factor model.
 Because the goric() function cannot use the default labeling, make sure
 to give your own labels to estimates by including them in the
 <code>lavaan</code> model.</p>
-<pre class="r"><code>model1 &lt;- &#39;
+<pre class="r"><code>model1 &lt;- &quot;
     A =~ A1*Ab + A2*Al + A3*Af + A4*An + A5*Ar + A6*Ac 
     B =~ B1*Bb + B2*Bl + B3*Bf + B4*Bn + B5*Br + B6*Bc 
-&#39;</code></pre>
+&quot;</code></pre>
 <p>Next, we can fit the confirmatory factor model using the
 <code>lavaan</code> sem() function.</p>
 <pre class="r"><code>fit1 &lt;- sem(model1, data = sesamesim, std.lv = TRUE)</code></pre>
 <p>We can also plot said model using <code>lavaanPlot.</code></p>
-<pre class="r"><code># if (!require(&quot;lavaanPlot&quot;)) install.packages(&quot;lavaanPlot&quot;)
+<pre class="r"><code># if (!require(&#39;lavaanPlot&#39;)) install.packages(&#39;lavaanPlot&#39;)
 library(lavaanPlot)
-lavaanPlot(model = fit1, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
-           edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-436d122d05cdc23f5b72" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-436d122d05cdc23f5b72">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+lavaanPlot(model = fit1, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;),
+    edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-0fe43a16868f523190e3" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-0fe43a16868f523190e3">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>To call the goric() function, we need to formulate the hypothesis of
 interest. The GORICA selects the best hypothesis out of a given set.
 Here, since we only have a single hypothesis, we will compare it to its
@@ -2791,12 +2788,11 @@ comparing the hypothesis of interest to its complement, we also specify
 <pre class="r"><code># Calculate GORICA values and weights for H1.1 and its complement ().
 set.seed(100)
 
-results1 &lt;- goric(fit1, 
-                  hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;, 
-                  type = &quot;gorica&quot;, standardized = TRUE) 
+results1 &lt;- goric(fit1, hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;,
+    type = &quot;gorica&quot;, standardized = TRUE)
 
 summary(results1)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2807,21 +2803,21 @@ The order-restricted hypothesis &#39;H1.1&#39; has 85.561 times more support tha
 
 
 Ratio GORICA-weights:
-               vs. H1.1     vs. complement
-H1.1           1.000        85.561        
-complement     0.012        1.000         
+            vs. H1.1  vs. complement
+H1.1           1.000          85.561
+complement     0.012           1.000
 ---
 
 Ratio loglik-weights:
             vs. H1.1  vs. complement
-H1.1        1.000     2.017         
-complement  0.496     1.000         
+H1.1           1.000           2.017
+complement     0.496           1.000
 ---
 
 Ratio penalty-weights:
             vs. H1.1  vs. complement
-H1.1        1.000     42.417        
-complement  0.024     1.000         
+H1.1           1.000          42.417
+complement     0.024           1.000
 ---
 
 order-restricted hypotheses:
@@ -2829,62 +2825,52 @@ order-restricted hypotheses:
 H1.1:
 A1 &gt; .6; A2 &gt; .6; A3 &gt; .6; A4 &gt; .6; A5 &gt; .6; A6 &gt; .6; 
 B1 &gt; .6; B2 &gt; .6; B3 &gt; .6; B4 &gt; .6; B5 &gt; .6; B6 &gt; .6 </code></pre>
-<pre><code></code></pre>
 <p>From the comparison of hypotheses, it seems that the hypothesis H1.1
 is better supported by the data than its complement.</p>
 <p>The default way of calculating the penalty scores in goric() is
 slower when the number of parameters is large. Here, there are 12
-parameters; so, we may want to use: <code>mix.weights = &quot;boot&quot;</code>.
+parameters; so, we may want to use: <code>mix_weights = &quot;boot&quot;</code>.
 This means that the function will use bootstrapping in the calculation
 of the so-called level probabilities (LPs) needed in the penalties.</p>
 <p>The results of course do not change, but the computation time may
 decrease.</p>
-<p>Using multiple cores can decrease the computation time even more.</p>
-<pre class="r"><code># if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;)
-library(parallel)
-nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
-# Increasing the number of cores does not always help, so for now:
-nrCPUcores &lt;- 1</code></pre>
+<!-- Using multiple cores can decrease the computation time even more. -->
+<pre class="r"><code># if (!require(&#39;parallel&#39;)) install.packages(&#39;parallel&#39;) library(parallel)
+# nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE) Increasing the
+# number of cores does not always help, so for now: nrCPUcores &lt;- 1</code></pre>
 <p>We repeat the same analysis with bootstrapping:</p>
 <pre class="r"><code>set.seed(100)
 
-results1_b &lt;- goric(fit1, 
-                    hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;,
-                      type = &quot;gorica&quot;, standardized = TRUE, 
-                    mix.weights = &quot;boot&quot;, parallel = &quot;snow&quot;, 
-                    ncpus = nrCPUcores, mix.bootstrap = 99999)
+results1_b &lt;- goric(fit1, hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;,
+    type = &quot;gorica&quot;, standardized = TRUE, mix_weights = &quot;boot&quot;)
 
 summary(results1_b)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
-
-Level probabilities:
-  Number of requested bootstrap draws 99999 
-  Number of successful bootstrap draws for H1.1: 99999
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1        H1.1  33.581    8.148  -50.866           0.669            0.977           0.988
-2  complement  32.879   11.883  -41.993           0.331            0.023           0.012
+1        H1.1  33.581    8.152  -50.857           0.669            0.977           0.988
+2  complement  32.879   11.884  -41.990           0.331            0.023           0.012
 ---
-The order-restricted hypothesis &#39;H1.1&#39; has 84.509 times more support than its complement.
+The order-restricted hypothesis &#39;H1.1&#39; has 84.260 times more support than its complement.
 
 
 Ratio GORICA-weights:
-               vs. H1.1     vs. complement
-H1.1           1.000        84.509        
-complement     0.012        1.000         
+            vs. H1.1  vs. complement
+H1.1           1.000          84.260
+complement     0.012           1.000
 ---
 
 Ratio loglik-weights:
             vs. H1.1  vs. complement
-H1.1        1.000     2.017         
-complement  0.496     1.000         
+H1.1           1.000           2.017
+complement     0.496           1.000
 ---
 
 Ratio penalty-weights:
             vs. H1.1  vs. complement
-H1.1        1.000     41.896        
-complement  0.024     1.000         
+H1.1           1.000          41.773
+complement     0.024           1.000
 ---
 
 order-restricted hypotheses:
@@ -2892,7 +2878,6 @@ order-restricted hypotheses:
 H1.1:
 A1 &gt; .6; A2 &gt; .6; A3 &gt; .6; A4 &gt; .6; A5 &gt; .6; A6 &gt; .6; 
 B1 &gt; .6; B2 &gt; .6; B3 &gt; .6; B4 &gt; .6; B5 &gt; .6; B6 &gt; .6 </code></pre>
-<pre><code></code></pre>
 <p>As you can see from the summary of the results, we arrive at the same
 GORICA weights as earlier.</p>
 </div>
@@ -2901,21 +2886,19 @@ GORICA weights as earlier.</p>
 Group Regression</h2>
 <p>As for Example 1, ensure that the required libraries are loaded in
 the R workspace.</p>
-<pre class="r"><code># To install restriktor in R:
-#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
+# install.packages(&#39;restriktor&#39;)
 
-# To install restriktor from github:
-# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-# library(devtools) 
-# install_github(&quot;LeonardV/restriktor&quot;)
+# To install restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;)
 library(restriktor)
 
-# To install lavaan in R:
-# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
+# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
 library(lavaan)
 
-# Additionally, load the gorica library to obtain the data set &#39;sesamesim&#39;
-# if (!require(&quot;gorica&quot;)) install.packages(&quot;gorica&quot;)
+# Additionally, load the gorica library to obtain the data set &#39;sesamesim&#39; if
+# (!require(&#39;gorica&#39;)) install.packages(&#39;gorica&#39;)
 library(gorica)</code></pre>
 <p>Before specifying the regression model ensure that the variable <span class="math inline">\(sex\)</span> in the <span class="math inline">\(sesamesim\)</span> data set is a factor with the
 right labels.</p>
@@ -2924,21 +2907,22 @@ right labels.</p>
 group regression model. Again, because the goric() function cannot use
 the default labeling, make sure to include your own labels in the
 model.</p>
-<pre class="r"><code>model2 &lt;- &#39;
+<pre class="r"><code>model2 &lt;- &quot;
     postnumb ~ c(Pre_b, Pre_g)*prenumb 
-&#39;</code></pre>
+&quot;</code></pre>
 <p>Fit the model using the <code>lavaan</code> sem() function and, if
 desired, use the lavaanPlot() function to obtain a graph of the
 model.</p>
 <pre class="r"><code>fit2 &lt;- sem(model2, data = sesamesim, std.lv = TRUE, group = &quot;sex&quot;)
 
-#if (!require(&quot;lavaanPlot&quot;)) install.packages(&quot;lavaanPlot&quot;) # install this package first (once)
+# if (!require(&#39;lavaanPlot&#39;)) install.packages(&#39;lavaanPlot&#39;) # install this
+# package first (once)
 library(lavaanPlot)
 
-lavaanPlot(model = fit2, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
-           edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d375259f38f3861c15ec" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-d375259f38f3861c15ec">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+lavaanPlot(model = fit2, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;),
+    edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-8dd551f18ec21e6cd512" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-8dd551f18ec21e6cd512">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Proceed to formulate the hypothesis of interest using the same labels
 as in the model definition:</p>
 <pre class="r"><code>H2.1 &lt;- &quot;Pre_b &lt; Pre_g&quot;</code></pre>
@@ -2951,10 +2935,10 @@ use <code>standardized = TRUE</code>.</p>
 <pre class="r"><code>set.seed(100)
 
 results2 &lt;- goric(fit2, hypotheses = list(H2.1 = H2.1), comparison = &quot;complement&quot;,
-                  type = &quot;gorica&quot;, standardized = TRUE) 
+    type = &quot;gorica&quot;, standardized = TRUE)
 
 summary(results2)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2965,28 +2949,27 @@ The order-restricted hypothesis &#39;H2.1&#39; has 0.992 times more support than
 
 
 Ratio GORICA-weights:
-               vs. H2.1     vs. complement
-H2.1           1.000        0.992         
-complement     1.008        1.000         
+            vs. H2.1  vs. complement
+H2.1           1.000           0.992
+complement     1.008           1.000
 ---
 
 Ratio loglik-weights:
             vs. H2.1  vs. complement
-H2.1        1.000     0.992         
-complement  1.008     1.000         
+H2.1           1.000           0.992
+complement     1.008           1.000
 ---
 
 Ratio penalty-weights:
             vs. H2.1  vs. complement
-H2.1        1         1             
-complement  1         1             
+H2.1               1               1
+complement         1               1
 ---
 
 order-restricted hypotheses:
 
 H2.1:
 Pre_b &lt; Pre_g </code></pre>
-<pre><code></code></pre>
 <p>The output table shows that the hypothesis of interest and its
 complement are equally likely, since both have a weight of approximately
 .50. In other words, both are equally supported.</p>
