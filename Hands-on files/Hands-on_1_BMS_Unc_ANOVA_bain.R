@@ -88,12 +88,12 @@ names(coef(lm_fit_Lucas))
 # - bain uses ";" to separate the hypotheses
 #
 H0 <- 'group1 = group2 = group3 = group4 = group5' 
-H1 <- 'group5 = (group3, group4) > group1 > group2'
-# Note: H1 is not full row-rank, and cannot be evaulated (see below)
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# Note: H1 is not full row-rank, and cannot be evaluated
 H2 <- 'group3 > group1 > group4 = group5 > group2'
 #
 # Combine them to one character string (using ;)
-# (notably, only H0 and H2 are used next, not H1):
+# (notably, only H0 and H2 are used next, since H1 cannot be evaluated by bain):
 Hypotheses <- 'group1 = group2 = group3 = group4 = group5;
 group3 > group1 > group4 = group5 > group2'
 

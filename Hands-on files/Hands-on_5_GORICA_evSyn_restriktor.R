@@ -62,7 +62,7 @@ H0 <- "beta1 == 0"
 Hpos <- "beta1 > 0"
 Hneg <- "beta1 < 0"
 #
-Hypo_studies <- list(H0, Hpos, Hneg)
+Hypo_studies <- list(H0 = H0, Hpos = Hpos, Hneg = Hneg)
 #
 # Then, we also need to set a safeguard-hypothesis, to prevent choosing a best hypothesis from a set of weak hypotheses. 
 # In this example, the whole space of theories is covered by the three hypotheses. 
@@ -79,6 +79,20 @@ evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies,
                           #type = "added", # Default
                           comparison = safeguard)
 
+evSyn_trust
+#summary(evSyn_trust)
+plot(evSyn_trust)
+
+
+# Alternatively, you could do:
+Hypo_studies <- list(Hpos = Hpos)
+safeguard <- "complement"
+#
+evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
+                     hypotheses = Hypo_studies,
+                     #type = "added", # Default
+                     comparison = safeguard)
+#
 evSyn_trust
 #summary(evSyn_trust)
 plot(evSyn_trust)

@@ -112,8 +112,10 @@ names(coef(lm_fit_Lucas))
 # - goric uses "=" or "==" to denote an equality restriction
 # - goric uses ";" to separate the restrictions within one hypothesis
 #
-H0 <- 'group1 = group2 = group3 = group4 = group5' 
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+#H0 <- 'group1 = group2 = group3 = group4 = group5' # only when of interest!
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 # Note: H1 is not full row-rank, 
 #       see below and the goric tutorial for more details.
 H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
@@ -138,7 +140,7 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 #
 set.seed(123) # Set seed value
 output_gorica <- goric(lm_fit_Lucas, 
-                       hypotheses = list(H0 = H0, H1 = H1, H2 = H2), 
+                       hypotheses = list(H1 = H1, H2 = H2), 
                        type = "gorica")
 output_gorica
 #summary(output_gorica)
@@ -148,11 +150,10 @@ output_gorica$ratio.gw
 # weights are (about) the same for the GORIC and GORICA.
 #
 # From this output, it can be seen that the order-restricted hypothesis $H_1$ 
-# has 16.5 times more support than $H_u$ (the unconstrained hypothesis). 
+# has 17 times more support than $H_u$ (the unconstrained hypothesis). 
 # Hence, $H_1$ is not a weak hypotheses and can be compared to the other (weak 
 # and non-weak) competing hypotheses: 
-# $H_1$ is much more supported than $H_0$ 
-# and 37.2 times more likely than $H_2$.
+# $H_1$ is 37 times more likely than $H_2$.
 
 
 ## In case of one informative hypothesis (H1) ##
@@ -160,7 +161,9 @@ output_gorica$ratio.gw
 # H1 vs its complement 
 #If you have only one informative hypothesis ($H_1$), then evaluate this against 
 # its complement (i.e., all other theories, thus excluding the one of interest).
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1 > group2; group3 > group4 > group2'
 # Note: H1 is not full row-rank, see the goric tutorial for more details.
 set.seed(123) # Set seed value
 output_gorica_c <- goric(lm_fit_Lucas, 
@@ -168,7 +171,7 @@ output_gorica_c <- goric(lm_fit_Lucas,
                          type = "gorica")
 output_gorica_c
 #summary(output_gorica_c)
-# The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
+# The order-restricted hypothesis $H_1$ has 14 times more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
 
 
@@ -178,7 +181,9 @@ output_gorica_c
 # H1 vs its complement 
 #If you have only one informative hypothesis ($H_1$), then evaluate this against 
 # its complement (i.e., all other theories, thus excluding the one of interest).
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 # Note: H1 is not full row-rank, see the goric tutorial for more details.
 set.seed(123) # Set seed value
 est <- coef(lm_fit_Lucas)
@@ -188,9 +193,11 @@ output_gorica_c_est <- goric(est, VCOV = VCOV,
                              type = "gorica")
 output_gorica_c_est
 #summary(output_gorica_c_est)
-# The order-restricted hypothesis $H_1$ has 13.4 times more support than its 
+# The order-restricted hypothesis $H_1$ has 14 times more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
 
+
+#####
 
 
 ## Extra: benchmarks ##
@@ -206,7 +213,9 @@ output_gorica_c_est
 library(benchmarks)
 #?benchmarks
 #
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 set.seed(123) # Set seed value
 output_gorica_c <- goric(lm_fit_Lucas, 
                          hypotheses = list(H1), comparison = "complement", 
@@ -214,14 +223,18 @@ output_gorica_c <- goric(lm_fit_Lucas,
 #
 pop.es <- c(0) # c(0, .2, .5)
 benchmarks_1c <- benchmarks_ANOVA(output_gorica_c, pop.es, iter = 10)
+# Note: I only used 10 iterations here, since the calculation takes quite long 
+# because of the not full row-rank hypothesis.
 benchmarks_1c$error.prob.pref.hypo
 benchmarks_1c$benchmarks.weight
 benchmarks_1c$benchmarks.ratios
 
 
 # Note: When using the estimates and their covariance matrix
-# in which case you also need to state the group sample size.
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+# in which case you also need to state the group sample size (N).
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
 set.seed(123) # Set seed value
 est <- coef(lm_fit_Lucas)
 VCOV <- vcov(lm_fit_Lucas)
@@ -231,6 +244,8 @@ output_gorica_c <- goric(est, VCOV = VCOV,
 pop.es <- c(0) # c(0, .2, .5)
 benchmarks_1c <- benchmarks_ANOVA(output_gorica_c, N = descrstat$n, pop.es, iter = 10)
 # Could also use N = 30 or N = rep(30,5)
+# Note: I only used 10 iterations here, since the calculation takes quite long 
+# because of the not full row-rank hypothesis.
 benchmarks_1c$error.prob.pref.hypo
 benchmarks_1c$benchmarks.weight
 benchmarks_1c$benchmarks.ratios

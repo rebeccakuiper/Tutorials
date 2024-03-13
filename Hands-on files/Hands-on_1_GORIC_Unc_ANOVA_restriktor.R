@@ -112,8 +112,10 @@ names(coef(lm_fit_Lucas))
 # - goric uses "=" or "==" to denote an equality restriction
 # - goric uses ";" to separate the restrictions within one hypothesis
 #
-H0 <- 'group1 = group2 = group3 = group4 = group5' 
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+#H0 <- 'group1 = group2 = group3 = group4 = group5' # only when of interest!
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1 > group2; group3 > group4 > group2' 
 # Note: H1 is not full row-rank, 
 #       see below and the goric tutorial for more details.
 H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
@@ -130,17 +132,16 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 #   of the penalty (see below).
 #
 set.seed(123) # Set seed value
-output <- goric(lm_fit_Lucas, hypotheses = list(H0 = H0, H1 = H1, H2 = H2))
+output <- goric(lm_fit_Lucas, hypotheses = list(H1 = H1, H2 = H2))
 output
 #summary(output)
 output$ratio.gw
 #
-# It can be seen that the order-restricted hypothesis $H_1$ has 16.5 (1.65e+01) 
+# It can be seen that the order-restricted hypothesis $H_1$ has 17 
 # times more support than $H_u$ (the unconstrained hypothesis). 
 # Hence, $H_1$ is not a weak hypotheses and can be compared to the other (weak 
 # and non-weak) competing hypotheses: 
-# $H_1$ is much more (452001.79 times more) supported than $H_0$ 
-# and 38.5 (3.848283e+01) times more likely than $H_2$.
+# $H_1$ is 39 times more likely than $H_2$.
 
 
 
@@ -150,31 +151,9 @@ output$ratio.gw
 # The default method is often much faster and needs less input specification. 
 # It can, however, not deal with hypotheses that are not of full row-rank 
 # (like $H_1$ above). 
-# In that case, `restriktor` uses automatically the other (bootstrap) method. 
-# In this bootstrap method, one can also more easily change the number of 
-# iterations on which the penalty is based (mix.bootstrap). 
+# In that case, `restriktor` uses automatically the other ('boot'/bootstrap) method.
 #
-# The computation time of this bootstrap method can in some instances be reduced 
-# by using multiple cores (but often it takes more time to use all cores). 
-# For a windows device, you then have to use 'parallel = "snow"' 
-# (see the tutorial for more options); see some code after '#' below. 
-#
-# To use this bootstrap method (on a windows machine), use:
-#if (!require("parallel")) install.packages("parallel") 
-#library(parallel)
-#nrCPUcores <- detectCores(all.tests = FALSE, logical = TRUE)
-set.seed(123) # Set seed value: 
-#1) Every time same PT value; 
-#2) Change it to check sensitivity of PT value 
-#  (if sensitive, then increase number of iterations used in calculation of PT).
-output_b <- goric(lm_fit_Lucas, hypotheses = list(H0, H1, H2),
-                  mix.weights = "boot", #parallel = "snow", ncpus = nrCPUcores, 
-                  mix.bootstrap = 99999)
-output_b
-#summary(output_b)
-#output_b$ratio.gw
-# This, of course, renders the same results as above (if there is a difference, 
-# it is in the second decimal of the penalty).
+#For additional details, see '?goric' or the Vignette.
 
 
 ################################################################################

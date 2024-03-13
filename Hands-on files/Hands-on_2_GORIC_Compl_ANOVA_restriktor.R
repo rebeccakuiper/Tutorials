@@ -112,7 +112,9 @@ names(coef(lm_fit_Lucas))
 # - goric uses "=" or "==" to denote an equality restriction
 # - goric uses ";" to separate the restrictions within one hypothesis
 #
-H1 <- 'group5 = group3 > group1; group3 > group4 > group2; group1 > group2' 
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+# which is the same as:
+#H1 <- 'group5 = group3 > group1 > group2; group3 > group4 > group2' 
 # Note: H1 is not full row-rank, 
 #       see below and the goric tutorial for more details.
 
@@ -132,7 +134,7 @@ output_c <- goric(lm_fit_Lucas,
 output_c
 #summary(output_c)
 #
-# The order-restricted hypothesis ‘H_theory1’ has  13.4 times more support 
+# The order-restricted hypothesis ‘H_theory1’ has  13.5 times more support 
 #                                                           than its complement.             
 
 

@@ -133,7 +133,7 @@ H03 <- 'group2 = group3'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-goric(lm_fit_Monin, hypotheses = list(H00, H01, H02, H03))
+goric(lm_fit_Monin, hypotheses = list(H00=H00, H01=H01, H02=H02, H03=H03))
 #
 # It can be seen that $H_01$ ($\mu_1 = \mu_2, \mu_3$) receives the most support. 
 # Based on the means (see `descrstat`), 
@@ -148,8 +148,8 @@ goric(lm_fit_Monin, hypotheses = list(H00, H01, H02, H03))
 # In case you want to use the GORICA values and weights instead, use:
 #
 #set.seed(123) # Set seed value
-#goric(fit.lm_Monin, H00, H01, H02, H03, type = "gorica")
-
+#goric(lm_fit_Monin, hypotheses = list(H00=H00, H01=H01, H02=H02, H03=H03), 
+#      type = "gorica")
 
 
 
@@ -195,19 +195,20 @@ output_repl
 # you could also evaluate this against its complement:
 set.seed(123) # Set seed value
 goric(lm_fit_Holubar, hypotheses = list(H1), comparison = "complement")
-# Since $H_1$ has only 0.39 (lower than 1) times more support than its 
-# complement, it is a weak hypothesis. 
+# Since $H_1$ has only 0.39 (< 1) times more support than its complement, 
+# it is a weak hypothesis. 
 # Hence, the study of Holubar did not replicate the findings of Monin.
 
 
 ## Notably, in case you want to use the GORICA, use the following commands:
 #
 #set.seed(123) # Set seed value
-#goric(lm_fit_Holubar, hypotheses = list(H0, H1, H2), type = "gorica")
+#goric(lm_fit_Holubar, hypotheses = list(H1, H2), type = "gorica")
 ##
 ## When you want to calculate the GORICA for $H_1$ and its complement, use:
 #set.seed(123) # Set seed value
-#goric(lm_fit_Holubar, hypotheses = list(H1), type = "gorica", comparison = "complement")
+#goric(lm_fit_Holubar, hypotheses = list(H1), type = "gorica", 
+#       comparison = "complement")
 
 
 ###################################################################################
