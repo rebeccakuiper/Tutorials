@@ -58,10 +58,17 @@ H1 <- 'group1 > group2 > group3'
 set.seed(123) # Set seed value
 goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
 #goric.PandG$result[,1] <- c("H0","H1","Hu")
-#goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
-goric.PandG$result
+goric.PandG
+#goric.PandG$result
 #summary(goric.PandG)
-
+goric.PandG$ratio.gw
+#
+# Most probably, H0 is not of interest, then do:
+set.seed(123) # Set seed value
+goric.PandG <- goric(fit.PandG, hypotheses = list(H1))
+goric.PandG
+#goric.PandG$result
+#summary(goric.PandG)
 
 
 # Example Lucas
@@ -85,13 +92,18 @@ H1 <- 'group5 = group3 > group1 > group2, group3 > group4 > group2'
 
 # GORIC
 set.seed(123) # Set seed value
-goric.Lucas <- goric(fit.Lucas, hypotheses = list(H1), comparison = 'complement')
-goric.Lucas$result
-summary(goric.Lucas)
+goric.Lucas <- goric(fit.Lucas, 
+                     hypotheses = list(H1), comparison = 'complement')
+goric.Lucas
+#goric.Lucas$result
+#summary(goric.Lucas)
 
 # GORICA
 set.seed(123) # Set seed value
-goric.Lucas <- goric(fit.Lucas, hypotheses = list(H1), comparison = 'complement', type = 'gorica')
-goric.Lucas$result
-summary(goric.Lucas)
+gorica.Lucas <- goric(fit.Lucas, 
+                      hypotheses = list(H1), comparison = 'complement', 
+                      type = 'gorica')
+gorica.Lucas
+#gorica.Lucas$result
+#summary(gorica.Lucas)
 

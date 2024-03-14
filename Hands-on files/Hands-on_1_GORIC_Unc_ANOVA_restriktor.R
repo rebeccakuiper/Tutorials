@@ -33,6 +33,48 @@ library(restriktor) # for the goric function
 # pane is located next to the panes for "Plots", "Packages", "Help", and "Viewer").
 
 
+########################
+
+
+# Example Palmer & Gough
+
+# Data
+PandG_data <- read.table("Data_PalmerAndGough.txt", header=TRUE)
+PandG_data$group <- factor(PandG_data$group) 
+
+## NHST: pairwise testing
+#pairwise.t.test(PandG_data$Importance, PandG_data$group, p.adj = 'bonferroni')
+
+# Fit object, also NHST
+fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
+#summary(fit.PandG) # NHST
+
+
+# (Informative) hypotheses
+H0 <- 'group1 = group2 = group3' 
+H1 <- 'group1 > group2 > group3' 
+
+
+# GORIC
+set.seed(123) # Set seed value
+goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
+#goric.PandG$result[,1] <- c("H0","H1","Hu")
+goric.PandG
+#goric.PandG$result
+#summary(goric.PandG)
+goric.PandG$ratio.gw
+#
+# Most probably, H0 is not of interest, then do:
+set.seed(123) # Set seed value
+goric.PandG <- goric(fit.PandG, hypotheses = list(H1))
+goric.PandG
+#goric.PandG$result
+#summary(goric.PandG)
+
+
+#####################
+
+
 ### Example Lucas ### 
 
 # Read/Load the Data # 
