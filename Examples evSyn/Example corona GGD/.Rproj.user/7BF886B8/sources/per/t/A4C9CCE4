@@ -1,6 +1,6 @@
 {
     "id": "A4C9CCE4",
-    "path": "C:/WERK/Git/Tutorials---Source-files/Examples evSyn/Example corona GGD/Ev syn - GGD - added.R",
+    "path": "C:/WERK/Git/Tutorials/Examples evSyn/Example corona GGD/Ev syn - GGD - added.R",
     "project_path": "Ev syn - GGD - added.R",
     "type": "r_source",
     "hash": "1778911720",
@@ -12,8 +12,8 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "15,0",
-        "scrollLine": "0"
+        "cursorPosition": "38,36",
+        "scrollLine": "31"
     },
     "folds": "",
     "lastKnownWriteTime": 1688927971,

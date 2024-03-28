@@ -1,6 +1,6 @@
 {
     "id": "0A9C614E",
-    "path": "C:/WERK/Git/Tutorials---Source-files/Examples evSyn/Example WtC/GES_All.R",
+    "path": "C:/WERK/Git/Tutorials/Examples evSyn/Example WtC/GES_All.R",
     "project_path": "GES_All.R",
     "type": "r_source",
     "hash": "2019940511",
@@ -12,8 +12,8 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "9,50",
-        "scrollLine": "0"
+        "cursorPosition": "104,16",
+        "scrollLine": "95"
     },
     "folds": "",
     "lastKnownWriteTime": 1688927980,
