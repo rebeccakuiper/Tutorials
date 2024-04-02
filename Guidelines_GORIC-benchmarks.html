@@ -11,6 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
+<meta name="date" content="2024-04-02" />
 
 <title>Guidelines GORIC(A) benchmarks</title>
 
@@ -1480,7 +1481,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Guidelines GORIC(A) benchmarks</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">09 februari 2024</h4>
+<h4 class="date">02 April 2024</h4>
 
 </div>
 
@@ -1539,9 +1540,8 @@ if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
 library(devtools)
 install_github(&quot;rebeccakuiper/benchmarks&quot;)
 library(benchmarks)
-# For more information regarding the included functions:
-#?benchmarks
-#?benchmarks_ANOVA</code></pre>
+# For more information regarding the included functions: ?benchmarks
+# ?benchmarks_ANOVA</code></pre>
 </div>
 <div id="gorica-weights-benchmarks" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> GORIC(A) weights
@@ -1665,10 +1665,10 @@ want to conclude that the border is true.</p>
 <h3><span class="header-section-number">2.2.1</span> Example 1 (ANOVA):
 <span class="math inline">\(H_1\)</span> vs its complement</h3>
 <pre class="r"><code># H1 vs complement - H1 is true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123) 
+set.seed(123)
 results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c</code></pre>
 <pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
@@ -1678,17 +1678,14 @@ Results:
 1          H1  -155.075    2.833  315.816           0.704            0.697          0.845
 2  complement  -155.939    3.667  319.212           0.296            0.303          0.155
 ---
-The order-restricted hypothesis &#39;H1&#39; has 5.464 times more support than its complement.</code></pre>
-<pre class="r"><code># Benchmarks based on null
-#pop.es &lt;- c(0)
-#benchmarks_1c &lt;- benchmarks_ANOVA(results_1c, pop.es)
-#benchmarks_1c$error.prob.pref.hypo
-#benchmarks_1c$benchmarks.weight
-#benchmarks_1c$benchmarks.ratios
+The order-restricted hypothesis &#39;H1&#39; has 5.46 times more support than its complement.</code></pre>
+<pre class="r"><code># Benchmarks based on null pop.es &lt;- c(0) benchmarks_1c &lt;-
+# benchmarks_ANOVA(results_1c, pop.es) benchmarks_1c$error.prob.pref.hypo
+# benchmarks_1c$benchmarks.weight benchmarks_1c$benchmarks.ratios
 
 # Benchmarks based on null/no, small, medium, and large effect sizes, use:
-#pop.es &lt;- c(0, .1, .25, .4) # According to Cohen 1992
-pop.es &lt;- c(0, .1)
+# pop.es &lt;- c(0, .1, .25, .4) # According to Cohen 1992
+pop.es &lt;- c(0, 0.1)
 benchmarks_1c &lt;- benchmarks_ANOVA(results_1c, pop.es)
 benchmarks_1c$error.prob.pref.hypo</code></pre>
 <pre><code>[1] 0.1547036</code></pre>
@@ -1791,11 +1788,11 @@ infinity.</p>
 <h3><span class="header-section-number">2.2.2</span> Example 2 (ANOVA):
 Overlapping hypotheses</h3>
 <pre class="r"><code># H1, H2, and unconstrained (default) - subset/overlap true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;               # mu1 &gt; mu2 &gt; mu3
-H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
+H2 &lt;- &quot;D1 &gt; D2&quot;  # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 
 # Apply GORIC #
-set.seed(123) 
+set.seed(123)
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
 <pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
@@ -1811,7 +1808,7 @@ H1             1.000  1.948             3.211
 H2             0.513  1.000             1.649
 unconstrained  0.311  0.607             1.000</code></pre>
 <pre class="r"><code># Benchmarks
-pop.es &lt;- c(0, .1, .25)
+pop.es &lt;- c(0, 0.1, 0.25)
 benchmarks_12u &lt;- benchmarks_ANOVA(results_12u, pop.es)
 benchmarks_12u$error.prob.pref.hypo</code></pre>
 <pre><code>[1] 0.1547036</code></pre>
@@ -1948,10 +1945,10 @@ even non-overlapping (except for the boundary).</p>
 <h2><span class="header-section-number">3.1</span> Example 3 (ANOVA):
 Border is true</h2>
 <pre class="r"><code># H1 vs complement - border (nl., mu1 = mu2 &gt; mu3) is true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123) 
+set.seed(123)
 results_1c_border &lt;- goric(fit_border, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c_border</code></pre>
 <pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
@@ -1961,7 +1958,7 @@ Results:
 1          H1  -150.549    2.833  306.765           0.482            0.697          0.682
 2  complement  -150.477    3.667  308.288           0.518            0.303          0.318
 ---
-The order-restricted hypothesis &#39;H1&#39; has 2.141 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 2.14 times more support than its complement.</code></pre>
 <p>Before we inspect the height of support for the preferred hypotheses,
 we can check whether there is support for the boundary/border of the two
 (non-overlapping) hypotheses. By eyeballing, I believe the
@@ -1969,29 +1966,24 @@ log-likelihood values are close (-150.549 vs -150.477).<br />
 To obtain better evidence for the closeness of the loglik values, I will
 use the log-likelihood benchmarks functions for several specifications
 of null populations:</p>
-<pre class="r"><code>## Loglik benchmarks based on null / no effect sizes
-## That is, setting all three means equal in the population,
-## using the benchmarks_ANOVA function:
-#pop.es &lt;- c(0)
-#benchmarks_1c_border &lt;- benchmarks_ANOVA(results_1c_border, pop.es)
-##benchmarks_1c_border$benchmarks.LLratios
-##benchmarks_1c_border$benchmarks.LLratios_ge1
-#benchmarks_1c_border$benchmarks.difLL
-##benchmarks_1c_border$benchmarks.absdifLL
+<pre class="r"><code>## Loglik benchmarks based on null / no effect sizes That is, setting all three
+## means equal in the population, using the benchmarks_ANOVA function: pop.es
+## &lt;- c(0) benchmarks_1c_border &lt;- benchmarks_ANOVA(results_1c_border, pop.es)
+## benchmarks_1c_border$benchmarks.LLratios
+## benchmarks_1c_border$benchmarks.LLratios_ge1
+## benchmarks_1c_border$benchmarks.difLL
+## benchmarks_1c_border$benchmarks.absdifLL
 
-# To obtain more insight into closeness log-likelihood values:
-# Loglik benchmarks based on using all possible equalities,
-# using the benchmarks function:
+# To obtain more insight into closeness log-likelihood values: Loglik
+# benchmarks based on using all possible equalities, using the benchmarks
+# function:
 est &lt;- coef(fit_border)
-pop.est &lt;- matrix(c(
-                  mean(est[1:2]), mean(est[1:2]), est[3],
-                  est[1], mean(est[2:3]), mean(est[2:3]),
-                  mean(est[1:3]), mean(est[1:3]), mean(est[1:3])
-                  ),
-                  byrow = TRUE, ncol = length(est))
+pop.est &lt;- matrix(c(mean(est[1:2]), mean(est[1:2]), est[3], est[1], mean(est[2:3]),
+    mean(est[2:3]), mean(est[1:3]), mean(est[1:3]), mean(est[1:3])), byrow = TRUE,
+    ncol = length(est))
 benchmarks_1c_border_allpos &lt;- benchmarks(results_1c_border, pop.est)
-#benchmarks_1c_border_allpos$benchmarks.LLratios
-#benchmarks_1c_border_allpos$benchmarks.LLratios_ge1
+# benchmarks_1c_border_allpos$benchmarks.LLratios
+# benchmarks_1c_border_allpos$benchmarks.LLratios_ge1
 benchmarks_1c_border_allpos$benchmarks.difLL</code></pre>
 <pre><code>$`pop.est.nr. = 1`
                        Sample        5%         35%           50%        65%      95%
@@ -2007,7 +1999,7 @@ $`pop.est.nr. = 3`
                        Sample        5%        35%        50%         65%        95%
 H1 vs. H1          0.00000000  0.000000  0.0000000  0.0000000  0.00000000 0.00000000
 H1 vs. complement -0.07186354 -2.419489 -0.4854035 -0.2315981 -0.07077023 0.09057281</code></pre>
-<pre class="r"><code>#benchmarks_1c_border_allpos$benchmarks.absdifLL</code></pre>
+<pre class="r"><code># benchmarks_1c_border_allpos$benchmarks.absdifLL</code></pre>
 <p>In this example, the difference in log-likelihood values (-.07) lies
 between the 35% and the 50% percentile of the loglik benchmarks of the
 first two null populations; and it is close to the 65% benchmark of the
@@ -2061,10 +2053,10 @@ Coefficients:
 <pre class="r"><code># Now, group size is 200 (instead of 40)
 
 # H1 vs complement - border (nl., mu1 = mu2 &gt; mu3) is true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123) 
+set.seed(123)
 results_1c_border_200 &lt;- goric(fit_border_200, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c_border_200</code></pre>
 <pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
@@ -2074,35 +2066,30 @@ Results:
 1          H1  -829.928    2.833  1665.522           0.509            0.697          0.704
 2  complement  -829.962    3.667  1667.258           0.491            0.303          0.296
 ---
-The order-restricted hypothesis &#39;H1&#39; has 2.382 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 2.38 times more support than its complement.</code></pre>
 <p>We will also now check whether there is support for the border of the
 two (non-overlapping) hypotheses. By eyeballing, I believe the
 log-likelihood values are close, but - to obtain more evidence - I will
 use the log-likelihood benchmarks functions for several specifications
 of null populations:</p>
-<pre class="r"><code>## Loglik benchmarks based on null / no effect sizes
-## That is, setting all three means equal in the population,
-## using the benchmarks_ANOVA function:
-#pop.es &lt;- c(0)
-#benchmarks_1c_border_200 &lt;- benchmarks_ANOVA(results_1c_border_200, pop.es)
-##benchmarks_1c_border_200$benchmarks.LLratios
-##benchmarks_1c_border_200$benchmarks.LLratios_ge1
-#benchmarks_1c_border_200$benchmarks.difLL
-##benchmarks_1c_border_200$benchmarks.absdifLL
+<pre class="r"><code>## Loglik benchmarks based on null / no effect sizes That is, setting all three
+## means equal in the population, using the benchmarks_ANOVA function: pop.es
+## &lt;- c(0) benchmarks_1c_border_200 &lt;- benchmarks_ANOVA(results_1c_border_200,
+## pop.es) benchmarks_1c_border_200$benchmarks.LLratios
+## benchmarks_1c_border_200$benchmarks.LLratios_ge1
+## benchmarks_1c_border_200$benchmarks.difLL
+## benchmarks_1c_border_200$benchmarks.absdifLL
 
-# To obtain more insight into closeness log-likelihood values:
-# Loglik benchmarks based on using all possible equalities (and none),
-# using the benchmarks function:
+# To obtain more insight into closeness log-likelihood values: Loglik
+# benchmarks based on using all possible equalities (and none), using the
+# benchmarks function:
 est &lt;- coef(fit_border_200)
-pop.est &lt;- matrix(c(
-                  mean(est[1:2]), mean(est[1:2]), est[3],
-                  est[1], mean(est[2:3]), mean(est[2:3]),
-                  mean(est[1:3]), mean(est[1:3]), mean(est[1:3])
-                  ),
-                  byrow = TRUE, ncol = length(est))
+pop.est &lt;- matrix(c(mean(est[1:2]), mean(est[1:2]), est[3], est[1], mean(est[2:3]),
+    mean(est[2:3]), mean(est[1:3]), mean(est[1:3]), mean(est[1:3])), byrow = TRUE,
+    ncol = length(est))
 benchmarks_1c_border_200_allpos &lt;- benchmarks(results_1c_border_200, pop.est)
-#benchmarks_1c_border_200_allpos$benchmarks.LLratios
-#benchmarks_1c_border_200_allpos$benchmarks.LLratios_ge1
+# benchmarks_1c_border_200_allpos$benchmarks.LLratios
+# benchmarks_1c_border_200_allpos$benchmarks.LLratios_ge1
 benchmarks_1c_border_200_allpos$benchmarks.difLL</code></pre>
 <pre><code>$`pop.est.nr. = 1`
                       Sample        5%         35%           50%        65%      95%
@@ -2118,7 +2105,7 @@ $`pop.est.nr. = 3`
                       Sample        5%        35%        50%         65%        95%
 H1 vs. H1         0.00000000  0.000000  0.0000000  0.0000000  0.00000000 0.00000000
 H1 vs. complement 0.03450004 -2.419489 -0.4854035 -0.2315981 -0.07077023 0.09057281</code></pre>
-<pre class="r"><code>#benchmarks_1c_border_200_allpos$benchmarks.absdifLL</code></pre>
+<pre class="r"><code># benchmarks_1c_border_200_allpos$benchmarks.absdifLL</code></pre>
 <p>Also in this example, with a much higher sample size, the difference
 in log-likelihood values (.04) lies between the 5% and the 95%
 percentile of the loglik benchmarks for all three orderings. Based on
@@ -2163,19 +2150,15 @@ which such a boundary is true.</p>
 <!-- ``` -->
 <!-- In this case, TO DO (maar ws niet meer nodig) our loglik weight ratio is (much) higher than the 95\% benchmark of the loglik weights under the null (nl., 2.12 > 1.08). Additionally, our loglik weight ratio is higher than the 65\% percentile of the weights which are transformed to all be larger than 1. -->
 <!-- Furthermore, the difference and the absolute difference in log-likelihood values is higher than the 95\% and 65\% benchmark (nl., 0.75 > .08 and 0.75 > 0.53), respectively.   Hence, we conclude that the log-likelihood values of $H_1$ and its complement are not close (i.e., their loglik weight ratio is not close to 1 and their (absolute) difference is not close to 0) and that $H_1$ is the preferred hypothesis (for which we want to inspect the height of the support - which we did in the previous section).  -->
-<pre class="r"><code># To obtain more insight into closeness log-likelihood values:
-# Benchmarks based on using all possible equalities (and none),
-# using the benchmarks function:
+<pre class="r"><code># To obtain more insight into closeness log-likelihood values: Benchmarks based
+# on using all possible equalities (and none), using the benchmarks function:
 est &lt;- coef(fit)
-pop.est &lt;- matrix(c(
-                  mean(est[1:2]), mean(est[1:2]), est[3],
-                  est[1], mean(est[2:3]), mean(est[2:3]),
-                  mean(est[1:3]), mean(est[1:3]), mean(est[1:3])
-                  ),
-                  byrow = TRUE, ncol = length(est))
+pop.est &lt;- matrix(c(mean(est[1:2]), mean(est[1:2]), est[3], est[1], mean(est[2:3]),
+    mean(est[2:3]), mean(est[1:3]), mean(est[1:3]), mean(est[1:3])), byrow = TRUE,
+    ncol = length(est))
 benchmarks_1c_allpos &lt;- benchmarks(results_1c, pop.est)
-#benchmarks_1c_allpos$benchmarks.LLratios
-#benchmarks_1c_allpos$benchmarks.LLratios_ge1
+# benchmarks_1c_allpos$benchmarks.LLratios
+# benchmarks_1c_allpos$benchmarks.LLratios_ge1
 benchmarks_1c_allpos$benchmarks.difLL</code></pre>
 <pre><code>$`pop.est.nr. = 1`
                      Sample        5%         35%           50%        65%       95%
@@ -2191,7 +2174,7 @@ $`pop.est.nr. = 3`
                      Sample        5%        35%        50%         65%        95%
 H1 vs. H1         0.0000000  0.000000  0.0000000  0.0000000  0.00000000 0.00000000
 H1 vs. complement 0.8648427 -2.419489 -0.4854035 -0.2315981 -0.07077023 0.09057281</code></pre>
-<pre class="r"><code>#benchmarks_1c_allpos$benchmarks.absdifLL</code></pre>
+<pre class="r"><code># benchmarks_1c_allpos$benchmarks.absdifLL</code></pre>
 <p>In this example, the difference in log-likelihood values (1.13) is
 larger than the 95% percentile of the loglik benchmarks for all three
 orderings.<br />
@@ -2220,10 +2203,10 @@ size</h3>
 <pre class="r"><code># Now, group size is 200 (instead of 40)
 
 # H1 vs complement
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123) 
+set.seed(123)
 results_1c_200 &lt;- goric(fit_200, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c_200</code></pre>
 <pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
@@ -2233,35 +2216,29 @@ Results:
 1          H1  -829.928    2.833  1665.522           0.889            0.697          0.949
 2  complement  -832.009    3.667  1671.351           0.111            0.303          0.051
 ---
-The order-restricted hypothesis &#39;H1&#39; has 18.434 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 18.43 times more support than its complement.</code></pre>
 <p>Also here, we will check whether there is support for the border of
 the two (non-overlapping) hypotheses. By eyeballing, I believe the
 log-likelihood values are not close. To obtain more evidence, I will use
 the log-likelihood benchmarks functions for several specifications of
 null populations:</p>
-<pre class="r"><code>## Loglik benchmarks based on null / no effect sizes
-## That is, setting all three means equal in the population,
-## using the benchmarks_ANOVA function:
-#pop.es &lt;- c(0)
-#benchmarks_1c_200 &lt;- benchmarks_ANOVA(results_1c_200, pop.es)
-##benchmarks_1c_200$benchmarks.LLratios
-##benchmarks_1c_200$benchmarks.LLratios_ge1
-#benchmarks_1c_200$benchmarks.difLL
-##benchmarks_1c_200$benchmarks.absdifLL
+<pre class="r"><code>## Loglik benchmarks based on null / no effect sizes That is, setting all three
+## means equal in the population, using the benchmarks_ANOVA function: pop.es
+## &lt;- c(0) benchmarks_1c_200 &lt;- benchmarks_ANOVA(results_1c_200, pop.es)
+## benchmarks_1c_200$benchmarks.LLratios
+## benchmarks_1c_200$benchmarks.LLratios_ge1 benchmarks_1c_200$benchmarks.difLL
+## benchmarks_1c_200$benchmarks.absdifLL
 
-# To obtain more insight into closeness log-likelihood values:
-# Loglik benchmarks based on using all possible equalities (and none),
-# using the benchmarks function:
+# To obtain more insight into closeness log-likelihood values: Loglik
+# benchmarks based on using all possible equalities (and none), using the
+# benchmarks function:
 est &lt;- coef(fit_200)
-pop.est &lt;- matrix(c(
-                  mean(est[1:2]), mean(est[1:2]), est[3],
-                  est[1], mean(est[2:3]), mean(est[2:3]),
-                  mean(est[1:3]), mean(est[1:3]), mean(est[1:3])
-                  ),
-                  byrow = TRUE, ncol = length(est))
+pop.est &lt;- matrix(c(mean(est[1:2]), mean(est[1:2]), est[3], est[1], mean(est[2:3]),
+    mean(est[2:3]), mean(est[1:3]), mean(est[1:3]), mean(est[1:3])), byrow = TRUE,
+    ncol = length(est))
 benchmarks_1c_200_allpos &lt;- benchmarks(results_1c_200, pop.est)
-#benchmarks_1c_200_allpos$benchmarks.LLratios
-#benchmarks_1c_200_allpos$benchmarks.LLratios_ge1
+# benchmarks_1c_200_allpos$benchmarks.LLratios
+# benchmarks_1c_200_allpos$benchmarks.LLratios_ge1
 benchmarks_1c_200_allpos$benchmarks.difLL</code></pre>
 <pre><code>$`pop.est.nr. = 1`
                     Sample        5%         35%           50%        65%      95%
@@ -2277,7 +2254,7 @@ $`pop.est.nr. = 3`
                     Sample        5%        35%        50%         65%        95%
 H1 vs. H1         0.000000  0.000000  0.0000000  0.0000000  0.00000000 0.00000000
 H1 vs. complement 2.080879 -2.419489 -0.4854035 -0.2315981 -0.07077023 0.09057281</code></pre>
-<pre class="r"><code>#benchmarks_1c_200_allpos$benchmarks.absdifLL</code></pre>
+<pre class="r"><code># benchmarks_1c_200_allpos$benchmarks.absdifLL</code></pre>
 <p>In this example with a higher sample size, the difference in
 log-likelihood values (2.08) is higher than the 95% percentile of the
 loglik benchmarks for all three null populations. Based on this, I

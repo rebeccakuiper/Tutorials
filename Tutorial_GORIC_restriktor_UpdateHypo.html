@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2023-07-11" />
+<meta name="date" content="2024-04-02" />
 
 <title>Tutorial for updating hypotheses using the GORIC(A)</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for updating hypotheses using the
 GORIC(A)</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">11 July 2023</h4>
+<h4 class="date">02 April 2024</h4>
 
 </div>
 
@@ -1541,14 +1541,13 @@ if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
 ## Then, load the packages:
-library(psych) # for the function describeBy
-library(restriktor) # for the goric function
+library(psych)  # for the function describeBy
+library(restriktor)  # for the goric function
 
-# If you want to use restriktor from github:
-#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-#library(devtools) 
-#install_github(&quot;LeonardV/restriktor&quot;)
-#library(restriktor) # for goric function</code></pre>
+# If you want to use restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;) library(restriktor) # for goric
+# function</code></pre>
 <p>Second, it is necessary to load the data.</p>
 <p>Notably, it is only possible to load the data if you are using the
 correct working directory (with both your R script and data file). The
@@ -1574,10 +1573,10 @@ more than two groups, one has to tell R that the variable
 function on the <code>group</code> variable (i.e., a grouping /
 categorical / nominal variable):</p>
 <pre class="r"><code># Make the variable group a factor
-Monin$group &lt;- factor(Monin$group) </code></pre>
+Monin$group &lt;- factor(Monin$group)</code></pre>
 <p>To inspect the first 6 rows of the dataset, use the
 <code>head()</code> function:</p>
-<pre class="r"><code>head(Monin) # Look at first (6) rows of the data</code></pre>
+<pre class="r"><code>head(Monin)  # Look at first (6) rows of the data</code></pre>
 <pre><code>      attract group
 1  1.19560213     1
 2  0.05852551     1
@@ -1653,10 +1652,10 @@ hypotheses’ near the end of the goric() tutorial called
 ‘Tutorial_GORIC_restriktor_General’).</p></li>
 </ul>
 <p>All possible exploratory hypotheses are denoted by:</p>
-<pre class="r"><code>H00 &lt;- &#39;group1 = group2 = group3&#39; 
-H01 &lt;- &#39;group1 = group2&#39; 
-H02 &lt;- &#39;group1 = group3&#39; 
-H03 &lt;- &#39;group2 = group3&#39;</code></pre>
+<pre class="r"><code>H00 &lt;- &quot;group1 = group2 = group3&quot;
+H01 &lt;- &quot;group1 = group2&quot;
+H02 &lt;- &quot;group1 = group3&quot;
+H03 &lt;- &quot;group2 = group3&quot;</code></pre>
 <p>To prevent from selecting a weak hypothesis, that is, a hypothesis
 not supported by the data, one should include a failsafe/safeguard
 hypothesis. This can be:</p>
@@ -1690,9 +1689,9 @@ using GORIC(A)</h3>
 <div id="calculate-goric-values-and-weights" class="section level4" number="1.1.3.1">
 <h4><span class="header-section-number">1.1.3.1</span> Calculate GORIC
 values and weights</h4>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03))</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1700,17 +1699,16 @@ Results:
 2            H01  -141.191    3.000  288.383           0.369            0.164          0.610
 3            H02  -145.404    3.000  296.809           0.005            0.164          0.009
 4            H03  -148.907    3.000  303.815           0.000            0.164          0.000
-5  unconstrained  -140.665    4.000  289.330           0.625            0.060          0.380
----</code></pre>
-<pre><code></code></pre>
+5  unconstrained  -140.665    4.000  289.330           0.625            0.060          0.380</code></pre>
 </div>
 <div id="calculate-gorica-values-and-weights" class="section level4" number="1.1.3.2">
 <h4><span class="header-section-number">1.1.3.2</span> Calculate GORICA
 values and weights</h4>
 <p>In case you want to use the GORICA values and weights instead, use:
 type = “gorica”. Thus:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
-goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03), type = &quot;gorica&quot;)</code></pre>
+<pre class="r"><code>set.seed(123)  # Set seed value
+goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03),
+    type = &quot;gorica&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1736,8 +1734,8 @@ preparation</h3>
 and tell R that the variable <code>gr</code> (group) is a factor instead
 of a continuous variable (although it is not necessary because it
 consists of only two groups).</p>
-<pre class="r"><code>Holubar &lt;- read.table(&quot;data/Data_Holubar.txt&quot;, header = TRUE) # load the data
-Holubar$gr &lt;- factor(Holubar$gr) # tell R that gr is a factor</code></pre>
+<pre class="r"><code>Holubar &lt;- read.table(&quot;data/Data_Holubar.txt&quot;, header = TRUE)  # load the data
+Holubar$gr &lt;- factor(Holubar$gr)  # tell R that gr is a factor</code></pre>
 <p>If you want a more detailed overview of the data, also by means of
 descriptive statistics splitted by <code>group</code>, use</p>
 <pre class="r"><code>head(Holubar)</code></pre>
@@ -1773,8 +1771,8 @@ names(coef(lm_fit_Holubar))</code></pre>
 hypotheses</h4>
 <p>Based on the results and sample means of Monin, the following two
 competing hypotheses were created:</p>
-<pre class="r"><code>H1 &lt;- &#39;gr1 = gr2 &gt; gr3&#39; 
-H2 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;</code></pre>
+<pre class="r"><code>H1 &lt;- &quot;gr1 = gr2 &gt; gr3&quot;
+H2 &lt;- &quot;gr2 &gt; gr1 &gt; gr3&quot;</code></pre>
 </div>
 </div>
 <div id="model-selection-using-gorica-1" class="section level3" number="1.3.3">
@@ -1783,10 +1781,10 @@ using GORIC(A)</h3>
 <div id="calculate-goric-values-and-weights-1" class="section level4" number="1.3.3.1">
 <h4><span class="header-section-number">1.3.3.1</span> Calculate GORIC
 values and weights</h4>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 output_repl &lt;- goric(lm_fit_Holubar, hypotheses = list(H1, H2))
 summary(output_repl)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1794,28 +1792,26 @@ Results:
 2             H2  -144.981    2.803  295.569           0.111            0.376          0.224
 3  unconstrained  -143.038    4.000  294.076           0.777            0.114          0.473
 ---
-Note: If log-likelihood values are equal or close to each other, the goric ratio weights are determined only by the difference in penalty values. Please check the ratio penalty-weights.
-
 
 Ratio GORIC-weights:
-                  vs. H1     vs. H2     vs. unconstrained
-H1                1.000      1.355      0.642            
-H2                0.738      1.000      0.474            
-unconstrained     1.557      2.109      1.000            
+               vs. H1  vs. H2  vs. unconstrained
+H1              1.000   1.355              0.642
+H2              0.738   1.000              0.474
+unconstrained   1.557   2.109              1.000
 ---
 
 Ratio loglik-weights:
                vs. H1  vs. H2  vs. unconstrained
-H1             1.000   1.000   0.143            
-H2             1.000   1.000   0.143            
-unconstrained  6.978   6.978   1.000            
+H1              1.000   1.000              0.143
+H2              1.000   1.000              0.143
+unconstrained   6.978   6.978              1.000
 ---
 
 Ratio penalty-weights:
                vs. H1  vs. H2  vs. unconstrained
-H1             1.000   1.355   4.482            
-H2             0.738   1.000   3.309            
-unconstrained  0.223   0.302   1.000            
+H1              1.000   1.355              4.482
+H2              0.738   1.000              3.309
+unconstrained   0.223   0.302              1.000
 ---
 
 order-restricted hypotheses:
@@ -1825,7 +1821,6 @@ gr1 = gr2 &gt; gr3
 
 H2:
 gr2 &gt; gr1 &gt; gr3 </code></pre>
-<pre><code></code></pre>
 <p>Since the support for <span class="math inline">\(H_1\)</span> and
 <span class="math inline">\(H_2\)</span> is lower than for <span class="math inline">\(H_u\)</span>, it can be concluded that both are
 weak hypotheses. Hence, the study of Holubar did not replicate the
@@ -1836,17 +1831,16 @@ findings of Monin.</p>
 set</h4>
 <p>In case you are only interested in the ‘main hypothesis’ <span class="math inline">\(H_1\)</span> found in Monin, you could also
 evaluate this against its complement:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 goric(lm_fit_Holubar, hypotheses = list(H1), comparison = &quot;complement&quot;)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -144.981    2.500  294.962           0.125            0.731          0.280
 2  complement  -143.038    3.500  293.076           0.875            0.269          0.720
---- 
-The order-restricted hypothesis &#39;H1&#39; has 0.390 times more support than its complement.</code></pre>
-<pre><code></code></pre>
+---
+The order-restricted hypothesis &#39;H1&#39; has 0.39 times more support than its complement.</code></pre>
 <p>Since <span class="math inline">\(H_1\)</span> has only 0.39 (lower
 than 1) times more support than its complement, it is a weak hypothesis.
 Hence, the study of Holubar did not replicate the findings of Monin.</p>
@@ -1856,10 +1850,10 @@ Hence, the study of Holubar did not replicate the findings of Monin.</p>
 values and weights</h4>
 <p>Notably, in case you want to use the GORICA, you can use the
 following commands:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 goric(lm_fit_Holubar, hypotheses = list(H1, H2), type = &quot;gorica&quot;)</code></pre>
 <p>When you want to calculate the GORICA for <span class="math inline">\(H_1\)</span> and its complement, use:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 goric(lm_fit_Holubar, hypotheses = list(H1), type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
 </div>
 </div>
@@ -1884,32 +1878,26 @@ reopen R, you will have to load the required libraries.</p>
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
 ## Then, load the packages:
-library(restriktor) # for the goric function
+library(restriktor)  # for the goric function
 
-# If you want to use restriktor from github:
-#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-#library(devtools) 
-#install_github(&quot;LeonardV/restriktor&quot;)
-#library(restriktor) # for goric function</code></pre>
+# If you want to use restriktor from github: if (!require(&#39;devtools&#39;))
+# install.packages(&#39;devtools&#39;) library(devtools)
+# install_github(&#39;LeonardV/restriktor&#39;) library(restriktor) # for goric
+# function</code></pre>
 </div>
 <div id="load-data" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Load data</h2>
 <p>The estimates of structural parameters (i.e., the parameters of
 interest, that is, the parameters used in the hypotheses) are</p>
-<pre class="r"><code>est &lt;- c(0.4765484,  0.2759022,  0.8669835, -0.4430030,  0.8066336, -0.2462610)
-names(est) &lt;- c(&quot;RS_Gr1&quot;, &quot;RSES_Gr1&quot;, &quot;RS_Gr2&quot;, &quot;RSES_Gr2&quot;, &quot;RS_Gr3&quot;, 
-                                                                    &quot;RSES_Gr3&quot;)</code></pre>
+<pre class="r"><code>est &lt;- c(0.4765484, 0.2759022, 0.8669835, -0.443003, 0.8066336, -0.246261)
+names(est) &lt;- c(&quot;RS_Gr1&quot;, &quot;RSES_Gr1&quot;, &quot;RS_Gr2&quot;, &quot;RSES_Gr2&quot;, &quot;RS_Gr3&quot;, &quot;RSES_Gr3&quot;)</code></pre>
 <p>Notably, the parameters need to be labelled such that those can be
 used in specifying the hypotheses.</p>
 <p>Their covariance matrix is:</p>
-<pre class="r"><code>VCOV &lt;- matrix(c(
- 0.1736427, -0.1736427,  0.0000000,  0.0000000,  0.0000000,  0.0000000,
--0.1736427,  0.6325835,  0.0000000,  0.0000000,  0.0000000,  0.0000000,
- 0.0000000,  0.0000000,  0.2094106, -0.2094106,  0.0000000,  0.0000000,
- 0.0000000,  0.0000000, -0.2094106,  0.3740883,  0.0000000,  0.0000000,
- 0.0000000,  0.0000000,  0.0000000,  0.0000000,  0.1351709, -0.1351709,
- 0.0000000,  0.0000000,  0.0000000,  0.0000000, -0.1351709,  0.1829996), 
-byrow = TRUE, ncol = 6)</code></pre>
+<pre class="r"><code>VCOV &lt;- matrix(c(0.1736427, -0.1736427, 0, 0, 0, 0, -0.1736427, 0.6325835, 0, 0,
+    0, 0, 0, 0, 0.2094106, -0.2094106, 0, 0, 0, 0, -0.2094106, 0.3740883, 0, 0, 0,
+    0, 0, 0, 0.1351709, -0.1351709, 0, 0, 0, 0, -0.1351709, 0.1829996), byrow = TRUE,
+    ncol = 6)</code></pre>
 <p>Notably, the covariance matrix does not need to be labelled.</p>
 </div>
 <div id="set-of-updated-hypotheses" class="section level2" number="2.3">
@@ -1932,7 +1920,7 @@ GORICA</h2>
 <pre class="r"><code>set.seed(123)
 output_gorica_Altinisik &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
 summary(output_gorica_Altinisik)</code></pre>
-<pre><code>restriktor (0.5-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1942,24 +1930,24 @@ Results:
 ---
 
 Ratio GORICA-weights:
-                  vs. H1     vs. H2     vs. unconstrained
-H1                1.000      3.650      23.847           
-H2                0.274      1.000      6.534            
-unconstrained     0.042      0.153      1.000            
+               vs. H1  vs. H2  vs. unconstrained
+H1              1.000   3.650             23.847
+H2              0.274   1.000              6.534
+unconstrained   0.042   0.153              1.000
 ---
 
 Ratio loglik-weights:
                vs. H1  vs. H2  vs. unconstrained
-H1             1.000   6.018   0.265            
-H2             0.166   1.000   0.044            
-unconstrained  3.775   22.715  1.000            
+H1              1.000   6.018              0.265
+H2              0.166   1.000              0.044
+unconstrained   3.775  22.715              1.000
 ---
 
 Ratio penalty-weights:
                vs. H1  vs. H2  vs. unconstrained
-H1             1.000   0.607   90.017           
-H2             1.649   1.000   148.413          
-unconstrained  0.011   0.007   1.000            
+H1              1.000   0.607             90.017
+H2              1.649   1.000            148.413
+unconstrained   0.011   0.007              1.000
 ---
 
 order-restricted hypotheses:
@@ -1973,7 +1961,6 @@ H2:
 RS_Gr1 + RSES_Gr1 = 0; RS_Gr1 &gt; 0;
 RSES_Gr2 = 0; RS_Gr2 = 0;
 RSES_Gr3 = 0; RS_Gr3 &gt; 0 </code></pre>
-<pre><code></code></pre>
 <p>It can be seen that both <span class="math inline">\(H_1\)</span> and
 <span class="math inline">\(H_2\)</span> are not weak hypotheses and
 that <span class="math inline">\(H_1\)</span> is the preferred one: It
@@ -1985,31 +1972,33 @@ replication study, it is concluded that <span class="math inline">\(H_1\)</span>
 <div id="extra-generating-all-exploratory-restrictions" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Extra: Generating all
 exploratory (=) restrictions</h1>
-<pre class="r"><code>#make columns per number of variables in hypothesis
+<pre class="r"><code># make columns per number of variables in hypothesis
 h &lt;- paste(names(coef(lm_fit_Monin)), &quot; = 0&quot;)
 col &lt;- NULL
-for(i in 1:length(h)){
-  col &lt;- c(col, combn(h, i, 
-                      FUN = function(x){return(paste(x, collapse = &#39;; &#39;))}))
+for (i in 1:length(h)) {
+    col &lt;- c(col, combn(h, i, FUN = function(x) {
+        return(paste(x, collapse = &quot;; &quot;))
+    }))
 }
 hypotheses &lt;- data.frame(col)
-#make dataframe without the missings and split in two columns
+# make dataframe without the missings and split in two columns
 if (!require(&quot;tidyr&quot;)) install.packages(&quot;tidyr&quot;)</code></pre>
 <pre><code>Loading required package: tidyr</code></pre>
 <pre class="r"><code>library(tidyr)
 hypotheses &lt;- gather(hypotheses, na.rm = TRUE, factor_key = TRUE)
-#all hypothesis in text, by R
+# all hypothesis in text, by R
 hypotheses$value</code></pre>
 <pre><code>[1] &quot;group1  = 0&quot;                           &quot;group2  = 0&quot;                           &quot;group3  = 0&quot;                           &quot;group1  = 0; group2  = 0&quot;              &quot;group1  = 0; group3  = 0&quot;              &quot;group2  = 0; group3  = 0&quot;              &quot;group1  = 0; group2  = 0; group3  = 0&quot;</code></pre>
-<pre class="r"><code>#number of hypotheses
+<pre class="r"><code># number of hypotheses
 nrhypos &lt;- sum(!is.na(hypotheses$value))
-#create all hypotheses H01 to H0nrhypos
-for(i in 1:nrhypos){
-  assign(paste(&quot;H0&quot;, i, sep = &quot;&quot;), hypotheses$value[i])    
+# create all hypotheses H01 to H0nrhypos
+for (i in 1:nrhypos) {
+    assign(paste(&quot;H0&quot;, i, sep = &quot;&quot;), hypotheses$value[i])
 }
 # Now all the exploratory (=) hypotheses are specified
 
-# In case you want to see them all, paste the following result in the R console:
+# In case you want to see them all, paste the following result in the R
+# console:
 cat(paste0(&quot;H0&quot;, 1:nrhypos, &quot;;&quot;))</code></pre>
 <pre><code>H01; H02; H03; H04; H05; H06; H07;</code></pre>
 <pre class="r"><code># and past result in R console and you see them.

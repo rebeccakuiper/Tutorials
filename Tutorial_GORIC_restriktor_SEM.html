@@ -11,6 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
+<meta name="date" content="2024-04-02" />
 
 <title>How to evaluate theory-based hypotheses in a SEM model using the GORICA</title>
 
@@ -2695,7 +2696,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a SEM model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">09 februari 2024</h4>
+<h4 class="date">02 April 2024</h4>
 
 </div>
 
@@ -2763,8 +2764,8 @@ to give your own labels to estimates by including them in the
 library(lavaanPlot)
 lavaanPlot(model = fit1, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;),
     edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-0fe43a16868f523190e3" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-0fe43a16868f523190e3">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-4831eceec4232086a6d7" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-4831eceec4232086a6d7">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>To call the goric() function, we need to formulate the hypothesis of
 interest. The GORICA selects the best hypothesis out of a given set.
 Here, since we only have a single hypothesis, we will compare it to its
@@ -2799,7 +2800,7 @@ Results:
 1        H1.1  33.581    8.139  -50.884           0.669            0.977           0.988
 2  complement  32.879   11.886  -41.985           0.331            0.023           0.012
 ---
-The order-restricted hypothesis &#39;H1.1&#39; has 85.561 times more support than its complement.
+The order-restricted hypothesis &#39;H1.1&#39; has 85.56 times more support than its complement.
 
 
 Ratio GORICA-weights:
@@ -2852,7 +2853,7 @@ Results:
 1        H1.1  33.581    8.152  -50.857           0.669            0.977           0.988
 2  complement  32.879   11.884  -41.990           0.331            0.023           0.012
 ---
-The order-restricted hypothesis &#39;H1.1&#39; has 84.260 times more support than its complement.
+The order-restricted hypothesis &#39;H1.1&#39; has 84.26 times more support than its complement.
 
 
 Ratio GORICA-weights:
@@ -2921,8 +2922,8 @@ library(lavaanPlot)
 
 lavaanPlot(model = fit2, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;),
     edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-8dd551f18ec21e6cd512" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-8dd551f18ec21e6cd512">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-56194053b1473652e82a" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-56194053b1473652e82a">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Proceed to formulate the hypothesis of interest using the same labels
 as in the model definition:</p>
 <pre class="r"><code>H2.1 &lt;- &quot;Pre_b &lt; Pre_g&quot;</code></pre>
@@ -2945,7 +2946,7 @@ Results:
 1        H2.1   4.420    1.500  -5.841           0.498            0.500           0.498
 2  complement   4.428    1.500  -5.856           0.502            0.500           0.502
 ---
-The order-restricted hypothesis &#39;H2.1&#39; has 0.992 times more support than its complement.
+The order-restricted hypothesis &#39;H2.1&#39; has 0.99 times more support than its complement.
 
 
 Ratio GORICA-weights:
