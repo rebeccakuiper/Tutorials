@@ -1,7 +1,4 @@
 
-Note: All files can be run under restriktor version 0.5-20.
-
-
 How to download the files:
 
 0. Go to main folder (https://github.com/rebeccakuiper/Tutorials).
