@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Leonard Vanbrabant" />
 
-<meta name="date" content="2024-04-02" />
+<meta name="date" content="2024-04-09" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper and Leonard Vanbrabant</h4>
-<h4 class="date">02 April 2024</h4>
+<h4 class="date">09 April 2024</h4>
 
 </div>
 
@@ -1538,9 +1538,9 @@ quantify their relative support. This leads to conclusions like
 Hypothesis <span class="math inline">\(H_1\)</span> is <span class="math inline">\(w_1/w_2\)</span> more supported than the competing
 hypothesis <span class="math inline">\(H_2\)</span>.</p>
 <p>I am not in favor of cut-off points, but when you feel you need them
-to label the height of the weights and/or their ratios, you can use
-benchmarks as proposed and discussed in ‘Guidelines_GORIC-benchmarks’ on
-<a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
+to label the height/strength of the weights and/or their ratios, you can
+use benchmarks as proposed and discussed in
+‘Guidelines_GORIC-benchmarks’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
 </div>
 <div id="hypotheses-sets" class="section level1" number="3">
@@ -1567,6 +1567,9 @@ investigation.</p></li>
 </ul>
 <p>Consequently, be aware of specifying overlapping hypotheses and
 hypotheses containing one or more equality restrictions.</p>
+<p>For an overview of what type of hypotheses to include in the set and
+which failsafe hypothesis to use, see the decision trees in ‘Decision
+trees - Choice hypotheses.pdf’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
 <div id="interpretation-output" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Interpretation
@@ -1593,6 +1596,9 @@ interest). Generally good advise - as will become clear later on -
 check the (ratio of) fit/loglik weights of the preferred hypotheses with
 that of the other hypotheses in the set</strong>. Additionally, you may
 want to take into account the sample size you have.</p>
+<p>For an overview of what type of output to inspect and how to
+interpret, see the decision tree in ‘Decision tree - Interpretation.pdf’
+on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 <p>Next, I will go into more detail for each type of hypothesis set.</p>
 </div>
 <div id="one-informative-hypothesis" class="section level2" number="4.2">
@@ -1647,7 +1653,8 @@ The order-restricted hypothesis &#39;H1&#39; has 4.88 times more support than it
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is <span class="math inline">\(.83/.17 \approx 4.88\)</span> time more supported
 than its complement.<br />
-Additionally, one could say that the probability that <span class="math inline">\(H_1\)</span> is not the best is 17%.</p>
+Additionally, one could say that the probability that <span class="math inline">\(H_1\)</span> is not the best is 17%.
+<!-- TO DO lees uit de output! --></p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1666,9 +1673,9 @@ loglik.weights is not close to 1), there is no support for the boundary
 of these hypotheses; only support for <span class="math inline">\(H_1\)</span>.</p>
 </div>
 </div>
-<div id="vs-unconstrained" class="section level3" number="4.2.2">
-<h3><span class="header-section-number">4.2.2</span> vs
-Unconstrained</h3>
+<div id="vs-unconstrained-but-not-advised" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> vs Unconstrained
+(but not advised)</h3>
 <p>The unconstrained hypothesis denotes all the possible hypotheses
 (i.e., all the possible orderings); so, including the one of interest.
 Since it covers the hypothesis of interest, it cannot act like a
@@ -1709,7 +1716,8 @@ Results:
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is more supported than the
 unconstrained (since <span class="math inline">\(.763/.237 &gt;
-1\)</span>) and is, therefore, not a weak hypothesis.</p>
+1\)</span>) and is, therefore, not a weak hypothesis.
+<!-- TO DO lees uit de output! --></p>
 <p>When you look at the fit/loglik value, you can see that they are the
 same for both hypotheses (also reflected by the loglik.weights; leading
 to a ratio of loglik.weights of 1). The unconstrained has, by
@@ -1762,9 +1770,9 @@ all possible theories/orderings. Namely, when both informative
 hypotheses are weak hypotheses, GORIC(A) selects the best out of a set
 of weak hypotheses (i.e., best of the worst). To refrain from this, one
 should then include a safeguard hypothesis.</p>
-<div id="complement-as-failsafe" class="section level3" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Complement as
-failsafe</h3>
+<div id="complement-of-set-as-failsafe" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Complement of set
+as failsafe</h3>
 <p>The complement of a set of hypotheses denotes all the other possible
 hypotheses (i.e., all the other possible orderings); so, excluding the
 ones of interest. The <strong>complement acts like another competing
@@ -1790,6 +1798,10 @@ Section.</p></li>
 </ul>
 <p>Important: This option is unfortunately not yet available in GORIC(A)
 software.</p>
+<p>However, the relative support of two informative hypotheses is
+independent from the choice of failsafe. So, if the goal is the
+comparison of informative hypotheses, one could also use the
+unconstrained (as discussed in the next subsection).</p>
 </div>
 <div id="unconstrained-as-failsafe" class="section level3" number="4.3.2">
 <h3><span class="header-section-number">4.3.2</span> Unconstrained as
@@ -1843,7 +1855,7 @@ hypothesis <span class="math inline">\(H_2: \mu_1 &lt; \mu_2 &lt;
 \mu_3\)</span>. Note that <span class="math inline">\(H_2\)</span> is
 weak <span class="math inline">\((.000/.237 &lt; 1\)</span> or <span class="math inline">\(.000 &lt; .237)\)</span>; so, we already know that
 <span class="math inline">\(H_1\)</span> is better, but not yet how much
-better.</p>
+better. <!-- TO DO lees uit de output! --></p>
 <p>From the GORIC weights (or their ratios in results_12u$ratio.gw - H1
 vs. H2), you can conclude that <span class="math inline">\(H_1\)</span>
 is .763/.000 = an infinite times (or 2871.23 times) more supported than
@@ -1907,7 +1919,8 @@ Results:
 H1  1.000 44.682
 H2  0.022  1.000</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2, \ \mu_3\)</span> is <span class="math inline">\(.978/.022\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(45\)</span> times more supported than <span class="math inline">\(H_2: \mu_1 &lt; \mu_2, \ \mu_3\)</span>.</p>
+\mu_1 &gt; \mu_2, \ \mu_3\)</span> is <span class="math inline">\(.978/.022\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(45\)</span> times more supported than <span class="math inline">\(H_2: \mu_1 &lt; \mu_2, \ \mu_3\)</span>.
+<!-- TO DO lees uit de output! --></p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1989,7 +2002,8 @@ supported than its complement. Since the ratio is larger than 1, <span class="ma
 [Note: Since the fit/loglik weights differ (i.e., the ratio of
 loglik.weights is not close to 1), there is no support for the boundary
 of <span class="math inline">\(H_{1g}\)</span> and its comeplement - as
-discussed in the Special cases Section.]</p>
+discussed in the Special cases Section.]
+<!-- TO DO lees uit de output! --></p>
 <p>Sometimes you may want a minimum support for your hypothesis of
 interest. You could do this by pre-specifying a cut-off value for the
 ratio: when the ratio of GORIC(A) weights is higher than that value,
@@ -2024,7 +2038,8 @@ Treatment A.<br />
 [Note: Since the fit/loglik weights differ (i.e., the ratio of
 loglik.weights is not close to 1), there is no support for the boundary
 of <span class="math inline">\(H_{1m}\)</span> and its complement - as
-discussed in the Special cases Section.]</p>
+discussed in the Special cases Section.]
+<!-- TO DO lees uit de output! --></p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2.5:1;
 implying that both <span class="math inline">\(H_{1g}\)</span> and <span class="math inline">\(H_{1m}\)</span> are correct. More specifically, I
@@ -2041,7 +2056,8 @@ interest versus its complement will go to infinity.</p>
 <ul>
 <li><p>When specifying a bound/treshold for a positive difference (e.g.,
 the .1 in the example above), you should use the minimum difference you
-would like to find. Notably, if you use a higher bound then needed, the
+would like to find. Notably, if you use a higher bound (in case of an
+<span class="math inline">\(&gt;\)</span> restriction) then needed, the
 complexity does not change, while the fit decreases; which leads to less
 support for your hypothesis of interest.</p></li>
 <li><p>In case you want to inspect an absolute difference, you can make
@@ -2597,6 +2613,31 @@ and applied the GORIC.<br />
 When I would sample more observations, the ratio of loglik weights of
 <span class="math inline">\(H_1\)</span> and its complement will go to
 infinity and, most importantly, the GORIC(A) weight of <span class="math inline">\(H_1\)</span> will converge to 1.</p>
+</div>
+<div id="about-equality-vs-absolute-specification" class="section level4" number="5.2.2.2">
+<h4><span class="header-section-number">5.2.2.2</span> About-equality vs
+absolute specification</h4>
+<p>An about-equality restriction should preferably be specified as a
+range restriction (e.g., <span class="math inline">\(-0.2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(\beta_1
+- \beta_2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(0.2\)</span>). In that case, the fit is based on
+that range restriction; and the penalty then reduces to the penalty for
+an equality restriction, which make sense since this range restriction
+is meant as an equality.</p>
+<p>In an about-equality restriction, one specifies that a (function of)
+parameter(s) lies in between two values. In theory, one could use the
+abs() function as well, but that is not advised. If you would use abs(b1
+- b2) &lt; .2, an inequality restriction is evaluated where the sign of
+the expression in abs() is made positive. That is, if b1 - b2 is
+positive, b1 - b2 &lt; .2 is evaluated; if b1 - b2 is negative, then
+-(b1 - b2) &lt; .2 is evaluated. In this case, the penalty is based on
+the inequality, not an equality restriction.</p>
+<p>I would advise on<br />
+- expressing an about-equality via a range restriction, where you
+specify a range of values. - using the abs() function when you are
+interested in an inequality restriction for the absolute value of one or
+more parameters / for the strength of one or more predictors (e.g.,
+abs(b1) &gt; abs(b2); or, when using bounds/thresholds, abs(b1) -
+abs(b2) &gt; .1).</p>
 </div>
 </div>
 </div>
