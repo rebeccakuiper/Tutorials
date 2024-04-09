@@ -138,5 +138,28 @@ output_c
 #                                                           than its complement.             
 
 
+########################
+
+
+# Example Palmer & Gough
+
+# Data
+PandG_data <- read.table("Data_PalmerAndGough.txt", header=TRUE)
+PandG_data$group <- factor(PandG_data$group) 
+
+# Fit object
+fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
+
+# Informative hypothesis
+H1 <- 'group1 > group2 > group3' 
+
+# GORIC
+set.seed(123) # Set seed value
+goric.PandG_c <- goric(fit.PandG, 
+                     hypotheses = list(H1 = H1), comparison = "complement")
+goric.PandG_c
+#summary(goric.PandG_c)
+
+
 ################################################################################
 

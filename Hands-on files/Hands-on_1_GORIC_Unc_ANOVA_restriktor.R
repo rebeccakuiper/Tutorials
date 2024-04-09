@@ -51,8 +51,11 @@ fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
 
 
 # (Informative) hypotheses
-H0 <- 'group1 = group2 = group3' 
+H0 <- 'group1 = group2 = group3' # Only if of interest!
 H1 <- 'group1 > group2 > group3' 
+#
+# Note: If equalities are of interest, I would inspect about-equalities.
+# For more details, see the tutorial(s) on my github page.
 
 
 # GORIC
@@ -63,13 +66,22 @@ goric.PandG
 #goric.PandG$result
 #summary(goric.PandG)
 goric.PandG$ratio.gw
-#
-# Most probably, H0 is not of interest, then do:
+
+###
+
+# Most probably, H0 is not of interest, but perhaps there is another theory:
+
+# Informative hypotheses
+H1 <- 'group1 > group2 > group3' 
+H2 <- 'group1 > group2 < group3'
+
+# GORIC
 set.seed(123) # Set seed value
-goric.PandG <- goric(fit.PandG, hypotheses = list(H1))
-goric.PandG
-#goric.PandG$result
-#summary(goric.PandG)
+goric.PandG_H2 <- goric(fit.PandG, hypotheses = list(H1 = H1, H2 = H2))
+goric.PandG_H2
+#goric.PandG_H2$result
+#summary(goric.PandG_H2)
+goric.PandG_H2$ratio.gw
 
 
 #####################

@@ -36,13 +36,17 @@
 # alternative hypothesis is included in the set. 
 # This safeguards from choosing a weak hypothesis as the best one.
 # If at least one of the theory-based / informative hypotheses is not weak,
-# one can compare those to all other hypotheses in the set.
+# one can compare that/those to all other hypotheses in the set.
 #
 # Currently, "complement" only works for one hypothesis and not a whole set. 
 # Then, the complement of the hypothesis of interest is evaluated
 # and acts like a competing hypothesis. 
 # Since there is per definition no overlap between the hypothesis and its 
 # complement, this is more powerful then including the unconstrained hypothesis.
+#
+# Note that the use of the complement of the set would not change the relative 
+# support between two competing theories. 
+# Hence, one can just use the unconstrained (as a failsafe then).
 #
 # The example below uses the default: comparison = "unconstrained".
 # At the end, there are three examples for the three types of comparisons.
@@ -82,6 +86,8 @@
 # - One can also define terms that are a linear function of parameters and 
 # specify hypotheses on those (see 'Extra possibility specification hypotheses' 
 # near the end of this document).
+# - One can use 'abs()' in case one wants to specify an absolute strength; 
+#   e.g., abs(beta1) > abs(beta2); abs(beta2) > abs(beta3).
 #
 # When 'list with constraints matrix'
 # One should now specify "list(constraints = xxx, rhs = xxx, neq = x)", with 
