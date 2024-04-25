@@ -1503,9 +1503,15 @@ matrix.</p>
 <p>To use the discussed tools/functions, you need the following R
 package and R files (or functions):</p>
 <pre class="r"><code>library(expm)
+#
 source(&quot;phiplot.R&quot;)
 source(&quot;plotIRF.R&quot;)
-# Possibly: Run the code in these files</code></pre>
+# Possibly: Run the code in these files
+library(devtools)
+install_github(&quot;rebeccakuiper/CTmeta&quot;)
+library(CTmeta)
+# ?CTmeta
+citation(&quot;CTmeta&quot;)</code></pre>
 </div>
 <div id="drift" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Drift</h1>
@@ -1566,7 +1572,7 @@ than <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_
 is strongly positive at shorter intervals, peaking around <span class="math inline">\(\Delta t = .15\)</span>.</li>
 <li>The cross-lagged effect <span class="math inline">\(Y_1(t)
 \rightarrow Y_2(t+\Delta t)\)</span>, denoted by the red dashed line, is
-also positive, but peaks at a later interval (approx <span class="math inline">\(\Delta t = 4\)</span>). At shorter intervals
+also positive, but peaks at a later interval (approximately <span class="math inline">\(\Delta t = .4\)</span>). At shorter intervals
 (<span class="math inline">\(\Delta t &lt; .6\)</span>), this effect is
 smaller than the <span class="math inline">\(Y_2 \rightarrow
 Y_3\)</span> effect, but at longer intervals (<span class="math inline">\(\Delta t &gt; .6\)</span>), this effect is
@@ -1596,6 +1602,16 @@ The reverse then, is also true: The moment-to-moment dynamics are not
 easy to infer on the basis of looking at the lagged parameters at some
 longer time-interval.</li>
 </ul>
+<!-- ## Extra -->
+<!-- TO DO -->
+<!-- Werk aan deze fie, want nu geeft het vooral de TI waarvoor de Phi nul is! Dus geef zowel max als min ms?! Zoek voor meerdere optima??  -->
+<!-- ```{r, eval = T}  -->
+<!-- res_Optimum <- MaxDeltaT(Drift = A) -->
+<!-- # TIs for which optimum: -->
+<!-- round(res_Optimum$DeltaT_MinOrMaxPhi, 3) -->
+<!-- # Optimum phi_{jj'} (not Phi!): -->
+<!-- round(res_Optimum$MinOrMaxPhi, 3) -->
+<!-- ``` -->
 </div>
 <div id="impulse-response-function" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Impulse response
