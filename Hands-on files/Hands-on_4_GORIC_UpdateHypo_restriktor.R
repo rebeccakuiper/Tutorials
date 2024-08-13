@@ -195,7 +195,7 @@ output_repl
 # you could also evaluate this against its complement:
 set.seed(123) # Set seed value
 goric(lm_fit_Holubar, hypotheses = list(H1), comparison = "complement")
-# Since $H_1$ has only 0.39 (< 1) times more support than its complement, 
+# Since $H_1$ has < 1 times more, so less, support than its complement, 
 # it is a weak hypothesis. 
 # Hence, the study of Holubar did not replicate the findings of Monin.
 

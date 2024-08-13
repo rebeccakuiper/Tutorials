@@ -1,8 +1,11 @@
 
 # https://github.com/rebeccakuiper/Tutorials/blob/main/Tutorial_GORIC_restriktor_General.R
 
+if (!require("EffectLiteR")) install.packages("EffectLiteR") # install this package first (once)
 library(EffectLiteR)
 # effectLiteGUI() ## shiny interface
+#
+if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
 library(restriktor)
 
 ############## Example 1: Adjusted Means ##################
@@ -34,7 +37,7 @@ out_01u
 #summary(out_01u)
 # H0 and H1 both not weak (nl more support than the unconstrained), thus,
 # we can compare H0 vs H1: H0 has 0.553/0.340 more support than H1:
-out_01u$ratio.gw
+out_01u$ratio.gw # see element (1,2) for H0 vs H1
 #H0 has 1.6280686 more support than H1. 
 # Note that H1 also contains H0.
 #
@@ -46,7 +49,7 @@ out_0c <- goric(est, VCOV=VCOV,
                 hypotheses=list(H0=H0), comparison = 'complement')
 out_0c
 #summary(out_0c)
-# H0 has 5.162 times more support than its complement, that is, the unconstrained.
+# H0 has 5.16 times more support than its complement, that is, the unconstrained.
 #
 #
 # H1 versus its complement #
@@ -77,7 +80,7 @@ parnames <- c("Eg1","Eg2")
 est <- m1@results@est[parnames]
 VCOV <- m1@results@vcov.def[parnames,parnames]
 
-H0 <- "Eg1 == Eg2" 
+H0 <- "Eg1 = Eg2" 
 H1 <- "Eg1 < Eg2"
 H2 <- "Eg1 > Eg2"
 # When these are you hypotheses of interest, 
@@ -99,7 +102,7 @@ out_1c <- goric(est, VCOV=VCOV,
                 hypotheses=list(H1=H1), comparison = 'complement')
 out_1c
 #summary(out_1c)
-# H1 has 5.797 times more support than its complement.
+# H1 has 5.8 times more support than its complement.
 # Btw the loglik values do not resemble, so we can interpret the ratio.
 
 

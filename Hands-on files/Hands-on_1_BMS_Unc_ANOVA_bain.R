@@ -96,6 +96,7 @@ H2 <- 'group3 > group1 > group4 = group5 > group2'
 # (notably, only H0 and H2 are used next, since H1 cannot be evaluated by bain):
 Hypotheses <- 'group1 = group2 = group3 = group4 = group5;
 group3 > group1 > group4 = group5 > group2'
+# Note that these hypotheses will be called H1 & H2.
 
 
 # Calculate BFs and PMPs

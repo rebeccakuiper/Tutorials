@@ -23,10 +23,10 @@ H1 <- "D1 < D2 < D3"
 # GORIC values and GORIC weights
 GORIC <- goric(fit.lm, hypotheses = list(H1), comparison = "complement") 
 GORIC
-# The order-restricted hypothesis ‘H1’ has 4.375 times more support than its complement.
+# The order-restricted hypothesis ‘H1’ has > 1 times more support than its complement.
 
 # GORICc values and GORICc weights
 GORICc <- goric(fit.lm, hypotheses = list(H1), comparison = "complement",
               type = 'goricc') 
 GORICc
-#The order-restricted hypothesis ‘H1’ has 7.717 times more support than its complement.
+#The order-restricted hypothesis ‘H1’ has > 1 times more support than its complement.

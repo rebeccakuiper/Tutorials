@@ -40,6 +40,6 @@ evSyn.added <- evSyn(object = LL, PT = PT,
                      hypo_names = c("H1", "Hc"))
 
 evSyn.added
-summary(evSyn.added)
+#summary(evSyn.added)
 plot(evSyn.added)
 

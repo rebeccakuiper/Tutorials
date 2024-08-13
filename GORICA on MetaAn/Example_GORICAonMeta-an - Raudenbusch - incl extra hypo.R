@@ -4,11 +4,11 @@ library(metafor)
 if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
 library(restriktor) # for goric function
 
-library(devtools) # Make sure you have Rtools (and a version which is compatible with your R version).
-install_github("rebeccakuiper/ICweights")
-library(ICweights)
-#?IC.weights # This also contains examples of how to use the function
-#citation("ICweights") # In case you use this function, please cite it
+#library(devtools) # Make sure you have Rtools (and a version which is compatible with your R version).
+#install_github("rebeccakuiper/ICweights")
+#library(ICweights)
+##?IC.weights # This also contains examples of how to use the function
+##citation("ICweights") # In case you use this function, please cite it
 
 
 #######################################
@@ -48,16 +48,9 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#restriktor (0.5-20): generalized order-restricted information criterion approximation:
-#  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0   0.731    0.000  -1.462           0.422
-#2  complement   2.044    1.000  -2.089           0.578
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.731 times more support than its complement.
+# The order-restricted hypothesis ‘H0’ has < 1 times more, so less, support than its complement.
 #
-# So, support for H0 just below the support for Hunc, 
+# So, support for H0 lower than the support for Hunc, 
 # but no quantification for (lack of) support for the hypothesis of interest H1.
 
 
@@ -79,15 +72,9 @@ results_H1 <- goric(est, VCOV = VCOV_est,
                     hypotheses = list(H1), comparison = "complement", 
                     type = "gorica")
 results_H1
-#restriktor (0.5-20): generalized order-restricted information criterion approximation:
-#  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H1   2.044    0.500  -3.089           0.788
-#2  complement   0.731    0.500  -0.462           0.212
-#---
-#  The order-restricted hypothesis ‘H1’ has  3.719 times more support than its complement.
-# Support for 'theta > 0' versus 'theta < 0' is about 3.7 as strong.
+#
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support than its complement.
+# Support for 'theta > 0' is stronger than that for 'theta < 0'.
 
 
 # Alternative: H0 and H1
@@ -97,14 +84,6 @@ set.seed(123) # set seed: to obtain the same results when you re-run it
 goric(est, VCOV = VCOV_est, 
       hypotheses = list(H0 = H0, H1 = H1), 
       type = "gorica")
-#
-#restriktor (0.5-20): generalized order-restricted information criterion approximation:
-#  
-#  Results:
-#           model  loglik  penalty  gorica  gorica.weights
-#1             H0   0.731    0.000  -1.462           0.216
-#2             H1   2.044    0.500  -3.089           0.488
-#3  unconstrained   2.044    1.000  -2.089           0.296
 #
 # Note: H1 and H0 are subsets of Hunc (and H0 is also part of H1).
 #
@@ -120,17 +99,9 @@ library(ICweights)
 ICw <- IC.weights(c(results_H0$result[1,4], results_H1$result[,4]), Name_Hypo = c("H0", "H1", "compl_H1"))
 ICw
 #
-#$IC.weights
-#[1] 0.2589079 0.5840564 0.1570356
-#
-#$rel.IC.weights
-#             vs H0     vs H1 vs compl H1
-#H0       1.0000000 0.4432927    1.648721
-#H1       2.2558460 1.0000000    3.719261
-#compl H1 0.6065307 0.2688706    1.000000
-#
 # Most support for H1 (which includes also some support for H0). 
-# H1 2.3 times more supported than H0 and 3.7 times more than its complement (cf. results first analysis).
+# H1 (> 1 times) more supported than H0 and
+# H1 (> 1 times) times more than its complement (cf. results first analysis).
 #
 # Note: support for 'theta >= 0' vs 'theta < 0' is 0.2589079 + 0.5840564 vs 0.1570356
 IC.weights_Hypo <- c(0.2589079 + 0.5840564, 0.1570356)
@@ -140,14 +111,6 @@ names(rel.IC.weights_Hypo) <- c("theta >= 0 vs theta < 0")
 IC.weights_Hypo
 rel.IC.weights_Hypo
 #
-#> IC.weights_Hypo
-#theta >= 0  theta < 0 
-#0.8429643  0.1570356
-#
-#> rel.IC.weights_Hypo
-#theta >= 0 vs theta < 0 
-#5.367982 
-#
 #
 # or: support for 'theta > 0' vs 'theta <= 0' is 0.2589079 vs 0.5840564 + 0.1570356
 IC.weights_Hypo <- c(0.2589079, 0.5840564 + 0.1570356)
@@ -156,17 +119,7 @@ rel.IC.weights_Hypo <- IC.weights_Hypo[1] / IC.weights_Hypo[2]
 names(rel.IC.weights_Hypo) <- c("theta > 0 vs theta <= 0")
 IC.weights_Hypo
 rel.IC.weights_Hypo
-#
-#> IC.weights_Hypo
-#theta > 0 theta <= 0 
-#0.2589079  0.7410920 
-#
-#> rel.IC.weights_Hypo
-#theta > 0 vs theta <= 0 
-#0.34936 
 
 
 #######################################
-
-
 

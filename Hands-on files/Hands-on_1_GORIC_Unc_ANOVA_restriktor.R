@@ -191,11 +191,11 @@ output
 #summary(output)
 output$ratio.gw
 #
-# It can be seen that the order-restricted hypothesis $H_1$ has 17 
-# times more support than $H_u$ (the unconstrained hypothesis). 
+# It can be seen that the order-restricted hypothesis $H_1$ has (>1 
+# times) more support than $H_u$ (the unconstrained hypothesis). 
 # Hence, $H_1$ is not a weak hypotheses and can be compared to the other (weak 
 # and non-weak) competing hypotheses: 
-# $H_1$ is 39 times more likely than $H_2$.
+# $H_1$ is (>1 times) more likely than $H_2$.
 
 
 

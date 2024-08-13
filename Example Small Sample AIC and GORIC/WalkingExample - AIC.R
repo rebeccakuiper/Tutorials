@@ -23,10 +23,10 @@ H1 <- "D1 = D2 = D3"
 # AIC values and AIC weights
 AIC <- goric(fit.lm, hypotheses = list(H1), comparison = "complement") 
 AIC
-# The order-restricted hypothesis ‘H1’ has 0.360 times more support than its complement.
+# The order-restricted hypothesis ‘H1’ has < 1 times more, so less, support than its complement.
 
 # AICc values and AICc weights
 AICc <- goric(fit.lm, hypotheses = list(H1), comparison = "complement",
               type = 'goricc') 
 AICc
-#The order-restricted hypothesis ‘H1’ has 1.241 times more support than its complement.
+#The order-restricted hypothesis ‘H1’ has > 1 times more support than its complement.

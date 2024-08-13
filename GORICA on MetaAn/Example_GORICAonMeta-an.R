@@ -7,11 +7,11 @@ library(restriktor) # for goric function
 #install_github("LeonardV/restriktor")
 #library(restriktor)
 
-library(devtools) # Make sure you have Rtools (and a version which is compatible with your R version).
-install_github("rebeccakuiper/ICweights")
-library(ICweights)
-#?IC.weights # This also contains examples of how to use the function
-#citation("ICweights") # In case you use this function, please cite it
+#library(devtools) # Make sure you have Rtools (and a version which is compatible with your R version).
+#install_github("rebeccakuiper/ICweights")
+#library(ICweights)
+##?IC.weights # This also contains examples of how to use the function
+##citation("ICweights") # In case you use this function, please cite it
 
 
 #######################################
@@ -121,14 +121,8 @@ results_H0_1.1 <- goric(est, VCOV = VCOV_est,
 # Note that the complement is the unconstrained Hunc now.
 results_H0_1.1
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0   0.731    0.000  -1.462           0.422
-#2  complement   2.044    1.000  -2.089           0.578
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.731 times more support 
+# The order-restricted hypothesis ‘H0’ has < 1 times more, so less, support 
 #                                                 than its complement.
-# So, the support for H0 just below the support for Hunc.
 # Notably, Hunc also includes H0.
 
 # Conclusion
@@ -152,14 +146,9 @@ results_H0_1.2 <- goric(est, VCOV = VCOV_est,
 # Note that the complement is the unconstrained Hunc now.
 results_H0_1.2
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0   1.995    0.000  -3.989           0.721
-#2  complement   2.044    1.000  -2.089           0.279
-#---
-#  The order-restricted hypothesis ‘H0’ has  2.586 times more support 
+# The order-restricted hypothesis ‘H0’ has (> 1 times) more support 
 #                                                 than its complement.
-# So, the support for H0 (2.6 times) higher than the support for Hunc.
+# So, the support for H0 is higher than the support for Hunc.
 # Notably, Hunc also includes H0.
 
 # Conclusion
@@ -196,14 +185,8 @@ results_H1_1.1 <- goric(est, VCOV = VCOV_est,
 # Note that the complement is all other orderings now; here: 'theta < 0'.
 results_H1_1.1
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H1   2.044    0.500  -3.089           0.788
-#2  complement   0.731    0.500  -0.462           0.212
-#---
-#  The order-restricted hypothesis ‘H1’ has  3.719 times more support 
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
 #                                                 than its complement.
-# Thus, the support for 'theta > 0' versus 'theta < 0' is about 3.7 as strong.
 
 # Conclusion
 # Evidence in favor of H1.1: theta > 0.
@@ -224,12 +207,7 @@ results_H1_1.2 <- goric(est, VCOV = VCOV_est,
 # here: 'theta < 0' and 'theta > 0.2'.
 results_H1_1.2
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H1   2.044    0.000  -4.089           0.910
-#2  complement   0.731    1.000   0.538           0.090
-#---
-#  The order-restricted hypothesis ‘H1’ has 10.110 times more support 
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
 #                                                 than its complement.
 
 # Conclusion
@@ -266,28 +244,11 @@ results_all <- goric(est, VCOV = VCOV_est,
 results_all
 round(results_all$ratio.gw, digits = 2)
 #
-#Results:
-#   model   loglik  penalty   gorica  gorica.weights
-#1   H2.0    0.731    0.500   -0.462           0.131
-#2   H2.1    2.044    0.000   -4.089           0.805
-#3   H2.2   -0.491    0.000    0.981           0.064
-#4   H2.3  -30.442    0.000   60.883           0.000
-#5   H2.4  -94.135    0.500  189.270           0.000
-#---
-#
-#> round(results_all$ratio.gw, digits = 2)
-#     vs. H2.0 vs. H2.1 vs. H2.2     vs. H2.3     vs. H2.4
-#H2.0     1.00     0.16     2.06 2.093783e+13 1.583837e+41
-#H2.1     6.13     1.00    12.62 1.283913e+14 9.712130e+41
-#H2.2     0.49     0.08     1.00 1.017521e+13 7.697015e+40
-#H2.3     0.00     0.00     0.00 1.000000e+00 7.564477e+27
-#H2.4     0.00     0.00     0.00 0.000000e+00 1.000000e+00
-#
 # Thus, 'H2.1: 0 < theta < 0.2' has the highest support and is thus preferred.
 # The support for H2.1 (no effect) versus 'H2.0: theta < 0' (no improvement)
-# is about 6.1 times as strong (see ratio.gw or use .805/.131).
+# is about 6 times as strong (see ratio.gw).
 # Its support versus that of 'H2.2: 0.2 < theta < 0.5' (small effect) 
-# is about 12.6 higher.
+# is about 13 higher.
 # The support for H2.1 versus H2.3 (medium) and H2.4 (large effect) is infinite.
 # Hence, there is quite some support for H2.1: 0 < theta < 0.2 (no effect).
 #
@@ -384,14 +345,7 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#  Results:
-#  model  loglik  penalty  gorica  gorica.weights
-#1          H0  -6.197    0.000  12.394           0.000
-#2  complement   4.802    2.000  -5.605           1.000
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.000 times more support 
-#                                                 than its complement.
-#
+# The order-restricted hypothesis ‘H0’ has no support;
 # So, full support for complement, which is the unconstrained in this case.
 # This includes the hypothesis of interest H1.
 # Notably, no quantification for (lack of) support for 
@@ -416,12 +370,7 @@ results <- goric(est, VCOV = VCOV_est,
                  type = "gorica")
 results
 #
-#Results:
-#  model  loglik  penalty  gorica  gorica.weights
-#1          H1   4.802    1.362  -6.880           1.000
-#2  complement  -4.827    1.138  11.929           0.000
-#---
-#  The order-restricted hypothesis ‘H1’ has 12141.770 times more support 
+# The order-restricted hypothesis ‘H1’ has (>>1 times) more support 
 #                                                    than its complement.
 #
 # Full support for H1.
@@ -440,12 +389,7 @@ results_H2_1 <- goric(est, VCOV = VCOV_est,
                       type = "gorica")
 results_H2_1
 #
-#Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H2   4.802    0.497  -8.610           0.987
-#2  complement   1.969    2.000   0.062           0.013
-#---
-#The order-restricted hypothesis ‘H2’ has 76.387 times more support 
+# The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
 #                                               than its complement.
 
 
@@ -600,36 +544,17 @@ results_AIC_Set3
 #
 #
 # Set 1
-#  Results:
-#           model   loglik  penalty   gorica  gorica.weights
-#1            H01  -73.975    0.000  147.950           0.000
-#2            H02  -20.393    1.000   42.787           0.000
-#3            H03   -5.063    1.000   12.127           0.000
-#4  unconstrained    3.912    2.000   -3.824           1.000
-#---
 # From this, it is concluded that the unconstrained hypothesis is 
 # the best hypothesis and has even full support. 
 # This implies that the other three hypotheses are weak hypotheses.
 #
 # Set 2
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1         H04  -9.560    0.000  19.120           0.000
-#2  complement   3.912    2.000  -3.824           1.000
-#---
-#  The order-restricted hypothesis ‘H04’ has  0.000 times more support 
-#                                                   than its complement.
-# Hence, there is no support for $H_{04}$, or stated differently,
+# There is no support for $H_{04}$, or stated differently,
 # there is full support for the unconstrained (the complement of $H_{04}$).
 # Note that the unconstrained contains both values above and below 0.2.
 #
 # Set 3
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0   3.910    1.000  -5.820           0.731
-#2  complement   3.912    2.000  -3.824           0.269
-#---
-#  The order-restricted hypothesis ‘H0’ has  2.713 times more support 
+# The order-restricted hypothesis ‘H0’ has (> 1 times) more support 
 #                                                 than its complement.
 # This may not seem to be convincing evidence, 
 # but this has to do with evaluating an equality. 
@@ -669,12 +594,7 @@ results_H1.1 <- goric(est, VCOV = VCOV_est,
                       type = "gorica") 
 results_H1.1
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1        H1.1   3.912    0.799  -6.226           1.000
-#2  complement  -5.063    1.701  13.529           0.000
-#---
-#  The order-restricted hypothesis ‘H1.1’ has 19482.703 times more support 
+# The order-restricted hypothesis ‘H1.1’ has (>>1 times) more support 
 #                                                      than its complement.
 #
 # Thus, there is overwhelming (full) support for H1 versus its complement.
@@ -699,18 +619,6 @@ results_H1 <- goric(est, VCOV = VCOV_est,
 #
 results_H1
 round(results_H1$ratio.gw, digits = 2)
-#
-#  Results:
-#           model   loglik  penalty  gorica  gorica.weights
-#1           H1.1    3.912    0.799  -6.226           0.769
-#2           H1.2  -20.393    1.201  43.189           0.000
-#3  unconstrained    3.912    2.000  -3.824           0.231
-#
-#> round(results_H1$ratio.gw, digits = 2)
-#              vs. H1.1    vs. H1.2 vs. unconstrained
-#H1.1               1.0 53728634328              3.32
-#H1.2               0.0           1              0.00
-#unconstrained      0.3 16165185252              1.00
 
 
 # Set 2
@@ -725,15 +633,10 @@ results_H2 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H2
 #  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H2   3.912    0.799  -6.226           0.917
-#2  complement   2.417    1.701  -1.431           0.083
-#---
-#  The order-restricted hypothesis ‘H2’ has 10.996 times more support 
+# The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
 #                                                 than its complement.
 #
-# Thus, there is compelling support for H2.
+# Thus, there is (compelling) support for H2.
 
 
 # Set 3
@@ -747,17 +650,9 @@ results_H3 <- goric(est, VCOV = VCOV_est,
                     hypotheses = list(H3 = H3), comparison = "complement", 
                     type = "gorica") 
 results_H3
-# Weights based on penalty values
-IC.weights(2*results_H3$result[,3])$IC.weights 
-# Note that the penalty is 2*`penalty'
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H3   3.912    1.500  -4.824           0.500
-#2  complement   3.910    1.500  -4.820           0.500
-#---
-#  The order-restricted hypothesis ‘H3’ has  1.002 times more support 
-#                                                 than its complement.
+# The order-restricted hypothesis ‘H3’ has about the same support 
+#                                                 as its complement.
 #
 # Thus, both hypotheses are equally likely. 
 # The log likelihood values are nearly the same and 
@@ -786,34 +681,12 @@ results_range <- goric(est, VCOV = VCOV_est,
                        type = "gorica") 
 results_range
 #
-#Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1    H0_range   3.912    1.000  -5.823           0.731
-#2  complement   3.912    2.000  -3.824           0.269
-#---
-#  The order-restricted hypothesis ‘H0_range’ has  2.718 times more support 
+# The order-restricted hypothesis ‘H0_range’ has (> 1 times) more support 
 #                                                       than its complement.
-#
-#Restriktor message: Since the constraint matrix is not full row-rank, 
-#the level probabilities are calculated using mix.weights = "boot" 
-#(the default is mix.weights = "pmvnorm").
-#For more information see ?restriktor.
-#
-# Notably, in case a hypothesis is not a closed convex cone, 
-# which is the case for range restrictions, 
-# the restriction matrix is not full row-rank. 
-# In that case, the penalty is calculated using another function 
-# (nl, using bootstrap).
-#
 #
 # Since the loglik of the two hypotheses are very close 
 #(and in case of using the unconstrained instead of the complement, even equal)
-# The gorica.weights approximately equal the penalty weights:
-round( IC.weights(2*results_range$result[,3])$IC.weights, 3)
-# Note that the penalty is 2*`penalty'
-#   H1    H2 
-#0.731 0.269
-#
+# The gorica.weights approximately equal the penalty weights.
 # Therefore, there is support for the boundary/overlap of these hypotheses, 
 # which implies H0.
 
@@ -869,14 +742,7 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#Results:
-#        model   loglik  penalty   gorica  gorica.weights
-#1          H0  -61.532    1.000  125.063           0.000
-#2  complement   10.119    4.000  -12.238           1.000
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.000 times more support 
-#                                                 than its complement.
-#
+# The order-restricted hypothesis ‘H0’ has no support.
 # So, full support for complement, which is the unconstrained in this case.
 
 
@@ -897,17 +763,8 @@ results <- goric(est, VCOV = VCOV_est,
                  type = "gorica")
 results
 #
-#Results:
-#        model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-#1          H1  10.119    2.806  -14.625           1.000            0.708           1.000
-#2  complement   1.041    3.693    5.304           0.000            0.292           0.000
-#--- 
-#  The order-restricted hypothesis ‘H1’ has 21259.850 times more support 
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
 #                                                 than its complement.
-#
-#Restriktor message: Since the constraint matrix is not full row-rank, the level probabilities 
-#are calculated using mix.weights = "boot" (the default is mix.weights = "pmvnorm").
-#For more information see ?restriktor.
 
 
 #Alternative:
@@ -921,13 +778,9 @@ results_mod <- goric(est, VCOV = VCOV_est,
                      type = "gorica")
 results_mod
 #
-#Results:
-#        model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-#1      H1_mod  10.119    3.500  -13.238           0.544            0.500           0.544
-#2  complement   9.943    3.500  -12.887           0.456            0.500           0.456
-#--- 
-#  The order-restricted hypothesis ‘H1_mod’ has 1.192 times more support 
+# The order-restricted hypothesis ‘H1_mod’ has (> 1 times) more support 
 #                                                     than its complement.
+# But: about equal...
 #
 #
 # Note that this is the same as:
@@ -940,14 +793,6 @@ results_mod_res <- goric(est_res, VCOV = VCOV_est_res,
                          hypotheses = list(H1_mod_res = H1_mod_res), 
                          comparison = "complement", type = "gorica")
 results_mod_res
-#
-#Results:
-#        model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-#1  H1_mod_res  10.119    3.500  -13.238           0.544            0.500           0.544
-#2  complement   9.943    3.500  -12.887           0.456            0.500           0.456
-#--- 
-#  The order-restricted hypothesis ‘H1_mod_res’ has 1.192 times more support  
-#                                                         than its complement.
 
 
 #######################################
@@ -992,14 +837,7 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0  -7.885    0.000  15.770           0.000
-#2  complement   0.807    1.000   0.385           1.000
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.000 times more support 
-#                                                 than its complement.
-#
+# The order-restricted hypothesis ‘H0’ has no support.
 # So, no support for H0 and full support for Hunc. 
 # Notably, no quantification for (lack of) support for 
 # the hypothesis of interest H1 (or H2).
@@ -1022,12 +860,7 @@ results <- goric(est, VCOV = VCOV_est,
                  type = "gorica") 
 results
 #  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H1   0.807    0.500  -0.615           1.000
-#2  complement  -7.885    0.500  16.770           0.000
-#---
-#  The order-restricted hypothesis ‘H1’ has 5955.893 times more support 
+# The order-restricted hypothesis ‘H1’ has (>>1 times) more support 
 #                                                   than its complement.
 #
 # Thus, there is overwhelming (full) support for H1 versus its complement 
@@ -1047,15 +880,10 @@ results_H2 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H2
 #  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H2   0.807    0.500  -0.615           0.716
-#2  complement  -0.117    0.500   1.234           0.284
-#---
-#  The order-restricted hypothesis ‘H2’ has  2.520 times more support 
+# The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
 #                                                 than its complement.
 #
-# Now, less support of course (note: complement is here 'LogOdds > -0.5').
+# Now, less support than above of course (note: complement is here 'LogOdds > -0.5').
 
 
 ########
@@ -1122,14 +950,7 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#Results:
-#        model   loglik  penalty   gorica  gorica.weights
-#1          H0  -34.256    2.000  72.512           0.000
-#2  complement    6.065    3.000  -6.130           1.000
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.000 times more support 
-#                                                 than its complement.
-#
+# The order-restricted hypothesis ‘H0’ has no support.
 # So, no support for H0 and full support for its complement (i.e., Hunc). 
 # Notably, no quantification for (lack of) support for the hypothesis of interest H1.
 
@@ -1151,13 +972,8 @@ results_H1 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H1
 #
-#Results:
-#        model   loglik  penalty   gorica  gorica.weights
-#1          H1    6.065    2.500  -7.130           1.000
-#2  complement  -34.256    2.500  73.512           0.000
-#---
-#  The order-restricted hypothesis ‘H1’ has 324506692665273152.000 
-#                           times more support than its complement.
+# The order-restricted hypothesis ‘H1’ has (>> 1 times) more support 
+#                                                       than its complement.
 
 
 # In case you want to specify some value:
@@ -1172,13 +988,8 @@ results_H2 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H2
 #
-#Results:
-#        model  loglik  penalty   gorica  gorica.weights
-#1          H2   6.065    2.500  -7.130           1.000
-#2  complement  -7.202    2.500  19.403           0.000
-#---
-#  The order-restricted hypothesis ‘H2’ has 577632.025 times more support 
-#                                                     than its complement.
+# The order-restricted hypothesis ‘H1’ has (>> 1 times) more support 
+#                                                       than its complement.
 
 
 #######################################
@@ -1284,15 +1095,10 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#Results:
-#        model  loglik  penalty   gorica  gorica.weights
-#1          H0   8.318    1.000  -14.635           0.113
-#2  complement  13.382    4.000  -18.763           0.887
-#---
-#  The order-restricted hypothesis ‘H0’ has  0.127 times more support 
+# The order-restricted hypothesis ‘H0’ has < 1 times more, so less, support 
 #                                                 than its complement.
 #
-# So, some support for Ho and quite some support for Hunc, 
+# There is quite some support for Hunc, 
 # which includes the hypothesis of interest H1.
 # Notably, no quantification for (lack of) support for 
 # the hypothesis of interest H1.
@@ -1315,12 +1121,7 @@ results <- goric(est, VCOV = VCOV_est,
                  type = "gorica") 
 results
 #
-#Results:
-#        model  loglik  penalty   gorica  gorica.weights
-#1          H1  13.278    1.917  -22.722           0.827
-#2  complement  13.382    3.583  -19.597           0.173
-#---
-#  The order-restricted hypothesis ‘H1’ has  4.769 times more support 
+#  The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
 #                                                 than its complement.
 
 
@@ -1333,14 +1134,7 @@ results_ab <- goric(est, VCOV = VCOV_est,
                     type = "gorica") # default: unconstrained
 results_ab
 #
-#Results:
-#           model  loglik  penalty   gorica  gorica.weights
-#1            H1a  11.609    1.500  -20.219           0.201
-#2            H1b  13.278    1.917  -22.722           0.702
-#3  unconstrained  13.382    4.000  -18.763           0.097
-#---
-#
-# Both H1a and H1b not weak, especially H1b (.702 / .097 >> 1).
+# Both H1a and H1b not weak (i.e., better than unc), especially H1b.
 # Note: H1a is a subset of H1b, which implies that 
 # all support for H1a is also support for H1b.
 # Thus, compelling evidence for H1b, 
@@ -1355,12 +1149,7 @@ results_H2 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H2
 #
-#Results:
-#        model  loglik  penalty   gorica  gorica.weights
-#1          H2  13.382    3.500  -19.763           0.861
-#2  complement  11.560    3.500  -16.120           0.139
-#---
-#  The order-restricted hypothesis ‘H2’ has  6.181 times more support 
+#  The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
 #                                                 than its complement.
 
 
@@ -1404,15 +1193,10 @@ results_H0 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H0
 #
-#Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0   4.941    4.000  -1.882           0.551
-#2  complement   6.736    6.000  -1.472           0.449
-#---
-#  The order-restricted hypothesis ‘H0’ has  1.227 times more support 
+# The order-restricted hypothesis ‘H0’ has (> 1 times) more support 
 #                                                 than its complement.
 #
-# So, support for H0 but not very compelling evidence. 
+# There is support for H0 but not very compelling evidence. 
 # Moreover, no quantification for (lack of) support for the hypothesis of interest H1.
 
 
@@ -1441,12 +1225,7 @@ results <- goric(est, VCOV = VCOV_est,
                  type = "gorica") 
 results
 #  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H1   6.736    5.010  -3.453           0.785
-#2  complement   5.922    5.490  -0.863           0.215
-#---
-#  The order-restricted hypothesis ‘H1’ has  3.652 times more support 
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
 #                                                 than its complement.
 
 
@@ -1595,15 +1374,9 @@ results_H0_alloc <- goric(est, VCOV = VCOV_est,
                           type = "gorica") 
 results_H0_alloc
 #
-#Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1    H0_alloc   2.567    3.000   0.865           0.784
-#2  complement   3.276    5.000   3.447           0.216
-#---
-#  The order-restricted hypothesis ‘H0_alloc’ has  3.636 times more support 
+# The order-restricted hypothesis ‘H0_alloc’ has (> 1 times) more support 
 #                                                       than its complement.
-#
-# So, (some) support for H0_alloc. 
+# So, support for H0_alloc. 
 
 
 # In case of the logRR per group specification #
@@ -1652,9 +1425,8 @@ results_H0
 #1          H0   2.567    3.000   0.865           0.784
 #2  complement   3.276    5.000   3.447           0.216
 #---
-#  The order-restricted hypothesis ‘H0’ has  3.636 times more support 
+#  The order-restricted hypothesis ‘H0’ has (> 1 times) more support 
 #                                                 than its complement.
-#
 # So, support for H0. 
 # Notably, no quantification for (lack of) support for 
 # the hypothesis of interest H1.
@@ -1680,15 +1452,9 @@ results <- goric(est, VCOV = VCOV_est,
                  type = "gorica") 
 results
 #
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H1   3.276    4.104   1.655           0.659
-#2  complement   2.908    4.396   2.975           0.341
-#---
-#  The order-restricted hypothesis ‘H1’ has  1.935 times more support 
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
 #                                                 than its complement.
-#
-# Some support for H1
+# There is (some) support for H1
 
 
 #As an alternative example:
@@ -1699,15 +1465,10 @@ results_H2 <- goric(est, VCOV = VCOV_est,
                     type = "gorica") 
 results_H2
 #  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H2   3.276    4.500   2.447           0.574
-#2  complement   2.979    4.500   3.042           0.426
-#---
-#  The order-restricted hypothesis ‘H2’ has  1.346 times more support 
+# The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
 #                                                 than its complement.
 #
-# Hence, no compelling support for H2.
+# There is support but probably no compelling support for H2.
 
 
 #As an alternative example, one can specify both simultaneously:
@@ -1719,18 +1480,8 @@ results_H12 <- goric(est, VCOV = VCOV_est,
                      type = "gorica") 
 results_H12
 #  
-#  Results:
-#        model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-#1         H12   3.276    4.105   1.658           0.591            0.572           0.659
-#2  complement   2.908    4.395   2.973           0.409            0.428           0.341
-#--- 
-#  The order-restricted hypothesis ‘H12’ has 1.930 times more support
+# The order-restricted hypothesis ‘H12’ has (> 1 times) more support
 #                                                  than its complement.
-#
-#Restriktor message: Since the constraint matrix is not full row-rank, 
-#the level probabilities are calculated using mix.weights = "boot" 
-#(the default is mix.weights = "pmvnorm").
-#For more information see ?restriktor.
 #
 # Hence, (some) support for H12.
 
@@ -1765,13 +1516,7 @@ results_H3a <- goric(est, VCOV = VCOV_est,
                      type = "gorica") 
 results_H3a
 #
-#  Results:
-#        model     loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
-#1         H3a  -1538.106    4.500  3085.213           0.000            0.500           0.000
-#2  complement      8.338    4.500    -7.677           1.000            0.500           1.000
-#--- 
-#  The order-restricted hypothesis ‘H3a’ has 0.000 times more support 
-#                                                  than its complement.
+# The order-restricted hypothesis ‘H3a’ has no support.
 
 
 # Likewise, one may want to compare two (or more) different settings:
@@ -1786,12 +1531,7 @@ results_H3b <- goric(est, VCOV = VCOV_est,
                      type = "gorica") 
 results_H3b
 #  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1         H3b   8.338    4.500  -7.677           0.884
-#2  complement   6.306    4.500  -3.612           0.116
-#---
-#  The order-restricted hypothesis ‘H3b’ has  7.633 times more support
+# The order-restricted hypothesis ‘H3b’ has (> 1 times) more support
 #                                                  than its complement.
 
 

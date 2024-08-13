@@ -24,7 +24,11 @@ library(lavaan)
 library(restriktor)
 
 # Load the data set into R
-data <- read.table("data.dat")
+dat <- read.table("RICLPM.dat", 
+                  col.names = c(
+                    "x1", "x2", "x3", "x4", "x5", 
+                    "y1", "y2", "y3", "y4", "y5")
+)
 
 # Hypothesis w.r.t. wave-specific cross-lagged effects (as specified in the model)
 H1ws.l <- "abs(b2) < abs(c2); abs(b3) < abs(c3); 

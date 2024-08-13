@@ -40,6 +40,6 @@ evSyn.equal <- evSyn(object = LL, PT = PT,
                      hypo_names = c("H1", "Hc"))
 
 evSyn.equal
-summary(evSyn.equal)
+#summary(evSyn.equal)
 plot(evSyn.equal)
 

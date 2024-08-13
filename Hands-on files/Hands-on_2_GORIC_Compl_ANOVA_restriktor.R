@@ -134,7 +134,7 @@ output_c <- goric(lm_fit_Lucas,
 output_c
 #summary(output_c)
 #
-# The order-restricted hypothesis ‘H_theory1’ has  13.5 times more support 
+# The order-restricted hypothesis ‘H_theory1’ has  (>1 times) more support 
 #                                                           than its complement.             
 
 

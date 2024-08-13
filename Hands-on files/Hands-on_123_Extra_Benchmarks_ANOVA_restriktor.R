@@ -22,6 +22,16 @@ library(restriktor) # for the goric function
 
 ################################################################################
 
+## Benchmarks ##
+#
+#I am not in favor of cut-off points, 
+#but when you feel you need them to label the height of the weights and/or their ratios, 
+#you can use benchmarks as proposed and discussed in 
+#'Guidelines_GORIC-benchmarks' on https://github.com/rebeccakuiper/Tutorials.
+#
+# Below, you can find some examples.
+
+################################################################################
 
 # Example Palmer & Gough
 
@@ -43,30 +53,27 @@ goric.PandG <- goric(fit.PandG,
 goric.PandG
 #summary(goric.PandG)
 
+# Benchmarks #
+benchmarks.PandG <- benchmark(goric.PandG, model_type = "means", ncpus = 8)
+benchmarks.PandG
+plot(benchmarks.PandG)
 
-## Benchmarks ##
-#
-#I am not in favor of cut-off points, 
-#but when you feel you need them to label the height of the weights and/or their ratios, 
-#you can use benchmarks as proposed and discussed in 
-#'Guidelines_GORIC-benchmarks' on https://github.com/rebeccakuiper/Tutorials.
-#
-#
-#library(devtools)
-#install_github("rebeccakuiper/benchmarks")
-library(benchmarks)
-#?benchmarks
-#
-pop.es <- c(0) # c(0, .2, .5)
-benchmarks_1c <- benchmarks_ANOVA(goric.PandG, pop.es) # This takes some time
-benchmarks_1c$error.prob.pref.hypo
-benchmarks_1c$benchmarks.weight
-benchmarks_1c$benchmarks.ratios
 
-# Alternatively, one can use the benchmarks() function.
-# In that case, one needs to specify the population estimates 
-# (instead of population effect size).
+###
 
+# When using the estimates and their covariance matrix and thus gorica:
+# use default model_type 
+# and possible specify (null) population parameters (instead of effect sizes).
+set.seed(123) # Set seed value
+est <- coef(fit.PandG)
+VCOV <- vcov(fit.PandG)
+gorica.PandG <- goric(est, VCOV = VCOV, 
+                       hypotheses = list(H1), 
+                       type = "gorica")
+# Benchmarks #
+benchmarks.PandG_gorica <- benchmark(gorica.PandG, ncpus = 8)
+benchmarks.PandG_gorica
+plot(benchmarks.PandG_gorica)
 
 
 #####################
@@ -95,59 +102,22 @@ names(coef(lm_fit_Lucas))
 # Specify restrictions using those names
 
 # Hypotheses Set
-H1 <- 'group5 = group3 > (group1, group4) > group2'
-H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
-
+H1 <- 'group3 > group1 > group4'
+ 
 # Calculate GORICA values and weights
 set.seed(123) # Set seed value
-output_gorica <- goric(lm_fit_Lucas, 
-                       hypotheses = list(H1 = H1, H2 = H2), 
-                       type = "gorica")
-output_gorica
-#summary(output_gorica)
-output_gorica$ratio.gw
+goric.Lucas <- goric(lm_fit_Lucas, 
+                     hypotheses = list(H1 = H1), 
+                     comparison = 'complement',
+                     type = "gorica")
+goric.Lucas
+#summary(goric.Lucas)
+goric.Lucas$ratio.gw
 
-## Benchmarks ##
-#
-#I am not in favor of cut-off points, 
-#but when you feel you need them to label the height of the weights and/or their ratios, 
-#you can use benchmarks as proposed and discussed in 
-#'Guidelines_GORIC-benchmarks' on https://github.com/rebeccakuiper/Tutorials.
-#
-#library(devtools)
-#install_github("rebeccakuiper/benchmarks")
-library(benchmarks)
-#?benchmarks
-#
-pop.es <- c(0) # c(0, .2, .5)
-benchmarks_12u <- benchmarks_ANOVA(output_gorica, pop.es, iter = 10)
-# Note: I only used 10 iterations here, since the calculation takes quite long 
-# because of the not full row-rank hypothesis.
-benchmarks_12u$error.prob.pref.hypo
-benchmarks_12u$benchmarks.weight
-benchmarks_12u$benchmarks.ratios
-
-
-# Note: When using the estimates and their covariance matrix
-# in which case you also need to state the group sample size (N).
-set.seed(123) # Set seed value
-est <- coef(lm_fit_Lucas)
-VCOV <- vcov(lm_fit_Lucas)
-output_gorica <- goric(est, VCOV = VCOV, 
-                         hypotheses = list(H1, H2), 
-                         type = "gorica")
-pop.es <- c(0) # c(0, .2, .5)
-benchmarks_12u <- benchmarks_ANOVA(output_gorica, N = descrstat$n, pop.es, iter = 10)
-# Could also use N = 30 or N = rep(30,5)
-# Note: I only used 10 iterations here, since the calculation takes quite long 
-# because of the not full row-rank hypothesis.
-benchmarks_12u$error.prob.pref.hypo
-benchmarks_12u$benchmarks.weight
-benchmarks_12u$benchmarks.ratios
-
-# Alternatively, one can use the benchmarks() function.
-# In that case, one needs to specify the population estimates 
-# (instead of population effect size).
+# Benchmarks #
+benchmarks.Lucas <- benchmark(goric.Lucas, model_type = "means", ncpus = 8)
+benchmarks.Lucas
+plot(benchmarks.Lucas)
 
 
 ################################################################################
