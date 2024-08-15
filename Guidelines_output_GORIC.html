@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Leonard Vanbrabant" />
 
-<meta name="date" content="2024-04-11" />
+<meta name="date" content="2024-08-15" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper and Leonard Vanbrabant</h4>
-<h4 class="date">11 April 2024</h4>
+<h4 class="date">15 August 2024</h4>
 
 </div>
 
@@ -1636,13 +1636,13 @@ the set.</p>
 <div id="example" class="section level4" number="4.2.1.1">
 <h4><span class="header-section-number">4.2.1.1</span> Example</h4>
 <pre class="r"><code># H1 vs complement
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # Denoting mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # Denoting mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1651,10 +1651,9 @@ Results:
 ---
 The order-restricted hypothesis &#39;H1&#39; has 4.88 times more support than its complement.</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is <span class="math inline">\(.83/.17 \approx 4.88\)</span> time more supported
-than its complement.<br />
-Additionally, one could say that the probability that <span class="math inline">\(H_1\)</span> is not the best is 17%.
-<!-- TO DO lees uit de output! --></p>
+\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is 0.83 <span class="math inline">\(/\)</span> 0.17 <span class="math inline">\(\approx\)</span> 4.88 time more supported than its
+complement.<br />
+Additionally, one could say that the probability that <span class="math inline">\(H_1\)</span> is not the best is 17%.</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1701,13 +1700,13 @@ there is</em> (in case of a small sample size).</p></li>
 <div id="example-1" class="section level4" number="4.2.2.1">
 <h4><span class="header-section-number">4.2.2.1</span> Example</h4>
 <pre class="r"><code># H1 vs unconstrained (default)
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_1u &lt;- goric(fit, hypotheses = list(H1))
 results_1u</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1715,9 +1714,9 @@ Results:
 2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is more supported than the
-unconstrained (since <span class="math inline">\(.763/.237 &gt;
-1\)</span>) and is, therefore, not a weak hypothesis.
-<!-- TO DO lees uit de output! --></p>
+unconstrained (since 0.763 <span class="math inline">\(/\)</span> 0.237
+<span class="math inline">\(&gt;\)</span> 1) and is, therefore, not a
+weak hypothesis.</p>
 <p>When you look at the fit/loglik value, you can see that they are the
 same for both hypotheses (also reflected by the loglik.weights; leading
 to a ratio of loglik.weights of 1). The unconstrained has, by
@@ -1735,7 +1734,7 @@ overlap of the two hypotheses is <span class="math inline">\(H_1\)</span>. There
 maximum fit and is (by definition) more parsimonious than the
 unconstrained. Note that, now, we cannot say anything regarding the
 uncertainty (which we could in the case of using the complement as the
-failsafe).</p>
+failsafe, as done above).</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1797,10 +1796,10 @@ Be aware of the special cases, as will be discussed in the Special cases
 Section.</p></li>
 </ul>
 <p>Important: This option is unfortunately not yet available in GORIC(A)
-software.</p>
-<p>However, <strong>the relative support of two informative hypotheses
-is independent from the choice of failsafe hypothesis</strong>. So, if
-the goal is the comparison of informative hypotheses, one could also use
+software.<br />
+However, <strong>the relative support of two informative hypotheses is
+independent from the choice of failsafe hypothesis</strong>. So, if the
+goal is to compare informative hypotheses, one could just as well use
 the unconstrained (as discussed in the next subsection).</p>
 </div>
 <div id="unconstrained-as-failsafe" class="section level3" number="4.3.2">
@@ -1828,39 +1827,38 @@ Section.</p></li>
 <div id="example-2" class="section level4" number="4.3.2.1">
 <h4><span class="header-section-number">4.3.2.1</span> Example</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default)
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
-H2 &lt;- &quot;D1 &lt; D2 &lt; D3&quot;  # mu1 &lt; mu2 &lt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+H2 &lt;- &quot;D1 &lt; D2 &lt; D3&quot; # mu1 &lt; mu2 &lt; mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -123.384    2.832  252.431           0.500            0.433          0.763
 2             H2  -131.346    2.832  268.356           0.000            0.433          0.000
 3  unconstrained  -123.384    4.000  254.767           0.500            0.135          0.237</code></pre>
-<pre class="r"><code>round(results_12u$ratio.gw, 3)</code></pre>
-<pre><code>              vs. H1   vs. H2 vs. unconstrained
-H1             1.000 2871.230             3.216
-H2             0.000    1.000             0.001
-unconstrained  0.311  892.888             1.000</code></pre>
+<pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
+<pre><code>              vs. H1  vs. H2 vs. unconstrained
+H1              1.00 2871.23              3.22
+H2              0.00    1.00              0.00
+unconstrained   0.31  892.89              1.00</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is not a weak hypothesis, since it
-is <span class="math inline">\(.763/.237 &gt; 1\)</span> times more
-supported than the unconstrained. Therefore, <span class="math inline">\(H_1\)</span> can be compared to its competing
-hypothesis <span class="math inline">\(H_2: \mu_1 &lt; \mu_2 &lt;
-\mu_3\)</span>. Note that <span class="math inline">\(H_2\)</span> is
-weak <span class="math inline">\((.000/.237 &lt; 1\)</span> or <span class="math inline">\(.000 &lt; .237)\)</span>; so, we already know that
+is <span class="math inline">\(&gt;\)</span> 1 times more supported than
+the unconstrained. Therefore, <span class="math inline">\(H_1\)</span>
+can be compared to its competing hypothesis <span class="math inline">\(H_2: \mu_1 &lt; \mu_2 &lt; \mu_3\)</span>. Note
+that <span class="math inline">\(H_2\)</span> is weak 0 <span class="math inline">\(/\)</span> 0.237 <span class="math inline">\(&lt;\)</span> 1 or 0 <span class="math inline">\(&lt;\)</span> 0.237; so, we already know that
 <span class="math inline">\(H_1\)</span> is better, but not yet how much
-better. <!-- TO DO lees uit de output! --></p>
-<p>From the GORIC weights (or their ratios in results_12u$ratio.gw - H1
-vs. H2), you can conclude that <span class="math inline">\(H_1\)</span>
-is .763/.000 = an infinite times (or 2871.23 times) more supported than
-<span class="math inline">\(H_2\)</span>. This denotes (almost) full
-support for <span class="math inline">\(H_1\)</span>.<br />
+better.</p>
+<p>From the GORIC weights or, better, their ratios
+(cf. <code>results_12u$ratio.gw</code> - H1 vs. H2), you can conclude
+that <span class="math inline">\(H_1\)</span> is 2871 times more
+supported than <span class="math inline">\(H_2\)</span>. This denotes
+(almost) full support for <span class="math inline">\(H_1\)</span>.<br />
 In comparison, if you would calculate the GORIC(A) weights for the set
 consisting of solely <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> (thus, without the unconstrained),
 you would obtain GORIC weights of 1.000 and .000, respectively; denoting
@@ -1901,26 +1899,29 @@ discussed in the Special cases Section.</p>
 <div id="example-3" class="section level4" number="4.3.3.1">
 <h4><span class="header-section-number">4.3.3.1</span> Example</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default)
-H1 &lt;- &quot;D1 &gt; D2&quot;  # # =&gt; H1: D1 &gt; D2, D3 # mu1 &gt; mu2, mu3
-H2 &lt;- &quot;D1 &lt; D2&quot;  # # =&gt; H2: D1 &lt; D2, D3 # mu1 &lt; mu2, mu3
+H1 &lt;- &quot;D1 &gt; D2&quot; # # =&gt; H1: D1 &gt; D2, D3 # mu1 &gt; mu2, mu3
+H2 &lt;- &quot;D1 &lt; D2&quot; # # =&gt; H2: D1 &lt; D2, D3 # mu1 &lt; mu2, mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_12 &lt;- goric(fit, hypotheses = list(H1, H2), comparison = &quot;none&quot;)
 results_12</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
    model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1     H1  -123.384    3.500  253.767           0.978            0.500          0.978
-2     H2  -127.183    3.500  261.366           0.022            0.500          0.022</code></pre>
-<pre class="r"><code>round(results_12$ratio.gw, 3)</code></pre>
+2     H2  -127.183    3.500  261.366           0.022            0.500          0.022
+---
+The order-restricted hypothesis &#39;H1&#39; has 44.68 times more support than &#39;H2&#39;.</code></pre>
+<pre class="r"><code>round(results_12$ratio.gw, 2)</code></pre>
 <pre><code>   vs. H1 vs. H2
-H1  1.000 44.682
-H2  0.022  1.000</code></pre>
+H1   1.00  44.68
+H2   0.02   1.00</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
-\mu_1 &gt; \mu_2, \ \mu_3\)</span> is <span class="math inline">\(.978/.022\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(45\)</span> times more supported than <span class="math inline">\(H_2: \mu_1 &lt; \mu_2, \ \mu_3\)</span>.
-<!-- TO DO lees uit de output! --></p>
+\mu_1 &gt; \mu_2, \ \mu_3\)</span> is<br />
+0.978 <span class="math inline">\(/\)</span> 0.022 <span class="math inline">\(\approx\)</span> 45 times more supported than
+<span class="math inline">\(H_2: \mu_1 &lt; \mu_2, \ \mu_3\)</span>.</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:1;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -1952,11 +1953,14 @@ making, you may want to pre-specify a cut-off value <span class="math inline">\(
 the ratio of GORIC(A) weights is larger than <span class="math inline">\(x\)</span>, then I am willing to choose (to make
 policy based on) this best hypothesis. It can be hard to pre-specify
 <span class="math inline">\(x\)</span>; unless there is already previous
-research perhaps. Therefore, my advise is to create the hypotheses in
-such a way that finding a ratio of 1 (or higher) is enough evidence for
-the preferred hypothesis. I would also advise against overlapping
-hypotheses and using equality restrictions; for more detail, see the
-special cases discussed in the Special cases Section.</p>
+research perhaps. Alternatively, you could use the benchmark package for
+this, see ‘Guidelines_GORIC-benchmarks.html’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>. My advise is
+to create the hypotheses in such a way that finding a ratio of 1 (or
+higher) is enough evidence for the preferred hypothesis. This can still
+be hard to do, but in my opinion is easier than specifying <span class="math inline">\(x\)</span>.<br />
+I would also advise against overlapping hypotheses and using equality
+restrictions; for more detail, see the special cases discussed in the
+Special cases Section.</p>
 <p>For example, let us assume that we compare an outcome (e.g., a
 standardized level of happiness) for three types of treatments: a new
 treatment (A), the established treatment (B), and a placebo treatment
@@ -1966,10 +1970,10 @@ for Treatment A when <span class="math inline">\(H_{1g}\)</span> is 1 or
 perhaps 1.1 times more supported than <span class="math inline">\(H_c\)</span>. Then, it could be handy (if
 possible) to specify the hypothesis in such a way that a ratio of (just
 over) 1 makes you willing to choose for Treatment A. You could specify a
-minimum difference between Treatments A and B and additional state (as a
-check) that Treatment B (and then also A) does better than the placebo:
-<span class="math inline">\(H_{1m}: \mu_A - \mu_B &gt; .1, \ \mu_B &gt;
-\mu_P\)</span>.</p>
+minimum difference between Treatments A and B and additionally state (as
+a check) that Treatment B (and then also A) does better than the
+placebo: <span class="math inline">\(H_{1m}: \mu_A - \mu_B &gt; .1, \
+\mu_B &gt; \mu_P\)</span>.</p>
 <p>Note: <span class="math inline">\(H_{1g}: \mu_A &gt; \mu_B &gt;
 \mu_P\)</span> can be rewritten as <span class="math inline">\(H_{1g}:
 \mu_A - \mu_B &gt; 0, \ \mu_B &gt; \mu_P\)</span>. In <span class="math inline">\(H_{1m}\)</span>, the (minimum)
@@ -1978,13 +1982,13 @@ difference in treatments you would like to find.</p>
 <div id="example-4" class="section level3" number="4.4.1">
 <h3><span class="header-section-number">4.4.1</span> Example</h3>
 <pre class="r"><code># General hypothesis vs complement
-H1g &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt;  mu2 &gt; mu3
+H1g &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt;  mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
-results_12 &lt;- goric(fit, hypotheses = list(H1g = H1g), comparison = &quot;complement&quot;)
-results_12</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_1g &lt;- goric(fit, hypotheses = list(H1g = H1g), comparison = &quot;complement&quot;)
+results_1g</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1992,33 +1996,29 @@ Results:
 2  complement  -124.978    3.668  257.292           0.169            0.302          0.081
 ---
 The order-restricted hypothesis &#39;H1g&#39; has 11.36 times more support than its complement.</code></pre>
-<pre class="r"><code>round(results_12$ratio.gw, 3)</code></pre>
+<pre class="r"><code>round(results_1g$ratio.gw, 2)</code></pre>
 <pre><code>           vs. H1g vs. complement
-H1g          1.000         11.363
-complement   0.088          1.000</code></pre>
+H1g           1.00          11.36
+complement    0.09           1.00</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_{1g}:
-\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is <span class="math inline">\(.919/.081 \approx 11.4\)</span> times more
-supported than its complement. Since the ratio is larger than 1, <span class="math inline">\(H_{1g}\)</span> is the best.<br />
+\mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is 0.919 <span class="math inline">\(/\)</span> 0.081 <span class="math inline">\(\approx\)</span> 11.4 times more supported than
+its complement. Since the ratio is larger than 1, <span class="math inline">\(H_{1g}\)</span> is the best.<br />
 [Note: Since the fit/loglik weights differ (i.e., the ratio of
 loglik.weights is not close to 1), there is no support for the boundary
-of <span class="math inline">\(H_{1g}\)</span> and its comeplement - as
-discussed in the Special cases Section.]
-<!-- TO DO lees uit de output! --></p>
-<p>Sometimes you may want a minimum support for your hypothesis of
-interest. You could do this by pre-specifying a cut-off value for the
-ratio: when the ratio of GORIC(A) weights is higher than that value,
-then you select the hypothesis (you could use the benchmark package for
-this, see ‘Guidelines_GORIC-benchmarks.html’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).<br />
-Alternatively, you could make you hypothesis more specific, such that a
-ratio of 1 or more is sufficient to select the hypothesis:</p>
+of <span class="math inline">\(H_{1g}\)</span> and its complement - as
+discussed in the Special cases Section.]</p>
+<p>You may now wonder whether this support is large enough to start
+using Treatment A instead of B. Therefore, you could – if possible –
+make you hypothesis more specific, such that a ratio of 1 or more is
+sufficient to select the hypothesis:</p>
 <pre class="r"><code># More specific hypothesis vs complement
-H1m &lt;- &quot;D1 - D2 &gt; .1, D2 &gt; D3&quot;  # mu1 - mu2 &gt; .1, mu2 &gt; mu3
+H1m &lt;- &quot;D1 - D2 &gt; .1, D2 &gt; D3&quot; # mu1 - mu2 &gt; .1, mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
-results_12 &lt;- goric(fit, hypotheses = list(H1m = H1m), comparison = &quot;complement&quot;)
-results_12</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_1m &lt;- goric(fit, hypotheses = list(H1m = H1m), comparison = &quot;complement&quot;)
+results_1m</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2026,20 +2026,19 @@ Results:
 2  complement  -124.409    3.668  256.154           0.264            0.302          0.135
 ---
 The order-restricted hypothesis &#39;H1m&#39; has 6.43 times more support than its complement.</code></pre>
-<pre class="r"><code>round(results_12$ratio.gw, 3)</code></pre>
+<pre class="r"><code>round(results_1m$ratio.gw, 2)</code></pre>
 <pre><code>           vs. H1m vs. complement
-H1m          1.000          6.433
-complement   0.155          1.000</code></pre>
+H1m           1.00           6.43
+complement    0.16           1.00</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_{1m}:
-\mu_1 - \mu_2 &gt; .1, \ \mu_2 &gt; \mu_3\)</span> is <span class="math inline">\(.865/.135 \approx 6.4 &gt; 1\)</span> times more
-supported than its complement. Since the difference in treatment means
-is at least as large as pre-specified, you can now convincingly go for
-Treatment A.<br />
+\mu_1 - \mu_2 &gt; .1, \ \mu_2 &gt; \mu_3\)</span> is<br />
+0.865 <span class="math inline">\(/\)</span> 0.135 <span class="math inline">\(\approx\)</span> 6.4 <span class="math inline">\(&gt;\)</span> 1 times more supported than its
+complement. Since the difference in treatment means is at least as large
+as pre-specified, you can now convincingly go for Treatment A.<br />
 [Note: Since the fit/loglik weights differ (i.e., the ratio of
 loglik.weights is not close to 1), there is no support for the boundary
 of <span class="math inline">\(H_{1m}\)</span> and its complement - as
-discussed in the Special cases Section.]
-<!-- TO DO lees uit de output! --></p>
+discussed in the Special cases Section.]</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2.5:1;
 implying that both <span class="math inline">\(H_{1g}\)</span> and <span class="math inline">\(H_{1m}\)</span> are correct. More specifically, I
@@ -2061,10 +2060,13 @@ would like to find. Notably, if you use a higher bound (in case of an
 complexity does not change, while the fit decreases; which leads to less
 support for your hypothesis of interest.</p></li>
 <li><p>In case you want to inspect an absolute difference, you can make
-use of the abs() function (e.g., <span class="math inline">\(|\beta_1|
+use of the abs() function. E.g., <span class="math inline">\(|\beta_1|
 &gt; |\beta_2|\)</span> can be reflected in the code - using b1 and b2 -
-via abs(b1) &gt; abs(b2); or, when using bounds/thresholds, abs(b1) -
-abs(b2) &gt; .1); as is explained in GORIC(A) tutorials.</p></li>
+by abs(b1) &gt; abs(b2); or, when using bounds/thresholds, abs(b1) -
+abs(b2) &gt; .1; and <span class="math inline">\(|\beta_1 - \beta_2|
+&gt;\)</span> .1 can be reflected in the code by abs(b1 - b2) &gt; .1.
+<!-- NB  --> <!-- abs(b1-b2)>.1 leidt naar ineq, zeg, b1-b2>.1 -->
+<!-- Als juist about-eq, bijv, -.1<(b1-b2)<.1, dat leidt naar eq(!) in PT (en about-eq in LL) --></p></li>
 </ul>
 </div>
 </div>
@@ -2122,14 +2124,14 @@ building.</p>
 <h4><span class="header-section-number">5.1.1.1</span> Example: Subset
 true</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default) - subset true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
-H2 &lt;- &quot;D1 &gt; D2&quot;  # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;               # mu1 &gt; mu2 &gt; mu3
+H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2143,10 +2145,8 @@ H2             0.513  1.000             1.649
 unconstrained  0.311  0.607             1.000</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \ \mu_3\)</span> are not
-weak, since they are <span class="math inline">\(.548/.171 &gt;
-1\)</span> and <span class="math inline">\(.281/.171 &gt; 1\)</span>,
-respectively, times more supported than the unconstrained. Therefore,
-<span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.
+weak, since they are <span class="math inline">\(&gt;\)</span> 1 times
+more supported than the unconstrained. Therefore, <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.
 <!-- From the GORIC weights goric.weights (or their ratios in results_12u\$ratio.gw - H1 vs. H2), you can conclude that $H_1$ is $.548/.281$ times (or $1.95$ times) more supported than $H_2$. -->
 <!-- Notably, if you would calculate the GORIC(A) weight for the set consisting of solely $H_1$ and $H_2$, you would obtain $.548/(.548+.281) \approx .66$ and $.34$. --></p>
 <p>From the GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. Before we interpret the
@@ -2176,39 +2176,41 @@ weights for <span class="math inline">\(H_1\)</span>, <span class="math inline">
 <h4><span class="header-section-number">5.1.1.2</span> Example:
 Non-overlapping part true</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default) - non-overlapping part true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
-H2 &lt;- &quot;D1 &gt; D2&quot;  # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;               # mu1 &gt; mu2 &gt; mu3
+H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -124.316    2.832  254.297           0.164            0.548          0.323
 2             H2  -123.384    3.500  253.767           0.418            0.281          0.421
 3  unconstrained  -123.384    4.000  254.767           0.418            0.171          0.255</code></pre>
-<pre class="r"><code>round(results_12u$ratio.gw, 3)</code></pre>
+<pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
-H1             1.000  0.767             1.265
-H2             1.303  1.000             1.649
-unconstrained  0.790  0.607             1.000</code></pre>
+H1              1.00   0.77              1.27
+H2              1.30   1.00              1.65
+unconstrained   0.79   0.61              1.00</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2, \ \mu_3\)</span> are not
-weak, since since they are <span class="math inline">\(.323/.255 &gt;
-1\)</span> and <span class="math inline">\(.421/.255 &gt; 1\)</span>,
-respectively, times more supported than the unconstrained. Therefore,
-<span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.</p>
+weak, since since they are <span class="math inline">\(&gt;\)</span> 1
+times more supported than the unconstrained. Therefore, <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.</p>
 <p>From the GORIC weights, we can conclude that <span class="math inline">\(H_2\)</span> is the best. Since the fit/loglik
 values of <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_1\)</span> are not the same (i.e., the ratio of
 loglik.weights is not close to 1), there is no support for their overlap
 (which would have been their boundary then; more details can be found in
-a section later on). From the GORIC weights goric.weights (or their
-ratios in results_12u$ratio.gw - H1 vs. H2), you can conclude that <span class="math inline">\(H_2\)</span> is <span class="math inline">\(.421/.323\)</span> times (or <span class="math inline">\(1.30\)</span> times) more supported than <span class="math inline">\(H_1\)</span>. Notably, if you would calculate the
-GORIC(A) weight for the set consisting of solely <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>, you would obtain weights of <span class="math inline">\(.323/(.323+.421) \approx .43\)</span> and <span class="math inline">\(.57\)</span> (denoting the same relative support
-of course).</p>
+a section later on). From the GORIC weights <code>goric.weights</code>
+(or their ratios in <code>results_12u$ratio.gw</code> - H1 vs. H2), you
+can conclude that <span class="math inline">\(H_2\)</span> is 0.421
+<span class="math inline">\(/\)</span> 0.323 <span class="math inline">\(\approx\)</span> 1.3 more supported than <span class="math inline">\(H_1\)</span>.<br />
+Notably, if you would calculate the GORIC(A) weight for the set
+consisting of solely <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>, you would obtain weights of 0.323
+<span class="math inline">\(/\)</span> (0.323 <span class="math inline">\(+\)</span> 0.421) <span class="math inline">\(\approx\)</span> 0.434 and 1 <span class="math inline">\(-\)</span> 0.434 <span class="math inline">\(=\)</span> 0.566, respectively (denoting the same
+relative support of course).</p>
 <p>Since we know/see that <span class="math inline">\(H_1\)</span> and
 <span class="math inline">\(H_2\)</span> overlap, we can take it one
 step further. The support for <span class="math inline">\(H_2\)</span>
@@ -2216,7 +2218,7 @@ indicates support for the non-overlapping part of <span class="math inline">\(H_
 specify the the non-overlapping part, namely <span class="math inline">\(\mu_1 &gt; \mu_2 &lt; \mu_3\)</span>. If of
 interest, you could evaluate that versus its complement (as done below).
 For future research, you could advise to evaluate this non-overlapping
-part versus its complement.</p>
+part versus its complement (as done in the next subsection).</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2:3;
 implying that <span class="math inline">\(H_2\)</span> is correct. More
@@ -2234,14 +2236,14 @@ the unconstrained always obtains support (because it also includes <span class="
 <div id="follow-up-exploratory-analysis-for-non-overlapping-part" class="section level5" number="5.1.1.2.1">
 <h5><span class="header-section-number">5.1.1.2.1</span> Follow-up
 exploratory analysis for non-overlapping part</h5>
-<pre class="r"><code># non-overlapping part vs its complement
-Hn &lt;- &quot;D1 &gt; D2 &lt; D3&quot;  # mu1 &gt; mu2 &lt; mu3
+<pre class="r"><code># non-overlapping part vs  its complement
+Hn &lt;- &quot;D1 &gt; D2 &lt; D3&quot; # mu1 &gt; mu2 &lt; mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_n &lt;- goric(fit, hypotheses = list(Hn = Hn), comparison = &quot;complement&quot;)
 results_n</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2258,8 +2260,9 @@ boundary</h3>
 <p>When hypotheses do not overlap, there can mathematically still be
 overlap, namely the boundary/border of these hypotheses. This is always
 the case when evaluating an informative hypothesis versus its
-complement, but can also be the case for other pairs of hypotheses. As a
-very simple example: The overlap/boundary of <span class="math inline">\(\beta_1 &gt; 0\)</span> and its complement (here,
+complement, but can also be the case for other pairs of
+hypotheses.<br />
+As a very simple example: The overlap/boundary of <span class="math inline">\(\beta_1 &gt; 0\)</span> and its complement (here,
 <span class="math inline">\(\beta_1 &lt; 0\)</span>) is <span class="math inline">\(\beta_1 = 0\)</span>.</p>
 <p>Consequently, when non-overlapping hypotheses have (approximately)
 the same fit values (and thus when the ratio of loglik.weights
@@ -2279,13 +2282,13 @@ specified a minimum support to rule out support for the null <span class="math i
 <div id="example-h_1-versus-its-complement" class="section level4" number="5.1.2.1">
 <h4><span class="header-section-number">5.1.2.1</span> Example: <span class="math inline">\(H_1\)</span> versus its complement</h4>
 <pre class="r"><code># H1 vs complement
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
 results_1c</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2301,10 +2304,10 @@ coef(fit)</code></pre>
 <p>From the GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. Before interpreting the
 ratio of GORIC(A) weights, one may want to check the fit/loglik values
 (or the ratio of their weights), to see whether there is support for a
-boundary. From the output, you can see that the fit values of <span class="math inline">\(H_1\)</span> and its complement resemble (-123.450
-vs -123.384) and, thus, their loglik.weights are almost the same (.483
-vs .517; i.e., their ratio is close to 1). Likewise, you can see that
-the GORICA weights resemble the penalty weights (for <span class="math inline">\(H_1\)</span>, .683 vs .698). This indicates that
+boundary. From the output, you can see that the fit values of <span class="math inline">\(H_1\)</span> and its complement resemble (-123.45
+vs -123.384) and, thus, their loglik.weights are almost the same 0.483
+vs 0.517; i.e., their ratio is close to 1). Likewise, you can see that
+the GORICA weights resemble the penalty weights. This indicates that
 there is support for the boundary of the hypotheses. Bear in mind that
 the overlap of a hypothesis and its complement is the boundary of
 them.<br />
@@ -2338,66 +2341,72 @@ weights.</p>
 <h5><span class="header-section-number">5.1.2.1.1</span> Follow-up
 exploratory analysis for boundary</h5>
 <pre class="r"><code># Check on three boundary hypotheses
-Hb1 &lt;- &quot;D1 = D2 &gt; D3&quot;  # mu1 = mu2 &gt; mu3
-Hb2 &lt;- &quot;D1 &gt; D2 = D3&quot;  # mu1 &gt; mu2 = mu3
-Hb3 &lt;- &quot;D1 = D2 = D3&quot;  # mu1 = mu2 = mu3
-
+Hb1 &lt;- &quot;D1 = D2 &gt; D3&quot; # mu1 = mu2 &gt; mu3
+Hb2 &lt;- &quot;D1 &gt; D2 = D3&quot; # mu1 &gt; mu2 = mu3
+Hb3 &lt;- &quot;D1 = D2 = D3&quot; # mu1 = mu2 = mu3
+  
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_b123 &lt;- goric(fit, hypotheses = list(Hb1 = Hb1, Hb2 = Hb2, Hb3 = Hb3))
 results_b123</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1            Hb1  -126.132    2.500  257.263           0.031            0.258          0.050
 2            Hb2  -123.450    2.500  251.900           0.458            0.258          0.725
 3            Hb3  -126.570    2.000  257.139           0.020            0.426          0.053
-4  unconstrained  -123.384    4.000  254.767           0.490            0.058          0.173</code></pre>
+4  unconstrained  -123.384    4.000  254.767           0.490            0.058          0.173
+---
+
+Ratio GORIC-weights:
+               vs. Hb1  vs. Hb2  vs. Hb3  vs. unconstrained
+Hb1              1.000    0.068    0.940              0.287
+Hb2             14.611    1.000   13.734              4.194
+Hb3              1.064    0.073    1.000              0.305
+unconstrained    3.484    0.238    3.275              1.000</code></pre>
+<p> </p>
 </div>
 </div>
 <div id="example-h_1-h_2-and-the-unconstrained" class="section level4" number="5.1.2.2">
 <h4><span class="header-section-number">5.1.2.2</span> Example: <span class="math inline">\(H_1\)</span>, <span class="math inline">\(H_2\)</span>, and the unconstrained</h4>
 <pre class="r"><code># H1, H2, and unconstrained (default) - non-overlapping part true
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
-H2 &lt;- &quot;D1 &gt; D2 &lt; D3&quot;  # mu1 &gt; mu2 &lt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+H2 &lt;- &quot;D1 &gt; D2 &lt; D3&quot; # mu1 &gt; mu2 &lt; mu3
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -123.450    2.832  252.564           0.319            0.494          0.477
 2             H2  -123.384    3.168  253.103           0.341            0.353          0.364
 3  unconstrained  -123.384    4.000  254.767           0.341            0.154          0.159</code></pre>
-<pre class="r"><code>round(results_12u$ratio.gw, 3)</code></pre>
+<pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
-H1             1.000  1.310             3.009
-H2             0.764  1.000             2.298
-unconstrained  0.332  0.435             1.000</code></pre>
-<pre class="r"><code>round(results_12u$ratio.pw, 3)</code></pre>
+H1              1.00   1.31              3.01
+H2              0.76   1.00              2.30
+unconstrained   0.33   0.44              1.00</code></pre>
+<pre class="r"><code>round(results_12u$ratio.pw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
-H1             1.000  1.399             3.216
-H2             0.715  1.000             2.298
-unconstrained  0.311  0.435             1.000</code></pre>
+H1              1.00   1.40              3.22
+H2              0.71   1.00              2.30
+unconstrained   0.31   0.44              1.00</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> and <span class="math inline">\(H_2: \mu_1 &gt; \mu_2 &lt; \mu_3\)</span> are not
-weak, since since they are <span class="math inline">\(.477/.159 &gt;
-1\)</span> and <span class="math inline">\(.364/.159 &gt; 1\)</span>,
-respectively, times more supported than the unconstrained. Therefore,
-<span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.
+weak, since since they are <span class="math inline">\(&gt;\)</span> 1
+times more supported than the unconstrained. Therefore, <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> can be compared.
 <!-- From the GORIC weights goric.weights (or their ratios in results_12u\$ratio.gw - H1 vs. H2), you can conclude that $H_1$ is $.477/.364$ times (or $1.31$ times) more supported than $H_1$. --></p>
 <p>From the GORIC weights, we can conclude that <span class="math inline">\(H_1\)</span> is the best. When checking the
 fit/loglik values (or the ratio of their weights), you can see that the
 fit values of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> resemble and, thus, their
 loglik.weights are almost the same (i.e., the ratio of loglik.weights is
-close to 1). Likewise, you can see that the GORICA weights of <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span> (in results_12u$ratio.gw - H1 vs. H2)
-resemble the penalty weights of <span class="math inline">\(H_1\)</span>
-vs <span class="math inline">\(H_2\)</span> (in results_12u$ratio.pw -
-H1 vs. H2). This indicates that there is support for the overlap of
+close to 1). Likewise, you can see that the GORICA weights of <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span> (in <code>results_12u$ratio.gw</code>
+- H1 vs. H2) resemble the penalty weights of <span class="math inline">\(H_1\)</span> vs <span class="math inline">\(H_2\)</span> (in <code>results_12u$ratio.pw</code>
+- H1 vs. H2). This indicates that there is support for the overlap of
 these hypotheses. In this case, the overlap means <span class="math inline">\(\mu_1 &gt; \mu_2\)</span> (i.e., the part <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> have in common) together with the
 boundary of <span class="math inline">\(\mu_2 &gt; \mu_3\)</span> and
 <span class="math inline">\(\mu_2 &lt; \mu_3\)</span>, which is <span class="math inline">\(\mu_2 = \mu_3\)</span>; hence, <span class="math inline">\(\mu_1 &gt; \mu_2 = \mu_3\)</span>. This hypothesis
@@ -2422,20 +2431,20 @@ weights.</p>
 <h5><span class="header-section-number">5.1.2.2.1</span> Follow-up
 exploratory analysis for boundary</h5>
 <pre class="r"><code># overlap H1 and H2 versus its complement
-Hb &lt;- &quot;D1 &gt; D2, -.1 &lt; D2 - D3 &lt; .1&quot;  # mu1 &gt; mu2, -.1 &lt; mu2 - mu3 &lt; .1
+Hb &lt;- &quot;D1 &gt; D2, -.1 &lt; D2 - D3 &lt; .1&quot; # mu1 &gt; mu2, -.1 &lt; mu2 - mu3 &lt; .1
 
 # Apply GORIC #
-set.seed(123)
+set.seed(123) 
 results_b &lt;- goric(fit, hypotheses = list(Hb = Hb), comparison = &quot;complement&quot;)
 results_b</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1          Hb  -123.384    2.494  251.755           0.502            0.818          0.820
-2  complement  -123.391    4.000  254.783           0.498            0.182          0.180
+1          Hb  -123.384    2.500  251.767           0.944            0.731          0.979
+2  complement  -126.207    3.500  259.413           0.056            0.269          0.021
 ---
-The order-restricted hypothesis &#39;Hb&#39; has 4.54 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;Hb&#39; has 45.75 times more support than its complement.</code></pre>
 </div>
 </div>
 </div>
@@ -2460,8 +2469,8 @@ There are no cut-off values for fit values to resemble or for the ratio
 of loglik.weights being close to 1 (only gut feelings). Since the fit
 values depend on sample size, it is probably better to look the ratio of
 loglik.weights. Additionally, it could help to check the estimates that
-belong to those hypotheses (using, e.g., results_0c$ormle) and see if
-they meaningfully differ.<br />
+belong to those hypotheses (using, e.g., <code>results_0c$ormle</code>)
+and see if they meaningfully differ.<br />
 One could also look into log-likelihood benchmarks, as discussed in
 ‘Guidelines_GORIC-benchmarks’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
@@ -2484,43 +2493,43 @@ will never obtain a GORIC(A) weight of 1, but one lower than 1.</p>
 one equality restriction in the set. Moreover, only include an equality
 restriction when you are really interested in it. If possible, I would
 advise you to specify an about-equality restriction instead, as
-discussed next (after the example).</p>
+discussed next, after the example.</p>
 <div id="example-5" class="section level4" number="5.2.1.1">
 <h4><span class="header-section-number">5.2.1.1</span> Example</h4>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 = D2 &gt; 0, D3 &gt; 0&quot;  # mu1 = mu2 &gt; 0, mu3 &gt; 0
+He &lt;- &quot;D1 = D2 &gt; 0, D3 &gt; 0&quot; # mu1 = mu2 &gt; 0, mu3 &gt; 0
 
 # Apply GORIC #
-set.seed(123)
-results_0c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
-results_0c</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_e &lt;- goric(fit, hypotheses = list(He = He), comparison = &quot;complement&quot;)
+results_e</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1          H1  -139.114    2.000  282.228           0.499            0.818          0.817
+1          He  -139.114    2.000  282.228           0.499            0.818          0.817
 2  complement  -139.111    3.500  285.222           0.501            0.182          0.183
 ---
-The order-restricted hypothesis &#39;H1&#39; has 4.47 times more support than its complement.</code></pre>
-<pre class="r"><code>round(results_0c$ratio.lw, 3)  # ratio of loglik weights</code></pre>
-<pre><code>           vs. H1 vs. complement
-H1          1.000          0.997
-complement  1.003          1.000</code></pre>
-<pre class="r"><code>round(results_0c$ratio.gw, 3)  # ratio of GORIC weights</code></pre>
-<pre><code>           vs. H1 vs. complement
-H1          1.000          4.469
-complement  0.224          1.000</code></pre>
+The order-restricted hypothesis &#39;He&#39; has 4.47 times more support than its complement.</code></pre>
+<pre class="r"><code>round(results_e$ratio.lw, 2) # ratio of loglik weights</code></pre>
+<pre><code>           vs. He vs. complement
+He              1              1
+complement      1              1</code></pre>
+<pre class="r"><code>round(results_e$ratio.gw, 2) # ratio of GORIC weights</code></pre>
+<pre><code>           vs. He vs. complement
+He           1.00           4.47
+complement   0.22           1.00</code></pre>
 <!-- From this, you can conclude that $H_1: \mu_1 = \mu_2 > 0, \mu_3 > 0$ is $.817/.183 \approx 4.4$ times more supported than its complement. -->
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 = \mu_2 &gt; 0, \ \mu_3 &gt; 0\)</span> is more supported than its
 complement. When you look at the fit/loglik part, you see that both
 fit/loglik values resemble; that is, the ratio of loglik.weights is
-close to 1 (namely, .997). Thus, you can conclude that there is support
-for the overlap/boundary of these hypotheses.</p>
+close to 1 (namely, 1). Thus, you can conclude that there is support for
+the overlap/boundary of these hypotheses.</p>
 <p>Here, the complement receives the highest fit; that is, the estimates
 are in agreement with the complement. In this case, the fit of the
 complement is based on the fit for <span class="math inline">\(\mu_1
-&gt; 0, \mu_2 &gt; 0, \mu_3 &gt; 0\)</span> (so, the hypothesis that
+&gt; 0, \ \mu_2 &gt; 0, \ \mu_3 &gt; 0\)</span> (so, the hypothesis that
 does not restrict the first two means to be equal). Consequently, the
 preferred hypothesis <span class="math inline">\(H_1\)</span> does not
 have the highest fit/loglik (it has the best fit-complexity balance).
@@ -2568,41 +2577,40 @@ use this when creating a training set is not possible.</p>
 <div id="example-6" class="section level4" number="5.2.2.1">
 <h4><span class="header-section-number">5.2.2.1</span> Example</h4>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;-0.2 &lt; D1 - D2 &lt; .2, D1 &gt; 0, D2 &gt; 0, D3 &gt; 0&quot;
+Hae &lt;- &quot;-0.2 &lt; D1 - D2 &lt; .2, D1 &gt; 0, D2 &gt; 0, D3 &gt; 0&quot;
 # -0.2 &lt; mu1 - mu2 &lt; .2, mu1 &gt; 0, mu2 &gt; 0, mu3 &gt; 0
 
 # Apply GORIC #
-set.seed(123)
-results_12 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
-results_12</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_ae &lt;- goric(fit, hypotheses = list(Hae = Hae), comparison = &quot;complement&quot;)
+results_ae</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1          H1  -139.111    2.005  282.232           0.573            0.880          0.908
-2  complement  -139.404    4.000  286.808           0.427            0.120          0.092
+1         Hae  -139.111    2.000  282.222           0.926            0.818          0.983
+2  complement  -141.645    3.500  290.290           0.074            0.182          0.017
 ---
-The order-restricted hypothesis &#39;H1&#39; has 9.86 times more support than its complement.</code></pre>
-<pre class="r"><code>round(results_12$ratio.lw, 3)  # ratio of loglik weights</code></pre>
-<pre><code>           vs. H1 vs. complement
-H1          1.000           1.34
-complement  0.746           1.00</code></pre>
-<pre class="r"><code>round(results_12$ratio.gw, 3)  # ratio of GORIC weights</code></pre>
-<pre><code>           vs. H1 vs. complement
-H1          1.000          9.856
-complement  0.101          1.000</code></pre>
+The order-restricted hypothesis &#39;Hae&#39; has 56.48 times more support than its complement.</code></pre>
+<pre class="r"><code>round(results_ae$ratio.lw, 2) # ratio of loglik weights</code></pre>
+<pre><code>           vs. Hae vs. complement
+Hae           1.00           12.6
+complement    0.08            1.0</code></pre>
+<pre class="r"><code>round(results_ae$ratio.gw, 2) # ratio of GORIC weights</code></pre>
+<pre><code>           vs. Hae vs. complement
+Hae           1.00          56.48
+complement    0.02           1.00</code></pre>
 <pre class="r"><code>coef(fit)</code></pre>
 <pre><code>       D1        D2        D3 
 0.8073380 0.8251897 0.3860030 </code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
--0.2 &lt; \mu_1 - \mu_2 &lt; .2,\)</span> <span class="math inline">\(\mu_1 &gt; 0\)</span>, <span class="math inline">\(\mu_2 &gt; 0\)</span>, <span class="math inline">\(\mu_3 &gt; 0\)</span> is <span class="math inline">\(.908/.092 \approx 9.89\)</span> times more
-supported than its complement. Now, the fit/loglik value of this
-about-equality hypothesis <span class="math inline">\(H_1\)</span> is
-the highest (while it will never be the case for an equality
-hypothesis).<br />
+-0.2 &lt; \mu_1 - \mu_2 &lt; .2,\)</span> <span class="math inline">\(\mu_1 &gt; 0\)</span>, <span class="math inline">\(\mu_2 &gt; 0\)</span>, <span class="math inline">\(\mu_3 &gt; 0\)</span> is 0.98 <span class="math inline">\(/\)</span> 0.02 <span class="math inline">\(\approx\)</span> 56.48 times more supported than
+its complement. Now, the fit/loglik value of this about-equality
+hypothesis <span class="math inline">\(H_1\)</span> is the highest
+(while it will never be the case for an equality hypothesis).<br />
 Note that the fit values of <span class="math inline">\(H_1\)</span> and
-its complement are not close: the ratio of loglik.weights is <span class="math inline">\(.573/.427 \approx 1.34\)</span> (this ratio
-changes with the choice of range).</p>
+its complement are not close: the ratio of loglik.weights is 0.93 <span class="math inline">\(/\)</span> 0.07 <span class="math inline">\(\approx\)</span> 12.6 (notably, this ratio changes
+with the choice of range).</p>
 <p>Population information: In the data generation, I used a ratio of
 population means of 3:3:1.5; implying that <span class="math inline">\(H_1\)</span> is correct. More specifically, I used
 population mean values of approximately 0.70, 0.70, and 0.35. This
@@ -2614,15 +2622,18 @@ When I would sample more observations, the ratio of loglik weights of
 <span class="math inline">\(H_1\)</span> and its complement will go to
 infinity and, most importantly, the GORIC(A) weight of <span class="math inline">\(H_1\)</span> will converge to 1.</p>
 </div>
-<div id="about-equality-vs-absolute-specification" class="section level4" number="5.2.2.2">
-<h4><span class="header-section-number">5.2.2.2</span> About-equality vs
-absolute specification</h4>
+<div id="note-on-about-equality-vs-absolute-specification" class="section level4" number="5.2.2.2">
+<h4><span class="header-section-number">5.2.2.2</span> Note on
+about-equality vs absolute specification</h4>
 <p>An about-equality restriction should preferably be specified as a
 range restriction (e.g., <span class="math inline">\(-0.2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(\beta_1
 - \beta_2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(0.2\)</span>). In that case, the fit is based on
 that range restriction; and the penalty then reduces to the penalty for
 an equality restriction, which make sense since this range restriction
-is meant as an equality.</p>
+is meant as an equality.<br />
+Notably, the same applies for using ranges not centered around 0 (e.g.,
+<span class="math inline">\(-0.1\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(\beta_1
+- \beta_2\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(0.2\)</span>).</p>
 <p>In an about-equality restriction, one specifies that a (function of)
 parameter(s) lies in between two values. In theory, one could use the
 abs() function as well, but that is not advised. If you would use abs(b1
@@ -2633,11 +2644,11 @@ positive, b1 - b2 &lt; .2 is evaluated; if b1 - b2 is negative, then
 the inequality, not an equality restriction.</p>
 <p>I would advise on<br />
 - expressing an about-equality via a range restriction, where you
-specify a range of values. - using the abs() function when you are
-interested in an inequality restriction for the absolute value of one or
-more parameters / for the strength of one or more predictors (e.g.,
-abs(b1) &gt; abs(b2); or, when using bounds/thresholds, abs(b1) -
-abs(b2) &gt; .1).</p>
+specify a range of values.<br />
+- using the abs() function when you are interested in an inequality
+restriction for the absolute value of one or more parameters / for the
+strength of one or more predictors (e.g., abs(b1) &gt; abs(b2); or, when
+using bounds/thresholds, abs(b1) - abs(b2) &gt; .1).</p>
 </div>
 </div>
 </div>
@@ -2656,8 +2667,8 @@ has maximum fit. Per definition, this scenario goes hand in hand with a
 GORIC(A) weight for the preferred hypothesis being lower than 1.</p>
 <p>In such cases, the sample size is not large enough to find convincing
 evidence. In such a case, the GORIC(A) weights will also denote this
-uncertainty, since none of the weights will be close to 1 (and perhaps
-the weights will even be close together).</p>
+uncertainty, since none of the weights will be 1 (and perhaps the
+weights will even be close together).</p>
 <p>When you encounter such a situation, you may want to additionally
 take on an additional exploratory approach to come up with a few
 hypotheses for future research (by looking at sample means/estimates
@@ -2667,19 +2678,19 @@ research, one can evaluate the new set of hypotheses with a larger
 sample size.<br />
 When you believe the lower fit is solely because of a small sample or
 when you cannot create other theoretically meaningful hypotheses, you
-should advise to inspect the same hypothesis with a larger sample size
+should suggest to inspect the same hypothesis with a larger sample size
 in future research.</p>
 <div id="example-correct-hypothesis" class="section level3" number="5.3.1">
 <h3><span class="header-section-number">5.3.1</span> Example: Correct
 hypothesis</h3>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot;  # mu1 &gt; mu2 &gt; mu3
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
-results_2c &lt;- goric(fit, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)
-results_2c</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_c &lt;- goric(fit, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)
+results_c</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2687,12 +2698,12 @@ Results:
 2  complement  -120.072    3.668  247.481           0.581            0.302          0.375
 ---
 The order-restricted hypothesis &#39;H1&#39; has 1.67 times more support than its complement.</code></pre>
-<pre class="r"><code>round(results_2c$ratio.gw, 3)</code></pre>
+<pre class="r"><code>round(results_c$ratio.gw, 2)</code></pre>
 <pre><code>           vs. H1 vs. complement
-H1            1.0          1.667
-complement    0.6          1.000</code></pre>
+H1            1.0           1.67
+complement    0.6           1.00</code></pre>
 <p>Here, we see that our informative hypothesis <span class="math inline">\(H_1\)</span> is the preferred one, but it does not
-have the best fit (ratio of loglik.weights is <span class="math inline">\(.419 / .581\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(.72\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(1\)</span>).</p>
+have the best fit (ratio of loglik.weights is 0.42 <span class="math inline">\(/\)</span> 0.58 <span class="math inline">\(\approx\)</span> 0.72 <span class="math inline">\(&lt;\)</span> 1).</p>
 <p>Based on the sample size (<span class="math inline">\(N=100\)</span>,
 that is, approximately 33 observations per group), one could decide to
 leave the hypothesis like it is and only advise to increase the sample
@@ -2716,13 +2727,13 @@ for <span class="math inline">\(H_1\)</span>).</p>
 <h3><span class="header-section-number">5.3.2</span> Example: Incorrect
 hypothesis</h3>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 - D2 &gt; .5, D2 &gt; D3&quot;  # mu1 - mu2 &gt; .5, mu2 &gt; mu3
+H1 &lt;- &quot;D1 - D2 &gt; .5, D2 &gt; D3&quot; # mu1 - mu2 &gt; .5, mu2 &gt; mu3
 
 # Apply GORIC #
-set.seed(123)
-results_3c &lt;- goric(fit, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)
-results_3c</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_i &lt;- goric(fit, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)
+results_i</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2730,12 +2741,12 @@ Results:
 2  complement  -139.111    3.668  285.558           0.581            0.302          0.375
 ---
 The order-restricted hypothesis &#39;H1&#39; has 1.67 times more support than its complement.</code></pre>
-<pre class="r"><code>round(results_3c$ratio.gw, 3)</code></pre>
+<pre class="r"><code>round(results_i$ratio.gw, 3)</code></pre>
 <pre><code>           vs. H1 vs. complement
 H1            1.0          1.667
 complement    0.6          1.000</code></pre>
 <p>Here, we see that our informative hypothesis <span class="math inline">\(H_1\)</span> is the preferred one, but it does not
-have the best fit (ratio of loglik.weights is <span class="math inline">\(.419 / .581\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(.72\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(1\)</span>).</p>
+have the best fit (ratio of loglik.weights is 0.42 <span class="math inline">\(/\)</span> 0.58 <span class="math inline">\(\approx\)</span> 0.72 <span class="math inline">\(&lt;\)</span> 1).</p>
 <p>Based on your sample size, you could decide to leave the hypothesis
 like it is and only advise to increase the sample size in future
 research. Alternatively, you could also go for an additional exploratory
@@ -2770,8 +2781,10 @@ There are no cut-off values for fit values to resemble or for the ratio
 of loglik.weights being close to 1 (only gut feelings). Since the fit
 values depend on sample size, it is probably better to look the ratio of
 loglik.weights. Additionally, it could help to check the estimates that
-belong to those hypotheses (using, e.g., results_0c$ormle) and see if
-they meaningfully differ.</p>
+belong to those hypotheses (using, e.g., <code>results_0c$ormle</code>)
+and see if they meaningfully differ.<br />
+One could also look into log-likelihood benchmarks, as discussed in
+‘Guidelines_GORIC-benchmarks’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
 </div>
 </div>
@@ -2797,12 +2810,12 @@ example below.</p>
 <h2><span class="header-section-number">6.1</span> Example: Prior
 sensitivity bain</h2>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot;
+H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; 
 
 # Apply bain
 set.seed(123)
-bain1_1 &lt;- bain(fit, H1)
-bain1_1</code></pre>
+bain_c_f1 &lt;- bain(fit, H1)
+bain_c_f1</code></pre>
 <pre><code>Bayesian informative hypothesis testing for an object of class lm (ANOVA):
 
    Fit   Com   BF.u   BF.c   PMPa  PMPb  PMPc 
@@ -2815,8 +2828,8 @@ Hypotheses:
 
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 <pre class="r"><code>set.seed(123)
-bain1_2 &lt;- bain(fit, H1, fraction = 2)
-bain1_2</code></pre>
+bain_c_f2 &lt;- bain(fit, H1, fraction = 2)     
+bain_c_f2</code></pre>
 <pre><code>Bayesian informative hypothesis testing for an object of class lm (ANOVA):
 
    Fit   Com   BF.u   BF.c   PMPa  PMPb  PMPc 
@@ -2829,8 +2842,8 @@ Hypotheses:
 
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 <pre class="r"><code>set.seed(123)
-bain1_3 &lt;- bain(fit, H1, fraction = 3)
-bain1_3</code></pre>
+bain_c_f3 &lt;- bain(fit, H1, fraction = 3)     
+bain_c_f3</code></pre>
 <pre><code>Bayesian informative hypothesis testing for an object of class lm (ANOVA):
 
    Fit   Com   BF.u   BF.c   PMPa  PMPb  PMPc 
@@ -2842,8 +2855,8 @@ Hypotheses:
   H1: D1=D2&gt;0&amp;D3&gt;0
 
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
-<p>From this, you can see (from BF.c) that the equality hypothesis <span class="math inline">\(H_1\)</span> is approximately <span class="math inline">\(23\)</span>, <span class="math inline">\(16\)</span>, and <span class="math inline">\(13\)</span> times more supported than its
-complement when using a fraction of <span class="math inline">\(1\)</span>, <span class="math inline">\(2\)</span>, and <span class="math inline">\(3\)</span>, respectively.</p>
+<p>From this, you can see (from BF.c) that the equality hypothesis <span class="math inline">\(H_1\)</span> is approximately 23, 16, and 13,
+times more supported than its complement when using a fraction of <span class="math inline">\(1\)</span>, <span class="math inline">\(2\)</span>, and <span class="math inline">\(3\)</span>, respectively.</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:3:1.5;
 implying that <span class="math inline">\(H_1\)</span> is correct. More
@@ -2855,7 +2868,7 @@ ran an ANOVA (with three groups), and applied bain.</p>
 In terms of conclusions (i.e., there is support for <span class="math inline">\(H_1\)</span> or not), the output of GORIC(A) and
 bain are the same. In terms of the amount of support, bain renders more
 support for equality restrictions than the GORIC(A). In this example,
-this is good property, but: bain rendering more support for equality
+this is good property. But: bain rendering more support for equality
 restrictions happens both when the equality restrictions are
 true/correct and when they are incorrect; as will be shown in the
 examples below. Bear in mind that I advise on using about-equality
@@ -2867,12 +2880,12 @@ incorrect equality</h2>
 <div id="n-100" class="section level3" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> N = 100</h3>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot;
+H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; 
 
 # Apply bain
 set.seed(123)
-bain1_1 &lt;- bain(fit, H1)
-bain1_1</code></pre>
+bain_i_f1 &lt;- bain(fit, H1)
+bain_i_f1</code></pre>
 <pre><code>Bayesian informative hypothesis testing for an object of class lm (ANOVA):
 
    Fit   Com   BF.u   BF.c   PMPa  PMPb  PMPc 
@@ -2885,10 +2898,10 @@ Hypotheses:
 
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 <pre class="r"><code># Apply GORIC #
-set.seed(123)
-results_12 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
-results_12</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_i &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_i</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2898,9 +2911,9 @@ Results:
 The order-restricted hypothesis &#39;H1&#39; has 3.86 times more support than its complement.</code></pre>
 <p>From the bain output, you can see (from BF.c) that the incorrect
 equality hypothesis <span class="math inline">\(H_1\)</span> is
-approximately <span class="math inline">\(19.5\)</span> times more
-supported than its complement (when using a fraction of <span class="math inline">\(1\)</span>). From the GORIC output, you can see
-that the incorrect equality hypothesis <span class="math inline">\(H_1\)</span> is approximately <span class="math inline">\(3.8\)</span> times more supported than its
+approximately 19.5 times more supported than its complement (when using
+a fraction of <span class="math inline">\(1\)</span>). From the GORIC
+output, you can see that the incorrect equality hypothesis <span class="math inline">\(H_1\)</span> is approximately <span class="math inline">\(3.8\)</span> 3.9 times more supported than its
 complement.</p>
 <p>Population information:<br />
 In the data generation, I used a ratio of population means of 3:2.5:1;
@@ -2912,23 +2925,22 @@ ran an ANOVA (with three groups), and applied bain and the GORIC.<br />
 When I would sample more observations, the support for <span class="math inline">\(H_1\)</span> will go to 0, for both methods; thus,
 rendering full support for the complement. Note that the GORIC(A) will
 conclude this sooner (i.e., for smaller samples) than bain will:</p>
-<p>Below, you can find output for a sample size (<span class="math inline">\(N\)</span>) of 1000 and 10000. In case of <span class="math inline">\(N = 1000\)</span>, GORIC already shows support for
-the correct complement: The complement is <span class="math inline">\(.825/.175\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(4.71\)</span> (or <span class="math inline">\(1/.212\)</span>) times more supported than <span class="math inline">\(H_1\)</span>; while bain still favors the
-incorrect equality restriction: <span class="math inline">\(H_1\)</span>
-is <span class="math inline">\(.776/.224\)</span> <span class="math inline">\(\approx\)</span> <span class="math inline">\(3.46\)</span> times more supported than its
-complement. In case of <span class="math inline">\(N = 10000\)</span>,
-both methods show full support for the complement of <span class="math inline">\(H_1\)</span>.</p>
+<p>Below, you can find output for a sample size (<span class="math inline">\(N\)</span>) of 1000 and 10000. In the case of
+<span class="math inline">\(N = 1000\)</span>, GORIC already shows
+support for the correct complement; while bain still favors the
+incorrect equality restriction. In the case of <span class="math inline">\(N = 10000\)</span>, both methods show full support
+for the complement of <span class="math inline">\(H_1\)</span>.</p>
 </div>
 <div id="n-1000" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> N = 1000</h3>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot;</code></pre>
+H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; </code></pre>
 <div id="bain" class="section level4" number="6.2.2.1">
 <h4><span class="header-section-number">6.2.2.1</span> bain</h4>
 <pre class="r"><code># Apply bain
 set.seed(123)
-bain1_1_N1000 &lt;- bain(fit, H1)
-bain1_1_N1000</code></pre>
+bain_i_f1_N1000 &lt;- bain(fit, H1)
+bain_i_f1_N1000</code></pre>
 <pre><code>Bayesian informative hypothesis testing for an object of class lm (ANOVA):
 
    Fit   Com   BF.u  BF.c  PMPa  PMPb  PMPc 
@@ -2944,10 +2956,10 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 <div id="goric" class="section level4" number="6.2.2.2">
 <h4><span class="header-section-number">6.2.2.2</span> GORIC</h4>
 <pre class="r"><code># Apply GORIC #
-set.seed(123)
-results_12_N1000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
-results_12_N1000</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_i_N1000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_i_N1000</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model     loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
@@ -2960,13 +2972,13 @@ The order-restricted hypothesis &#39;H1&#39; has 0.21 times more support than it
 <div id="n-10000" class="section level3" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> N = 10000</h3>
 <pre class="r"><code># Equality versus its complement
-H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot;</code></pre>
+H1 &lt;- &quot;D1 = D2 &gt; 0 &amp; D3 &gt; 0&quot; </code></pre>
 <div id="bain-1" class="section level4" number="6.2.3.1">
 <h4><span class="header-section-number">6.2.3.1</span> bain</h4>
 <pre class="r"><code># Apply bain
 set.seed(123)
-bain1_1_N10000 &lt;- bain(fit, H1)
-bain1_1_N10000</code></pre>
+bain_i_f1_N10000 &lt;- bain(fit, H1)
+bain_i_f1_N10000</code></pre>
 <pre><code>Bayesian informative hypothesis testing for an object of class lm (ANOVA):
 
    Fit   Com   BF.u  BF.c  PMPa  PMPb  PMPc 
@@ -2982,10 +2994,10 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 <div id="goric-1" class="section level4" number="6.2.3.2">
 <h4><span class="header-section-number">6.2.3.2</span> GORIC</h4>
 <pre class="r"><code># Apply GORIC #
-set.seed(123)
-results_12_N10000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
-results_12_N10000</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+set.seed(123) 
+results_i_N10000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_i_N10000</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model      loglik  penalty      goric  loglik.weights  penalty.weights  goric.weights

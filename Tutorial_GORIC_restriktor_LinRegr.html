@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-04-02" />
+<meta name="date" content="2024-08-15" />
 
 <title>Evaluate a set of hypotheses with GORIC or GORICA: Linear Regression Example</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Evaluate a set of hypotheses with GORIC or
 GORICA: Linear Regression Example</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">02 April 2024</h4>
+<h4 class="date">15 August 2024</h4>
 
 </div>
 
@@ -1505,12 +1505,13 @@ load the required libraries.</p>
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
 ## Then, load the packages:
-library(restriktor)  # for the goric function
+library(restriktor) # for the goric function
 
-# If you want to use restriktor from github: if (!require(&#39;devtools&#39;))
-# install.packages(&#39;devtools&#39;) library(devtools)
-# install_github(&#39;LeonardV/restriktor&#39;) library(restriktor) # for goric
-# function</code></pre>
+# If you want to use restriktor from github:
+#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
+#library(devtools) 
+#install_github(&quot;LeonardV/restriktor&quot;)
+#library(restriktor) # for goric function</code></pre>
 <p>Second, it is necessary to load the data.</p>
 <p>Notably, it is only possible to load the data if you are using the
 correct working directory (with both your R script and data file). The
@@ -1520,14 +1521,14 @@ function <code>setwd()</code> by specifying the correct location between
 parentheses. Alternatively, in Rstudio, you can use the “Session” tab
 (on top) or you can use the “Files”-pane (on top of probably the right
 lower box of your Rstudio-screen, this pane is located next to the panes
-for “Plots”, “Packages”, “Help” and “Viewer”).</p>
+for “Plots”, “Packages”, “Help”, and “Viewer”).</p>
 <p>If you open the data file <code>Data_Lucas.txt</code> in a text
 editor, you can see that the variable labels have been inserted (using
 quotes; i.e., “…”) in the first line of the file, which is called a
 header. Therefore, you have to specify ‘header = TRUE’ when loading the
 data:</p>
 <pre class="r"><code># Load the sesame data from a text file
-Sesame &lt;- read.table(&quot;data/sesamesimRegression.txt&quot;, header = TRUE)
+Sesame &lt;- read.table(&quot;data/sesamesimRegression.txt&quot;, header=TRUE) 
 
 # Inspect data
 head(Sesame)</code></pre>
@@ -1543,7 +1544,7 @@ head(Sesame)</code></pre>
 <h2><span class="header-section-number">1.2</span> Example
 hypothesis</h2>
 <p>The following hypothesis will be evaluated:</p>
-<pre class="r"><code>H1 &lt;- &quot;prenumb &gt; prelet&quot;
+<pre class="r"><code>H1 &lt;- &#39;prenumb &gt; prelet&#39; 
 # Note that the labeling of the estimates should be used</code></pre>
 </div>
 <div id="standardize-data" class="section level2" number="1.3">
@@ -1554,8 +1555,10 @@ of the parameters is meaningful / fair, since they are on the same,
 comparable scale then).</p>
 <pre class="r"><code># Standardize all continuous variables (of interest) including the outcome:
 Sesame_s &lt;- as.data.frame(scale(Sesame))
-# Or: Standardize solely the continuous predictors (of interest): Sesame_s &lt;-
-# Sesame Sesame_s[,2:3] &lt;- as.data.frame(scale(Sesame[,2:3]))</code></pre>
+#
+# Or: Standardize solely the continuous predictors (of interest):
+#Sesame_s &lt;- Sesame
+#Sesame_s[,2:3] &lt;- as.data.frame(scale(Sesame[,2:3]))</code></pre>
 <p>Notes:</p>
 <ul>
 <li><p>Standardizing of ordinal and nominal variables is not helpful,
@@ -1563,34 +1566,38 @@ since the estimate of the unstandardized ordinal and nominal variables
 reflects a group difference in the outcome (in that case, one probably
 does not want to standardize the outcome).</p></li>
 <li><p>In case there are multiple outcomes and estimates for multiple
-outcomes are compared, then one needs to standardize the
-outcome.</p></li>
+outcomes are compared, then one needs to standardize the outcome (as
+well).</p></li>
 </ul>
 </div>
 <div id="preparation-for-gorica" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Preparation for
 GORIC(A)</h2>
-<pre class="r"><code># estimate the parameters of the statistical model at hand
+<pre class="r"><code># estimate the parameters of the statistical model at hand 
 fit_Sesame &lt;- lm(postnumb ~ prenumb + prelet, data = Sesame_s)
 
 # Check names used in model
 names(coef(fit_Sesame))</code></pre>
 <pre><code>[1] &quot;(Intercept)&quot; &quot;prenumb&quot;     &quot;prelet&quot;     </code></pre>
-<pre class="r"><code># Specify restrictions should use these names (as done above) In case of the
-# Intercept, one should use: .Intercept.  E.g., when outcome is not also
-# standardized: H1 &lt;- &#39;.Intercept. &gt; 0&#39;</code></pre>
+<pre class="r"><code># Specify restrictions should use these names (as done above)
+#
+# In case of the Intercept, one should use: .Intercept.
+# E.g., when outcome is not also standardized:
+# H1 &lt;- &#39;.Intercept. &gt; 0&#39;</code></pre>
 </div>
 </div>
 <div id="goric-gorica" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> GORIC &amp; GORICA</h1>
+<p>Note: For (more) information regarding interpreting the GORIC(A)
+output, see ‘Guidelines_output_GORIC’ (<a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).</p>
 <div id="goric-values-and-weights-for-h1-and-its-complement" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> GORIC values and
 weights for H1 and its complement</h2>
 <p>Here, we assume that the interest lies only in H1. In that case, it
 should be evaluated against its complement.</p>
-<pre class="r"><code>set.seed(123)
+<pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1599,15 +1606,17 @@ Results:
 ---
 The order-restricted hypothesis &#39;H1&#39; has 100793.25 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that the support for H1 is many more
-(100793.255 times more) supported / likely than its complement. Hence,
-there is compelling evidence in favor of H1.</p>
+supported / likely than its complement. Hence, there is compelling
+evidence in favor of H1.</p>
 </div>
 <div id="gorica-values-and-weights-for-h1-and-its-complement" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> GORICA values and
 weights for H1 and its complement</h2>
-<pre class="r"><code>set.seed(123)
-goric(fit_Sesame, hypotheses = list(H1 = H1), type = &quot;gorica&quot;, comparison = &quot;complement&quot;)</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
+<pre class="r"><code>set.seed(123) 
+goric_sesam_1c &lt;- goric(fit_Sesame, hypotheses = list(H1 = H1), type = &quot;gorica&quot;, comparison = &quot;complement&quot;)
+#summary(goric_sesam_1c)
+goric_sesam_1c</code></pre>
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights

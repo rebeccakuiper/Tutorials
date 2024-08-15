@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-04-02" />
+<meta name="date" content="2024-08-15" />
 
 <title>How to evaluate theory-based hypotheses in a (RI-)CLPM using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a (RI-)CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">02 April 2024</h4>
+<h4 class="date">15 August 2024</h4>
 
 </div>
 
@@ -1493,9 +1493,6 @@ width: 100%;
 margin: 0 auto;
 }
 </style>
-<div id="tutorial-gorica-and-ri-clpm" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Tutorial GORICA and
-(RI-)CLPM</h1>
 <p>This is a tutorial for using GORICA for (Random Intercept)
 Cross-lagged Panel Models ((RI-)CLPMs). The GORICA is an information
 criterion that can be used to evaluate theory-driven hypotheses.</p>
@@ -1507,67 +1504,85 @@ latent constructs that the observed variables represent. In the
 dimension model, the focus is on the observed variables themselves,
 rather than the latent constructs.</p>
 <p>Here, two examples are presented for the use of the
-<code>goric()</code> function in the restriktor package to evaluate
+<code>goric</code> function in the restriktor package to evaluate
 hypotheses about a CLPM. These are based on the analysis in:<br />
 Snijders, I., Wijnia, L., Kuiper, R. M., Rikers, R. M. J. P., &amp;
 Loyens, S. M. M. (2021). Relationship quality in higher education and
-the interplay with student engagement and loyalty. British Journal of
-Educational Psychology. <a href="https://doi.org/10.1111/bjep.12455" class="uri">https://doi.org/10.1111/bjep.12455</a><br />
+the interplay with student engagement and loyalty. <em>British Journal
+of Educational Psychology</em>. <a href="https://doi.org/10.1111/bjep.12455" class="uri">https://doi.org/10.1111/bjep.12455</a><br />
 The first example covers analysis at the construct level, while the
 second example covers analysis at the dimension level.<br />
 Other example files for evaluating (causal dominance) hypotheses in
 RI-CLPMs can be found on ‘<a href="https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM" class="uri">https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM</a>’.</p>
-<div id="example-1-construct-level-analysis" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Example 1: Construct
-Level Analysis</h2>
-<div id="r-packages" class="section level3" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> R packages</h3>
+<p>Note: For (more) information regarding interpreting the GORIC(A)
+output, see ‘Guidelines_output_GORIC’ (<a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).</p>
+<div id="example-1-construct-level-analysis" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Example 1: Construct
+Level Analysis</h1>
+<div id="r-packages" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> R packages</h2>
 <p>First, install and call the <code>lavaan</code> library to create a
 CLPM and the <code>restriktor</code> library to load the
-<code>goric()</code> function. If needed, it is possible to view the
+<code>goric</code> function. If needed, it is possible to view the
 description of the function with the <code>?</code> operator or the
-<code>help()</code> command.</p>
+<code>help</code> command.</p>
 <p>The code presented here also requires the <code>tidyverse</code>
 package for data manipulation.</p>
-<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
-# install.packages(&#39;restriktor&#39;)
+<pre class="r"><code># To install restriktor in R:
+#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
-# To install restriktor from github: if (!require(&#39;devtools&#39;))
-# install.packages(&#39;devtools&#39;) library(devtools)
-# install_github(&#39;LeonardV/restriktor&#39;)
+# To install restriktor from github:
+# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
+# library(devtools) 
+# install_github(&quot;LeonardV/restriktor&quot;)
 library(restriktor)
 
-# print docs in the help-tab to view arguments and explanations for the
-# function ?goric
+# print docs in the help-tab to view arguments and explanations for the function
+#?goric
 
-# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
+# To install lavaan in R:
+# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
 library(lavaan)
 
-# To install tidyverse in R: if (!require(&#39;tidyverse&#39;))
-# install.packages(&#39;tidyverse&#39;)
+# To install tidyverse in R:
+# if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
 library(tidyverse)</code></pre>
 </div>
-<div id="data" class="section level3" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Data</h3>
+<div id="data" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Data</h2>
 <p>Upload the data set to the R environment and select the columns used
 for analysis. The id column is renamed to <span class="math inline">\(ID\)</span> and the code in the data set for
 missing numbers -999.00 is replaced with <code>NAs</code>.</p>
 <pre class="r"><code>data &lt;- read.table(&quot;data/CLPM.dat&quot;, header = T)
 colnames(data)[1] &lt;- &quot;ID&quot;
-data &lt;- replace(data, data == -999, NA)
+data &lt;- replace(data , data == -999.00, NA)
 
-data_subset &lt;- select(data, THT1_SS, TBT1_SS, ACOMT1_SS, SATT1_SS, AB_T1_SS, DE_T1_SS,
-    VI_T1_SS, SLT1_SS, TH_T2_SS, TB_T2_SS, ACOMT2SS, SAT_T2SS, ABT2_SS, DET2_SS,
-    VIT2_SS, SLT2SS)</code></pre>
+data_subset &lt;- select(data, 
+                  THT1_SS,
+                  TBT1_SS,
+                  ACOMT1_SS,
+                  SATT1_SS,
+                  AB_T1_SS,
+                  DE_T1_SS,
+                  VI_T1_SS,
+                  SLT1_SS,
+                  TH_T2_SS,
+                  TB_T2_SS,
+                  ACOMT2SS,
+                  SAT_T2SS,
+                  ABT2_SS,
+                  DET2_SS,
+                  VIT2_SS,
+                  SLT2SS)</code></pre>
 </div>
-<div id="measuremnet-invariance" class="section level3" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> Measuremnet
-invariance</h3>
+<div id="measurement-invariance" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Measurement
+invariance</h2>
 <p>Next, we fit the CLPM using <code>lavaan</code>. The ‘RQ’ dimension
 is split into two sub-dimensions (cf. Snijders et al., 2021). Model 1 is
 fit to investigate configural invariance. The model is specified and fit
 in the following two steps.</p>
-<pre class="r"><code>CLPM_M1 &lt;- &quot;
+<pre class="r"><code>CLPM_M1 &lt;- &#39;
   
   #####################
   # MEASUREMENT MODEL #
@@ -1605,8 +1620,8 @@ in the following two steps.</p>
   RQ22 ~~ SE2 + SLT2SS
   SE2 ~~ SLT2SS
 
-&quot;</code></pre>
-<pre class="r"><code>CLPM_M1.fit &lt;- sem(CLPM_M1, data = data_subset, missing = &quot;ML&quot;)</code></pre>
+&#39;</code></pre>
+<pre class="r"><code>CLPM_M1.fit &lt;- sem(CLPM_M1, data = data_subset, missing = &#39;ML&#39;)</code></pre>
 <p>When fitting the model R returns the following warning message:</p>
 <p><code>Warning message:</code>
 <code>In lav_object_post_check(object) :</code>
@@ -1634,14 +1649,14 @@ SE2  0.407 0.523 0.496 0.648 0.881 1.000</code></pre>
 are very high, which is to be expected considered that these two
 sub-dimensions belong to one dimension. Given that the warning does not
 point to a model misspecification, we continue the analysis.</p>
-<pre class="r"><code>fitMeasures(CLPM_M1.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M1.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
 <pre><code>  chisq      df 
 715.867  78.000 </code></pre>
 <p>The output reports the following: <code>chisq      df</code>
 <code>715.867    78.000</code></p>
 <p>Based on these results we continue to Model 2, which investigates
 weak factorial invariance.</p>
-<pre class="r"><code>CLPM_M2 &lt;- &quot;
+<pre class="r"><code>CLPM_M2 &lt;- &#39;
   
   #####################
   # MEASUREMENT MODEL #
@@ -1677,8 +1692,8 @@ weak factorial invariance.</p>
   RQ22 ~~ SE2 + SLT2SS
   SE2 ~~ SLT2SS
   
-&quot;</code></pre>
-<pre class="r"><code>CLPM_M2.fit &lt;- sem(CLPM_M2, data = data_subset, missing = &quot;ML&quot;)</code></pre>
+&#39;</code></pre>
+<pre class="r"><code>CLPM_M2.fit &lt;- sem(CLPM_M2, data = data_subset, missing = &#39;ML&#39;)</code></pre>
 <p>R returns the same warning as before; so, we check the correlations
 again.</p>
 <pre class="r"><code>lavInspect(CLPM_M2.fit, &quot;cov.lv&quot;)</code></pre>
@@ -1698,21 +1713,24 @@ RQ22 0.566 0.968 0.739 1.000
 SE1  0.502 0.425 0.687 0.571 1.000      
 SE2  0.413 0.529 0.503 0.654 0.882 1.000</code></pre>
 <p>Again, there is no sign the model needs revision, so we continue.</p>
-<pre class="r"><code>fitMeasures(CLPM_M2.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M2.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
 <pre><code>  chisq      df 
 721.021  82.000 </code></pre>
 <p>We obtain these results: <code>chisq      df</code>
 <code>721.021    82.000</code></p>
 <p>We perform a Chi-square difference test to check whether Models 1 and
 2 differ significantly.</p>
-<p>Df = 82 - 78 = 4 Check the constrained factor loadings = 1 + 1 + 2 =
-4 Chi-square difference = 721.021 - 715.867 = 5.154 <a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
-<p>The P-Value is .271858. The result is not significant at p &lt;
-.05.</p>
+<p>Df = 82 - 78 = 4<br />
+Check the constrained factor loadings = 1 + 1 + 2 = 4<br />
+Chi-square difference = 721.021 - 715.867 = 5.154<br />
+<a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
+<p>The <span class="math inline">\(p\)</span> value is .271858. Hence,
+the result is not significant at <span class="math inline">\(\alpha
+=\)</span> .05.</p>
 <p>When the chi-square test is non-significant, this implies the factor
 loadings are not significantly different from each other over time. In
 other words, we can assume weak factorial invariance holds.</p>
-<p>So, we move on to strong factorial invariance with model 3.</p>
+<p>So, we move on to strong factorial invariance using Model 3:</p>
 <pre class="r"><code>CLPM_M3 &lt;- &#39;
   
   #####################
@@ -1775,7 +1793,7 @@ other words, we can assume weak factorial invariance holds.</p>
   SE2 ~~ SLT2SS
 
 &#39;</code></pre>
-<pre class="r"><code>CLPM_M3.fit &lt;- sem(CLPM_M3, data = data_subset, missing = &quot;ML&quot;)</code></pre>
+<pre class="r"><code>CLPM_M3.fit &lt;- sem(CLPM_M3, data = data_subset, missing = &#39;ML&#39;)</code></pre>
 <p>Given the warning, we investigate correlations again.</p>
 <pre class="r"><code>lavInspect(CLPM_M3.fit, &quot;cov.lv&quot;)</code></pre>
 <pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
@@ -1793,25 +1811,26 @@ RQ21 0.997 0.625 1.000
 RQ22 0.566 0.968 0.739 1.000            
 SE1  0.502 0.426 0.687 0.571 1.000      
 SE2  0.413 0.529 0.503 0.654 0.882 1.000</code></pre>
-<p>Then, move on to the results of the model,</p>
-<pre class="r"><code>fitMeasures(CLPM_M3.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
+<p>Then, move on to the results of the model:</p>
+<pre class="r"><code>fitMeasures(CLPM_M3.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
 <pre><code>   chisq       df 
 725.4913  84.0000 </code></pre>
-<p>which in this case are: <code>chisq       df</code>
-<code>725.4913    84.0000</code></p>
-<p>Because models 2 and 3 are also nested, we perform another Chi-square
-difference test.</p>
-<p>Df = 84 - 82 = 2 Check the constrained parameters = 8 - 6 = 2
-Chi-square difference = 725.4913 - 721.021 = 4.4703 <a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
-<p>The p-Value is .106976. The result is not significant: p &lt;
-.05.</p>
+<p>Because Models 2 and 3 are also nested, we perform another Chi-square
+difference test:</p>
+<p>Df = 84 - 82 = 2<br />
+Check the constrained parameters = 8 - 6 = 2<br />
+Chi-square difference = 725.4913 - 721.021 = 4.4703<br />
+<a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
+<p>The <span class="math inline">\(p\)</span> value is .106976. Hence,
+the result is not significant: <span class="math inline">\(p
+&gt;\)</span> .05.</p>
 <p>If this chi-square difference test is non-significant, this means we
 can assume that strong factorial invariance holds over time. In that
 case we could consider investigating whether the means change over time.
 This is just optional.</p>
 <p>Model 4 investigates strong factorial invariance without free latent
 means, meaning they are constrained over time). We repeat similar steps
-as above.</p>
+as above:</p>
 <pre class="r"><code>CLPM_M4 &lt;- &#39;
   
   #####################
@@ -1871,7 +1890,7 @@ as above.</p>
 
 &#39;</code></pre>
 <p>Fit the model:</p>
-<pre class="r"><code>CLPM_M4.fit &lt;- sem(CLPM_M4, data = data_subset, missing = &quot;ML&quot;)</code></pre>
+<pre class="r"><code>CLPM_M4.fit &lt;- sem(CLPM_M4, data = data_subset, missing = &#39;ML&#39;)</code></pre>
 <p>Inspect the correlations:</p>
 <pre class="r"><code>lavInspect(CLPM_M4.fit, &quot;cov.lv&quot;)</code></pre>
 <pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
@@ -1890,21 +1909,25 @@ RQ22 0.570 0.968 0.693 1.000
 SE1  0.502 0.426 0.662 0.568 1.000      
 SE2  0.407 0.530 0.506 0.654 0.883 1.000</code></pre>
 <p>Obtain the results:</p>
-<pre class="r"><code>fitMeasures(CLPM_M4.fit)[c(&quot;chisq&quot;, &quot;df&quot;)]</code></pre>
+<pre class="r"><code>fitMeasures(CLPM_M4.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
 <pre><code>   chisq       df 
 757.1568  90.0000 </code></pre>
 <p>We proceed with the Chi-squared difference test with the previous
 model:<br />
-Df = 90 - 84 = 6 Check the constrained / freed means = 6 Chi-square
-difference = 757.1568 - 725.4913 = 31.6655 <a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
-<p>The P-Value is .000019. The result is significant: p &lt; .05.</p>
-<p>Hence, we reject Model 4 and proceed with Model 3 (i.e., strong
+Df = 90 - 84 = 6<br />
+Check the constrained / freed means = 6<br />
+Chi-square difference = 757.1568 - 725.4913 = 31.6655<br />
+<a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
+<p>The <span class="math inline">\(p\)</span> value is .000019. Hence,
+the result is significant: <span class="math inline">\(p &lt;\)</span>
+.05.</p>
+<p>Thus, we reject Model 4 and proceed with Model 3 (i.e., strong
 factorial invariance - with freed means = CLPM_M3.fit).</p>
 <p>We can now move further by specifying the lagged effects between the
 latent variables.</p>
 </div>
-<div id="clpm" class="section level3" number="1.1.4">
-<h3><span class="header-section-number">1.1.4</span> CLPM</h3>
+<div id="clpm" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> CLPM</h2>
 <pre class="r"><code>clpmModel &lt;- &#39;
   
   #####################
@@ -1973,18 +1996,19 @@ latent variables.</p>
 
 &#39;</code></pre>
 <p>Next,we fit the model with the lagged relations:</p>
-<pre class="r"><code>clpmUnc &lt;- sem(clpmModel, data = data_subset, missing = &quot;ML&quot;)</code></pre>
-<p>Using the <code>summary()</code> function we obtain the results of
-the model fit and estimates. The standardized solution contains the
-p-values of standardized effects.</p>
+<pre class="r"><code>clpmUnc &lt;- sem(clpmModel, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+<p>Using the <code>summary</code> function we obtain the results of the
+model fit and estimates. The standardized solution contains the p-values
+of standardized effects.</p>
 <pre class="r"><code>fitMeasures(clpmUnc)</code></pre>
 <pre><code>                        npar                         fmin                        chisq                           df                       pvalue               baseline.chisq                  baseline.df              baseline.pvalue                          cfi                          tli                   cfi.robust                   tli.robust                         nnfi                          rfi                          nfi                         pnfi                          ifi                          rni                  nnfi.robust                   rni.robust                         logl            unrestricted.logl                          aic                          bic                       ntotal                         bic2                        rmsea               rmsea.ci.lower               rmsea.ci.upper               rmsea.ci.level                 rmsea.pvalue               rmsea.close.h0        rmsea.notclose.pvalue            rmsea.notclose.h0                 rmsea.robust        rmsea.ci.lower.robust        rmsea.ci.upper.robust          rmsea.pvalue.robust rmsea.notclose.pvalue.robust                          rmr                   rmr_nomean 
                       68.000                        0.220                      725.491                       84.000                        0.000                    11555.091                      120.000                        0.000                        0.944                        0.920                        0.902                        0.860                        0.920                        0.910                        0.937                        0.656                        0.944                        0.944                        0.860                        0.902                   -35727.898                   -35365.152                    71591.795                    71959.534                     1649.000                    71743.509                        0.068                        0.064                        0.073                        0.900                        0.000                        0.050                        0.000                        0.080                        0.130                        0.119                        0.141                        0.000                        1.000                        0.852                        0.901 
                         srmr                 srmr_bentler          srmr_bentler_nomean                         crmr                  crmr_nomean                   srmr_mplus            srmr_mplus_nomean                        cn_05                        cn_01                          gfi                         agfi                         pgfi                          mfi                         ecvi 
                        0.053                        0.053                        0.056                        0.055                        0.059                        0.053                        0.055                      242.829                      267.063                        0.988                        0.977                        0.546                        0.823                        0.522 </code></pre>
-<pre class="r"><code>stdClpmUnc &lt;- standardizedsolution(clpmUnc, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE,
-    pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, remove.eq = TRUE, remove.ineq = TRUE,
-    remove.def = FALSE, partable = NULL, GLIST = NULL, est = NULL)
+<pre class="r"><code>stdClpmUnc &lt;- standardizedsolution(clpmUnc, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE, 
+                                   pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, 
+                                   remove.eq = TRUE, remove.ineq = TRUE, remove.def = FALSE, 
+                                   partable = NULL, GLIST = NULL, est = NULL)
 stdClpmUnc</code></pre>
 <pre><code>         lhs op       rhs    label est.std    se       z pvalue ci.lower ci.upper
 1       RQ11 =~   THT1_SS       L1   0.860 0.010  87.184  0.000    0.841    0.880
@@ -2074,37 +2098,41 @@ stdClpmUnc</code></pre>
 85       SE1 ~~       SE1            1.000 0.000      NA     NA    1.000    1.000
 86       SE2 ~~       SE2            0.292 0.099   2.946  0.003    0.098    0.486</code></pre>
 </div>
-<div id="gorica" class="section level3" number="1.1.5">
-<h3><span class="header-section-number">1.1.5</span> GORICA</h3>
+<div id="gorica" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> GORICA</h2>
 <p>Next, we select the estimates relative to our hypotheses in order to
-use the <code>goric()</code> function.</p>
+use the <code>goric</code> function.</p>
 <pre class="r"><code># indices of estimates of interest
 indices &lt;- 37:52
 
 # select estimates from the column &#39;Std.all&#39; in the results summary above
-est &lt;- stdClpmUnc[indices, &quot;est.std&quot;]
+est &lt;- stdClpmUnc[indices, &#39;est.std&#39;]
 
-names(est) &lt;- c(&quot;RQ12_RQ11&quot;, &quot;RQ12_RQ21&quot;, &quot;RQ12_SE1&quot;, &quot;RQ12_SL1&quot;, &quot;RQ22_RQ11&quot;, &quot;RQ22_RQ21&quot;,
-    &quot;RQ22_SE1&quot;, &quot;RQ22_SL1&quot;, &quot;SE2_RQ11&quot;, &quot;SE2_RQ21&quot;, &quot;SE2_SE1&quot;, &quot;SE2_SL1&quot;, &quot;SL2_RQ11&quot;,
-    &quot;SL2_RQ21&quot;, &quot;SL2_SE1&quot;, &quot;SL2_SL1&quot;)
+names(est) &lt;- c(&quot;RQ12_RQ11&quot;, &quot;RQ12_RQ21&quot;, &quot;RQ12_SE1&quot;, &quot;RQ12_SL1&quot;, 
+                &quot;RQ22_RQ11&quot;, &quot;RQ22_RQ21&quot;, &quot;RQ22_SE1&quot;, &quot;RQ22_SL1&quot;, 
+                &quot;SE2_RQ11&quot;, &quot;SE2_RQ21&quot;, &quot;SE2_SE1&quot;, &quot;SE2_SL1&quot;,
+                &quot;SL2_RQ11&quot;, &quot;SL2_RQ21&quot;, &quot;SL2_SE1&quot;, &quot;SL2_SL1&quot;
+)
 
 # the covariance matrix for these estimates
-vcov &lt;- lavInspect(clpmUnc, &quot;vcov.std.all&quot;)[indices - 6, indices - 6]</code></pre>
-<p>We specify the hypotheses to test. Note the use of the use of the
-<code>abs()</code> function, that is because we are interested in the
-size of the relations and we want to compare absolute effects. In cases
-where the sign of the values is of interest, the <code>abs()</code> can
-be omitted (e.g., estimate_x &gt; .3 or estimate_y &lt; 0).</p>
-<p>Here there are two sets of hypotheses, <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span>, which focus on different
+vcov &lt;- lavInspect(clpmUnc, &quot;vcov.std.all&quot;)[indices-6, indices-6]</code></pre>
+<p>Next, we specify the hypotheses to be evaluated (which are known
+before seeing the data). Note the use of the <code>abs</code> function:
+This is because we are interested in the size of the relations and we
+want to compare absolute effects. In cases where the sign of the values
+is of interest, one should look at the regular/raw/non-absolute effect
+(e.g., estimate_x &gt; .3 or estimate_y &lt; 0).</p>
+<p>Here, there are two sets of hypotheses, <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span>, which focus on different
 relations in the model. The decisions of whether multiple hypotheses
 should be split in different sets and how to divide them are driven by
-theory, and depend on what the researchers intend to test. When multiple
-hypotheses are included in one set, as in <span class="math inline">\(H1\_Q2\)</span>, they are handled by the
-<code>goric()</code> function as a whole, not individually.</p>
+theory, and depend on what the researchers intend to evaluate. When
+multiple hypotheses are included in one set, as in <span class="math inline">\(H1\_Q2\)</span>, they are handled by the
+<code>goric</code> function as a whole, not individually.</p>
 <pre class="r"><code># Q1: Phi_21 &gt; Phi_12
 H1_Q1 &lt;- &quot;
 abs(RQ22_RQ11) &gt; abs(RQ12_RQ21)
 &quot;
+#
 # Q2
 H1_Q2 &lt;- &quot;
 abs(SE2_RQ11) &gt; abs(RQ12_SE1);
@@ -2113,14 +2141,15 @@ abs(SE2_RQ21) &gt; abs(RQ22_SE1);
 abs(SL2_RQ21) &gt; abs(RQ22_SL1)
 &quot;</code></pre>
 <p>We obtain the GORICA results for <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span> in two steps. Note the use of
-<code>set.seed()</code> to ensure results are reproducible.</p>
+<code>set.seed</code> to ensure that the results are reproducible.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_Q1 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q1 = H1_Q1), comparison = &quot;complement&quot;,
-    type = &quot;gorica&quot;)
+goricaResults_Q1 &lt;- goric(est, VCOV = vcov, 
+                          hypotheses = list(H1_Q1=H1_Q1), comparison = &quot;complement&quot;, 
+                          type = &quot;gorica&quot;)
 
 goricaResults_Q1</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2128,16 +2157,15 @@ Results:
 2  complement  21.898   15.500  -12.796           0.368            0.500           0.368
 ---
 The order-restricted hypothesis &#39;H1_Q1&#39; has 1.72 times more support than its complement.</code></pre>
-<pre class="r"><code># summary(goricaResults_Q1)</code></pre>
+<pre class="r"><code>#summary(goricaResults_Q1)</code></pre>
 <p>The output shows that the order-restricted hypothesis <span class="math inline">\(H1\_Q1\)</span> has 1.7 times more support than
 its complement.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_Q2 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q2 = H1_Q2), comparison = &quot;complement&quot;,
-    type = &quot;gorica&quot;)
+goricaResults_Q2 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q2=H1_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
 
 goricaResults_Q2</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2145,7 +2173,7 @@ Results:
 2  complement  22.387   15.131  -14.512           0.487            0.432           0.419
 ---
 The order-restricted hypothesis &#39;H1_Q2&#39; has 1.39 times more support than its complement.</code></pre>
-<pre class="r"><code># summary(goricaResults_Q2)</code></pre>
+<pre class="r"><code>#summary(goricaResults_Q2)</code></pre>
 <p>Furthermore, the order-restricted hypothesis <span class="math inline">\(H1\_Q2\)</span> has 1.4 times more support than
 its complement.</p>
 <p>Note that the results hold for the chosen time interval. Hence, the
@@ -2153,51 +2181,67 @@ results are time-interval dependent. At the end, more information is
 given.</p>
 </div>
 </div>
-<div id="example-2-measurement-level-analysis" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Example 2:
-Measurement Level Analysis</h2>
-<div id="r-packages-1" class="section level3" number="1.2.1">
-<h3><span class="header-section-number">1.2.1</span> R packages</h3>
+<div id="example-2-measurement-level-analysis" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Example 2: Measurement
+Level Analysis</h1>
+<div id="r-packages-1" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> R packages</h2>
 <p>First, install and call the <code>lavaan</code> library to create a
 CLPM and the <code>restriktor</code> library to load the
-<code>goric()</code> function. If needed, it is possible to view the
+<code>goric</code> function. If needed, it is possible to view the
 description of the function with the <code>?</code> operator or the
-<code>help()</code> command.</p>
+<code>help</code> command.</p>
 <p>The code presented here also requires the <code>tidyverse</code>
 package for data manipulation.</p>
-<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
-# install.packages(&#39;restriktor&#39;)
+<pre class="r"><code># To install restriktor in R:
+#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
-# To install restriktor from github: if (!require(&#39;devtools&#39;))
-# install.packages(&#39;devtools&#39;) library(devtools)
-# install_github(&#39;LeonardV/restriktor&#39;)
+# To install restriktor from github:
+# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
+# library(devtools) 
+# install_github(&quot;LeonardV/restriktor&quot;)
 library(restriktor)
 
-# print docs in the help-tab to view arguments and explanations for the
-# function ?goric
+# print docs in the help-tab to view arguments and explanations for the function
+#?goric
 
-# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
+# To install lavaan in R:
+# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
 library(lavaan)
 
-# To install tidyverse in R: if (!require(&#39;tidyverse&#39;))
-# install.packages(&#39;tidyverse&#39;)
+# To install tidyverse in R:
+# if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
 library(tidyverse)</code></pre>
 </div>
-<div id="data-1" class="section level3" number="1.2.2">
-<h3><span class="header-section-number">1.2.2</span> Data</h3>
+<div id="data-1" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Data</h2>
 <p>Upload the data set to the R environment and select the columns used
 for analysis. The id column is renamed to <span class="math inline">\(ID\)</span> and the code in the data set for
 missing numbers -999.00 is replaced with <code>NAs</code>.</p>
 <pre class="r"><code>data &lt;- read.table(&quot;data/CLPM.dat&quot;, header = T)
 colnames(data)[1] &lt;- &quot;ID&quot;
-data &lt;- replace(data, data == -999, NA)
+data &lt;- replace(data , data == -999.00, NA)
 
-data_subset &lt;- select(data, THT1_SS, TBT1_SS, ACOMT1_SS, SATT1_SS, AB_T1_SS, DE_T1_SS,
-    VI_T1_SS, SLT1_SS, TH_T2_SS, TB_T2_SS, ACOMT2SS, SAT_T2SS, ABT2_SS, DET2_SS,
-    VIT2_SS, SLT2SS)</code></pre>
+data_subset &lt;- select(data, 
+                  THT1_SS,
+                  TBT1_SS,
+                  ACOMT1_SS,
+                  SATT1_SS,
+                  AB_T1_SS,
+                  DE_T1_SS,
+                  VI_T1_SS,
+                  SLT1_SS,
+                  TH_T2_SS,
+                  TB_T2_SS,
+                  ACOMT2SS,
+                  SAT_T2SS,
+                  ABT2_SS,
+                  DET2_SS,
+                  VIT2_SS,
+                  SLT2SS)</code></pre>
 </div>
-<div id="clpm-1" class="section level3" number="1.2.3">
-<h3><span class="header-section-number">1.2.3</span> CLPM</h3>
+<div id="clpm-1" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> CLPM</h2>
 <p>Next, we fit the CLPM on sum scores using the <code>lavaan</code>
 package. Here we specify all the relations of the model.</p>
 <pre class="r"><code>clpmModel_2 &lt;- &#39;
@@ -2238,19 +2282,20 @@ package. Here we specify all the relations of the model.</p>
    VIT2_SS ~~ SLT2SS
    
 &#39;</code></pre>
-<p>We fit the model using the <code>sem()</code> function:</p>
-<pre class="r"><code>clpmUnc_2 &lt;- sem(clpmModel_2, data = data_subset, missing = &quot;ML&quot;)</code></pre>
-<p>Using the <code>summary()</code> function we obtain the results of
-the model fit and estimates. The standardized solution contains the
-p-values of standardized effects.</p>
+<p>We fit the model using the <code>sem</code> function:</p>
+<pre class="r"><code>clpmUnc_2 &lt;- sem(clpmModel_2, data = data_subset, missing = &#39;ML&#39;)</code></pre>
+<p>Using the <code>summary</code> function we obtain the results of the
+model fit and estimates. The standardized solution contains the p-values
+of standardized effects.</p>
 <pre class="r"><code>fitMeasures(clpmUnc_2)</code></pre>
 <pre><code>                        npar                         fmin                        chisq                           df                       pvalue               baseline.chisq                  baseline.df              baseline.pvalue                          cfi                          tli                   cfi.robust                   tli.robust                         nnfi                          rfi                          nfi                         pnfi                          ifi                          rni                  nnfi.robust                   rni.robust                         logl            unrestricted.logl                          aic                          bic                       ntotal                         bic2                        rmsea               rmsea.ci.lower               rmsea.ci.upper               rmsea.ci.level                 rmsea.pvalue               rmsea.close.h0        rmsea.notclose.pvalue            rmsea.notclose.h0                 rmsea.robust        rmsea.ci.lower.robust        rmsea.ci.upper.robust          rmsea.pvalue.robust rmsea.notclose.pvalue.robust                          rmr                   rmr_nomean 
                      152.000                        0.000                        0.000                        0.000                           NA                    11555.091                      120.000                        0.000                        1.000                        1.000                        1.000                        1.000                        1.000                        1.000                        1.000                        0.000                        1.000                        1.000                        1.000                        1.000                   -35365.152                   -35365.152                    71034.304                    71856.308                     1649.000                    71373.428                        0.000                        0.000                        0.000                        0.900                           NA                        0.050                           NA                        0.080                        0.000                        0.000                        0.000                           NA                           NA                        0.000                        0.000 
                         srmr                 srmr_bentler          srmr_bentler_nomean                         crmr                  crmr_nomean                   srmr_mplus            srmr_mplus_nomean                        cn_05                        cn_01                          gfi                         agfi                         pgfi                          mfi                         ecvi 
                        0.000                        0.000                        0.000                        0.000                        0.000                        0.000                        0.000                           NA                           NA                        0.998                        1.000                        0.000                        1.000                        0.184 </code></pre>
-<pre class="r"><code>stdClpmUnc_2 &lt;- standardizedsolution(clpmUnc_2, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE,
-    pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, remove.eq = TRUE, remove.ineq = TRUE,
-    remove.def = FALSE, partable = NULL, GLIST = NULL, est = NULL)
+<pre class="r"><code>stdClpmUnc_2 &lt;- standardizedsolution(clpmUnc_2, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE, 
+                                   pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, 
+                                   remove.eq = TRUE, remove.ineq = TRUE, remove.def = FALSE, 
+                                   partable = NULL, GLIST = NULL, est = NULL)
 stdClpmUnc_2</code></pre>
 <pre><code>          lhs op       rhs est.std    se      z pvalue ci.lower ci.upper
 1    TH_T2_SS  ~   THT1_SS   0.191 0.094  2.033  0.042    0.007    0.374
@@ -2405,14 +2450,14 @@ stdClpmUnc_2</code></pre>
 150  DE_T1_SS ~1             4.508 0.102 44.130  0.000    4.308    4.708
 151  VI_T1_SS ~1             3.542 0.083 42.581  0.000    3.379    3.705
 152   SLT1_SS ~1             4.082 0.094 43.588  0.000    3.899    4.266</code></pre>
-<p>In this case the results shows we obtain a ‘perfect’ model fit, that
-is because the degrees of freedom are 0, meaning the model is
-saturated.</p>
+<p>In this case, the results shows we obtain a ‘perfect’ model fit, that
+is because the degrees of freedom are 0, meaning the model is saturated
+(i.e., you have as much parameters as you have data points).</p>
 </div>
-<div id="gorica-1" class="section level3" number="1.2.4">
-<h3><span class="header-section-number">1.2.4</span> GORICA</h3>
+<div id="gorica-1" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> GORICA</h2>
 <p>We select the estimates relevant to our hypotheses in order to use
-the <code>goric()</code> function.</p>
+the <code>goric</code> function.</p>
 <pre class="r"><code># indices of estimates of interest
 indices_2 &lt;- 1:64
 
@@ -2433,18 +2478,17 @@ names(est_2) &lt;- c(&quot;TH2_TH1&quot;, &quot;TH2_TB1&quot;, &quot;TH2_ACOM1&q
 
 # the covariance matrix for these estimates
 vcov_2 &lt;- lavInspect(clpmUnc_2, &quot;vcov.std.all&quot;)[indices_2, indices_2]</code></pre>
-<p>We then specify the hypotheses to test. Note the use of the use of
-the <code>abs()</code> function; that is because we are interested in
-the size of the relations and we want to compare absolute effects. In
-cases where the sign of the values is of interest, the
-<code>abs()</code> can be omitted (e.g., estimate_x &gt; .3 or
-estimate_y &lt; 0).</p>
-<p>Here there are two sets of hypotheses, <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span>, which focus on different
+<p>Next, we specify the hypotheses to be evaluated. Note the use of the
+use of the <code>abs</code> function; that is because we are interested
+in the size of the relations and we want to compare absolute effects. In
+cases where the sign of the values is of interest, one should not use
+absolute values (e.g., estimate_x &gt; .3 or estimate_y &lt; 0).</p>
+<p>Here, there are two sets of hypotheses, <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span>, which focus on different
 relations in the model. The decisions of whether multiple hypotheses
 should be split in different sets and how to divide them are driven by
-theory, and depend on what the researchers intend to test. When multiple
-hypotheses are included in one set they are handled by the
-<code>goric()</code> function as a whole, not individually.</p>
+theory, and depend on what the researchers intend to evaluate. When
+multiple hypotheses are included in one set they are handled by the
+<code>goric</code> function as a whole, not individually.</p>
 <pre class="r"><code># Q1
 H2_Q1 &lt;- &quot;
 abs(ACOM2_TH1) &gt; abs(TH2_ACOM1); abs(SAT2_TH1) &gt; abs(TH2_SAT1);
@@ -2459,14 +2503,13 @@ abs(AB2_ACOM1) &gt; abs(ACOM2_AB1); abs(DE2_ACOM1) &gt; abs(ACOM2_DE1); abs(VI2_
 abs(AB2_SAT1) &gt; abs(SAT2_AB1); abs(DE2_SAT1) &gt; abs(SAT2_DE1); abs(VI2_SAT1) &gt; abs(SAT2_VI1); abs(SL2_SAT1) &gt; abs(SAT2_SL1)
 &quot;</code></pre>
 <p>We obtain the GORICA results for <span class="math inline">\(H2\_Q1\)</span> and <span class="math inline">\(H2\_Q2\)</span> in two steps. Note the use of
-<code>set.seed()</code> to ensure results are reproducible.</p>
+<code>set.seed</code> to ensure that the results are reproducible.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q1 = H2_Q1),
-    comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q1=H2_Q1), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
 
 goricaResults_H2_Q1</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2474,7 +2517,7 @@ Results:
 2  complement  134.301   63.473  -141.656           0.517            0.265           0.278
 ---
 The order-restricted hypothesis &#39;H2_Q1&#39; has 2.59 times more support than its complement.</code></pre>
-<pre class="r"><code># summary(goricaResults_H2_Q1)</code></pre>
+<pre class="r"><code>#summary(goricaResults_H2_Q1)</code></pre>
 <p>The output shows that the order-restricted hypothesis <span class="math inline">\(H2\_Q1\)</span> has 2.6 times more support than
 its complement.</p>
 <p>We can proceed in the same manner for <span class="math inline">\(H2\_Q1\)</span>; however, because the default
@@ -2483,20 +2526,22 @@ bootstrap method. When using the bootstrapping the results do not
 change, but the computation time may decrease.</p>
 <pre class="r"><code>set.seed(123)
 
-# goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, hypotheses =
-# list(H2_Q2=H2_Q2), comparison = &#39;complement&#39;, type = &#39;gorica&#39;)
-# goricaResults_H2_Q2 summary(goricaResults_H2_Q2)
+#goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=H2_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+#goricaResults_H2_Q2
+##summary(goricaResults_H2_Q2)
 
-# if (!require(&#39;parallel&#39;)) install.packages(&#39;parallel&#39;) library(parallel)
+# if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;)
+#library(parallel)
 
-# nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
+#nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
 
 # NB: there are many restrictions, so the code takes longer to run
-goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2 = H2_Q2),
-    comparison = &quot;complement&quot;, type = &quot;gorica&quot;, mix_weights = &quot;boot&quot;)
+goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=H2_Q2), 
+                               comparison = &quot;complement&quot;, type = &quot;gorica&quot;, 
+                               mix_weights = &quot;boot&quot;)
 
 goricaResults_H2_Q2_b</code></pre>
-<pre><code>restriktor (0.5-50): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2504,7 +2549,7 @@ Results:
 2  complement  134.301   63.995  -140.612           0.966            0.003           0.067
 ---
 The order-restricted hypothesis &#39;H2_Q2&#39; has 13.94 times more support than its complement.</code></pre>
-<pre class="r"><code># summary(goricaResults_H2_Q2_b)</code></pre>
+<pre class="r"><code>#summary(goricaResults_H2_Q2_b)</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H2\_Q2\)</span> has 14 times more support than its
 complement.</p>
 <p>Note that the results hold for the chosen time interval. Hence, the
@@ -2512,46 +2557,23 @@ results are time-interval dependent. Next, more information is
 given.</p>
 </div>
 </div>
-<div id="note-on-time-interval-dependency" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> Note on time-interval
-dependency</h2>
+<div id="note-on-time-interval-dependency" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Note on time-interval
+dependency</h1>
 <p>The parameter estimates in a (RI-)CLPM are time-interval dependent,
-and thus the GORICA results as well. By using the CTmeta package, one
-can plot the lagged-effects parameter estimates for different choices of
-time intervals. Based on this plot (and/or on other information), one
-can evaluate the hypotheses using the GORICA for different choices of
-time intervals.</p>
-<pre class="r"><code># Install and load packages library(devtools) if (!require(&#39;CTmeta&#39;))
-# install_github(&#39;rebeccakuiper/CTmeta&#39;)
-# ##install_github(&#39;rebeccakuiper/CTmeta&#39;, force = TRUE)
-library(CTmeta)</code></pre>
-<pre><code>Loading required package: expm</code></pre>
-<pre><code>Loading required package: Matrix</code></pre>
-<pre><code>
-Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
-
-    expand, pack, unpack</code></pre>
-<pre><code>
-Attaching package: &#39;expm&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:Matrix&#39;:
-
-    expm</code></pre>
-<pre><code>Loading required package: fastDummies</code></pre>
-<pre><code>Thank you for using fastDummies!</code></pre>
-<pre><code>To acknowledge our work, please cite the package:</code></pre>
-<pre><code>Kaplan, J. &amp; Schlegel, B. (2023). fastDummies: Fast Creation of Dummy (Binary) Columns and Rows from Categorical Variables. Version 1.7.1. URL: https://github.com/jacobkap/fastDummies, https://jacobkap.github.io/fastDummies/.</code></pre>
-<pre><code>Loading required package: ggpubr</code></pre>
-<pre><code>Loading required package: jtools</code></pre>
-<pre><code>Loading required package: metafor</code></pre>
-<pre><code>Loading required package: metadat</code></pre>
-<pre><code>Loading required package: numDeriv</code></pre>
-<pre><code>
-Loading the &#39;metafor&#39; package (version 4.4-0). For an
-introduction to the package please type: help(metafor)</code></pre>
-<pre><code>Loading required package: nleqslv</code></pre>
-<pre class="r"><code># ?PhiPlot</code></pre>
+and thus the GORICA results as well. By using the CTmeta package:</p>
+<pre class="r"><code># Install and load packages
+#
+#library(devtools)
+#if (!require(&quot;CTmeta&quot;)) install_github(&quot;rebeccakuiper/CTmeta&quot;) ##install_github(&quot;rebeccakuiper/CTmeta&quot;, force = TRUE)
+library(CTmeta)
+#?PhiPlot</code></pre>
+<p>one can plot the lagged-effects parameter estimates for different
+choices of time intervals. Based on this plot (and/or on other
+information), one can evaluate the hypotheses using the GORICA for
+different choices of time intervals.</p>
 <!-- ```{r} -->
+<!-- library(CTmeta) -->
 <!-- # Create Phi matrix from this and make Phi plot -->
 <!-- Phi <- matrix(est_2, byrow=T, ncol = sqrt(length(est_2))) -->
 <!-- #Phi -->
@@ -2581,7 +2603,6 @@ introduction to the package please type: help(metafor)</code></pre>
 <!-- ), ncol = sqrt(length(est_2)))  -->
 <!-- PhiPlot(DeltaT = 1, Phi, Min = 0, Max = 10, Step = 0.05, WhichElements = WhichEl_Q2, Labels = NULL, Col = NULL, Lty = NULL, Title = NULL) -->
 <!-- ``` -->
-</div>
 </div>
 
 
