@@ -11,9 +11,9 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-15" />
+<meta name="date" content="2024-08-19" />
 
-<title>Tutorial for goric(): How to evaluate theory-based hypotheses using the GORIC and GORICA</title>
+<title>Tutorial for goric: How to evaluate theory-based hypotheses using the GORIC and GORICA</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1479,10 +1479,10 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">Tutorial for goric(): How to evaluate
-theory-based hypotheses using the GORIC and GORICA</h1>
+<h1 class="title toc-ignore">Tutorial for <code>goric</code>: How to
+evaluate theory-based hypotheses using the GORIC and GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">15 August 2024</h4>
+<h4 class="date">19 August 2024</h4>
 
 </div>
 
@@ -1497,8 +1497,8 @@ margin: 0 auto;
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <div id="analyses" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Analyses</h2>
-<p>Below, you will find examples for the use of the <code>goric()</code>
-function in the <code>restriktor</code>-package.</p>
+<p>Below, you will find examples for the use of the <code>goric</code>
+function in the <code>restriktor</code> package.</p>
 <p>Two types of analyses can be run:</p>
 <ul>
 <li><code>type = &quot;goric&quot;</code> (the default), which can be applied to
@@ -1531,20 +1531,18 @@ more powerful then including the unconstrained hypothesis. Please note
 that in the example below, the default
 <code>comparison = &quot;unconstrained&quot;</code> is used. At the end of the
 file, there are three examples for the three types of comparisons.</p>
-<p>The <code>goric()</code> function of <code>restriktor</code> takes
+<p>The <code>goric</code> function of <code>restriktor</code> takes
 different forms of input (for model parameter estimates and
 constraints).</p>
 <ol class="example" style="list-style-type: decimal">
 <li>Fitted unconstrained (<code>lm</code> or <code>glm</code>) object* +
 character constraints.</li>
 <li>Fitted unconstrained (<code>lm</code> or <code>glm</code>) object +
-list with constraints matrix.
-<ul>
-<li>In case of within effects, the GORIC cannot be calculated.</li>
-</ul></li>
-<li>Fitted <code>restriktor</code> object(s).</li>
-<li>Numeric vector + character constraints.</li>
-<li>Numeric vector + list with constraints matrix.</li>
+list with constraints matrix. <!-- NB dit kan niet meer -->
+<!--     + In case of within effects, the GORIC cannot be calculated. -->
+<!-- (@) Fitted `restriktor` object(s). -->
+<!-- (@) Numeric vector + character constraints. -->
+<!-- (@) Numeric vector + list with constraints matrix. --></li>
 </ol>
 <p>Please note that:</p>
 <ul>
@@ -1566,16 +1564,16 @@ models.</li>
 <h2><span class="header-section-number">1.2</span> Hypothesis
 specification</h2>
 <p>A few remarks on how to specify hypotheses when working with the
-<code>goric()</code> function. When one uses
+<code>goric</code> function. When one uses
 <code>character constraints</code>:</p>
 <ul>
-<li><p>Within the <code>restriktor()</code> and <code>goric()</code>
+<li><p>Within the <code>restriktor</code> and <code>goric</code>
 functions, it is possible to use the following operators:
 <code>&gt;</code>, <code>&lt;</code>, <code>=</code>,
 <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code> (where the last
 three denote the same constraint as the first three).</p></li>
-<li><p>The <code>goric()</code> and the <code>restriktor()</code>
-functions can deal with:</p>
+<li><p>The <code>goric</code> and the <code>restriktor</code> functions
+can deal with:</p>
 <ul>
 <li>pairwise restrictions separated by a semicolon <code>;</code> (e.g.,
 <em>“beta1 &gt; beta2; beta2 &gt; beta3”</em>) or an &amp; sign (e.g.,
@@ -1592,13 +1590,13 @@ hypotheses’ near the end of this document).</p></li>
 together with <em>rhs</em> and <em>neq</em>), it should be done as
 follows: <code>list(constraints = xxx, rhs = xxx, neq = x)</code>, with
 <code>constraints</code> being a matrix, <code>rhs</code> a vector with
-the right hand sie of the restrictions, where the length of the vector
+the right hand side of the restrictions, where the length of the vector
 equals the number of rows of constraints matrix (when not all of them
 are zero), and <code>neq</code> a scalar denoting the number of
 equalities in the matrix (when not zero). By default, <code>rhs</code>
 and <code>neq</code> are set to 0. These arguments have to be specified
 such that: + <code>constraints * parameters &gt;= rhs</code>, + where
-the first <code>neq</code>-restrictions are equalities.</p>
+the first <code>neq</code> restrictions are equalities.</p>
 <p>In the following examples, the above methods are illustrated.</p>
 </div>
 </div>
@@ -1617,9 +1615,9 @@ to load the package each time the R script is run.</p>
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) 
 library(restriktor) # for goric function</code></pre>
 <p>Next, data is generated as example data to illustrate the
-functionality of the goric() function. If you want to obtain the same
-results as obtained here, it is necessary to set the seed at a fixed
-number.</p>
+functionality of the <code>goric</code> function. If you want to obtain
+the same results as obtained here, it is necessary to set the seed at a
+fixed number.</p>
 <pre class="r"><code>set.seed(123)
 
 n &lt;- 10        # sample size
@@ -1631,7 +1629,7 @@ e &lt;- rnorm(n)  # error term
 y &lt;- 1 + x1 + x2 + x3 + e # outcome, obtained by filling in the regression 
                           # equation with an intercept of 1 and 
                           # regression coefficients of 1.</code></pre>
-<p>Then, a regression model can be fit using the <code>lm()</code>
+<p>Then, a regression model can be fit using the <code>lm</code>
 function:</p>
 <pre class="r"><code>fit.lm &lt;- lm(y ~ x1 + x2 + x3)</code></pre>
 <p>Below, the GORIC and GORICA are applied to this model.</p>
@@ -1656,11 +1654,11 @@ GORIC(A)</h1>
 <h2><span class="header-section-number">3.1</span> GORIC &amp;
 GORICA</h2>
 <p>The upcoming analyses can be performed by means of both the GORIC and
-the GORICA. By default, the <code>goric()</code> function calculates the
+the GORICA. By default, the <code>goric</code> function calculates the
 <strong>GORIC</strong> values (which then uses: type = “goric”). To
 calculate the <strong>GORICA</strong> values, the argument
 <code>type</code> has to be set to <code>gorica</code> (i.e., type =
-“gorica”) within the <code>goric()</code> function.</p>
+“gorica”) within the <code>goric</code> function.</p>
 <p>Note on GORIC and GORICA weights:</p>
 <ul>
 <li>The GORICA weights (asymptotically) equal the GORIC weights. The
@@ -1684,7 +1682,7 @@ H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
            model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -1698,7 +1696,7 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have 
 out_gorica &lt;- goric(fit.lm, hypotheses = list(H1, H2), type = &quot;gorica&quot;)
 #summary(out_gorica)
 out_gorica</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1724,7 +1722,7 @@ H2 &lt;- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)))
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
            model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -1738,7 +1736,7 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have 
 out_gorica &lt;- goric(fit.lm, hypotheses = list(H1, H2), type = &quot;gorica&quot;)
 #summary(out_gorica)
 out_gorica</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1764,7 +1762,7 @@ H2 &lt;- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)), rhs = c(1,0), neq = 1
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
            model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -1783,7 +1781,7 @@ unconstrained  82.896   4.064              1.000</code></pre>
 out_gorica &lt;- goric(fit.lm, hypotheses = list(H1, H2), type = &quot;gorica&quot;)
 #summary(out_gorica)
 out_gorica</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1797,7 +1795,7 @@ Ratio GORICA-weights:
 H1              1.000   0.026              0.011
 H2             38.906   1.000              0.423
 unconstrained  91.977   2.364              1.000</code></pre>
-<!-- TO DO dit kan niet meer?? iig foutmelding... -->
+<!-- NB dit kan niet meer -->
 <!-- ### Fitted restriktor object(s) -->
 <!-- After specifying the hypotheses: -->
 <!-- ```{r} -->
@@ -1845,13 +1843,13 @@ VCOV &lt;- vcov(fit.lm)</code></pre>
 (which can also be re-labelled as is done in the next subsection).</p>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
-<p>Then, use the <code>goric()</code> function to select the best
+<p>Then, use the <code>goric</code> function to select the best
 model.</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1873,7 +1871,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1907,7 +1905,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1943,7 +1941,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1967,7 +1965,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2018,7 +2016,7 @@ H1 &lt;- &quot;x1 &lt; x2&quot;</code></pre>
 out_s &lt;- goric(fit.lm, hypotheses = list(H1), comparison = &quot;complement&quot;)
 #summary(out_s, brief = FALSE)
 out_s</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2035,7 +2033,7 @@ in terms of linear functions of the parameters. For instance, in case of
 adjusted means, you can specify the restrictions in two ways:</p>
 <ol style="list-style-type: decimal">
 <li>You can write them out yourself (using the parameter/variable names
-from an R-object, like <code>lm()</code>).</li>
+from an R-object, like <code>lm</code>).</li>
 <li>You can first specify the adjusted means (below called
 <code>&quot;m1&quot;</code> to <code>&quot;m4&quot;</code>) and specify the hypotheses in
 terms of those:</li>
@@ -2074,7 +2072,7 @@ out &lt;- goric(fit.lm, hypotheses = list(H1),
              comparison = &#39;complement&#39;) # for info, see below
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2106,7 +2104,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2), comparison = &quot;none&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
    model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2131,7 +2129,7 @@ out &lt;- goric(fit.lm, hypotheses = list(H1, H2), comparison = &quot;unconstrai
 # out &lt;- goric(fit.lm, H1, H2, type = &quot;gorica&quot;, comparison = &quot;unconstrained&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
            model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2161,7 +2159,7 @@ complement</h3>
 set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H1), comparison = &quot;complement&quot;)
 summary(out, brief = FALSE)</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2204,7 +2202,7 @@ $H1
 $complement
 [1] not H1</code></pre>
 <pre class="r"><code>summary(out)</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2237,7 +2235,7 @@ order-restricted hypotheses:
 H1:
 x1 &gt; 0 </code></pre>
 <pre class="r"><code>out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2255,7 +2253,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H2), comparison = &quot;complement&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2280,7 +2278,7 @@ output</h1>
 model / hypothesis the log-likelihood, penalty, GORIC(A), and
 GORIC(A)-weights).</p>
 <pre class="r"><code>out</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2291,7 +2289,7 @@ The order-restricted hypothesis &#39;H1&#39; has 2658.77 times more support than
 <p>The command <code>summary(out)</code> gives, besides the results,
 also the relative GORIC(A)-weights matrix.</p>
 <pre class="r"><code>summary(out)</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2327,7 +2325,7 @@ x1 &gt; 0; x2 &gt; 0 </code></pre>
 order / inequality restricted coefficients (order-restricted mle’s) and
 constraint matrices.</p>
 <pre class="r"><code>summary(out, brief = FALSE)</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2413,7 +2411,7 @@ automatically the other (bootstrap) method.</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = &quot;complement&quot;,
       mix_weights = &quot;boot&quot;)</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2436,11 +2434,11 @@ the following:</p>
 <ol style="list-style-type: decimal">
 <li>Redundant restriction, either:
 <ol style="list-style-type: lower-alpha">
-<li>leave the redundant one out (goric() function does this for you),
-or:</li>
+<li>leave the redundant one out (<code>goric</code> function does this
+for you), or:</li>
 <li>use another (more time-consuming) way of obtaining the level
 probabilities for the penalty term: Bootstrapping, as discussed above
-(goric function does this by default).</li>
+(<code>goric</code> function does this by default).</li>
 </ol></li>
 <li>Range restrictions (e.g., -2 &lt; group1 &lt; 2), which can be
 evaluated, but there is a sensitivity (like with a prior in a Bayes
