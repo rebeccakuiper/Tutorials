@@ -47,12 +47,15 @@ PandG_data$group <- factor(PandG_data$group)
 
 # Fit object, also NHST
 fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
+# - 1 says to leave out the intercept; rendering group means (not group mean differences)
 #summary(fit.PandG) # NHST
 
 
 # (Informative) hypotheses
+names(coef(fit.PandG)) # To check labels to be used in hypotheses specification
 H0 <- 'group1 = group2 = group3' # Only if of interest!
 H1 <- 'group1 > group2 > group3' 
+# Note: if no comparison with, say, group3, then leave that out: 'group1 > group2' (not 'group1 > group2, group3' or so)
 #
 # Note: If equalities are of interest, I would inspect about-equalities.
 # For more details, see the tutorial(s) on my github page.
@@ -60,7 +63,7 @@ H1 <- 'group1 > group2 > group3'
 
 # GORIC
 set.seed(123) # Set seed value
-goric.PandG <- goric(fit.PandG, hypotheses = list(H0 = H0, H1 = H1))
+goric.PandG <- goric(fit.PandG, hypotheses = list(Hnull = H0, H1 = H1))
 #goric.PandG$result[,1] <- c("H0","H1","Hu")
 goric.PandG
 #goric.PandG$result

@@ -58,7 +58,7 @@ CovMx_studies <- list(vcov_est_1, vcov_est_2, vcov_est_3, vcov_est_4)
 
 # Now, we need to specify the hypotheses for all studies. 
 # In this example, all studies have the same set of hypotheses (consisting of three hypotheses)
-H0 <- "beta1 == 0"
+H0 <- "beta1 = 0"
 Hpos <- "beta1 > 0"
 Hneg <- "beta1 < 0"
 #
@@ -84,7 +84,7 @@ evSyn_trust
 plot(evSyn_trust)
 
 
-# Alternatively, you could do:
+# Alternatively, you could do (which is what I would do):
 Hypo_studies <- list(Hpos = Hpos)
 safeguard <- "complement"
 #

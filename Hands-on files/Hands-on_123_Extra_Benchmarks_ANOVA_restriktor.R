@@ -102,13 +102,13 @@ names(coef(lm_fit_Lucas))
 # Specify restrictions using those names
 
 # Hypotheses Set
-H1 <- 'group3 > group1 > group4'
- 
+H1 <- 'group5 = group3 > (group1, group4) > group2'
+H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
+
 # Calculate GORICA values and weights
 set.seed(123) # Set seed value
 goric.Lucas <- goric(lm_fit_Lucas, 
-                     hypotheses = list(H1 = H1), 
-                     comparison = 'complement',
+                     hypotheses = list(H1 = H1, H2 = H2), 
                      type = "gorica")
 goric.Lucas
 #summary(goric.Lucas)
@@ -118,7 +118,6 @@ goric.Lucas$ratio.gw
 benchmarks.Lucas <- benchmark(goric.Lucas, model_type = "means", ncpus = 8)
 benchmarks.Lucas
 plot(benchmarks.Lucas)
-
 
 ################################################################################
 

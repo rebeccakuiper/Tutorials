@@ -27,6 +27,8 @@ model3 <- '
 # Hypotheses of interest
 # Formulate the hypotheses of interest using our own labeling
 H1.3 <- "Pre_b < Pre_g"
+# Note: in lavaan output, the labels are sometimes shortened,
+# but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
 
 
 # Fit the multiple group regression model using the lavaan sem function
@@ -43,14 +45,11 @@ fit3 <- sem(model3, data = sesamesim, std.lv = TRUE, group = "sex")
 #
 # Calculate GORICA values and weights for H1.3 and its complement ('comparison = "complement"').
 set.seed(100)
-results3 <- goric(fit3, hypotheses = list(H1.3), comparison = "complement", type = "gorica", 
+results3_r <- goric(fit3, hypotheses = list(H1.3 = H1.3), comparison = "complement", type = "gorica", 
                   standardized = T) 
-summary(results3) # Note: This also includes the comparison of hypotheses
-#
-#        model  loglik  penalty  gorica  gorica.weights
-#1        H1.3   4.420    1.500  -5.841           0.498
-#2  complement   4.428    1.500  -5.856           0.502
-#
+#summary(results3) 
+results3_r
+# The order-restricted hypothesis ‘H1.3’ has about the same support as its complement.
 #
 # Possible conclusion:
 # - This output table shows that the hypothesis of interest and its compliment 
@@ -66,24 +65,21 @@ summary(results3) # Note: This also includes the comparison of hypotheses
 
 ################################################################################
 
+
 # Sensitivity check
 
 # No influence of seed in PT:
 #
-#set.seed(100)
-#goric(fit3, H1.3, comparison = "complement", 
-#      type = "gorica", standardized = T)$result[,3]
-results3$result[,3]
 set.seed(100100)
-goric(fit3, hypotheses = list(H1.3), comparison = "complement", 
+results3_r_s1 <- goric(fit3, hypotheses = list(H1.3 = H1.3), comparison = "complement", 
       type = "gorica", standardized = T)$result[,3]
 set.seed(123456)
-goric(fit3, hypotheses = list(H1.3), comparison = "complement", 
+results3_r_s2 <- goric(fit3, hypotheses = list(H1.3 = H1.3), comparison = "complement", 
       type = "gorica", standardized = T)$result[,3]
 #
-# 1.5 1.5
-# 1.5 1.5
-# 1.5 1.5
+results3_r$result[,3]
+results3_r_s1$result[,3]
+results3_r_s2$result[,3]
 
 
 ################################################################################

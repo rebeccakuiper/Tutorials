@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-19" />
+<meta name="date" content="2024-08-22" />
 
 <title>How to evaluate theory-based hypotheses in a SEM model using the GORICA</title>
 
@@ -1276,6 +1276,83 @@ window.buildTabsets = function(tocID) {
   });
 };
 
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia, pre.foldable');
+  rCodeBlocks.each(function() {
+    // skip if the block has fold-none class
+    if ($(this).hasClass('fold-none')) return;
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    var showThis = (show || $(this).hasClass('fold-show')) && !$(this).hasClass('fold-hide');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (showThis ? 'Hide' : 'Show') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm code-folding-btn pull-right float-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-bs-toggle', 'collapse') // BS5
+        .attr('data-target', '#' + id)
+        .attr('data-bs-target', '#' + id)   // BS5
+        .attr('aria-expanded', showThis)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // show the div if necessary
+    if (showThis) div.collapse('show');
+
+    // update state of button on show/hide
+    //   * Change text
+    //   * add a class for intermediate states styling
+    div.on('hide.bs.collapse', function () {
+      showCodeText.text('Show');
+      showCodeButton.addClass('btn-collapsing');
+    });
+    div.on('hidden.bs.collapse', function () {
+      showCodeButton.removeClass('btn-collapsing');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+      showCodeButton.addClass('btn-expanding');
+    });
+    div.on('shown.bs.collapse', function () {
+      showCodeButton.removeClass('btn-expanding');
+    });
+
+  });
+
+}
 </script>
 <style type="text/css">.hljs-literal {
 color: #990073;
@@ -2634,6 +2711,9 @@ display: none;
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -2711,12 +2791,20 @@ border-radius: 0px;
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a SEM model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">19 August 2024</h4>
+<h4 class="date">22 August 2024</h4>
 
 </div>
 
@@ -2786,8 +2874,8 @@ make sure to give your own labels to estimates by including them in the
 library(lavaanPlot)
 lavaanPlot(model = fit1, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
            edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-30abe346d29e39c61ffc" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-30abe346d29e39c61ffc">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-5b9ef96a38041dada8f2" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-5b9ef96a38041dada8f2">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>To call the <code>goric</code> function, we need to formulate the
 hypothesis of interest. The GORICA selects the best hypothesis out of a
 given set. Here, since we only have a single hypothesis, we will compare
@@ -2904,8 +2992,8 @@ library(lavaanPlot)
 
 lavaanPlot(model = fit2, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
            edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-191d634bed2dcc2d1312" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-191d634bed2dcc2d1312">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-7a1e66c80e9e0f1a3e23" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-7a1e66c80e9e0f1a3e23">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Proceed to formulate the hypothesis of interest using the same labels
 as in the model definition:</p>
 <pre class="r"><code>H2.1 &lt;- &quot;Pre_b &lt; Pre_g&quot;</code></pre>
@@ -2977,6 +3065,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {

@@ -42,60 +42,51 @@ lavaanPlot(model = fit2_r, node_options = list(shape = "box", fontname = "Helvet
 H1.2 <- "AB > APeabody; APeabody == AAge; AAge == 0"
 H2.2 <- "AB > APeabody; APeabody > AAge; AAge == 0" 
 H3.2 <- "AB > APeabody; APeabody > AAge; AAge > 0"
-# Notes: 
-# An equality is represented by '=='; not '='.
-# The restrictions are 'connected' by using ';'.
-# Each restriction shoudl be specified seperetaly in a hypothesis; not like: "AB > APeabody == AAge == 0".
-
+# Note: in lavaan output, the labels are sometimes shortened,
+# but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
 
 # Call goric ('type = "gorica"')
 # Note: We need standardized estimates for a meaningful comparison ('standardize = TRUE').
 #
-# Because there is more than 1 hypothesis, we cannot use: comparison = "complement".
-# We will use the unconstrained hypothesis as safeguard (which is the default).
+# Because there is more than 1 hypothesis,
+# we will use the unconstrained hypothesis as safeguard (which is the default).
 set.seed(100)
-results2_r <- goric(fit2_r, hypotheses = list(H1.2, H2.2, H3.2), type = "gorica", standardized = TRUE) 
-summary(results2_r) # Note: This also includes the comparison of hypotheses
-#
-#           model  loglik  penalty   gorica  gorica.weights
-#1           H1.2   6.836    0.500  -12.672           0.379
-#2           H2.2   6.836    0.687  -12.297           0.314
-#3           H3.2   6.836    0.822  -12.028           0.274
-#4  unconstrained   6.894    3.000   -7.789           0.033
-
+results2_r <- goric(fit2_r, 
+                    hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), 
+                    type = "gorica", standardized = TRUE) 
+#summary(results2_r) 
+# All three theory-based hypotheses are not weak (nl, better than the unconstrained),
+# and H1.2 is the best from the set (nl, highest GORICA weight).
 
 # Note:
 # Hypotheses are nested, so hypotheses share support.
 # Therefore, we examine the best of these against its compliment:
 set.seed(100)
-results2_c_r <- goric(fit2_r, hypotheses = list(H1.2), comparison = "complement", type = "gorica", standardized = TRUE) 
-summary(results2_c_r) # Note: This also includes the comparison of hypotheses
-#
-#        model  loglik  penalty   gorica  gorica.weights
-#1        H1.2   6.836    0.500  -12.672           0.874
-#2  complement   6.894    2.500   -8.789           0.126
+results2_c_r <- goric(fit2_r, hypotheses = list(H1.2 = H1.2), comparison = "complement", type = "gorica", standardized = TRUE) 
+#summary(results2_c_r) 
+results2_c_r
+# The order-restricted hypothesis ‘H1.2’ has (> 1 times) more support than its complement.
 
 
 #####################################################################################
+
 
 # Sensitivity check
 
 # Influence of seed in PT (of H3), but negligible:
 #
-#set.seed(100)
-#goric(fit2_r, H1.2, H2.2, H3.2, type = "gorica", standardized = TRUE)$result[,3]
-results2_r$result[,3]
 set.seed(100100)
-goric(fit2_r, hypotheses = list(H1.2, H2.2, H3.2), type = "gorica", standardized = TRUE)$result[,3]
+results2_r_s1 <- goric(fit2_r, hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), type = "gorica", standardized = TRUE)$result[,3]
 set.seed(123456)
-goric(fit2_r, hypotheses = list(H1.2, H2.2, H3.2), type = "gorica", standardized = TRUE)$result[,3]
+results2_r_s2 <- goric(fit2_r, hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), type = "gorica", standardized = TRUE)$result[,3]
 #
-# 0.5000000 0.6873956 0.8218584 3.0000000
-# 0.5000000 0.6873956 0.8218222 3.0000000
-# 0.5000000 0.6873956 0.8218407 3.0000000
+results2_r$result[,3]
+results2_r_s1$result[,3]
+results2_r_s2$result[,3]
 
 
 #####################################################################################
+
 
 # The support for 'H1.2' is to be expected, when inspecting:
 #lavaan::standardizedsolution(fit2_r)[13:15,]

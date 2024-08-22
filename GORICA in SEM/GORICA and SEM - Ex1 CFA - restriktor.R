@@ -37,7 +37,9 @@ H1.1 <- "
 A1 > .6; A2 > .6; A3 > .6; A4 > .6; A5 > .6; A6 > .6; 
 B1 > .6; B2 > .6; B3 > .6; B4 > .6; B5 > .6; B6 > .6
 "
-# Note: The restrictions are 'connected' by using ';'
+# Note 1: The restrictions are 'connected' by using ';'
+# Note 2: in lavaan output, the labels are sometimes shortened,
+# but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
 
 
 # Call goric ('type = "gorica"')
@@ -45,57 +47,31 @@ B1 > .6; B2 > .6; B3 > .6; B4 > .6; B5 > .6; B6 > .6
 #
 # Calculate GORICA values and weights for H1.1 and its complement ('comparison = "complement"').
 set.seed(100)
-results1_r <- goric(fit1_r, hypotheses = list(H1.1), comparison = "complement", type = "gorica", standardized = TRUE) 
-summary(results1_r) # Note: This also includes the comparison of hypotheses
-#
-#        model  loglik  penalty   gorica  gorica.weights
-#1        H1.1  33.581    8.139  -50.884           0.988
-#2  complement  32.879   11.886  -41.985           0.012
-
-
-# Note: The default way of calculating the PT in goric() is slow(er) when the number of parameters is large. 
-# Here, there are 12 parameters, so may want to use: 'mix.weights = "boot"'.
-# That is, we will use bootstrap in the calculation of the level probabilities (LPs) needed in PT. 
-# The results of course do not change, but the computation time may.
-# 
-# Determine number of cores that can be used, to fasten the calculation of PT even more.
-if (!require("parallel")) install.packages("parallel") # install this package first (once)
-library(parallel)
-nrCPUcores <- detectCores(all.tests = FALSE, logical = TRUE)
-#
-set.seed(100)
-results1_r_b <- goric(fit1_r, hypotheses = list(H1.1), comparison = "complement", type = "gorica", standardized = TRUE, 
-                   mix.weights = "boot", parallel = "snow", ncpus = nrCPUcores, mix.bootstrap = 99999)
-summary(results1_r_b) # Note: This also includes the comparison of hypotheses
-#
-#        model  loglik  penalty   gorica  gorica.weights
-#1        H1.1  33.581    8.148  -50.866           0.988
-#2  complement  32.879   11.883  -41.993           0.012
+results1_r <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), comparison = "complement", type = "gorica", standardized = TRUE) 
+#summary(results1_r)
+results1_r
+# The order-restricted hypothesis ‘H1’ has (> 1 times) more support than its complement.
 
 
 #####################################################################################
+
 
 # Sensitivity check
 
 # Influence of seed in PT, but negligible:
 #
-#set.seed(100)
-#goric(fit1_r, H1.1, comparison = "complement", type = "gorica", standardized = TRUE, 
-#      mix.weights = "boot", parallel = "snow", ncpus = nrCPUcores, mix.bootstrap = 99999)$result[,3]
-results1_r_b$result[,3]
 set.seed(100100)
-goric(fit1_r, hypotheses = list(H1.1), comparison = "complement", type = "gorica", standardized = TRUE, 
-       mix.weights = "boot", parallel = "snow", ncpus = nrCPUcores, mix.bootstrap = 99999)$result[,3]
+results1_r_s1 <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), comparison = "complement", type = "gorica", standardized = TRUE)$result[,3]
 set.seed(123456)
-goric(fit1_r, hypotheses = list(H1.1), comparison = "complement", type = "gorica", standardized = TRUE, 
-       mix.weights = "boot", parallel = "snow", ncpus = nrCPUcores, mix.bootstrap = 99999)$result[,3]
+results1_r_s2 <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), comparison = "complement", type = "gorica", standardized = TRUE)$result[,3]
 #
-#[1]  8.147561 11.882759
-#[1]  8.134921 11.893199
-#[1]  8.140621 11.886719
+results1_r$result[,3]
+results1_r_s1$result[,3]
+results1_r_s2$result[,3]
 
 
 #####################################################################################
+
 
 # The support for 'H1.1' is to be expected, when inspecting:
 #lavaan::standardizedsolution(fit1_r)[1:12,]

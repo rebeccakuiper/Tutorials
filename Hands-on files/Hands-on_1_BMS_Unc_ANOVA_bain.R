@@ -89,14 +89,15 @@ names(coef(lm_fit_Lucas))
 #
 H0 <- 'group1 = group2 = group3 = group4 = group5' 
 H1 <- 'group5 = group3 > (group1, group4) > group2'
-# Note: H1 is not full row-rank, and cannot be evaluated
+# Note: H1 is not full row-rank
 H2 <- 'group3 > group1 > group4 = group5 > group2'
 #
 # Combine them to one character string (using ;)
 # (notably, only H0 and H2 are used next, since H1 cannot be evaluated by bain):
 Hypotheses <- 'group1 = group2 = group3 = group4 = group5;
+group5 = group3 > (group1, group4) > group2;
 group3 > group1 > group4 = group5 > group2'
-# Note that these hypotheses will be called H1 & H2.
+# Note that these hypotheses will be called H1, H2, and H3, resp.
 
 
 # Calculate BFs and PMPs
@@ -107,7 +108,6 @@ group3 > group1 > group4 = group5 > group2'
 #   If it is sensitive, then increase number of iterations used in calculation.
 set.seed(123) # Set seed value
 output <- bain(lm_fit_Lucas, Hypotheses)
-#output <- bain(lm_fit_Lucas, H1) # does not work
 output
 #summary(output)
 
