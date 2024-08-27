@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-15" />
+<meta name="date" content="2024-08-27" />
 
 <title>How to evaluate theory-based hypotheses in a (RI-)CLPM using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a (RI-)CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">15 August 2024</h4>
+<h4 class="date">27 August 2024</h4>
 
 </div>
 
@@ -2149,7 +2149,7 @@ goricaResults_Q1 &lt;- goric(est, VCOV = vcov,
                           type = &quot;gorica&quot;)
 
 goricaResults_Q1</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2165,7 +2165,7 @@ its complement.</p>
 goricaResults_Q2 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q2=H1_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
 
 goricaResults_Q2</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2509,7 +2509,7 @@ abs(AB2_SAT1) &gt; abs(SAT2_AB1); abs(DE2_SAT1) &gt; abs(SAT2_DE1); abs(VI2_SAT1
 goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q1=H2_Q1), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
 
 goricaResults_H2_Q1</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2541,7 +2541,7 @@ goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=
                                mix_weights = &quot;boot&quot;)
 
 goricaResults_H2_Q2_b</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2603,6 +2603,9 @@ different choices of time intervals.</p>
 <!-- ), ncol = sqrt(length(est_2)))  -->
 <!-- PhiPlot(DeltaT = 1, Phi, Min = 0, Max = 10, Step = 0.05, WhichElements = WhichEl_Q2, Labels = NULL, Col = NULL, Lty = NULL, Title = NULL) -->
 <!-- ``` -->
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
 </div>
 
 

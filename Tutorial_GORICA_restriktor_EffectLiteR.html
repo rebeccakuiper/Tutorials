@@ -11,7 +11,7 @@
 
 <meta name="author" content="Axel Mayer, Leonard Vanbrabant, and Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-15" />
+<meta name="date" content="2024-08-27" />
 
 <title>Apply GORICA to EffectLiteR estimates</title>
 
@@ -1483,7 +1483,7 @@ border-radius: 0px;
 estimates</h1>
 <h4 class="author">Axel Mayer, Leonard Vanbrabant, and Rebecca M.
 Kuiper</h4>
-<h4 class="date">15 August 2024</h4>
+<h4 class="date">27 August 2024</h4>
 
 </div>
 
@@ -1702,7 +1702,7 @@ use:</p>
 gorica_AdjMeans &lt;- goric(est_AdjMeans, VCOV=VCOV_AdjMeans, hypotheses=list(H1=H1), comparison = &#39;complement&#39;)
 #summary(gorica_AdjMeans)
 gorica_AdjMeans</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1826,7 +1826,7 @@ use:</p>
 gorica_AvEffects &lt;- goric(est_AvEffects, VCOV=VCOV_AvEffects, hypotheses=list(H1=H1), comparison = &#39;complement&#39;)
 #summary(gorica_AvEffects)
 gorica_AvEffects</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1839,6 +1839,9 @@ hypothesis <span class="math inline">\(H_1\)</span> has 5.8 times more
 support than its complement. Notably, since the fit parts clearly
 differ, there is no indication for support for the boundary (see the
 ‘Guidelines_output_GORIC.html’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
 </div>
 </div>
 

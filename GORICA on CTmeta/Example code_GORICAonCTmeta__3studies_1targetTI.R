@@ -23,12 +23,22 @@ out_CTmeta <- CTmeta(N, DeltaT, DeltaTStar, Phi, SigmaVAR, FEorRE = 2)
 out_CTmeta
 
 ## Evaluate dominance of cross-lagged relationships ##
-# Extract the vectorized overall standardized Phi matrix and its covariance matrix
-est <- out_CTmeta$Overall_standPhi_DeltaTStar
-VCOV <- out_CTmeta$CovMx_OverallPhi_DeltaTStar
+#
 # Specify hypothesis
-H1 <- "overallPhi12 < overallPhi21"
+H1 <- "abs(overallPhi12) < abs(overallPhi21)"
+#
 # Evaluate dominance of cross-lagged relationships via GORICA 
+# Next, two options, which lead to some results of course
+# Option 1: Extract the vectorized overall standardized Phi matrix and its covariance matrix
+est <- coef(out_CTmeta)  # or: est  <- out_CTmeta$Overall_vecStandPhi_DeltaTStar
+VCOV <- vcov(out_CTmeta) # or: VCOV <- out_CTmeta$CovMx_OverallPhi_DeltaTStar
+set.seed(123) # for reproducability of results and possible sensitivity check of penalty
+goricaResult <- goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = "complement")
+#summary(goricaResult)
+goricaResult
+# Option 2: Use CTmeta object
+set.seed(123)  # for reproducability of results and possible sensitivity check of penalty
 goricaResult <- goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = "complement")
 # In this example, the complement is "overallPhi12 > overallPhi21"
-summary(goricaResult)
+#summary(goricaResult)
+goricaResult

@@ -1485,48 +1485,50 @@ lagged effects model parameters</h1>
 </div>
 
 
-<pre class="r"><code>library(CTmeta)</code></pre>
-<div id="introduction" class="section level2" number="0.1">
-<h2><span class="header-section-number">0.1</span> Introduction</h2>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
 <p>CTmeta is created to preform meta-analysis on time-interval dependent
 discrete-time (DT) lagged parameters estimates (e.g., CLPM or VAR(1)
 estimates). Its method utilizes an underlying continuous-time (CT)
-model, hence the name CTmeta. Since its creation, many functions have
-been added, including functions to transform, standardize, and plot the
-time-interval dependent discrete-time (DT) lagged parameters.</p>
+model; hence, the name CTmeta. Since its creation, many functions have
+been added to the package <code>CTmeta</code>, including functions to
+transform, standardize, and plot the time-interval dependent
+discrete-time (DT) lagged parameters.</p>
 <p>More specifically, some of functionalities include:</p>
 <ul>
 <li><p>Rendering plots that illustrate how the VAR(1) model lagged
 parameters (Phi) and residual covariance matrix (SigmaVAR) vary as a
-function of the time interval (DeltaT). See the functions ‘PhiPlot’ and
-‘SigmaVARPlot’, respectively.</p></li>
+function of the time interval (DeltaT). See the functions
+<code>PhiPlot</code> and <code>SigmaVARPlot</code>,
+respectively.</p></li>
 <li><p>Determining the time interval (DeltaT) for which each element of
 Phi(DeltaT) reaches its minimum or maximum. See the function
-‘MaxDeltaT’.</p></li>
+<code>MaxDeltaT</code>.</p></li>
 <li><p>Rendering the time interval for which the VAR(1) model residual
 covariance matrix is a diagonal matrix. See the function
-‘DiagDeltaT’.</p></li>
+<code>DiagDeltaT</code>.</p></li>
 <li><p>Rendering standardized lagged relationships from their
 unstandardized counterparts; or from cross-correlations and their
-covariance matrix. See the functions ‘StandPhi’ and ‘TransPhi_Corr’,
-respectively. These functions also render the univariate (i.e.,
-simultaneous) and multivariate (i.e., elliptical) confidence intervals
-of the (un)standardized lagged relationships.</p></li>
+covariance matrix. See the functions <code>StandPhi</code> and
+<code>TransPhi_Corr</code>, respectively. These functions also render
+the univariate (i.e., simultaneous) and multivariate (i.e., elliptical)
+confidence intervals of the (un)standardized lagged
+relationships.</p></li>
 <li><p>Transforming (un)standardized VAR(1) model lagged parameters and
 the residual covariance matrix to reflect scenarios in which another
-time interval is used. See the function ‘StandTransPhi’. This function
-also renders the univariate (i.e., simultaneous) and multivariate (i.e.,
-elliptical) confidence intervals of the (un)standardized lagged
-relationships.</p></li>
+time interval is used. See the function <code>StandTransPhi</code>. This
+function also renders the univariate (i.e., simultaneous) and
+multivariate (i.e., elliptical) confidence intervals of the
+(un)standardized lagged relationships.</p></li>
 <li><p>Transforming VAR(1) model lagged parameters and the residual
 covariance matrix into their (un)standardized counterparts in the
-underlying CT(1) model and vice versa. See the functions ‘CTMparam’ and
-‘VARparam’, respectively.</p></li>
+underlying CT(1) model and vice versa. See the functions
+<code>CTMparam</code> and <code>VARparam</code>, respectively.</p></li>
 </ul>
 <p>Below, one can find examples demonstrating the application of these
 functions.</p>
-<div id="more-details" class="section level3" number="0.1.1">
-<h3><span class="header-section-number">0.1.1</span> More details</h3>
+<div id="more-details" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> More details</h2>
 <p>More details about the methods and derivations can be found in:</p>
 <ul>
 <li><p>Kuiper, R. M., and Hamaker, E.L. (unpublished). Correlated
@@ -1543,9 +1545,9 @@ hypotheses using a generalization of the AIC. Psychological Methods,
 26(5), 599-621. <a href="https://doi.org/10.1037/met0000406" class="uri">https://doi.org/10.1037/met0000406</a>.</p></li>
 </ul>
 </div>
-<div id="installation-and-descriptions" class="section level3" number="0.1.2">
-<h3><span class="header-section-number">0.1.2</span> Installation and
-descriptions</h3>
+<div id="installation-and-descriptions" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Installation and
+descriptions</h2>
 <pre class="r"><code># Install R package
 # Note: Make sure you have Rtools 
 #       (and a version which is compatible with your R version).
@@ -1580,8 +1582,8 @@ citation(&quot;CTmeta&quot;)
 lsf.str(&quot;package:CTmeta&quot;) 
 </code></pre>
 </div>
-<div id="usage" class="section level3" number="0.1.3">
-<h3><span class="header-section-number">0.1.3</span> Usage</h3>
+<div id="usage" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Usage</h2>
 <p>Area(DeltaT = 1, Phi, …)</p>
 <p>ChecksCTM(Drift, Sigma)</p>
 <p>CTmeta(N, DeltaT, DeltaTStar, Phi, SigmaVAR, …)</p>
@@ -1600,26 +1602,26 @@ lsf.str(&quot;package:CTmeta&quot;)
 <p><br /><br /></p>
 </div>
 </div>
-<div id="examples" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Examples</h1>
-<div id="ctmeta" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> 1: CTmeta</h2>
-<p>This section shows the functionality of CTmeta demonstrated by using
-a simple example with S = 3 primary studies. These three studies
-investigate the (cross-)lagged relationship between q = 2 variables:
-Stress and Anxiety. Thus, each study generates a 2 x 2 lagged
-relationships matrix. All studies used different samples, different
-sample sizes, and collected the data using different time intervals.</p>
-<p>The function CTmeta requires the following arguments as input: N,
-DeltaT, DeltaTStar, Phi, and one of SigmaVAR or Gamma, details are
-included below.</p>
-<p>Setting up the arguments for CTmeta:</p>
+<div id="examples" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Examples</h1>
+<div id="ctmeta" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> CTmeta</h2>
+<p>This section shows the functionality of <code>CTmeta</code>
+demonstrated by using a simple example with <span class="math inline">\(S\)</span> = 3 primary studies. These three
+studies investigate the (cross-)lagged relationship between <span class="math inline">\(q\)</span> = 2 variables: Stress and Anxiety.
+Thus, each study generates a 2 x 2 lagged relationships matrix. All
+studies used different samples, different sample sizes, and collected
+the data using different time intervals.</p>
+<p>The function <code>CTmeta</code> requires the following arguments as
+input: N, DeltaT, DeltaTStar, Phi, and one of SigmaVAR or Gamma, details
+are included below.</p>
+<p>Setting up the arguments for <code>CTmeta</code>:</p>
 <ul>
-<li>N: the sample size of each study in a S x 1 matrix.</li>
+<li>N: the sample size of each study in a <span class="math inline">\(S\)</span> x 1 matrix.</li>
 </ul>
 <pre class="r"><code>N &lt;- matrix(c(643, 651, 473))</code></pre>
 <ul>
-<li>DeltaT: the time interval used in each study in a S x 1 matrix.</li>
+<li>DeltaT: the time interval used in each study in a <span class="math inline">\(S\)</span> x 1 matrix.</li>
 </ul>
 <pre class="r"><code>DeltaT &lt;- matrix(c(2, 3, 1))</code></pre>
 <ul>
@@ -1630,10 +1632,11 @@ intervals).</li>
 <pre class="r"><code>DeltaTStar &lt;- 1</code></pre>
 <ul>
 <li>Phi: the stacked discrete-time lagged relationships matrices. For
-each of the S = 3 studies, retrieve the q x q lagged relationships
-matrix; in this specific example, there are three 2 x 2 lagged
-relationships matrices. Then, stack the three matrices to form a matrix
-(Phi) with dimensions S*q x q. This argument has an example matrix
+each of the <span class="math inline">\(S\)</span> = 3 studies, retrieve
+the <span class="math inline">\(q\)</span> x <span class="math inline">\(q\)</span> lagged relationships matrix; in this
+specific example, there are three 2 x 2 lagged relationships matrices.
+Then, stack the three matrices to form a matrix (Phi) with dimensions
+<span class="math inline">\(S*q\)</span> x <span class="math inline">\(q\)</span>. This argument has an example matrix
 stored in the package:</li>
 </ul>
 <pre class="r"><code>Phi &lt;- myPhi
@@ -1655,22 +1658,22 @@ relationship is stronger than (different from) a scenario in which
 Stress and Anxiety are measured daily (24 hours).</p>
 <ul>
 <li>SigmaVAR: the stacked residual covariance matrices. For each of the
-S = 3 studies, retrieve the q x q residual covariance matrix. Then,
-stack the matrices to form a matrix (SigmaVAR) with dimensions S*q x q.
-This argument has an example matrix stored in the package:</li>
+<span class="math inline">\(S\)</span> = 3 studies, retrieve the <span class="math inline">\(q\)</span> x <span class="math inline">\(q\)</span> residual covariance matrix. Then, stack
+the matrices to form a matrix (SigmaVAR) with dimensions <span class="math inline">\(S*q\)</span> x <span class="math inline">\(q\)</span>. This argument has an example matrix
+stored in the package:</li>
 </ul>
 <pre class="r"><code>SigmaVAR &lt;- mySigmaVAR</code></pre>
 <ul>
-<li>Gamma: the stacked stationary covariance matrices. For each of the S
-= 3 studies, generate the q x q stationary covariance matrix. Then,
-stack the matrices to form a matrix (Gamma) with dimensions S*q x q.
-This argument has an example matrix stored in the package:</li>
+<li>Gamma: the stacked stationary covariance matrices. For each of the
+<span class="math inline">\(S\)</span> = 3 studies, generate the <span class="math inline">\(q\)</span> x <span class="math inline">\(q\)</span> stationary covariance matrix. Then,
+stack the matrices to form a matrix (Gamma) with dimensions <span class="math inline">\(S*q\)</span> x <span class="math inline">\(q\)</span>. This argument has an example matrix
+stored in the package:</li>
 </ul>
 <pre class="r"><code>Gamma &lt;- myGamma # Note: CTmeta does not need both SigmaVAR and Gamma</code></pre>
 <p><br /></p>
-<p>The CTmeta function will standardize these matrices (Phi, SigmaVAR,
-Gamma) to make the comparisons and weighted averages of lagged
-relationships estimates meaningful.</p>
+<p>The <code>CTmeta</code> function will standardize these matrices
+(Phi, SigmaVAR, Gamma) to make the comparisons and weighted averages of
+lagged relationships estimates meaningful.</p>
 <p><br /></p>
 <p>As with regular meta-analysis, one can choose between a fixed-effects
 and random-effects model, and moderators can also be included. Notably,
@@ -1854,10 +1857,11 @@ CTma$summaryMetaAnalysis
 &gt; ---
 &gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>This results, among other things, in a 2 x 2 overall Phi matrix (if
-q=2). Although the varying time intervals are corrected for, this
-overall Phi matrix is also dependent on the chosen time interval (i.e.,
-DeltaTStar). To obtain insight into this, a Phi-plot of the resulting
-overall Phi can be made. This is demonstrated in Section 1.1.</p>
+<span class="math inline">\(q\)</span> = 2). Although the varying time
+intervals are corrected for, this overall Phi matrix is also dependent
+on the chosen time interval (i.e., DeltaTStar). To obtain insight into
+this, a Phi-plot of the resulting overall Phi can be made. This is
+demonstrated in Section 1.1.</p>
 <p>A major point of interest with regards to lagged relationships is to
 determine the ‘causal dominant’ variable, that is, the variable with the
 highest predictive power. In this example, we are interested in the
@@ -1865,15 +1869,15 @@ question: Is current Stress a stronger predictor for Anxiety on the next
 time interval or is current Anxiety a stronger predictor for Stress on
 the next time interval? To evaluate the dominance of (overall) lagged
 relationships, an AIC-type criterion called the GORICA can be used
-(Altinisik, …, Kuiper, 2021). This method is included in the restriktor
-package and is demonstrated in Section 1.2.</p>
+(Altinisik, …, Kuiper, 2021). This method is included in the
+<code>restriktor</code> package and is demonstrated in Section 1.2.</p>
 <p>Finally, in the example above, the lagged relationships matrices
 (stacked in Phi) were obtained for each primary study. It is also
 possible that some or all primary studies report a (lagged) correlation
 matrix. Section 1.3 demonstrates how (lagged) correlation matrices can
-be used in CTmeta.</p>
-<div id="phi-plot-of-resulting-overall-phi" class="section level3" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> 1.1: Phi-plot of
+be used in <code>CTmeta</code>.</p>
+<div id="phi-plot-of-resulting-overall-phi" class="section level3" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Phi-plot of
 resulting overall Phi</h3>
 <p>Make customized Phi-plot of resulting overall Phi:</p>
 <pre class="r"><code># Option 1: Use the plot option in the &#39;CTmeta&#39; function. 
@@ -1903,40 +1907,48 @@ overallPhi &lt;- out_CTmeta$Overall_standPhi
 # Make Phi-plot:
 Title &lt;- as.list(expression(Phi(Delta[t])~plot), 
  &quot;How do the overall lagged parameters vary as a function of the time interval&quot;)
-PhiPlot(DeltaTStar, overallPhi, Min = 0, Max = 40, Step = 0.5, Title = Title)</code></pre>
+PhiPlot(DeltaTStar, overallPhi, Min = 0, Max = 40, Step = 0.5, Title = Title)
+&gt; NULL</code></pre>
 <pre class="r"><code># Option 4: The function &#39;ggPhiPlot&#39; can be used instead of &#39;PhiPlot&#39;.
 phi_plot &lt;- ggPhiPlot(DeltaTStar, overallPhi, 
                       Min = 0, Max = 40, Step = 0.5, Title = Title)
 print(phi_plot$PhiPlot)</code></pre>
 </div>
-<div id="evaluate-dominance-of-overall-phi-using-gorica" class="section level3" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> 1.2: Evaluate
-dominance of overall Phi using GORICA</h3>
+<div id="evaluate-dominance-of-overall-phi-using-gorica" class="section level3" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Evaluate dominance
+of overall Phi using GORICA</h3>
 <p>Evaluate dominance of overall lagged relationships matrix
-(overallPhi) with the GORICA using the goric function in the restriktor
-package:</p>
-<pre class="r"><code># Extract the vectorized overall standardized Phi matrix 
-# and its covariance matrix using the functions coef() and vcov(), respectively:
-out_CTmeta &lt;- CTmeta(N, DeltaT, DeltaTStar, Phi, SigmaVAR)
-est &lt;- coef(out_CTmeta)  # or: est &lt;- out_CTmeta$Overall_vecStandPhi_DeltaTStar
-VCOV &lt;- vcov(out_CTmeta) # or: VCOV &lt;- out_CTmeta$CovMx_OverallPhi_DeltaTStar
-
-# Specify hypothesis
+(overallPhi) with the GORICA using the <code>goric</code> function in
+the <code>restriktor</code> package:</p>
+<pre class="r"><code># Specify hypothesis
 H1 &lt;- &quot;overallPhi12 &lt; overallPhi21&quot;
 #H2 &lt;- &quot;overallPhi12 &gt; overallPhi21&quot;
+# Btw if signs can be negative one perhaps better use:
+# H1 &lt;- &quot;abs(overallPhi12) &lt; abs(overallPhi21)&quot;
 
 # Evaluate dominance of cross-lagged using the GORICA 
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) 
 &gt; Loading required package: restriktor
-&gt; This is restriktor 0.5-50
-&gt; Please report any bugs.
-# Use restriktor package for function goric().
+&gt; This is restriktor 0.5-90
+&gt; Please report any bugs to info@restriktor.org</code></pre>
+<pre class="r"><code># Use restriktor package for function goric().
 # Authors of goric(): Vanbrabant and Kuiper.
 library(restriktor)
-#goric(est, VCOV = VCOV, H1, H2, type = &quot;gorica&quot;, comparison = &quot;none&quot;) 
-# or equivalently:
-goric(est, VCOV = VCOV, hypotheses = list(H1), type = &quot;gorica&quot;, comparison = &quot;complement&quot;)
-&gt; restriktor (0.5-50): generalized order-restricted information criterion approximation:
+set.seed(123) # for reproducability of results and possible sensitivity check of penalty
+#
+# Option 1:
+# Extract the vectorized overall standardized Phi matrix 
+# and its covariance matrix using the functions coef() and vcov(), respectively:
+#out_CTmeta &lt;- CTmeta(N, DeltaT, DeltaTStar, Phi, SigmaVAR)
+#est &lt;- coef(out_CTmeta)  # or: est &lt;- out_CTmeta$Overall_vecStandPhi_DeltaTStar
+#VCOV &lt;- vcov(out_CTmeta) # or: VCOV &lt;- out_CTmeta$CovMx_OverallPhi_DeltaTStar
+#goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = &quot;complement&quot;)
+#
+# Option 2
+goricaResult &lt;- goric(out_CTmeta, hypotheses = list(H1), comparison = &quot;complement&quot;)
+#summary(goricaResult)
+goricaResult
+&gt; restriktor (0.5-90): generalized order-restricted information criterion approximation:
 &gt; 
 &gt; Results:
 &gt;         model  loglik  penalty   gorica  loglik.weights  penalty.weights
@@ -1946,15 +1958,15 @@ goric(est, VCOV = VCOV, hypotheses = list(H1), type = &quot;gorica&quot;, compar
 &gt; 1           0.936
 &gt; 2           0.064
 &gt; ---
-&gt; The order-restricted hypothesis &#39;H1&#39; has 14.584 times more support than its complement.</code></pre>
+&gt; The order-restricted hypothesis &#39;H1&#39; has 14.58 times more support than its complement.</code></pre>
 <p>From this, one concludes that H1: overallPhi12 &lt; overallPhi21 is
-approximately 15 times more supported /more likely than its complement
-(here, overallPhi12 &gt; overallPhi21). Hence, there is quite some
-support in favor of our theory w.r.t. predictive strength / the ordering
-of the size of the cross-lagged relationships.</p>
+more supported / more likely than its complement (here, overallPhi12
+&gt; overallPhi21). Hence, there is support in favor of our theory
+w.r.t. predictive strength / the ordering of the size of the
+cross-lagged relationships.</p>
 </div>
-<div id="a-lagged-correlation-matrix-as-input" class="section level3" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> 1.3: A (lagged)
+<div id="a-lagged-correlation-matrix-as-input" class="section level3" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> A (lagged)
 correlation matrix as input</h3>
 <p>If primary studies report a (lagged) correlation matrix rather than
 reporting the lagged relationships, then do the following:</p>
@@ -2010,12 +2022,13 @@ out_CTmeta &lt;- CTmeta(N, DeltaT, DeltaTStar, Phi, SigmaVAR)
 out_CTmeta$Overall_standPhi</code></pre>
 </div>
 </div>
-<div id="time-interval-dependency" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> 2: Time-interval
+<div id="time-interval-dependency" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Time-interval
 dependency</h2>
 <p>This section focuses on the time-interval dependency of
 (cross-)lagged relationships for one study. However, it can also be used
-for the overall (cross-)lagged relationships resulting from CTmeta.</p>
+for the overall (cross-)lagged relationships resulting from
+<code>CTmeta</code>.</p>
 <p>Let us investigate the (cross-)lagged relationship between Stress and
 Anxiety (i.e., between q=2 variables), represented by a 2 x 2
 discrete-time lagged relationships matrix, Phi, and a 2 x 2
@@ -2047,7 +2060,6 @@ DeltaT &lt;- 1
 data &lt;- myData
 #if (!require(&quot;vars&quot;)) install.packages(&quot;vars&quot;)
 library(vars)
-&gt; Warning: package &#39;vars&#39; was built under R version 4.3.1
 &gt; Loading required package: MASS
 &gt; 
 &gt; Attaching package: &#39;MASS&#39;
@@ -2055,21 +2067,16 @@ library(vars)
 &gt; 
 &gt;     select
 &gt; Loading required package: strucchange
-&gt; Warning: package &#39;strucchange&#39; was built under R version 4.3.1
 &gt; Loading required package: zoo
-&gt; Warning: package &#39;zoo&#39; was built under R version 4.3.1
 &gt; 
 &gt; Attaching package: &#39;zoo&#39;
 &gt; The following objects are masked from &#39;package:base&#39;:
 &gt; 
 &gt;     as.Date, as.Date.numeric
 &gt; Loading required package: sandwich
-&gt; Warning: package &#39;sandwich&#39; was built under R version 4.3.1
 &gt; Loading required package: urca
-&gt; Warning: package &#39;urca&#39; was built under R version 4.3.1
-&gt; Loading required package: lmtest
-&gt; Warning: package &#39;lmtest&#39; was built under R version 4.3.1
-out_VAR &lt;- VAR(data, p = 1)
+&gt; Loading required package: lmtest</code></pre>
+<pre class="r"><code>out_VAR &lt;- VAR(data, p = 1)
 
 
 ## Continuous-time equivalents Drift &amp; Sigma
@@ -2077,8 +2084,8 @@ out_VAR &lt;- VAR(data, p = 1)
 CTparam &lt;- CTMparam(DeltaT, Phi, SigmaVAR)
 Drift &lt;-CTparam$Drift
 Sigma &lt;-CTparam$Sigma</code></pre>
-<div id="plots" class="section level3" number="1.2.1">
-<h3><span class="header-section-number">1.2.1</span> 2.1 Plots</h3>
+<div id="plots" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> 2.1 Plots</h3>
 <p>To visualize the time-interval dependency, there are functions that
 plot the elements of these matrices for a range of time intervals:</p>
 <pre class="r"><code>### Make Phi-plot ###
@@ -2087,10 +2094,12 @@ plot the elements of these matrices for a range of time intervals:</p>
 
 # Example 1.1: unstandardized Phi #
 PhiPlot(DeltaT, Phi)
-
+&gt; NULL</code></pre>
+<pre class="r"><code>
 # Example 1.2: standardized Phi #
 SigmaVAR &lt;- diag(2) # for ease
-PhiPlot(DeltaT, Phi, Stand = 1, SigmaVAR = SigmaVAR)</code></pre>
+PhiPlot(DeltaT, Phi, Stand = 1, SigmaVAR = SigmaVAR)
+&gt; NULL</code></pre>
 <pre class="r"><code>## Example 2: input from fitted object of class &quot;varest&quot; ##
 
 # Example 2.1: unstandardized Phi #
@@ -2115,12 +2124,12 @@ for(i in 1:length(Lab)){
 Col &lt;- c(1,2)
 Lty &lt;- c(1,2)
 # Standardized Phi
-PhiPlot(DeltaT = 1, Phi, Stand = 1, SigmaVAR = SigmaVAR, 
+ggPhiPlot(DeltaT = 1, Phi, Stand = 1, SigmaVAR = SigmaVAR, 
         Min = 0, Max = 10, Step = 0.05, 
         WhichElements = WhichElements, Labels = Labels, Col = Col, Lty = Lty)
 
-# Note that you can also use &#39;ggPhiPlot&#39;.
-# Then, you can customize this plot like you would do with a regular ggplot.</code></pre>
+# Note that when you use &#39;ggPhiPlot&#39;,
+# then you can customize the plot like you would do with a regular ggplot.</code></pre>
 <pre class="r"><code>### Make Psi-plot/SigmaVAR-plot ###
 
 # Example 1.1: unstandardized Phi&amp;SigmaVAR #
@@ -2147,8 +2156,8 @@ PhiPlot(DeltaT, Drift = Drift, Stand = 1, Sigma = Sigma)
 # SigmaVAR-plot: unstandardized Drift &amp; Sigma / Phi &amp; SigmaVAR # . 
 SigmaVARPlot(DeltaT, Drift = Drift, Sigma = Sigma, 
              Min = 0, Max = 10, Step = 0.01)</code></pre>
-<div id="area-under-curves-in-phi-plot" class="section level4" number="1.2.1.1">
-<h4><span class="header-section-number">1.2.1.1</span> 2.1.1 Area under
+<div id="area-under-curves-in-phi-plot" class="section level4" number="2.2.1.1">
+<h4><span class="header-section-number">2.2.1.1</span> 2.1.1 Area under
 curves in Phi-plot</h4>
 <p>The area under a curve is the magnitude of the displacement, which is
 equal to the distance traveled (only for constant acceleration). As a
@@ -2171,8 +2180,8 @@ in Phi:</p>
 &gt; $Area_range
 &gt;           [,1]     [,2]
 &gt; [1,] 0.7699825 0.244806
-&gt; [2,] 0.4896121 1.039269
-
+&gt; [2,] 0.4896121 1.039269</code></pre>
+<pre class="r"><code>
 # If, for instance, the time interval range from 1 to 2 should be inspected 
 # (and not 0 to infinity), then use:
 Area(DeltaT, Phi, t_min = 1, t_max = 2)
@@ -2184,8 +2193,8 @@ Area(DeltaT, Phi, t_min = 1, t_max = 2)
 &gt; $Area_range
 &gt;           [,1]       [,2]
 &gt; [1,] 0.1480669 0.08153651
-&gt; [2,] 0.1630730 0.23775709
-
+&gt; [2,] 0.1630730 0.23775709</code></pre>
+<pre class="r"><code>
 # Notes: 
 # - A fitted object of the classes &quot;varest&quot; and &quot;ctsemFit&quot; can also be used.
 # - The Drift matrix can also be used.</code></pre>
@@ -2193,23 +2202,43 @@ Area(DeltaT, Phi, t_min = 1, t_max = 2)
 area under the curve for each element separately. For ease, these are
 depicted in matrices.</p>
 </div>
-<div id="maximum-or-minimum-of-curves-in-phi-plot" class="section level4" number="1.2.1.2">
-<h4><span class="header-section-number">1.2.1.2</span> 2.1.2 Maximum or
+<div id="maximum-or-minimum-of-curves-in-phi-plot" class="section level4" number="2.2.1.2">
+<h4><span class="header-section-number">2.2.1.2</span> 2.1.2 Maximum or
 minimum of curves in Phi-plot</h4>
 <p>To calculate for each element in Phi what the optimum is, thus either
-its maximum or minumum, together wit the corresponding time interval,
+its maximum or minimum, together wit the corresponding time interval,
 the following function can be used:</p>
 <pre class="r"><code>MaxDeltaT(DeltaT, Phi)
 &gt; $DeltaT_MinOrMaxPhi
 &gt;            [,1]       [,2]
-&gt; [1,] 22.2610551  0.7992313
-&gt; [2,]  0.7992313 22.9205743
+&gt; [1,] 22.0973792  0.7992313
+&gt; [2,]  0.7992313 23.1126937
 &gt; 
 &gt; $MinOrMaxPhi
 &gt;              [,1]         [,2]
-&gt; [1,] 8.459562e-09 1.025501e-01
-&gt; [2,] 2.051002e-01 1.078231e-08
-
+&gt; [1,] 9.617270e-09 1.025501e-01
+&gt; [2,] 2.051002e-01 9.275289e-09
+&gt; 
+&gt; $DeltaT_MinOrMaxPhi_2
+&gt;          [,1]     [,2]
+&gt; [1,] 23.11269 23.11269
+&gt; [2,] 23.11269 23.11269
+&gt; 
+&gt; $MinOrMaxPhi_2
+&gt;              [,1]         [,2]
+&gt; [1,] 4.340191e-09 4.486453e-09
+&gt; [2,] 8.972906e-09 9.275289e-09
+&gt; 
+&gt; $DeltaT_MinOrMaxPhi_3
+&gt;          [,1]     [,2]
+&gt; [1,] 23.11269 23.11269
+&gt; [2,] 23.11269 23.11269
+&gt; 
+&gt; $MinOrMaxPhi_3
+&gt;              [,1]         [,2]
+&gt; [1,] 4.340191e-09 4.486453e-09
+&gt; [2,] 8.972906e-09 9.275289e-09</code></pre>
+<pre class="r"><code>
 # Notes: 
 # - A fitted object of the classes &quot;varest&quot; and &quot;ctsemFit&quot; can also be used.
 # - The Drift matrix can also be used.</code></pre>
@@ -2218,11 +2247,11 @@ optimum and corresponding time interval for each element separately. For
 ease, these are depicted in matrices.</p>
 </div>
 </div>
-<div id="transformations" class="section level3" number="1.2.2">
-<h3><span class="header-section-number">1.2.2</span> 2.2
+<div id="transformations" class="section level3" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> 2.2
 Transformations</h3>
-<div id="discrete-time---continuous-time" class="section level4" number="1.2.2.1">
-<h4><span class="header-section-number">1.2.2.1</span> 2.2.1
+<div id="discrete-time---continuous-time" class="section level4" number="2.2.2.1">
+<h4><span class="header-section-number">2.2.2.1</span> 2.2.1
 Discrete-time &lt;-&gt; continuous-time</h4>
 <p>There are two types of lagged relationships models: the discrete-time
 (DT) and continuous-time (CT) models. Both are related (for more details
@@ -2277,8 +2306,8 @@ CTMparam(DeltaT, Phi, SigmaVAR)
 &gt; [1] -1.8756189 -0.7836412
 &gt; 
 &gt; $eigenvaluePhi_DeltaT
-&gt; [1] 0.4567399 0.1532601
-
+&gt; [1] 0.4567399 0.1532601</code></pre>
+<pre class="r"><code>
 # Notes: 
 # - A fitted object of the class &quot;varest&quot; can also be used.
 # - The Gamma matrix can be used instead of SigmaVAR.</code></pre>
@@ -2291,8 +2320,8 @@ VARparam(DeltaT, Drift, Sigma)
 # - A fitted object of the class &quot;ctsemFit&quot; can also be used.
 # - The Gamma matrix can be used instead of SigmaVAR.</code></pre>
 </div>
-<div id="gamma" class="section level4" number="1.2.2.2">
-<h4><span class="header-section-number">1.2.2.2</span> 2.2.2 Gamma</h4>
+<div id="gamma" class="section level4" number="2.2.2.2">
+<h4><span class="header-section-number">2.2.2.2</span> 2.2.2 Gamma</h4>
 <p>For both the DT and CT model, it holds that there are three types of
 matrices: 1) the lagged relationships matrix (Phi or Drift), 2) the
 residuals covariance matrix (SigmaVAR or Sigma), and 3) the stationary
@@ -2306,16 +2335,16 @@ respectively:</p>
 Gamma.fromVAR(Phi, SigmaVAR)
 &gt;           [,1]      [,2]
 &gt; [1,] 1.0855262 0.1102123
-&gt; [2,] 0.1102123 1.2170170
-
+&gt; [2,] 0.1102123 1.2170170</code></pre>
+<pre class="r"><code>
 # Using CT matrices
 Gamma.fromCTM(Drift, Sigma)
 &gt;           [,1]      [,2]
 &gt; [1,] 1.0855262 0.1102123
 &gt; [2,] 0.1102123 1.2170170</code></pre>
 </div>
-<div id="checks" class="section level4" number="1.2.2.3">
-<h4><span class="header-section-number">1.2.2.3</span> 2.2.3 Checks</h4>
+<div id="checks" class="section level4" number="2.2.2.3">
+<h4><span class="header-section-number">2.2.2.3</span> 2.2.3 Checks</h4>
 <p>When you have the CT matrices, you can also do checks on these
 matrices. For example, the covariance matrices should be positive
 definite. These checks can be done via:</p>
@@ -2348,12 +2377,12 @@ definite. These checks can be done via:</p>
 &gt; [1] 3.896442 1.936636
 &gt; 
 &gt; $EigenVal_Gamma
-&gt; [1] 1.279604 1.022939
-
+&gt; [1] 1.279604 1.022939</code></pre>
+<pre class="r"><code>
 # Note: a fitted object of class &quot;ctsemFit&quot; can also be used.</code></pre>
 </div>
-<div id="standardization" class="section level4" number="1.2.2.4">
-<h4><span class="header-section-number">1.2.2.4</span> 2.2.4
+<div id="standardization" class="section level4" number="2.2.2.4">
+<h4><span class="header-section-number">2.2.2.4</span> 2.2.4
 Standardization</h4>
 <p>The function ‘StandPhi’ renders standardized lagged relationships
 estimates from their unstandardized counterparts. Using this function,
@@ -2394,8 +2423,8 @@ StandPhi(N = NULL, Phi, SigmaVAR)
 &gt; $standGamma
 &gt;            [,1]       [,2]
 &gt; [1,] 1.00000000 0.09588739
-&gt; [2,] 0.09588739 1.00000000
-# or
+&gt; [2,] 0.09588739 1.00000000</code></pre>
+<pre class="r"><code># or
 #StandPhi(Phi = Phi, SigmaVAR = SigmaVAR)
 
 ## Obtain standardized lagged relationships and multivariate CIs ##
@@ -2445,14 +2474,14 @@ StandPhi(N, Phi, SigmaVAR)
 &gt; $standGamma
 &gt;            [,1]       [,2]
 &gt; [1,] 1.00000000 0.09588739
-&gt; [2,] 0.09588739 1.00000000
-
+&gt; [2,] 0.09588739 1.00000000</code></pre>
+<pre class="r"><code>
 # Notes: 
 # - A fitted object of the classes &quot;varest&quot; and &quot;ctsemFit&quot; can also be used.
 # - The Gamma matrix can also be used instead of Sigma.</code></pre>
 </div>
-<div id="same-time-interval" class="section level4" number="1.2.2.5">
-<h4><span class="header-section-number">1.2.2.5</span> 2.2.5 Same time
+<div id="same-time-interval" class="section level4" number="2.2.2.5">
+<h4><span class="header-section-number">2.2.2.5</span> 2.2.5 Same time
 interval</h4>
 <p>To compare results from multiple studies, it may be necessary to
 transform the time-interval dependent matrices (i.e., Phi and SigmaVAR)
@@ -2489,8 +2518,8 @@ StandTransPhi(DeltaTStar, DeltaT, N, Phi, SigmaVAR)
 </div>
 </div>
 </div>
-<div id="correlated-residuals" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> 3: Correlated
+<div id="correlated-residuals" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Correlated
 residuals</h2>
 <p>Even though the focus in lagged relationships models is the strength
 and sign of the lagged relationships, the residuals may be of interest
@@ -2519,8 +2548,8 @@ SigmaVARPlot(DeltaT, Phi, SigmaVAR, Stand = 1)
 # - Like in the Phi-plot, a &#39;varest&#39; object can be used.
 # - Like in the Phi-plot, the plot can be customized 
 #   (but there is no ggplot variant)</code></pre>
-<div id="time-interval-for-uncorrelated-discrete-time-residuals" class="section level3" number="1.3.1">
-<h3><span class="header-section-number">1.3.1</span> 3.1: Time interval
+<div id="time-interval-for-uncorrelated-discrete-time-residuals" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> 3.1: Time interval
 for uncorrelated discrete-time residuals</h3>
 <p>Since SigmaVAR varies with the chosen time interval DeltaT, there may
 exist a DeltaT for which SigmaVAR is diagonal. In that case, the
@@ -2570,8 +2599,8 @@ DiagDeltaT(Phi, SigmaVAR = SigmaVAR)
 &gt; [1] &quot;No error: All matrices (Drift, Sigma, and Gamma) are fine.&quot;
 &gt; 
 &gt; $message_startvalues
-&gt; [1] &quot;In case the Psi-plot/SigmaVAR-plot does show a solution (or another solution) for DeltaT such that Psi is diagonal (i.e., the covariances are 0), \n\n  alter the starting value for &#39;DeltaT_diag&#39;. Notably, by default, the value 1 is used.&quot;
-
+&gt; [1] &quot;In case the Psi-plot/SigmaVAR-plot does show a solution (or another solution) for DeltaT such that Psi is diagonal (i.e., the covariances are 0), \n\n  alter the starting value for &#39;DeltaT_diag&#39;. Notably, by default, the value 1 is used.&quot;</code></pre>
+<pre class="r"><code>
 
 # Notes:
 # - The function &#39;SigmaVARPlot&#39; can help to see whether there is a DeltaT for 
@@ -2586,8 +2615,8 @@ interval), but it actually is not. It also does not signal that lagged
 effects relationships are distorted, since omitted unique causes will
 not affect the DT residual correlations.</p>
 </div>
-<div id="continuous-time-residual-covariance-matrix" class="section level3" number="1.3.2">
-<h3><span class="header-section-number">1.3.2</span> 3.2:
+<div id="continuous-time-residual-covariance-matrix" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> 3.2:
 Continuous-time residual covariance matrix</h3>
 <p>It may be better to inspect continuous-time residuals, by looking at
 Sigma, instead of the DT residuals. Correlated continuous-time residuals
@@ -2607,8 +2636,8 @@ CTM &lt;- CTMparam(DeltaT, Phi, SigmaVAR)
 CTM$Sigma 
 &gt;            [,1]       [,2]
 &gt; [1,]  3.2370355 -0.9260082
-&gt; [2,] -0.9260082  2.5960426
-
+&gt; [2,] -0.9260082  2.5960426</code></pre>
+<pre class="r"><code>
 # Notes: 
 # - A fitted object of the class &quot;varest&quot; can also be used.
 # - The Gamma matrix can be used instead of SigmaVAR.</code></pre>

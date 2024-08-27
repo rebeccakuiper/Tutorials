@@ -181,19 +181,28 @@ any(eigen(CovMx)$val < 0)
 # Multivariate Meta-analyses
 out_CTmeta <- CTmeta(N, DeltaT = TI, DeltaTStar = 1, Phi, SigmaVAR)
 #
+#
 ## Evaluate dominance of cross-lagged effects ##
-# Extract the vectorized overall standardized Phi matrix and its covariance matrix
-est <- out_CTmeta$Overall_standPhi_DeltaTStar
-VCOV <- out_CTmeta$CovMx_OverallPhi_DeltaTStar
+#
 # Specify hypothesis
 H1 <- "overallPhi12 < overallPhi21"
-#H2 <- "overallPhi12 > overallPhi21"
+#Complement: "overallPhi12 > overallPhi21"
+# Btw if signs can be negative one perhaps better use:
+# H1 <- "abs(overallPhi12) < abs(overallPhi21)"
+#
 # Evaluate dominance of cross-lagged effects via AIC-type criterion called the GORICA (Altinisik, Nederhof, Hoijtink, Oldehinkel, Kuiper, unpublished).
-#goric(est, VCOV = VCOV, hypotheses = list(H1, H2), type = "gorica", comparison = "none") # authors of goric(): Vanbrabant and Kuiper
-# or equivalently:
-goricaResult <- goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = "complement")
-summary(goricaResult)
-
+set.seed(123) # for reproducability of results and possible sensitivity check of penalty
+goricaResult <- goric(out_CTmeta, hypotheses = list(H1), comparison = "complement")
+#summary(goricaResult)
+goricaResult
+#
+#
+## AIC
+H0 <- "overallPhi12 = overallPhi21"
+# or: H0 <- "abs(overallPhi12) = abs(overallPhi21)"
+goricaResult_H0 <- goric(out_CTmeta, hypotheses = list(H0), comparison = "complement")
+#summary(goricaResult_H0)
+goricaResult_H0
 
 ##### Automate this such that I obtain easier/faster the results for multiple time-intervals:
 
@@ -220,6 +229,7 @@ for(g in 1:G){
 
 
 ## Apply GORICA ##
+H0 <- "Phi12 = Phi21"
 H1 <- "Phi12 < Phi21"
 #
 # On overall Phi #
@@ -227,6 +237,10 @@ GORICAweights_g <- array(NA, dim = c(2, G))
 GORICA_g <- array(NA, dim = c(2, G))
 LL_g <- array(NA, dim = c(2, G))
 PT_g <- array(NA, dim = c(2, G))
+GORICAweights_g_H0 <- array(NA, dim = c(2, G))
+GORICA_g_H0 <- array(NA, dim = c(2, G))
+LL_g_H0 <- array(NA, dim = c(2, G))
+PT_g_H0 <- array(NA, dim = c(2, G))
 for(g in 1:G){
   #g <- 1
   est <- Phi_Trans[g,]
@@ -239,6 +253,15 @@ for(g in 1:G){
   GORICA_g[, g] <- results_g$result[,4]
   LL_g <- results_g$result[,2]
   PT_g <- results_g$result[,3]
+  #
+  # AIC: H0 vs Hunc
+  set.seed(123)
+  results_g_H0 <- goric(est, VCOV = VCOV, hypotheses = list(H0), comparison = "complement") 
+  #summary(results_g_H0)
+  GORICAweights_g_H0[, g] <- results_g_H0$result[,5]
+  GORICA_g_H0[, g] <- results_g_H0$result[,4]
+  LL_g_H0 <- results_g_H0$result[,2]
+  PT_g_H0 <- results_g_H0$result[,3]
 }
 #
 # On study-specific Phi; on Phi from each of the primary studies #
@@ -246,6 +269,10 @@ GORICAweights_g_s <- array(NA, dim = c(2, S, G))
 GORICA_g_s <- array(NA, dim = c(2, S, G))
 LL_g_s <- array(NA, dim = c(2, S, G))
 PT_g_s <- array(NA, dim = c(2, S, G))
+GORICAweights_g_s_H0 <- array(NA, dim = c(2, S, G))
+GORICA_g_s_H0 <- array(NA, dim = c(2, S, G))
+LL_g_s_H0 <- array(NA, dim = c(2, S, G))
+PT_g_s_H0 <- array(NA, dim = c(2, S, G))
 for(g in 1:G){
   for(s in 1:S){
     #g <- 1; s <- 1
@@ -259,6 +286,15 @@ for(g in 1:G){
     GORICA_g_s[, s, g] <- results_g_s$result[,4]
     LL_g_s[, s, g] <- results_g_s$result[,2]
     PT_g_s[, s, g] <- results_g_s$result[,3]
+    #
+    # AIC: H0 vs Hunc
+    set.seed(123)
+    results_g_s_H0 <- goric(est, VCOV = VCOV, hypotheses = list(H0), comparison = "complement") 
+    #summary(results_g_s_H0)
+    GORICAweights_g_s_H0[, s, g] <- results_g_s_H0$result[,5]
+    GORICA_g_s_H0[, s, g] <- results_g_s_H0$result[,4]
+    LL_g_s_H0[, s, g] <- results_g_s_H0$result[,2]
+    PT_g_s_H0[, s, g] <- results_g_s_H0$result[,3]
   }
 }
 #
@@ -273,10 +309,22 @@ table <- cbind(
 )
 rownames(table) <- rep("", G)
 table
+#
+# AIC: H0 vs Hunc
+table_H0 <- cbind(
+  unique(TI)[order(unique(TI))],
+  GORICAweights_g_H0[2,order(unique(TI))], 
+  apply(GORICAweights_g_s_H0[2,,order(unique(TI))], 2, min),
+  apply(GORICAweights_g_s_H0[2,,order(unique(TI))], 2, max),
+  apply(GORICAweights_g_s_H0[2,,order(unique(TI))], 2, mean),
+  apply(GORICAweights_g_s_H0[2,,order(unique(TI))], 2, sd)
+)
+rownames(table_H0) <- rep("", G)
+table_H0
 
 
 #--- Save and Load (for new data)
-save(list = ls(), file = "Example_GORICAonCTmeta.RData")
+save(list = ls(), file = "Example_GORICAonCTmeta_vsAIC.RData")
 
 
 ################
@@ -317,11 +365,51 @@ save(list = ls(), file = "Example_GORICAonCTmeta.RData")
   )
   #
   #
-  #
   #dev.copy(pdf, paste0('Plot_GORICAonCTmeta_Example.pdf'))
   dev.copy(png, paste0('Plot_GORICAonCTmeta_Example.png'))
   dev.off()
   par(op)
-
-
+  #
+  #
+  #
+  # AIC: H0 vs Hunc
+  op <- par(mfrow=c(1,1)) 
+  Col <- 1
+  title <- as.list(expression(paste("GORICA weights for ", H["u"], " for the targeted time-intervals ", Delta[t]^"*"))) 
+  plot(y=GORICAweights_g_H0[2,][order(unique(TI))], x=unique(TI)[order(unique(TI))], type="p", 
+       ylim=
+         c((min(GORICAweights_g_H0[2,], GORICAweights_g_s_H0[2,,]) - 0.05), 
+           max(GORICAweights_g_H0[2,], GORICAweights_g_s_H0[2,,])), 
+       ylab = expression(paste("GORICA weights")), xlab = expression(paste("Time-interval (", Delta[t]^"*", ")", sep="")), 
+       col=Col, lwd=1, lty=1, pch = 15,
+       main = mtext(do.call(expression, title), side=3)
+  )
+  #
+  #
+  #lines(y=GORICAweights_g_H0[1,][order(unique(TI))], x=unique(TI)[order(unique(TI))], col=Col, lwd=0.5, lty=1, type = "l")
+  #
+  for(s in 1:S){
+    # s <- 1
+    lines(y=GORICAweights_g_s_H0[2,s,], x=rep(unique(TI)[s], G), col=(1+s), lwd=1, lty=1, type = "p", pch = 1)
+  }
+  #
+  #
+  e1 <- "on CTmeta estimates"
+  e2 <- "on study estimates"
+  legend = c(e1,e2)
+  pos <- "bottomright"
+  legend(pos,
+         legend = legend, cex=1,
+         bty = "n",
+         lty=rep(0,2), # gives the legend appropriate symbols (no lines)
+         lwd=rep(0,2), 
+         pch = c(15,1),
+         col=c(1,"grey")
+  )
+  #
+  #
+  #dev.copy(pdf, paste0('Plot_GORICAonCTmeta_Example_AIC.pdf'))
+  dev.copy(png, paste0('Plot_GORICAonCTmeta_Example_AIC.png'))
+  dev.off()
+  par(op)
 

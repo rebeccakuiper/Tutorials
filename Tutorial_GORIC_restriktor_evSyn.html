@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-22" />
+<meta name="date" content="2024-08-27" />
 
 <title>Tutorial for GORIC(A) evidence aggregation</title>
 
@@ -1570,7 +1570,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for GORIC(A) evidence
 aggregation</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">22 August 2024</h4>
+<h4 class="date">27 August 2024</h4>
 
 </div>
 
@@ -1731,7 +1731,7 @@ obtain the results for GORICA Evidence Synthesis:</p>
                      comparison = &#39;complement&#39;)
 
 evSyn_trust</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
       Hpos  Complement  
@@ -1885,7 +1885,7 @@ study).</p>
                       )
 
 results_Set1</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
          H1.1           H1.2  Unconstrained  
@@ -1928,7 +1928,7 @@ be helpful for future research:</p>
                      comparison = &#39;complement&#39;)
 
 results_Set1_H1c</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
       H1.1  Complement  
@@ -1961,7 +1961,7 @@ hypothesis specification can be used for all studies.</p>
                     comparison = &#39;complement&#39;)
 
 results_Set2</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
         H1  Complement  
@@ -1999,7 +1999,7 @@ specification can be used for all studies.</p>
                     comparison = &#39;complement&#39;)
 
 results_Set3</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
         H1  Complement  
@@ -2142,7 +2142,7 @@ matrices as input for GORIC(A) evidence synthesis:</p>
                       )
 
 results_Set1</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
          H1.1           H1.2  Unconstrained  
@@ -2187,7 +2187,7 @@ GORICA &lt;- list(gorica_Study1$result[,4], gorica_Study2$result[,4],
 results_Set1_gorica &lt;- evSyn(GORICA)
 #
 results_Set1_gorica</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
    H1     H2     H3  
@@ -2212,7 +2212,7 @@ the function would be:</p>
                              hypo_names = c(&quot;H1.1&quot;, &quot;H1.2&quot;, &quot;Hu&quot;))
 #
 results_Set1_gorica</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
  H1.1   H1.2     Hu  
@@ -2244,7 +2244,7 @@ results_Set1_gw &lt;- evSyn(GORICAweights,
                          hypo_names = c(&quot;H1.1&quot;, &quot;H1.2&quot;, &quot;Hu&quot;))
 #
 results_Set1_gw</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
  H1.1   H1.2     Hu  
@@ -2299,7 +2299,7 @@ results_Set1_LLandPT &lt;- evSyn(LL_Set1, PT = PT_Set1,
                             hypo_names = c(&quot;H1.1&quot;, &quot;H1.2&quot;, &quot;Hu&quot;))
 #
 results_Set1_LLandPT</code></pre>
-<pre><code>restriktor (0.5-85): added Evidence Synthesis results:
+<pre><code>restriktor (0.5-90): added Evidence Synthesis results:
 
 Final GORICA weights:
  H1.1   H1.2     Hu  
@@ -2321,6 +2321,9 @@ methods is suitable for aggregating evidence over multiple studies.</p>
 <p>As in the previous sections, it is not necessary to specify the
 hypotheses in <code>evSyn</code>. However, to avoid confusion,
 <code>hypo_names</code> is used for a better labeling in the output.</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
 </div>
 </div>
 
