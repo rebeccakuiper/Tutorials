@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-27" />
+<meta name="date" content="2024-09-17" />
 
 <title>How to evaluate theory-based hypotheses in a (RI-)CLPM using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a (RI-)CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">27 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -2140,13 +2140,14 @@ abs(SL2_RQ11) &gt; abs(RQ12_SL1);
 abs(SE2_RQ21) &gt; abs(RQ22_SE1);
 abs(SL2_RQ21) &gt; abs(RQ22_SL1)
 &quot;</code></pre>
-<p>We obtain the GORICA results for <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span> in two steps. Note the use of
+<p>We obtain the GORICA results for <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span> in two steps (where each is
+evaluated against their own complement). Note the use of
 <code>set.seed</code> to ensure that the results are reproducible.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_Q1 &lt;- goric(est, VCOV = vcov, 
-                          hypotheses = list(H1_Q1=H1_Q1), comparison = &quot;complement&quot;, 
-                          type = &quot;gorica&quot;)
+#H1_Q1 vs its complement, using GORICA
+goricaResults_Q1 &lt;- goric(est, VCOV = vcov, # then, default: type = &quot;gorica&quot;
+                          hypotheses = list(H1_Q1=H1_Q1))
 
 goricaResults_Q1</code></pre>
 <pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
@@ -2162,7 +2163,9 @@ The order-restricted hypothesis &#39;H1_Q1&#39; has 1.72 times more support than
 its complement.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_Q2 &lt;- goric(est, VCOV = vcov, hypotheses = list(H1_Q2=H1_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+#H1_Q2 vs its complement, using GORICA
+goricaResults_Q2 &lt;- goric(est, VCOV = vcov, 
+                          hypotheses = list(H1_Q2=H1_Q2))
 
 goricaResults_Q2</code></pre>
 <pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
@@ -2506,7 +2509,9 @@ abs(AB2_SAT1) &gt; abs(SAT2_AB1); abs(DE2_SAT1) &gt; abs(SAT2_DE1); abs(VI2_SAT1
 <code>set.seed</code> to ensure that the results are reproducible.</p>
 <pre class="r"><code>set.seed(123)
 
-goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q1=H2_Q1), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+#H2_Q1 vs its complement, using GORICA
+goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, 
+                             hypotheses = list(H2_Q1=H2_Q1))
 
 goricaResults_H2_Q1</code></pre>
 <pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
@@ -2526,18 +2531,19 @@ bootstrap method. When using the bootstrapping the results do not
 change, but the computation time may decrease.</p>
 <pre class="r"><code>set.seed(123)
 
-#goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=H2_Q2), comparison = &quot;complement&quot;, type = &quot;gorica&quot;)
+##H2_Q2 vs its complement, using GORICA
+#goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, 
+#                             hypotheses = list(H2_Q2=H2_Q2))
 #goricaResults_H2_Q2
 ##summary(goricaResults_H2_Q2)
 
 # if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;)
 #library(parallel)
-
+#
 #nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
-
-# NB: there are many restrictions, so the code takes longer to run
-goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, hypotheses = list(H2_Q2=H2_Q2), 
-                               comparison = &quot;complement&quot;, type = &quot;gorica&quot;, 
+#
+goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, 
+                               hypotheses = list(H2_Q2=H2_Q2), 
                                mix_weights = &quot;boot&quot;)
 
 goricaResults_H2_Q2_b</code></pre>

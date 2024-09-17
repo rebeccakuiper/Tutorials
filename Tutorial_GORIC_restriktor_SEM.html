@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-27" />
+<meta name="date" content="2024-09-17" />
 
 <title>How to evaluate theory-based hypotheses in a SEM model using the GORICA</title>
 
@@ -2716,7 +2716,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a SEM model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">27 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -2786,8 +2786,8 @@ make sure to give your own labels to estimates by including them in the
 library(lavaanPlot)
 lavaanPlot(model = fit1, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
            edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-9aa105bfc2ab14c56110" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-9aa105bfc2ab14c56110">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-978eb4e9ec001f1c35d8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-978eb4e9ec001f1c35d8">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>To call the <code>goric</code> function, we need to formulate the
 hypothesis of interest. The GORICA selects the best hypothesis out of a
 given set. Here, since we only have a single hypothesis, we will compare
@@ -2802,19 +2802,25 @@ A1 &gt; .6; A2 &gt; .6; A3 &gt; .6; A4 &gt; .6; A5 &gt; .6; A6 &gt; .6;
 B1 &gt; .6; B2 &gt; .6; B3 &gt; .6; B4 &gt; .6; B5 &gt; .6; B6 &gt; .6
 &quot;</code></pre>
 <p>After specifying the hypothesis of interest, we can call the
-<code>goric</code> function. Here we use GORICA by specifying
-<code>type = &quot;gorica&quot;</code> as an argument. Additionally, because we
-need standardized estimates to obtain a meaningful comparison, we
-specify <code>standardized = TRUE</code>. Finally, because we are
-interested in comparing the hypothesis of interest to its complement, we
-also specify <code>comparison = &quot;complement&quot;</code>.</p>
+<code>goric</code> function. Here, we use GORICA
+(i.e.,<code>type = &quot;gorica&quot;</code>) by default, because of entering a
+lavaan object. Additionally, because we need standardized estimates to
+obtain a meaningful comparison, we specify
+<code>standardized = TRUE</code>. Finally, because we are interested in
+one theory-based hypothesis, we compare it (by default) to its
+complement (i.e., by default:
+<code>comparison = &quot;complement&quot;</code>).</p>
 <pre class="r"><code># Calculate GORICA values and weights for H1.1 and its complement.
 
 set.seed(100)
 
+#results1 &lt;- goric(fit1, 
+#                  hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;, 
+#                  type = &quot;gorica&quot;, standardized = TRUE) 
+# or, because of the defaults:
 results1 &lt;- goric(fit1, 
-                  hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;, 
-                  type = &quot;gorica&quot;, standardized = TRUE) 
+                  hypotheses = list(H1.1 = H1.1), 
+                  standardized = TRUE) 
 
 #summary(results1)
 results1</code></pre>
@@ -2846,8 +2852,8 @@ decrease.</p>
 <pre class="r"><code>set.seed(100)
 
 results1_b &lt;- goric(fit1, 
-                    hypotheses = list(H1.1 = H1.1), comparison = &quot;complement&quot;,
-                    type = &quot;gorica&quot;, standardized = TRUE, 
+                    hypotheses = list(H1.1 = H1.1), 
+                    standardized = TRUE, 
                     mix_weights = &quot;boot&quot;)
 
 #summary(results1_b)
@@ -2904,22 +2910,20 @@ library(lavaanPlot)
 
 lavaanPlot(model = fit2, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
            edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-3364aac315275e4f28ef" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-3364aac315275e4f28ef">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-75db6b30206e617633e6" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-75db6b30206e617633e6">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Proceed to formulate the hypothesis of interest using the same labels
 as in the model definition:</p>
-<pre class="r"><code>H2.1 &lt;- &quot;Pre_b &lt; Pre_g&quot;</code></pre>
-<p>Call the <code>goric</code> function to evaluate the hypothesis.
-Again, we request GORICA weights using the argument
-<code>type = &quot;gorica&quot;</code> and, because we have a single hypothesis,
-we test it against its complement using
-<code>comparison = &quot;complement&quot;</code>. And similarly, because we need
+<pre class="r"><code>H2.1 &lt;- &quot;Pre_b &lt; Pre_g&quot;
+# versus its complement</code></pre>
+<p>Call the <code>goric</code> function to evaluate the hypothesis
+versus its complement using the GORICA. Note that, because we need
 standardized estimates for a meaningful comparison, we use
 <code>standardized = TRUE</code>.</p>
 <pre class="r"><code>set.seed(100)
 
-results2 &lt;- goric(fit2, hypotheses = list(H2.1 = H2.1), comparison = &quot;complement&quot;,
-                  type = &quot;gorica&quot;, standardized = TRUE) 
+results2 &lt;- goric(fit2, hypotheses = list(H2.1 = H2.1), 
+                  standardized = TRUE) 
 
 #summary(results2)
 results2</code></pre>

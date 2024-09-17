@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-15" />
+<meta name="date" content="2024-09-17" />
 
 <title>Tutorial for updating hypotheses using the GORIC(A)</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for updating hypotheses using the
 GORIC(A)</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">15 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -1695,24 +1695,17 @@ using GORIC(A)</h3>
 values and weights</h4>
 <pre class="r"><code>set.seed(123) # Set seed value
 goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03))</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1            H00  -149.907    2.000  303.815           0.000            0.447          0.000
-2            H01  -141.191    3.000  288.383           0.369            0.164          0.610
-3            H02  -145.404    3.000  296.809           0.005            0.164          0.009
-4            H03  -148.907    3.000  303.815           0.000            0.164          0.000
-5  unconstrained  -140.665    4.000  289.330           0.625            0.060          0.380
+           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1            H00  -149.907    2.000  303.815           0.000            0.447          0.000                      0.000
+2            H01  -141.191    3.000  288.383           0.369            0.164          0.610                      0.985
+3            H02  -145.404    3.000  296.809           0.005            0.164          0.009                      0.015
+4            H03  -148.907    3.000  303.815           0.000            0.164          0.000                      0.000
+5  unconstrained  -140.665    4.000  289.330           0.625            0.060          0.380                           
 ---
-
-Ratio GORIC-weights:
-                vs. H00  vs. H01  vs. H02   vs. H03  vs. unconstrained
-H00               1.000    0.000    0.030     1.000              0.001
-H01            2243.685    1.000   67.557  2243.958              1.606
-H02              33.212    0.015    1.000    33.216              0.024
-H03               1.000    0.000    0.030     1.000              0.001
-unconstrained  1397.166    0.623   42.068  1397.336              1.000</code></pre>
+The order-restricted hypothesis &#39;H01&#39; is not weak, with 2.244e+03 times more support than H00, 67.557 times more support than H02 and 2.244e+03 times more support than H03.</code></pre>
 </div>
 <div id="calculate-gorica-values-and-weights" class="section level4" number="1.1.3.2">
 <h4><span class="header-section-number">1.1.3.2</span> Calculate GORICA
@@ -1720,7 +1713,8 @@ values and weights</h4>
 <p>In case you want to use the GORICA values and weights instead, use:
 type = “gorica”. Thus:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
-goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03), type = &quot;gorica&quot;)</code></pre>
+goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03), 
+      type = &quot;gorica&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1796,7 +1790,7 @@ values and weights</h4>
 output_repl &lt;- goric(lm_fit_Holubar, hypotheses = list(H1, H2))
 #summary(output_repl)
 output_repl</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1805,6 +1799,8 @@ Results:
 3  unconstrained  -143.038    4.000  294.076           0.777            0.114          0.473</code></pre>
 <pre><code>---
 Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The unconstrained hypothesis is the best hypothesis in the set, meaning that all order-restricted hypotheses in the set are weak.</code></pre>
 <p>Since the support for <span class="math inline">\(H_1\)</span> and
 <span class="math inline">\(H_2\)</span> is lower than for <span class="math inline">\(H_u\)</span>, it can be concluded that both are
 weak hypotheses. Hence, the study of Holubar did not replicate the
@@ -1816,9 +1812,9 @@ set</h4>
 <p>In case you are only interested in the ‘main hypothesis’ <span class="math inline">\(H_1\)</span> found in Monin, you could also
 evaluate this against its complement:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
-output_repl_alt &lt;- goric(lm_fit_Holubar, hypotheses = list(H1), comparison = &quot;complement&quot;)
+output_repl_alt &lt;- goric(lm_fit_Holubar, hypotheses = list(H1))
 output_repl_alt</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1836,11 +1832,12 @@ values and weights</h4>
 <p>Notably, in case you want to use the GORICA, you can use the
 following commands:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
-goric(lm_fit_Holubar, hypotheses = list(H1, H2), type = &quot;gorica&quot;)</code></pre>
+goric(lm_fit_Holubar, hypotheses = list(H1, H2), 
+      type = &quot;gorica&quot;)</code></pre>
 <p>When you want to calculate the GORICA for <span class="math inline">\(H_1\)</span> and its complement, use:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
-goric(lm_fit_Holubar, hypotheses = list(H1), type = &quot;gorica&quot;, 
-      comparison = &quot;complement&quot;)</code></pre>
+goric(lm_fit_Holubar, hypotheses = list(H1), 
+      type = &quot;gorica&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1910,23 +1907,20 @@ H2 &lt;- &quot;RS_Gr1 + RSES_Gr1 = 0; RS_Gr1 &gt; 0;
 GORICA</h2>
 <p>Next, the GORICA values and weights are calculated:</p>
 <pre class="r"><code>set.seed(123)
-output_gorica_Altinisik &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
+output_gorica_Altinisik &lt;- goric(est, VCOV = VCOV,
+                                 hypotheses = list(H1, H2))
+# Note: because of est &amp; VCOV, &#39;type = &quot;gorica&quot;&#39; is default.
 #summary(output_gorica_Altinisik)
 output_gorica_Altinisik</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1  -1.373    1.500   5.746           0.202            0.376           0.760
-2             H2  -3.168    1.000   8.335           0.034            0.620           0.208
-3  unconstrained  -0.045    6.000  12.089           0.764            0.004           0.032
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1  -1.373    1.500   5.746           0.202            0.376           0.760                       0.785
+2             H2  -3.168    1.000   8.335           0.034            0.620           0.208                       0.215
+3  unconstrained  -0.045    6.000  12.089           0.764            0.004           0.032                            
 ---
-
-Ratio GORICA-weights:
-               vs. H1  vs. H2  vs. unconstrained
-H1              1.000   3.650             23.847
-H2              0.274   1.000              6.534
-unconstrained   0.042   0.153              1.000</code></pre>
+The order-restricted hypothesis &#39;H1&#39; is not weak, with 3.650 times more support than H2.</code></pre>
 <pre class="r"><code>round(output_gorica_Altinisik$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00   3.65             23.85

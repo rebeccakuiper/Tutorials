@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-15" />
+<meta name="date" content="2024-09-17" />
 
 <title>Evaluate a set of hypotheses with GORIC or GORICA: Linear Regression Example</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Evaluate a set of hypotheses with GORIC or
 GORICA: Linear Regression Example</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">15 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -1596,8 +1596,8 @@ weights for H1 and its complement</h2>
 <p>Here, we assume that the interest lies only in H1. In that case, it
 should be evaluated against its complement.</p>
 <pre class="r"><code>set.seed(123) 
-goric(fit_Sesame, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion: 
+goric(fit_Sesame, hypotheses = list(H1 = H1))</code></pre>
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1613,10 +1613,10 @@ evidence in favor of H1.</p>
 <h2><span class="header-section-number">2.2</span> GORICA values and
 weights for H1 and its complement</h2>
 <pre class="r"><code>set.seed(123) 
-goric_sesam_1c &lt;- goric(fit_Sesame, hypotheses = list(H1 = H1), type = &quot;gorica&quot;, comparison = &quot;complement&quot;)
+goric_sesam_1c &lt;- goric(fit_Sesame, hypotheses = list(H1 = H1), type = &quot;gorica&quot;)
 #summary(goric_sesam_1c)
 goric_sesam_1c</code></pre>
-<pre><code>restriktor (0.5-80): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Leonard Vanbrabant" />
 
-<meta name="date" content="2024-08-22" />
+<meta name="date" content="2024-09-17" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper and Leonard Vanbrabant</h4>
-<h4 class="date">22 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -1606,9 +1606,9 @@ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://gith
 hypothesis</h2>
 <p>Here, I assume you have one informative hypothesis, that is, there
 are no competing hypotheses of interest. Then, I would advise you to
-evaluate it with its complement (an option in the software), as opposed
-to the unconstrained hypothesis. Nevertheless, I will describe both
-situations next.</p>
+evaluate it with its complement (the default option in the software), as
+opposed to the unconstrained hypothesis. Nevertheless, I will describe
+both situations next.</p>
 <div id="vs-complement" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> vs Complement</h3>
 <p>The complement of a hypothesis denotes all the other possible
@@ -1640,9 +1640,9 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # Denoting mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
 set.seed(123) 
-results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_1c &lt;- goric(fit, hypotheses = list(H1))
 results_1c</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1704,14 +1704,16 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
 set.seed(123) 
-results_1u &lt;- goric(fit, hypotheses = list(H1))
+results_1u &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;unconstrained&quot;)
 results_1u</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -123.384    2.832  252.431           0.500            0.763          0.763
-2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237</code></pre>
+2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237
+---
+The order-restricted hypothesis &#39;H1&#39; has 0.763 / 0.237 &gt; 1 times more support than the unconstrained.</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is more supported than the
 unconstrained (since 0.763 <span class="math inline">\(/\)</span> 0.237
@@ -1834,13 +1836,15 @@ H2 &lt;- &quot;D1 &lt; D2 &lt; D3&quot; # mu1 &lt; mu2 &lt; mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -123.384    2.832  252.431           0.500            0.433          0.763
-2             H2  -131.346    2.832  268.356           0.000            0.433          0.000
-3  unconstrained  -123.384    4.000  254.767           0.500            0.135          0.237</code></pre>
+           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -123.384    2.832  252.431           0.500            0.433          0.763                      1.000
+2             H2  -131.346    2.832  268.356           0.000            0.433          0.000                      0.000
+3  unconstrained  -123.384    4.000  254.767           0.500            0.135          0.237                           
+---
+The order-restricted hypothesis &#39;H1&#39; is not weak, with 2.871e+03 times more support than H2.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1  vs. H2 vs. unconstrained
 H1              1.00 2871.23              3.22
@@ -1906,7 +1910,7 @@ H2 &lt;- &quot;D1 &lt; D2&quot; # # =&gt; H2: D1 &lt; D2, D3 # mu1 &lt; mu2, mu3
 set.seed(123) 
 results_12 &lt;- goric(fit, hypotheses = list(H1, H2), comparison = &quot;none&quot;)
 results_12</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
    model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1986,9 +1990,9 @@ H1g &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt;  mu2 &gt; mu3
 
 # Apply GORIC #
 set.seed(123) 
-results_1g &lt;- goric(fit, hypotheses = list(H1g = H1g), comparison = &quot;complement&quot;)
+results_1g &lt;- goric(fit, hypotheses = list(H1g = H1g))
 results_1g</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2016,9 +2020,9 @@ H1m &lt;- &quot;D1 - D2 &gt; .1, D2 &gt; D3&quot; # mu1 - mu2 &gt; .1, mu2 &gt; 
 
 # Apply GORIC #
 set.seed(123) 
-results_1m &lt;- goric(fit, hypotheses = list(H1m = H1m), comparison = &quot;complement&quot;)
+results_1m &lt;- goric(fit, hypotheses = list(H1m = H1m))
 results_1m</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2131,13 +2135,15 @@ H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -123.384    2.832  252.431           0.333            0.548          0.548
-2             H2  -123.384    3.500  253.767           0.333            0.281          0.281
-3  unconstrained  -123.384    4.000  254.767           0.333            0.171          0.171</code></pre>
+           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -123.384    2.832  252.431           0.333            0.548          0.548                      0.661
+2             H2  -123.384    3.500  253.767           0.333            0.281          0.281                      0.339
+3  unconstrained  -123.384    4.000  254.767           0.333            0.171          0.171                           
+---
+The order-restricted hypothesis &#39;H1&#39; is not weak, with 1.950 times more support than H2.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 3)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1             1.000  1.950             3.216
@@ -2185,13 +2191,15 @@ H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -124.316    2.832  254.297           0.164            0.548          0.323
-2             H2  -123.384    3.500  253.767           0.418            0.281          0.421
-3  unconstrained  -123.384    4.000  254.767           0.418            0.171          0.255</code></pre>
+           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -124.316    2.832  254.297           0.164            0.548          0.323                      0.434
+2             H2  -123.384    3.500  253.767           0.418            0.281          0.421                      0.566
+3  unconstrained  -123.384    4.000  254.767           0.418            0.171          0.255                           
+---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.303 times more support than H1.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00   0.77              1.27
@@ -2243,9 +2251,9 @@ Hn &lt;- &quot;D1 &gt; D2 &lt; D3&quot; # mu1 &gt; mu2 &lt; mu3
 
 # Apply GORIC #
 set.seed(123) 
-results_n &lt;- goric(fit, hypotheses = list(Hn = Hn), comparison = &quot;complement&quot;)
+results_n &lt;- goric(fit, hypotheses = list(Hn = Hn))
 results_n</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2288,9 +2296,9 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
 set.seed(123) 
-results_1c &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_1c &lt;- goric(fit, hypotheses = list(H1))
 results_1c</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2351,22 +2359,16 @@ Hb3 &lt;- &quot;D1 = D2 = D3&quot; # mu1 = mu2 = mu3
 set.seed(123) 
 results_b123 &lt;- goric(fit, hypotheses = list(Hb1 = Hb1, Hb2 = Hb2, Hb3 = Hb3))
 results_b123</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1            Hb1  -126.132    2.500  257.263           0.031            0.258          0.050
-2            Hb2  -123.450    2.500  251.900           0.458            0.258          0.725
-3            Hb3  -126.570    2.000  257.139           0.020            0.426          0.053
-4  unconstrained  -123.384    4.000  254.767           0.490            0.058          0.173
+           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1            Hb1  -126.132    2.500  257.263           0.031            0.258          0.050                      0.060
+2            Hb2  -123.450    2.500  251.900           0.458            0.258          0.725                      0.876
+3            Hb3  -126.570    2.000  257.139           0.020            0.426          0.053                      0.064
+4  unconstrained  -123.384    4.000  254.767           0.490            0.058          0.173                           
 ---
-
-Ratio GORIC-weights:
-               vs. Hb1  vs. Hb2  vs. Hb3  vs. unconstrained
-Hb1              1.000    0.068    0.940              0.287
-Hb2             14.611    1.000   13.734              4.194
-Hb3              1.064    0.073    1.000              0.305
-unconstrained    3.484    0.238    3.275              1.000</code></pre>
+The order-restricted hypothesis &#39;Hb2&#39; is not weak, with 14.611 times more support than Hb1 and 13.734 times more support than Hb3.</code></pre>
 <p> </p>
 </div>
 </div>
@@ -2380,13 +2382,15 @@ H2 &lt;- &quot;D1 &gt; D2 &lt; D3&quot; # mu1 &gt; mu2 &lt; mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -123.450    2.832  252.564           0.319            0.494          0.477
-2             H2  -123.384    3.168  253.103           0.341            0.353          0.364
-3  unconstrained  -123.384    4.000  254.767           0.341            0.154          0.159</code></pre>
+           model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -123.450    2.832  252.564           0.319            0.494          0.477                      0.567
+2             H2  -123.384    3.168  253.103           0.341            0.353          0.364                      0.433
+3  unconstrained  -123.384    4.000  254.767           0.341            0.154          0.159                           
+---
+The order-restricted hypothesis &#39;H1&#39; is not weak, with 1.310 times more support than H2.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00   1.31              3.01
@@ -2437,9 +2441,9 @@ Hb &lt;- &quot;D1 &gt; D2, -.1 &lt; D2 - D3 &lt; .1&quot; # mu1 &gt; mu2, -.1 &l
 
 # Apply GORIC #
 set.seed(123) 
-results_b &lt;- goric(fit, hypotheses = list(Hb = Hb), comparison = &quot;complement&quot;)
+results_b &lt;- goric(fit, hypotheses = list(Hb = Hb))
 results_b</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2504,9 +2508,9 @@ He &lt;- &quot;D1 = D2 &gt; 0, D3 &gt; 0&quot; # mu1 = mu2 &gt; 0, mu3 &gt; 0
 
 # Apply GORIC #
 set.seed(123) 
-results_e &lt;- goric(fit, hypotheses = list(He = He), comparison = &quot;complement&quot;)
+results_e &lt;- goric(fit, hypotheses = list(He = He))
 results_e</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2585,9 +2589,9 @@ Hae &lt;- &quot;-0.2 &lt; D1 - D2 &lt; .2, D1 &gt; 0, D2 &gt; 0, D3 &gt; 0&quot;
 
 # Apply GORIC #
 set.seed(123) 
-results_ae &lt;- goric(fit, hypotheses = list(Hae = Hae), comparison = &quot;complement&quot;)
+results_ae &lt;- goric(fit, hypotheses = list(Hae = Hae))
 results_ae</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2691,9 +2695,9 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 
 # Apply GORIC #
 set.seed(123) 
-results_c &lt;- goric(fit, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)
+results_c &lt;- goric(fit, hypotheses = list(H1 = H1))
 results_c</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2734,9 +2738,9 @@ H1 &lt;- &quot;D1 - D2 &gt; .5, D2 &gt; D3&quot; # mu1 - mu2 &gt; .5, mu2 &gt; m
 
 # Apply GORIC #
 set.seed(123) 
-results_i &lt;- goric(fit, hypotheses = list(H1 = H1), comparison = &quot;complement&quot;)
+results_i &lt;- goric(fit, hypotheses = list(H1 = H1))
 results_i</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2905,9 +2909,9 @@ Hypotheses:
 Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
 <pre class="r"><code># Apply GORIC #
 set.seed(123) 
-results_i &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_i &lt;- goric(fit, hypotheses = list(H1))
 results_i</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2965,9 +2969,9 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 <h4><span class="header-section-number">6.2.2.2</span> GORIC</h4>
 <pre class="r"><code># Apply GORIC #
 set.seed(123) 
-results_i_N1000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_i_N1000 &lt;- goric(fit, hypotheses = list(H1))
 results_i_N1000</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model     loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
@@ -3003,9 +3007,9 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 <h4><span class="header-section-number">6.2.3.2</span> GORIC</h4>
 <pre class="r"><code># Apply GORIC #
 set.seed(123) 
-results_i_N10000 &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;complement&quot;)
+results_i_N10000 &lt;- goric(fit, hypotheses = list(H1))
 results_i_N10000</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model      loglik  penalty      goric  loglik.weights  penalty.weights  goric.weights

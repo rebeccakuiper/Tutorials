@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-19" />
+<meta name="date" content="2024-09-17" />
 
 <title>Tutorial for goric: How to evaluate theory-based hypotheses using the GORIC and GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for <code>goric</code>: How to
 evaluate theory-based hypotheses using the GORIC and GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">19 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -1522,43 +1522,35 @@ unconstrained / unrestricted / classical alternative hypothesis is
 included in the set. This safeguards from choosing a weak hypothesis,
 that is, a hypothesis not supported by the data, as the best one. If at
 least one of the theory-based / informative hypotheses is not weak, one
-can compare those to all other hypotheses in the set. Currently,
-<code>&quot;complement&quot;</code> only works for one hypothesis and not for a
-whole set. Then, the complement of the hypothesis of interest is
-evaluated and acts like a competing hypothesis. Since there is per
-definition no overlap between the hypothesis and its complement, this is
-more powerful then including the unconstrained hypothesis. Please note
-that in the example below, the default
-<code>comparison = &quot;unconstrained&quot;</code> is used. At the end of the
-file, there are three examples for the three types of comparisons.</p>
+can compare those to all other hypotheses in the set. This is the
+default in case of multiple theory-based hypotheses.<br />
+In case of one theory-based hypothesis, <code>&quot;complement&quot;</code> is the
+default. Then, the complement of the hypothesis of interest is evaluated
+and acts like a competing hypothesis. Since there is per definition no
+overlap between the hypothesis and its complement, this is more powerful
+then using the unconstrained hypothesis as a failsafe for one
+theory-based hypothesis.<br />
+At the end of the file, there are three examples for the three types of
+comparisons.</p>
 <p>The <code>goric</code> function of <code>restriktor</code> takes
-different forms of input (for model parameter estimates and
-constraints).</p>
-<ol class="example" style="list-style-type: decimal">
-<li>Fitted unconstrained (<code>lm</code> or <code>glm</code>) object* +
-character constraints.</li>
-<li>Fitted unconstrained (<code>lm</code> or <code>glm</code>) object +
-list with constraints matrix. <!-- NB dit kan niet meer -->
-<!--     + In case of within effects, the GORIC cannot be calculated. -->
-<!-- (@) Fitted `restriktor` object(s). -->
-<!-- (@) Numeric vector + character constraints. -->
-<!-- (@) Numeric vector + list with constraints matrix. --></li>
-</ol>
-<p>Please note that:</p>
-<ul>
-<li>The last two (i.e., using the numeric factor) can only be used when
-<code>type = &quot;gorica&quot;</code> (the first three can be used for both goric
-and gorica).</li>
-<li>Using the numeric factor can be especially helpful for objects other
-than (g)lm objects.</li>
-<li>The numeric vector contains parameter estimates, and these can be
-obtained from any type of model.</li>
-<li>The estimates are assumed to be normally distributed. So, for some
-models when sample size is low, this assumption may not hold. In that
-case, it is often not clear how well the GORICA performs. See Altinisik
-et al 2021, for some simulations regarding logistic regression and SEM
-models.</li>
-</ul>
+different forms of input.<br />
+For model parameter estimates:<br />
+* enter fitted unconstrained object (lm, glm, glmer, nlmer, lmer, or
+lavaan object);<br />
+* enter the (structural) parameter estimates and their covariance matrix
+yourself.<br />
+For constraints:<br />
+* enter character constraints;<br />
+* enter list with constraints matrix.</p>
+<p>Please note that:<br />
+* The GORIC can only be calculated for lm objects.<br />
+* The GORIC (type = ‘goric’) is the default for lm objects, while GORICA
+(type = ‘gorica’) is for the other input options.<br />
+* In the GORICA, the estimates are assumed to be normally distributed.
+So, for some models when sample size is low, this assumption may not
+hold. In that case, it is often not clear how well the GORICA performs.
+See Altinisik et al 2021, for some simulations regarding logistic
+regression and SEM models (for which the GORICA performs well).</p>
 </div>
 <div id="hypothesis-specification" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Hypothesis
@@ -1655,8 +1647,8 @@ GORIC(A)</h1>
 GORICA</h2>
 <p>The upcoming analyses can be performed by means of both the GORIC and
 the GORICA. By default, the <code>goric</code> function calculates the
-<strong>GORIC</strong> values (which then uses: type = “goric”). To
-calculate the <strong>GORICA</strong> values, the argument
+<strong>GORIC</strong> values for lm objects (which then uses: type =
+“goric”). To calculate the <strong>GORICA</strong> values, the argument
 <code>type</code> has to be set to <code>gorica</code> (i.e., type =
 “gorica”) within the <code>goric</code> function.</p>
 <p>Note on GORIC and GORICA weights:</p>
@@ -1678,33 +1670,39 @@ unconstrained (g)lm object + character constraints</h3>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
 <p>Now, the GORIC values and weights can be calculated.</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># GORIC
+set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -3.295    4.500  15.589           0.333            0.284          0.284
-2             H2  -3.295    3.847  14.284           0.333            0.545          0.545
-3  unconstrained  -3.295    5.000  16.589           0.333            0.172          0.172</code></pre>
+           model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -3.295    4.500  15.589           0.333            0.284          0.284                      0.342
+2             H2  -3.295    3.847  14.284           0.333            0.545          0.545                      0.658
+3  unconstrained  -3.295    5.000  16.589           0.333            0.172          0.172                           </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 <p>To obtain the GORICA values and weights instead:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># GORICA
+set.seed(123) # Set seed value
 out_gorica &lt;- goric(fit.lm, hypotheses = list(H1, H2), type = &quot;gorica&quot;)
 #summary(out_gorica)
 out_gorica</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   3.622    3.500  -0.244           0.333            0.284           0.284
-2             H2   3.622    2.847  -1.549           0.333            0.545           0.545
-3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   3.622    3.500  -0.244           0.333            0.284           0.284                       0.342
+2             H2   3.622    2.847  -1.549           0.333            0.545           0.545                       0.658
+3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 </div>
 <div id="fitted-unconstrained-glm-object-list-with-constraints-matrix" class="section level3" number="3.1.2">
 <h3><span class="header-section-number">3.1.2</span> Fitted
@@ -1718,33 +1716,39 @@ restrictions is equal to <span class="math inline">\(0\)</span>.</p>
 H2 &lt;- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)))  
 # &quot;x1 &gt; 0; x2 &gt; 0&quot; </code></pre>
 <p>The GORIC values and weights are obtained via:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># GORIC
+set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -3.295    4.500  15.589           0.333            0.284          0.284
-2             H2  -3.295    3.847  14.284           0.333            0.545          0.545
-3  unconstrained  -3.295    5.000  16.589           0.333            0.172          0.172</code></pre>
+           model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -3.295    4.500  15.589           0.333            0.284          0.284                      0.342
+2             H2  -3.295    3.847  14.284           0.333            0.545          0.545                      0.658
+3  unconstrained  -3.295    5.000  16.589           0.333            0.172          0.172                           </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 <p>and the GORICA values and weights via:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># GORICA
+set.seed(123) # Set seed value
 out_gorica &lt;- goric(fit.lm, hypotheses = list(H1, H2), type = &quot;gorica&quot;)
 #summary(out_gorica)
 out_gorica</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   3.622    3.500  -0.244           0.333            0.284           0.284
-2             H2   3.622    2.847  -1.549           0.333            0.545           0.545
-3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   3.622    3.500  -0.244           0.333            0.284           0.284                       0.342
+2             H2   3.622    2.847  -1.549           0.333            0.545           0.545                       0.658
+3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 </div>
 <div id="fitted-unconstrained-glm-object-list-with-constraints-matrix-rhs-and-neq-non-zero" class="section level3" number="3.1.3">
 <h3><span class="header-section-number">3.1.3</span> Fitted
@@ -1758,11 +1762,12 @@ first in the constraints’ list.</p>
 H2 &lt;- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)), rhs = c(1,0), neq = 1) 
 # &quot;x1 = 1; x2 &gt; 0&quot;</code></pre>
 <p>The GORIC values and weights are obtained via:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># GORIC
+set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
            model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -1770,18 +1775,14 @@ Results:
 2             H2  -6.197    3.500  19.394           0.052            0.629          0.196
 3  unconstrained  -3.295    5.000  16.589           0.941            0.140          0.795
 ---
-
-Ratio GORIC-weights:
-               vs. H1  vs. H2  vs. unconstrained
-H1              1.000   0.049              0.012
-H2             20.399   1.000              0.246
-unconstrained  82.896   4.064              1.000</code></pre>
+The unconstrained hypothesis is the best hypothesis in the set, meaning that all order-restricted hypotheses in the set are weak.</code></pre>
 <p>and the GORICA values and weights via:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># GORICA
+set.seed(123) # Set seed value
 out_gorica &lt;- goric(fit.lm, hypotheses = list(H1, H2), type = &quot;gorica&quot;)
 #summary(out_gorica)
 out_gorica</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1789,38 +1790,7 @@ Results:
 2             H2   1.262    2.500   2.477           0.086            0.629           0.295
 3  unconstrained   3.622    4.000   0.756           0.908            0.140           0.697
 ---
-
-Ratio GORICA-weights:
-               vs. H1  vs. H2  vs. unconstrained
-H1              1.000   0.026              0.011
-H2             38.906   1.000              0.423
-unconstrained  91.977   2.364              1.000</code></pre>
-<!-- NB dit kan niet meer -->
-<!-- ### Fitted restriktor object(s) -->
-<!-- After specifying the hypotheses: -->
-<!-- ```{r} -->
-<!-- H1 <- "x1 > 0" -->
-<!-- H2 <- "x1 > 0; x2 > 0" -->
-<!-- ``` -->
-<!-- the `restriktor` objects can be fitted as follows: -->
-<!-- ```{r} -->
-<!-- fit1.restr <- restriktor(fit.lm, constraints = H1) -->
-<!-- fit2.restr <- restriktor(fit.lm, constraints = H2) -->
-<!-- ``` -->
-<!-- Now, use the GORIC for model selection: -->
-<!-- ```{r} -->
-<!-- set.seed(123) # Set seed value -->
-<!-- out <- goric(fit1.restr, fit2.restr) -->
-<!-- #summary(out) -->
-<!-- out -->
-<!-- ``` -->
-<!-- or the GORICA: -->
-<!-- ```{r} -->
-<!-- set.seed(123) # Set seed value -->
-<!-- out_gorica <- goric(fit1.restr, fit2.restr, type = "gorica") -->
-<!-- #summary(out) -->
-<!-- out -->
-<!-- ``` -->
+The unconstrained hypothesis is the best hypothesis in the set, meaning that all order-restricted hypotheses in the set are weak.</code></pre>
 </div>
 </div>
 <div id="gorica" class="section level2" number="3.2">
@@ -1830,7 +1800,8 @@ unconstrained  91.977   2.364              1.000</code></pre>
 estimates or only those of interest (that is, those addressed in the
 hypotheses) and their covariance matrix. Because of this, it is
 applicable for a wider range of models (e.g., logistic regression and
-SEM models).</p>
+SEM models). When using this type of input, using GORICA is the
+default.</p>
 <div id="numeric-vector-character-constraints" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Numeric vector +
 character constraints</h3>
@@ -1845,19 +1816,23 @@ VCOV &lt;- vcov(fit.lm)</code></pre>
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;</code></pre>
 <p>Then, use the <code>goric</code> function to select the best
 model.</p>
-<pre class="r"><code>set.seed(123) # Set seed value
-out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
+<pre class="r"><code># GORICA
+set.seed(123) # Set seed value
+out &lt;- goric(est, VCOV = VCOV,
+             hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   3.622    3.500  -0.244           0.333            0.284           0.284
-2             H2   3.622    2.847  -1.549           0.333            0.545           0.545
-3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   3.622    3.500  -0.244           0.333            0.284           0.284                       0.342
+2             H2   3.622    2.847  -1.549           0.333            0.545           0.545                       0.658
+3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 <p>However, one could also use the structural parameters only, that is,
 the parameters used in all hypotheses in the set. In this case, the
 following code can be used:</p>
@@ -1867,19 +1842,23 @@ H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;
 est &lt;- coef(fit.lm)[2:3]
 VCOV &lt;- vcov(fit.lm)[2:3, 2:3]
 
+# GORICA
 set.seed(123) # Set seed value
-out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
+out &lt;- goric(est, VCOV = VCOV,
+             hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   1.614    1.500  -0.227           0.333            0.284           0.284
-2             H2   1.614    0.847  -1.532           0.333            0.545           0.545
-3  unconstrained   1.614    2.000   0.773           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   1.614    1.500  -0.227           0.333            0.284           0.284                       0.342
+2             H2   1.614    0.847  -1.532           0.333            0.545           0.545                       0.658
+3  unconstrained   1.614    2.000   0.773           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 <p>Now, the exact same weights are obtained. However, the penalties are
 two points lower than before, which is due to the fact that two
 unconstrained/free parameters are left out. The log-likelihoods also
@@ -1901,19 +1880,23 @@ VCOV &lt;- vcov(fit.lm)
 H1 &lt;- &quot;beta1 &gt; 0&quot;
 H2 &lt;- &quot;beta1 &gt; 0; beta2 &gt; 0&quot;
 
+# GORICA
 set.seed(123) # Set seed value
-out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
+out &lt;- goric(est, VCOV = VCOV,
+             hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   3.622    3.500  -0.244           0.333            0.284           0.284
-2             H2   3.622    2.847  -1.549           0.333            0.545           0.545
-3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   3.622    3.500  -0.244           0.333            0.284           0.284                       0.342
+2             H2   3.622    2.847  -1.549           0.333            0.545           0.545                       0.658
+3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 </div>
 <div id="manual-numeric-vector-character-constraints" class="section level3" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> ‘Manual’ numeric
@@ -1937,19 +1920,23 @@ VCOV &lt;- matrix(c(0.023513875, 0.002584345, 0.000504821, 0.011663312,
 H1 &lt;- &quot;beta1 &gt; 0&quot;
 H2 &lt;- &quot;beta1 &gt; 0; beta2 &gt; 0&quot;
 
+# GORICA
 set.seed(123) # Set seed value
-out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
+out &lt;- goric(est, VCOV = VCOV,
+             hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   3.622    3.500  -0.244           0.333            0.284           0.284
-2             H2   3.622    2.847  -1.549           0.333            0.545           0.545
-3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   3.622    3.500  -0.244           0.333            0.284           0.284                       0.342
+2             H2   3.622    2.847  -1.549           0.333            0.545           0.545                       0.658
+3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 <p>#Numeric vector + list with constraints matrix (rhs, neq)</p>
 <p>When one only wants to use a list with a constraints matrix, the
 following code can be used:</p>
@@ -1961,19 +1948,23 @@ H1 &lt;- list(constraints = c(0,1,0,0))
 H2 &lt;- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0))) 
 # &quot;x1 &gt; 0; x2 &gt; 0&quot;
 
+# GORICA
 set.seed(123) # Set seed value
-out &lt;- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = &quot;gorica&quot;)
+out &lt;- goric(est, VCOV = VCOV,
+             hypotheses = list(H1, H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1             H1   3.622    3.500  -0.244           0.333            0.284           0.284
-2             H2   3.622    2.847  -1.549           0.333            0.545           0.545
-3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172</code></pre>
+           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   3.622    3.500  -0.244           0.333            0.284           0.284                       0.342
+2             H2   3.622    2.847  -1.549           0.333            0.545           0.545                       0.658
+3  unconstrained   3.622    4.000   0.756           0.333            0.172           0.172                            </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 </div>
 </div>
 <div id="standardized-data" class="section level2" number="3.3">
@@ -2010,13 +2001,15 @@ need to be standardized.</p>
 character constraints.</p>
 <pre class="r"><code>fit.lm_s &lt;- lm(y ~ -1 + x1 + x2 + x3, data = data_s)
 
-H1 &lt;- &quot;x1 &lt; x2&quot;</code></pre>
+H1 &lt;- &quot;x1 &lt; x2&quot;
+# vs its complement</code></pre>
 <p>Then, calculate the GORIC values and weights:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
-out_s &lt;- goric(fit.lm, hypotheses = list(H1), comparison = &quot;complement&quot;)
+<pre class="r"><code># GORIC
+set.seed(123) # Set seed value
+out_s &lt;- goric(fit.lm, hypotheses = list(H1))
 #summary(out_s, brief = FALSE)
 out_s</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2066,13 +2059,14 @@ One can run:</p>
         m1 &lt; m4
         m2 &lt; m4
         m3 &lt; m4 &#39;
+# vs its complement
 
+# GORIC
 set.seed(123) # Set seed value
-out &lt;- goric(fit.lm, hypotheses = list(H1), 
-             comparison = &#39;complement&#39;) # for info, see below
+out &lt;- goric(fit.lm, hypotheses = list(H1))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2104,7 +2098,7 @@ set.seed(123) # Set seed value
 out &lt;- goric(fit.lm, hypotheses = list(H1, H2), comparison = &quot;none&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
    model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2118,26 +2112,30 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e
 “unconstrained”</h2>
 <p>If <code>comparison = &quot;unconstrained&quot;</code>, then the unconstrained
 / unrestricted / classical alternative hypothesis is included in the
-set. This safeguards from choosing a weak hypothesis as the best
-one.</p>
+set. This safeguards from choosing a weak hypothesis as the best one.
+Note that this (i.e., comparison = “unconstrained”) is default in case
+of multiple hypotheses.</p>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
 H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;
 
+# GORIC
 set.seed(123) # Set seed value
-out &lt;- goric(fit.lm, hypotheses = list(H1, H2), comparison = &quot;unconstrained&quot;)
-# or: 
-# out &lt;- goric(fit.lm, H1, H2, type = &quot;gorica&quot;, comparison = &quot;unconstrained&quot;)
+out &lt;- goric(fit.lm, hypotheses = list(H1, H2))
+# or GORICA: 
+# out &lt;- goric(fit.lm, H1, H2, type = &quot;gorica&quot;)
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
-           model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
-1             H1  -3.295    4.500  15.589           0.333            0.284          0.284
-2             H2  -3.295    3.847  14.284           0.333            0.545          0.545
-3  unconstrained  -3.295    5.000  16.589           0.333            0.172          0.172</code></pre>
+           model  loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
+1             H1  -3.295    4.500  15.589           0.333            0.284          0.284                      0.342
+2             H2  -3.295    3.847  14.284           0.333            0.545          0.545                      0.658
+3  unconstrained  -3.295    5.000  16.589           0.333            0.172          0.172                           </code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; and &#39;unconstrained&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
+<pre><code>---
+The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.921 times more support than H1.</code></pre>
 <p>Since at least one of, even both, H1 and H2 are not weak, one can
 compare the support for H1 versus H2 (where H2 is 1.921 times more
 supported).</p>
@@ -2146,20 +2144,26 @@ supported).</p>
 <h2><span class="header-section-number">4.3</span> Comparison =
 “complement”</h2>
 <p>Currently, <code>comparison = &quot;complement&quot;</code> only works for one
-hypothesis and not for a whole set of hypotheses. Then, the complement
-of the hypothesis of interest is evaluated and acts like a competing
-hypothesis. Since there is per definition no overlap between the
-hypothesis and its complement, this is more powerful then including the
-unconstrained.</p>
+hypothesis and not for a whole set of hypotheses. However, in the latter
+case, most probably the interest lies in comparing the support for the
+theory-based hypotheses, which is the same irrespective of choice of
+failsafe.<br />
+When the complement of the hypothesis of interest is evaluated, it acts
+like the competing hypothesis. Since there is per definition no overlap
+between the hypothesis and its complement, this is more powerful then
+using the unconstrained instead. Therefore, it (i.e., comparison =
+“complement”) is the default in case of one theory-based hypothesis.</p>
 <div id="h1-vs-its-complement" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> H1 vs its
 complement</h3>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
+# vs its complement
 
+# GORIC
 set.seed(123) # Set seed value
-out &lt;- goric(fit.lm, hypotheses = list(H1), comparison = &quot;complement&quot;)
+out &lt;- goric(fit.lm, hypotheses = list(H1))
 summary(out, brief = FALSE)</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2202,7 +2206,7 @@ $H1
 $complement
 [1] not H1</code></pre>
 <pre class="r"><code>summary(out)</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2235,7 +2239,7 @@ order-restricted hypotheses:
 H1:
 x1 &gt; 0 </code></pre>
 <pre class="r"><code>out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2248,12 +2252,14 @@ The order-restricted hypothesis &#39;H1&#39; has 122335.38 times more support th
 <h3><span class="header-section-number">4.3.2</span> H2 vs its
 complement</h3>
 <pre class="r"><code>H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;
+# vs its complement
 
+# GORIC
 set.seed(123) # Set seed value
-out &lt;- goric(fit.lm, hypotheses = list(H2), comparison = &quot;complement&quot;)
+out &lt;- goric(fit.lm, hypotheses = list(H2))
 #summary(out)
 out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2278,7 +2284,7 @@ output</h1>
 model / hypothesis the log-likelihood, penalty, GORIC(A), and
 GORIC(A)-weights).</p>
 <pre class="r"><code>out</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2289,7 +2295,7 @@ The order-restricted hypothesis &#39;H1&#39; has 2658.77 times more support than
 <p>The command <code>summary(out)</code> gives, besides the results,
 also the relative GORIC(A)-weights matrix.</p>
 <pre class="r"><code>summary(out)</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2325,7 +2331,7 @@ x1 &gt; 0; x2 &gt; 0 </code></pre>
 order / inequality restricted coefficients (order-restricted mle’s) and
 constraint matrices.</p>
 <pre class="r"><code>summary(out, brief = FALSE)</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
 
 Results:
         model   loglik  penalty   goric  loglik.weights  penalty.weights  goric.weights
@@ -2408,10 +2414,12 @@ automatically the other (bootstrap) method.</p>
 <pre class="r"><code>#if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) 
 #library(parallel)
 #nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)</code></pre>
-<pre class="r"><code>set.seed(123) # Set seed value
-goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = &quot;complement&quot;,
+<pre class="r"><code># GORICA
+set.seed(123) # Set seed value
+goric(est, VCOV = VCOV, 
+      hypotheses = list(H1),
       mix_weights = &quot;boot&quot;)</code></pre>
-<pre><code>restriktor (0.5-85): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights

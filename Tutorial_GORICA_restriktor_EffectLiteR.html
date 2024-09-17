@@ -11,7 +11,7 @@
 
 <meta name="author" content="Axel Mayer, Leonard Vanbrabant, and Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-08-27" />
+<meta name="date" content="2024-09-17" />
 
 <title>Apply GORICA to EffectLiteR estimates</title>
 
@@ -1483,7 +1483,7 @@ border-radius: 0px;
 estimates</h1>
 <h4 class="author">Axel Mayer, Leonard Vanbrabant, and Rebecca M.
 Kuiper</h4>
-<h4 class="date">27 August 2024</h4>
+<h4 class="date">17 September 2024</h4>
 
 </div>
 
@@ -1605,13 +1605,14 @@ used to fit the model.</p>
 <div id="extract-information-from-the-effectliter-object" class="section level3" number="2.2.2">
 <h3><span class="header-section-number">2.2.2</span> Extract information
 from the EffectLiteR object</h3>
-<p>Note that <code>goric</code> can use <code>lm</code> or
-<code>glm</code> objects (even most <code>lavaan</code> objects) as
-input. When using the GORICA, <code>goric</code> has another input
-option as well (that is why the GORICA can easily be applied to a broad
-range of models): One can enter the (structural) parameter estimates and
-their covariance matrix. Thus, these must be extracted from the
-<code>model_AdjMeans</code> object.</p>
+<p>Note that <code>goric</code> can use fit objects as input, like
+<code>lm</code>, <code>glm</code>, and <code>lavaan</code> objects. In
+case of lm, the GORIC is applied by default; for the other input
+options, the GORICA is applied. Alternatively, <code>goric</code> has
+another input option for the GORICA as well (that is why the GORICA can
+easily be applied to a broad range of models): One can enter the
+(structural) parameter estimates and their covariance matrix. Thus,
+these must be extracted from the <code>model_AdjMeans</code> object.</p>
 <p>For this example, we are interested in the adjusted means for the dv
 and the examined covariates and the covariance between them:</p>
 <pre class="r"><code>parnames &lt;- c(&quot;adjmean0&quot;,&quot;adjmean1&quot;,&quot;adjmean2&quot;) # to have a better overview
@@ -1672,24 +1673,27 @@ Safeguard hypothesis</h3>
 not supported by the data, one should include a failsafe/safeguard
 hypothesis. This can be:</p>
 <ul>
-<li><p>the unconstrained hypothesis (which includes all possible
-hypotheses, thus including the one(s) of interest);</p></li>
-<li><p>the complement (which includes all other possible hypotheses,
-thus excluding the one(s) of interest).</p></li>
+<li><p>comparison = “unconstrained”: This includes all possible
+hypotheses, thus including the one(s) of interest, which is the default
+in case of multiple theory-based hypotheses;</p></li>
+<li><p>comparison = “complement”: This includes all other possible
+hypotheses, thus excluding the one(s) of interest, which is the default
+in case of one multiple theory-based hypothesis;</p></li>
+<li><p>comparison = “none”: In this case, no failsafe is used.</p></li>
 </ul>
-<p>The unconstrained is used to prevent from choosing a weak hypothesis.
-When at least one of the theory-based hypotheses has more support than
-the unconstrained then it is not weak. In that case, the non-weak
-hypotheses can be compared to all the other theory-based hypotheses in
-the set.<br />
-The complement is also a failsafe hypothesis, but acts as a competing
-hypothesis, that is, theory-based hypotheses can/will be compared to the
-complement (as well).<br />
-The first option is the default; since, currently, the complement can
-only be used for one hypothesis of interest. However, the relative
-support of two informative hypotheses is independent from the choice of
-failsafe hypothesis. So, if the goal is to compare informative
-hypotheses, one could just as well use the unconstrained.</p>
+<p>The third option should only be used when you know that all the
+hypotheses in the set cover all possibilities. Namely, only in that
+case, (at least) one of the hypotheses contains the truth.<br />
+The first should be used when the interest lies in comparing the support
+for multiple theory-based hypotheses (and is therefore the default when
+multiple hypotheses are entered). One should then first check whether at
+least one theory-based hypothesis has more support than the
+unconstrained. If so, the non-weak hypotheses can be compared to all the
+other (weak and non-weak) theory-based hypotheses in the set. If not,
+then all the theory-based hypotheses are weak.<br />
+The second, that is, the complement, should be used in case there is one
+theory-based hypothesis (which is therefore the default when one
+theory-based hypothesis is entered).</p>
 </div>
 </div>
 <div id="apply-gorica" class="section level2" number="2.4">
@@ -1699,7 +1703,7 @@ hypotheses, one could just as well use the unconstrained.</p>
 <p>To apply the GORICA to the EffectLiteR adjusted means estimates,
 use:</p>
 <pre class="r"><code>set.seed(123) # More information below
-gorica_AdjMeans &lt;- goric(est_AdjMeans, VCOV=VCOV_AdjMeans, hypotheses=list(H1=H1), comparison = &#39;complement&#39;)
+gorica_AdjMeans &lt;- goric(est_AdjMeans, VCOV=VCOV_AdjMeans, hypotheses=list(H1=H1))
 #summary(gorica_AdjMeans)
 gorica_AdjMeans</code></pre>
 <pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
@@ -1719,15 +1723,12 @@ boundary; where one or more inequalities are set to equalities. For more
 information on this and also on how to proceed, see the
 ‘Guidelines_output_GORIC.html’ on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
-<div id="extra-specify-type-of-method" class="section level3" number="2.4.2">
-<h3><span class="header-section-number">2.4.2</span> Extra: Specify type
-of method</h3>
+<div id="extra-type-of-method" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Extra: Type of
+method</h3>
 <p>The <code>goric</code> function calculates the <em>GORIC</em> value
-by default (type = “goric”). To calculate the <em>GORICA</em> values,
-the argument <code>type</code> has to be set to <code>gorica</code>
-(type = “gorica”). However, when the input is the estimates with their
-covariance matrix (like here), then <code>restriktor</code> will
-recognize that the GORICA should be used.</p>
+by default (type = “goric”) for lm objects. For the other input options,
+the <em>GORICA</em> (type = “gorica”) is the default.</p>
 </div>
 <div id="extra-seed-values" class="section level3" number="2.4.3">
 <h3><span class="header-section-number">2.4.3</span> Extra: Seed
@@ -1823,7 +1824,7 @@ interest).</p>
 <p>To apply the GORICA to the EffectLiteR average effect estimates,
 use:</p>
 <pre class="r"><code>set.seed(123) 
-gorica_AvEffects &lt;- goric(est_AvEffects, VCOV=VCOV_AvEffects, hypotheses=list(H1=H1), comparison = &#39;complement&#39;)
+gorica_AvEffects &lt;- goric(est_AvEffects, VCOV=VCOV_AvEffects, hypotheses=list(H1=H1))
 #summary(gorica_AvEffects)
 gorica_AvEffects</code></pre>
 <pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
