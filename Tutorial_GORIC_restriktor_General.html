@@ -2006,7 +2006,7 @@ character constraints.</p>
 <pre class="r"><code>fit.lm_s &lt;- lm(y ~ -1 + x1 + x2 + x3, data = data_s)
 
 H1 &lt;- &quot;x1 &lt; x2&quot;
-# vs its complement</code></pre>
+# vs its complement (default in case of one hypothesis)</code></pre>
 <p>Then, calculate the GORIC values and weights:</p>
 <pre class="r"><code># GORIC
 set.seed(123) # Set seed value
@@ -2063,7 +2063,7 @@ One can run:</p>
         m1 &lt; m4
         m2 &lt; m4
         m3 &lt; m4 &#39;
-# vs its complement
+# vs its complement (default in case of one hypothesis)
 
 # GORIC
 set.seed(123) # Set seed value
@@ -2161,7 +2161,7 @@ using the unconstrained instead. Therefore, it (i.e., comparison =
 <h3><span class="header-section-number">4.3.1</span> H1 vs its
 complement</h3>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
-# vs its complement
+# vs its complement (default in case of one hypothesis)
 
 # GORIC
 set.seed(123) # Set seed value
@@ -2256,7 +2256,7 @@ The order-restricted hypothesis &#39;H1&#39; has 122335.38 times more support th
 <h3><span class="header-section-number">4.3.2</span> H2 vs its
 complement</h3>
 <pre class="r"><code>H2 &lt;- &quot;x1 &gt; 0; x2 &gt; 0&quot;
-# vs its complement
+# vs its complement (default in case of one hypothesis)
 
 # GORIC
 set.seed(123) # Set seed value

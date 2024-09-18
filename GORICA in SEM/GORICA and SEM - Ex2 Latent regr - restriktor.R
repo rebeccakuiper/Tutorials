@@ -37,11 +37,14 @@ lavaanPlot(model = fit2_r, node_options = list(shape = "box", fontname = "Helvet
 # Hypotheses of interest
 # Formulate the hypotheses of interest
 # Notably, using our own labeling
-H1.2 <- "AB > APeabody; APeabody == AAge; AAge == 0"
-H2.2 <- "AB > APeabody; APeabody > AAge; AAge == 0" 
+H1.2 <- "AB > APeabody; APeabody = AAge; AAge = 0"
+H2.2 <- "AB > APeabody; APeabody > AAge; AAge = 0" 
 H3.2 <- "AB > APeabody; APeabody > AAge; AAge > 0"
-# Note: in lavaan output, the labels are sometimes shortened,
-# but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
+# Notes: 
+# - The restrictions are 'connected' by using ';' or '&'.
+#   One could also use, for example: "AB > APeabody > AAge > 0"
+# - In lavaan output, the labels are sometimes shortened,
+#   but our labeling is used and should thus be used above.
 
 # Call goric 
 # Default in case of lavaan objects: type = "gorica"

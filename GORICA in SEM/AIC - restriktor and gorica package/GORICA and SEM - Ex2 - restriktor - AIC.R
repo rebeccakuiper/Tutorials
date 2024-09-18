@@ -39,13 +39,12 @@ lavaanPlot(model = fit2_r, node_options = list(shape = "box", fontname = "Helvet
 # Hypotheses of interest
 # Formulate the hypotheses of interest
 # Notably, using our own labeling
-H1.2 <- "AB > APeabody; APeabody == AAge; AAge == 0"
-H2.2 <- "AB > APeabody; APeabody > AAge; AAge == 0" 
+H1.2 <- "AB > APeabody; APeabody = AAge; AAge = 0"
+H2.2 <- "AB > APeabody; APeabody > AAge; AAge = 0" 
 H3.2 <- "AB > APeabody; APeabody > AAge; AAge > 0"
-# Notes: 
-# An equality is represented by '=='; not '='.
-# The restrictions are 'connected' by using ';'.
-# Each restriction shoudl be specified seperetaly in a hypothesis; not like: "AB > APeabody == AAge == 0".
+# Note: 
+# The restrictions are 'connected' by using ';' or '&'.
+# One could also use, for example: "AB > APeabody = AAge = 0"
 
 
 # Estimates and CIs
@@ -85,9 +84,9 @@ fit2_AIC_H3 <- sem(model2_AIC_H3, data = sesamesim, std.lv = TRUE)
 #Warning messages
 #
 # Alternatively, an approximated AIC can be used:
-H1.2_AIC <- "AB == APeabody; APeabody == AAge; AAge == 0"
-H2.2_AIC <- "APeabody == AAge; AAge == 0" 
-H3.2_AIC <- "AAge == 0"
+H1.2_AIC <- "AB = APeabody; APeabody = AAge; AAge = 0"
+H2.2_AIC <- "APeabody = AAge; AAge = 0" 
+H3.2_AIC <- "AAge = 0"
 set.seed(100)
 results2_r_AIC <- goric(fit2_r, 
                         hypotheses = list(H1.2_AIC = H1.2_AIC, H2.2_AIC = H2.2_AIC, H3.2_AIC = H3.2_AIC), 

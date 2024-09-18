@@ -40,7 +40,7 @@ VCOV_est <- vcov(metaan)
 #
 # Apply AIC #
 # Hypothesis of interest
-H0 <- "theta == 0"
+H0 <- "theta = 0"
 # vs its complement (default in case of one hypothesis); which is the unconstrained here.
 #
 # Apply GORICA (default here) to obtain AIC weights
@@ -78,7 +78,7 @@ results_H1
 
 
 # Alternative: H0 and H1
-H0 <- "theta == 0"
+H0 <- "theta = 0"
 H1 <- "theta > 0"
 # and unconstrained (default in case of multiple hypotheses)
 # GORICA (default here)
