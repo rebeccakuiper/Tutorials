@@ -28,7 +28,7 @@ H1 <- "adjmean1 < adjmean0 < adjmean2"
 
 # GORICA
 #
-# H0 and H1 and unconstrained as failsafe #
+# H0 and H1 and unconstrained as failsafe (default if multiple hypotheses) #
 out_01u <- goric(est, VCOV=VCOV, 
                  hypotheses=list(H0=H0, H1=H1) 
                  #type="gorica" # recognized because of input (est & VCOV)
@@ -36,28 +36,27 @@ out_01u <- goric(est, VCOV=VCOV,
 out_01u
 #summary(out_01u)
 # H0 and H1 both not weak (nl more support than the unconstrained), thus,
-# we can compare H0 vs H1: H0 has 0.553/0.340 more support than H1:
+# we can compare H0 vs H1: H0 has (>1 times) more support than H1:
 out_01u$ratio.gw # see element (1,2) for H0 vs H1
-#H0 has 1.6280686 more support than H1. 
 # Note that H1 also contains H0.
 #
 #
 # H0 versus its complement = the unconstrained #
-# Ho is the best and, for future research, 
-# you may like the support of H1 versus its complement
+# H0 is the best and, for future research, 
+# you may like the support of H1 versus its complement (default in case of one hypothesis)
 out_0c <- goric(est, VCOV=VCOV, 
-                hypotheses=list(H0=H0), comparison = 'complement')
+                hypotheses=list(H0=H0))
 out_0c
 #summary(out_0c)
-# H0 has 5.16 times more support than its complement, that is, the unconstrained.
+# H0 has (>1 times) more support than its complement, that is, the unconstrained.
 #
 #
 # H1 versus its complement #
 # If H0 is not of interest or 
 # when H1 would have been the best, and, for future research, 
-# you like the support of H1 versus its complement
+# you like the support of H1 versus its complement (default in case of one hypothesis)
 out_1c <- goric(est, VCOV=VCOV, 
-                hypotheses=list(H1=H1), comparison = 'complement')
+                hypotheses=list(H1=H1))
 out_1c
 #summary(out_1c)
 # H1 has the highest weight, but the loglik values resemble.
@@ -97,12 +96,12 @@ H2 <- "Eg1 > Eg2"
 #out_012u
 #summary(out_012u)
 
-# If H1 vs its complement
+# If H1 vs its complement (default in case of one hypothesis)
 out_1c <- goric(est, VCOV=VCOV, 
                 hypotheses=list(H1=H1), comparison = 'complement')
 out_1c
 #summary(out_1c)
-# H1 has 5.8 times more support than its complement.
+# H1 has (>1 times) more support than its complement.
 # Btw the loglik values do not resemble, so we can interpret the ratio.
 
 
@@ -119,9 +118,9 @@ VCOV <- as.matrix(m1@results@vcov.def[parnames,parnames]) # make this a matrix
 
 H1 <- "Eg1 < 0"
 
-# H1 vs its complement
+# H1 vs its complement (default in case of one hypothesis)
 out_1c <- goric(est, VCOV=VCOV, 
-                hypotheses=list(H1=H1), comparison = 'complement')
+                hypotheses=list(H1=H1))
 out_1c
 #summary(out_1c)
 # The complement of H1 has full support.

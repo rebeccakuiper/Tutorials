@@ -34,6 +34,7 @@ dat <- read.table("RICLPM.dat",
 H1ws <- "abs(beta2) < abs(gamma2); abs(beta3) < abs(gamma3); 
          abs(beta4) < abs(gamma4); abs(beta5) < abs(gamma5)" 
 # versus it complement, that is, versus all other possibilities 
+# default in case of one hypothesis
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-specific parameters:
 RICLPM <- '
@@ -124,9 +125,10 @@ vcov <- vcov_StdEst[index_vcov, index_vcov] # Covariance matrix of standardize p
 # Compute GORICA values and weights
 set.seed(123)
 GORICA.Result.ws <- goric(est, VCOV = vcov, 
-                          hypotheses = list(H1ws = H1ws), 
-                          comparison = "complement", 
-                          type = "gorica")
+                          hypotheses = list(H1ws = H1ws)) 
+# Defaults: comparison = "complement" 
+#           type = "gorica"
+#
 GORICA.Result.ws
 #summary(GORICA.Result.ws)
 

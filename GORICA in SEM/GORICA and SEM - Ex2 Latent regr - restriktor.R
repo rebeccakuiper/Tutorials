@@ -14,9 +14,7 @@ if (!require("gorica")) install.packages("gorica") # install this package first 
 library(gorica)
 
 
-# Specify the latent regression model
-# Note: The goric function cannot use the default labeling, so:
-# Give your own labels to estimates by including them in the lavaan model:
+# Specify the latent regression model, using own labels:
 model2_r <- '
     A =~ Ab + Al + Af + An + Ar + Ac 
     B =~ Bb + Bl + Bf + Bn + Br + Bc 
@@ -45,7 +43,8 @@ H3.2 <- "AB > APeabody; APeabody > AAge; AAge > 0"
 # Note: in lavaan output, the labels are sometimes shortened,
 # but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
 
-# Call goric ('type = "gorica"')
+# Call goric 
+# Default in case of lavaan objects: type = "gorica"
 # Note: We need standardized estimates for a meaningful comparison ('standardize = TRUE').
 #
 # Because there is more than 1 hypothesis,
@@ -53,16 +52,16 @@ H3.2 <- "AB > APeabody; APeabody > AAge; AAge > 0"
 set.seed(100)
 results2_r <- goric(fit2_r, 
                     hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), 
-                    type = "gorica", standardized = TRUE) 
+                    standardized = TRUE) 
 #summary(results2_r) 
 # All three theory-based hypotheses are not weak (nl, better than the unconstrained),
 # and H1.2 is the best from the set (nl, highest GORICA weight).
 
 # Note:
 # Hypotheses are nested, so hypotheses share support.
-# Therefore, we examine the best of these against its compliment:
+# Therefore, we examine the best of these against its compliment (default in case of one hypothesis):
 set.seed(100)
-results2_c_r <- goric(fit2_r, hypotheses = list(H1.2 = H1.2), comparison = "complement", type = "gorica", standardized = TRUE) 
+results2_c_r <- goric(fit2_r, hypotheses = list(H1.2 = H1.2), standardized = TRUE) 
 #summary(results2_c_r) 
 results2_c_r
 # The order-restricted hypothesis ‘H1.2’ has (> 1 times) more support than its complement.
@@ -76,9 +75,9 @@ results2_c_r
 # Influence of seed in PT (of H3), but negligible:
 #
 set.seed(100100)
-results2_r_s1 <- goric(fit2_r, hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), type = "gorica", standardized = TRUE)$result[,3]
+results2_r_s1 <- goric(fit2_r, hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), standardized = TRUE)$result[,3]
 set.seed(123456)
-results2_r_s2 <- goric(fit2_r, hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), type = "gorica", standardized = TRUE)$result[,3]
+results2_r_s2 <- goric(fit2_r, hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), standardized = TRUE)$result[,3]
 #
 results2_r$result[,3]
 results2_r_s1$result[,3]

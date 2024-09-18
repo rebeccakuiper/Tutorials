@@ -186,13 +186,14 @@ out_CTmeta <- CTmeta(N, DeltaT = TI, DeltaTStar = 1, Phi, SigmaVAR)
 #
 # Specify hypothesis
 H1 <- "overallPhi12 < overallPhi21"
-#Complement: "overallPhi12 > overallPhi21"
+# vs its complement (default in case of one hypothesis); here: "overallPhi12 > overallPhi21"
 # Btw if signs can be negative one perhaps better use:
 # H1 <- "abs(overallPhi12) < abs(overallPhi21)"
 #
 # Evaluate dominance of cross-lagged effects via AIC-type criterion called the GORICA (Altinisik, Nederhof, Hoijtink, Oldehinkel, Kuiper, unpublished).
+# GORICA (default)
 set.seed(123) # for reproducability of results and possible sensitivity check of penalty
-goricaResult <- goric(out_CTmeta, hypotheses = list(H1), comparison = "complement")
+goricaResult <- goric(out_CTmeta, hypotheses = list(H1))
 #summary(goricaResult)
 goricaResult
 
@@ -235,7 +236,7 @@ for(g in 1:G){
   names(est) <- c("Phi11", "Phi12", "Phi21", "Phi22")
   VCOV <- CovMxPhi_Trans[g,,]
   set.seed(123)
-  results_g <- goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = "complement") 
+  results_g <- goric(est, VCOV = VCOV, hypotheses = list(H1)) 
   #summary(results_g)
   GORICAweights_g[, g] <- results_g$result[,5]
   GORICA_g[, g] <- results_g$result[,4]
@@ -255,7 +256,7 @@ for(g in 1:G){
     names(est) <- c("Phi11", "Phi12", "Phi21", "Phi22")
     VCOV <- CovMx_G[((s-1)*(q*q)+1):(s*q*q), ((s-1)*(q*q)+1):(s*q*q), g]
     set.seed(123)
-    results_g_s <- goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = "complement") 
+    results_g_s <- goric(est, VCOV = VCOV, hypotheses = list(H1)) 
     #summary(results_g_s)
     GORICAweights_g_s[, s, g] <- results_g_s$result[,5]
     GORICA_g_s[, s, g] <- results_g_s$result[,4]

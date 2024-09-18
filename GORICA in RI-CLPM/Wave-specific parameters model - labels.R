@@ -33,7 +33,8 @@ dat <- read.table("RICLPM.dat",
 # Hypothesis w.r.t. wave-specific cross-lagged effects (as specified in the model)
 H1ws.l <- "abs(b2) < abs(c2); abs(b3) < abs(c3); 
          abs(b4) < abs(c4); abs(b5) < abs(c5)" 
-# versus it complement, that is, versus all other possibilities 
+# versus it complement, that is, versus all other possibilities
+# default in case of one hypothesis
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-specific parameters:
 RICLPM.l <- '
@@ -105,9 +106,10 @@ summary(RICLPM.fit.l, standardized = T)
 set.seed(123)
 GORICA.Result.ws.l <- goric(RICLPM.fit.l, 
                           standardized = T,
-                          hypotheses = list(H1ws.l = H1ws.l), 
-                          comparison = "complement", 
-                          type = "gorica")
+                          hypotheses = list(H1ws.l = H1ws.l)) 
+# Defaults: comparison = "complement" 
+#           type = "gorica"
+#
 GORICA.Result.ws.l
 #summary(GORICA.Result.ws.l)
 

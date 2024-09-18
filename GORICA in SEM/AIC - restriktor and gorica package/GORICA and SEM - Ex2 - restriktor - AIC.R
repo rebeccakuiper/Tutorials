@@ -15,7 +15,7 @@ library(gorica)
 
 
 # Specify the latent regression model
-# Note: The goric function cannot use the default labeling, so:
+# Note: The goric function can sometimes not use the default labeling, so:
 # Give your own labels to estimates by including them in the lavaan model:
 model2_r <- '
     A =~ Ab + Al + Af + An + Ar + Ac 
@@ -89,76 +89,29 @@ H1.2_AIC <- "AB == APeabody; APeabody == AAge; AAge == 0"
 H2.2_AIC <- "APeabody == AAge; AAge == 0" 
 H3.2_AIC <- "AAge == 0"
 set.seed(100)
-results2_r_AIC <- goric(fit2_r, H1.2_AIC, H2.2_AIC, H3.2_AIC, type = "gorica", standardized = TRUE) 
-summary(results2_r_AIC) # Note: This also includes the comparison of hypotheses
-#
-#           model    loglik  penalty   gorica  gorica.weights
-#1       H1.2_AIC  -339.776    0.000  679.551           0.000
-#2       H2.2_AIC     6.836    1.000  -11.672           0.652
-#3       H3.2_AIC     6.894    2.000   -9.789           0.254
-#4  unconstrained     6.894    3.000   -7.789           0.094
+results2_r_AIC <- goric(fit2_r, 
+                        hypotheses = list(H1.2_AIC = H1.2_AIC, H2.2_AIC = H2.2_AIC, H3.2_AIC = H3.2_AIC), 
+                        standardized = TRUE) 
+summary(results2_r_AIC)
 
 
-# Call goric ('type = "gorica"')
+# Call goric
+# Default in case of lavaan objects: type = "gorica"
 # Note: We need standardized estimates for a meaningful comparison ('standardize = TRUE').
 #
 # Because there is more than 1 hypothesis, we cannot use: comparison = "complement".
-# We will use the unconstrained hypothesis as safeguard (which is the default).
+# We will use the unconstrained hypothesis as safeguard (which is the default in case of multiple hypotheses).
 set.seed(100)
-results2_r <- goric(fit2_r, H1.2, H2.2, H3.2, type = "gorica", standardized = TRUE) 
-summary(results2_r) # Note: This also includes the comparison of hypotheses
-#
-#           model  loglik  penalty   gorica  gorica.weights
-#1           H1.2   6.836    0.500  -12.672           0.379
-#2           H2.2   6.836    0.687  -12.297           0.314
-#3           H3.2   6.836    0.822  -12.028           0.274
-#4  unconstrained   6.894    3.000   -7.789           0.033
-
+results2_r <- goric(fit2_r, 
+                    hypotheses = list(H1.2 = H1.2, H2.2 = H2.2, H3.2 = H3.2), 
+                    standardized = TRUE) 
+results2_r
+summary(results2_r) 
 
 # Note:
 # Hypotheses are nested, so hypotheses share support.
-# Therefore, we examine the best of these against its compliment:
+# Therefore, we examine the best of these against its compliment (default in case of one hypothesis):
 set.seed(100)
-results2_c_r <- goric(fit2_r, H1.2, comparison = "complement", type = "gorica", standardized = TRUE) 
-summary(results2_c_r) # Note: This also includes the comparison of hypotheses
-#
-#        model  loglik  penalty   gorica  gorica.weights
-#1        H1.2   6.836    0.500  -12.672           0.874
-#2  complement   6.894    2.500   -8.789           0.126
-
-
-#####################################################################################
-
-# Sensitivity check
-
-# Influence of seed in PT (of H3), but negligible:
-#
-#set.seed(100)
-#goric(fit2_r, H1.2, H2.2, H3.2, type = "gorica", standardized = TRUE)$result[,3]
-results2_r$result[,3]
-set.seed(100100)
-goric(fit2_r, H1.2, H2.2, H3.2, type = "gorica", standardized = TRUE)$result[,3]
-set.seed(123456)
-goric(fit2_r, H1.2, H2.2, H3.2, type = "gorica", standardized = TRUE)$result[,3]
-#
-# 0.5000000 0.6873956 0.8218584 3.0000000
-# 0.5000000 0.6873956 0.8218222 3.0000000
-# 0.5000000 0.6873956 0.8218407 3.0000000
-
-
-#####################################################################################
-
-# The support for 'H1.2' is to be expected, when inspecting:
-#lavaan::standardizedsolution(fit2_r)[13:15,]
-##   lhs op     rhs est.std    se      z pvalue ci.lower ci.upper
-##13   A  ~       B   0.789 0.030 26.312  0.000    0.730    0.848
-##14   A  ~     age   0.000 0.047 -0.010  0.992   -0.093    0.092
-##15   A  ~ peabody  -0.016 0.047 -0.330  0.741   -0.108    0.077
-#or 
-summary(fit2_r, standardize = T)
-#Regressions:
-#               Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all(!)
-#A ~                                                                   
-#  B               1.284    0.129    9.941    0.000(!)    0.789    0.789(!)
-#age              -0.000    0.012   -0.010    0.992(!)   -0.000   -0.000(!)
-#peabody          -0.002    0.005   -0.330    0.741(!)   -0.001   -0.016(!)
+results2_c_r <- goric(fit2_r, hypotheses = list(H1.2 = H1.2), standardized = TRUE) 
+results2_c_r
+#summary(results2_c_r) 

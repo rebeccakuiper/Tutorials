@@ -41,11 +41,11 @@ VCOV_est <- vcov(metaan)
 # Apply AIC #
 # Hypothesis of interest
 H0 <- "theta == 0"
+# vs its complement (default in case of one hypothesis); which is the unconstrained here.
 #
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has < 1 times more, so less, support than its complement.
@@ -65,12 +65,12 @@ VCOV_est <- vcov(metaan)
 # Apply GORICA #
 # Hypothesis of interest (fictional)
 H1 <- "theta > 0"
+# vs its complement (default in case of one hypothesis)
 #
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H1 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H1), comparison = "complement", 
-                    type = "gorica")
+                    hypotheses = list(H1))
 results_H1
 #
 # The order-restricted hypothesis ‘H1’ has (> 1 times) more support than its complement.
@@ -80,10 +80,11 @@ results_H1
 # Alternative: H0 and H1
 H0 <- "theta == 0"
 H1 <- "theta > 0"
+# and unconstrained (default in case of multiple hypotheses)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it 
 goric(est, VCOV = VCOV_est, 
-      hypotheses = list(H0 = H0, H1 = H1), 
-      type = "gorica")
+      hypotheses = list(H0 = H0, H1 = H1))
 #
 # Note: H1 and H0 are subsets of Hunc (and H0 is also part of H1).
 #

@@ -1922,7 +1922,9 @@ of overall Phi using GORICA</h3>
 the <code>restriktor</code> package:</p>
 <pre class="r"><code># Specify hypothesis
 H1 &lt;- &quot;overallPhi12 &lt; overallPhi21&quot;
-#H2 &lt;- &quot;overallPhi12 &gt; overallPhi21&quot;
+#H2 &lt;- &quot;overallPhi12 &gt; overallPhi21&quot; or:
+# vs its complement (default in case of one hypothesis)
+#
 # Btw if signs can be negative one perhaps better use:
 # H1 &lt;- &quot;abs(overallPhi12) &lt; abs(overallPhi21)&quot;
 
@@ -1942,10 +1944,12 @@ set.seed(123) # for reproducability of results and possible sensitivity check of
 #out_CTmeta &lt;- CTmeta(N, DeltaT, DeltaTStar, Phi, SigmaVAR)
 #est &lt;- coef(out_CTmeta)  # or: est &lt;- out_CTmeta$Overall_vecStandPhi_DeltaTStar
 #VCOV &lt;- vcov(out_CTmeta) # or: VCOV &lt;- out_CTmeta$CovMx_OverallPhi_DeltaTStar
-#goric(est, VCOV = VCOV, hypotheses = list(H1), comparison = &quot;complement&quot;)
+## GORICA (default)
+#goric(est, VCOV = VCOV, hypotheses = list(H1))
 #
 # Option 2
-goricaResult &lt;- goric(out_CTmeta, hypotheses = list(H1), comparison = &quot;complement&quot;)
+# GORICA (default)
+goricaResult &lt;- goric(out_CTmeta, hypotheses = list(H1))
 #summary(goricaResult)
 goricaResult
 &gt; restriktor (0.5-90): generalized order-restricted information criterion approximation:
@@ -1959,11 +1963,10 @@ goricaResult
 &gt; 2           0.064
 &gt; ---
 &gt; The order-restricted hypothesis &#39;H1&#39; has 14.58 times more support than its complement.</code></pre>
-<p>From this, one concludes that H1: overallPhi12 &lt; overallPhi21 is
-more supported / more likely than its complement (here, overallPhi12
-&gt; overallPhi21). Hence, there is support in favor of our theory
-w.r.t. predictive strength / the ordering of the size of the
-cross-lagged relationships.</p>
+<p>From this, one concludes that H1: overallPhi12 <span class="math inline">\(&lt;\)</span> overallPhi21 is more supported /
+more likely than its complement (here, overallPhi12 <span class="math inline">\(&gt;\)</span> overallPhi21). Hence, there is
+support in favor of our theory w.r.t. predictive strength / the ordering
+of the size of the cross-lagged relationships.</p>
 </div>
 <div id="a-lagged-correlation-matrix-as-input" class="section level3" number="2.1.3">
 <h3><span class="header-section-number">2.1.3</span> A (lagged)

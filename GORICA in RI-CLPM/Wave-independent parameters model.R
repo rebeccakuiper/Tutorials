@@ -36,6 +36,7 @@ dat <- scale(dat)
 H1 <- "abs(b) < abs(c)" 
 # versus it complement, that is, versus all other possibilities 
 # (here: versus abs(b) > abs(c))
+# default in case of one hypothesis
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-independent parameters:
 RICLPM5 <- '
@@ -110,9 +111,10 @@ summary(RICLPM5.fit, standardized = T)
 # Compute GORICA values and weights
 set.seed(123)
 GORICA.Result <- goric(RICLPM5.fit, 
-                       hypotheses = list(H1), 
-                       comparison = "complement", 
-                       type = "gorica")
+                       hypotheses = list(H1)) 
+# Defaults: comparison = "complement" 
+#           type = "gorica"
+#
 GORICA.Result
 #summary(GORICA.Result)
 

@@ -110,14 +110,13 @@ VCOV_est <- vcov(metaan)
 # Example 1.1
 
 # Hypothesis
-H0 <- "theta == 0" # Hypothesis which will be evaluated
+H0 <- "theta = 0" # Hypothesis which will be evaluated vs its complement (default in case of one hypothesis)
 # Cannot test for direction (like hypothesis of interest H1.1: theta > 0).
 
 # Results
-# Apply GORICA to obtain AIC weights:
+# Apply GORICA (default here) to obtain AIC weights:
 results_H0_1.1 <- goric(est, VCOV = VCOV_est, 
-                        hypotheses = list(H0 = H0), comparison = "complement", 
-                        type = "gorica") 
+                        hypotheses = list(H0 = H0)) 
 # Note that the complement is the unconstrained Hunc now.
 results_H0_1.1
 #
@@ -135,14 +134,13 @@ results_H0_1.1
 # Example 1.2
 
 # Hypothesis
-H0 <- "theta == 0.1" # Hypothesis which will be evaluated
+H0 <- "theta = 0.1" # Hypothesis which will be evaluated
 # Cannot test for a range (like hypothesis of interest H1.2: 0 < theta < .2).
 
 # Results
 # Apply GORICA to obtain AIC weights:
 results_H0_1.2 <- goric(est, VCOV = VCOV_est, 
-                        hypotheses = list(H0 = H0), comparison = "complement", 
-                        type = "gorica") 
+                        hypotheses = list(H0 = H0)) 
 # Note that the complement is the unconstrained Hunc now.
 results_H0_1.2
 #
@@ -157,10 +155,10 @@ results_H0_1.2
 
 
 # One can also evaluate multiple, competing hypotheses; e.g.:
-#H2.1 <- "theta == 0"   # Indicating no effect
-#H2.2 <- "theta == 0.2" # Indicating a small effect
-#H2.3 <- "theta == 0.5" # Indicating a medium effect
-#H2.4 <- "theta == 0.8" # Indicating a large effect
+#H2.1 <- "theta = 0"   # Indicating no effect
+#H2.2 <- "theta = 0.2" # Indicating a small effect
+#H2.3 <- "theta = 0.5" # Indicating a medium effect
+#H2.4 <- "theta = 0.8" # Indicating a large effect
 
 
 
@@ -176,12 +174,13 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis
 H1 <- "theta > 0" # Hypothesis of interest H1.1
+# vs its complement (default in case of one hypothesis)
 
 # Results
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H1_1.1 <- goric(est, VCOV = VCOV_est, 
-                        hypotheses = list(H1), comparison = "complement", 
-                        type = "gorica")
+                        hypotheses = list(H1))
 # Note that the complement is all other orderings now; here: 'theta < 0'.
 results_H1_1.1
 #
@@ -197,12 +196,13 @@ results_H1_1.1
 
 # Hypothesis
 H1 <- "0 < theta < .2" # Hypothesis of interest H1.2
+# vs its complement (default in case of one hypothesis)
 
 # Results
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H1_1.2 <- goric(est, VCOV = VCOV_est, 
-                        hypotheses = list(H1), comparison = "complement", 
-                        type = "gorica")
+                        hypotheses = list(H1))
 # Note that the complement is all other orderings now; 
 # here: 'theta < 0' and 'theta > 0.2'.
 results_H1_1.2
@@ -234,13 +234,12 @@ H2.4 <- "theta > 0.8"       # Indicating a large effect
 # Note: These cover all possibilities.
 # Hence, we do not need a fail-safe hypothesis.
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_all <- goric(est, VCOV = VCOV_est, 
                      hypotheses = list(H2.0 = H2.0, H2.1 = H2.1, 
                                        H2.2 = H2.2, H2.3 = H2.3, H2.4 = H2.4), 
-                     comparison = "none", 
-                     type = "gorica")
+                     comparison = "none")
 results_all
 round(results_all$ratio.gw, digits = 2)
 #
@@ -337,12 +336,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis
 # H1 <- "theta > 0; beta < 0" # Hypothesis of interest
-H0 <- "theta == 0; beta == 0" # Hypothesis that can be evaluated
+H0 <- "theta = 0; beta = 0" # Hypothesis that can be evaluated
+# vs its complement (default in case of one hypothesis), here, equal to the unconstrained
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has no support;
@@ -362,12 +361,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest 
 H1 <- "theta > 0; beta < 0"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results <- goric(est, VCOV = VCOV_est, 
-                 hypotheses = list(H1), comparison = "complement", 
-                 type = "gorica")
+                 hypotheses = list(H1))
 results
 #
 # The order-restricted hypothesis ‘H1’ has (>>1 times) more support 
@@ -382,11 +381,12 @@ results
 H2 <- "0.2 < theta < 0.8; beta < 0" 
 # theta > 0.2; theta < 0.8: indicating a small to medium effect.
 # beta < 0:                 indicating a negative effect of the moderator.
+# Here, H2 vs its complement (default in case of one hypothesis)
 #
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H2_1 <- goric(est, VCOV = VCOV_est, 
-                      hypotheses = list(H2 = H2), comparison = "complement", 
-                      type = "gorica")
+                      hypotheses = list(H2 = H2))
 results_H2_1
 #
 # The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
@@ -503,43 +503,38 @@ VCOV_est <- vcov(metaan)
 # Set 1
 # H1.1 <- "theta_AL < 0; theta_PD > 0" 
 # H1.2 <- "theta_AL < 0; theta_PD < 0" 
-H01 <- "theta_AL == 0; theta_PD == 0" # i.e., theta_AL == 0, theta_PD == 0
-H02 <- "theta_PD == 0" # i.e., theta_AL, theta_PD == 0
-H03 <- "theta_AL == 0" # i.e., theta_AL == 0, theta_PD 
+H01 <- "theta_AL = 0; theta_PD = 0" # i.e., theta_AL = 0, theta_PD = 0
+H02 <- "theta_PD = 0" # i.e., theta_AL, theta_PD = 0
+H03 <- "theta_AL = 0" # i.e., theta_AL = 0, theta_PD 
 # Note: By default, the unconstrained hypothesis is added to the set.
 #
 # Set 2
 # H2 <- "abs(theta_AL) > 0.2; abs(theta_PD) > 0.2"
-H04 <- "abs(theta_AL) == 0.2; abs(theta_PD) == 0.2"
+H04 <- "abs(theta_AL) = 0.2; abs(theta_PD) = 0.2"
 # Note: This can be compared to its complement, but because of the equality,
 # the complement equals the unconstrained hypothesis.
 #
 # Set 3
 # H3 <- "abs(theta_AL) < abs(theta_PD)"
-H05 <- "abs(theta_AL) == abs(theta_PD)"
+H05 <- "abs(theta_AL) = abs(theta_PD)"
 # Note: This can be compared to its complement, but because of the equality,
 # the complement will equal the unconstrained hypothesis.
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 #
 # Set 1
 results_AIC_Set1 <- goric(est, VCOV = VCOV_est, 
-                          hypotheses = list(H01 = H01, H02 = H02, H03 = H03), 
-                          type = "gorica") 
+                          hypotheses = list(H01 = H01, H02 = H02, H03 = H03)) 
 results_AIC_Set1
 #
 # Set 2
 results_AIC_Set2 <- goric(est, VCOV = VCOV_est, 
-                          hypotheses = list(H04 = H04), 
-                          comparison = "complement", 
-                          type = "gorica") 
+                          hypotheses = list(H04 = H04)) 
 results_AIC_Set2
 #
 # Set 3
 results_AIC_Set3 <- goric(est, VCOV = VCOV_est, 
-                          hypotheses = list(H05 = H05), 
-                          comparison = "complement", 
-                          type = "gorica") 
+                          hypotheses = list(H05 = H05)) 
 results_AIC_Set3
 #
 #
@@ -585,13 +580,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
 H1.1 <- "theta_AL < 0; theta_PD > 0" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# Apply GORICA (default)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H1.1 <- goric(est, VCOV = VCOV_est, 
-                      hypotheses = list(H1.1 = H1.1), 
-                      comparison = "complement", 
-                      type = "gorica") 
+                      hypotheses = list(H1.1 = H1.1)) 
 results_H1.1
 #
 # The order-restricted hypothesis ‘H1.1’ has (>>1 times) more support 
@@ -610,11 +604,10 @@ H1.1 <- "theta_AL < 0; theta_PD > 0"
 H1.2 <- "theta_AL < 0; theta_PD < 0" 
 # Note: By default, the unconstrained hypothesis is added to the set.
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H1 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H1.1 = H1.1, H1.2 = H1.2), 
-                    type = "gorica") 
+                    hypotheses = list(H1.1 = H1.1, H1.2 = H1.2)) 
 #summary(results_H1)
 #
 results_H1
@@ -625,12 +618,12 @@ round(results_H1$ratio.gw, digits = 2)
 
 # Hypothesis of interest
 H2 <- "abs(theta_AL) > 0.2; abs(theta_PD) > 0.2"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H2 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H2 = H2), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H2 = H2)) 
 results_H2
 #  
 # The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
@@ -643,12 +636,12 @@ results_H2
 
 # Hypothesis of interest
 H3 <- "abs(theta_AL) < abs(theta_PD)"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H3 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H3 = H3), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H3 = H3)) 
 results_H3
 #
 # The order-restricted hypothesis ‘H3’ has about the same support 
@@ -672,13 +665,12 @@ results_H3
 # sqrt(diag(VCOV_est)) # se(theta_PD) = 0.04945984
 H0_range <- "abs(theta_AL) > abs(theta_PD) - 0.1*0.04945984; 
              abs(theta_AL) < abs(theta_PD) + 0.1*0.04945984"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_range <- goric(est, VCOV = VCOV_est, 
-                       hypotheses = list(H0_range = H0_range), 
-                       comparison = "complement", 
-                       type = "gorica") 
+                       hypotheses = list(H0_range = H0_range)) 
 results_range
 #
 # The order-restricted hypothesis ‘H0_range’ has (> 1 times) more support 
@@ -733,13 +725,13 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
 # H1 <- "theta_AL < 0; theta_PD > 0; abs(beta_Year_AL) > abs(beta_Year_PD)"
-H0 <- "theta_AL == 0; theta_PD == 0; beta_Year_AL == beta_Year_PD"
+H0 <- "theta_AL = 0; theta_PD = 0; beta_Year_AL = beta_Year_PD"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 # set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has no support.
@@ -755,12 +747,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest 
 H1 <- "theta_AL < 0; theta_PD > 0; abs(beta_Year_AL) > abs(beta_Year_PD)"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# Apply GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results <- goric(est, VCOV = VCOV_est, 
-                 hypotheses = list(H1), comparison = "complement", 
-                 type = "gorica")
+                 hypotheses = list(H1))
 results
 #
 # The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
@@ -772,10 +764,11 @@ est <- coef(metaan)
 names(est) <- c("theta_AL", "theta_PD", "beta_Year_AL", "beta_Year_PD")
 VCOV_est <- vcov(metaan)
 H1_mod <- "beta_Year_AL < beta_Year_PD"
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_mod <- goric(est, VCOV = VCOV_est, 
-                     hypotheses = list(H1_mod = H1_mod), comparison = "complement", 
-                     type = "gorica")
+                     hypotheses = list(H1_mod = H1_mod))
 results_mod
 #
 # The order-restricted hypothesis ‘H1_mod’ has (> 1 times) more support 
@@ -788,10 +781,11 @@ est_res <- coef(res)
 names(est_res) <- c("theta_AL", "theta_PD", "beta_Year_AL", "beta_Year_diff")
 VCOV_est_res <- vcov(res)
 H1_mod_res <- "beta_Year_diff > 0"
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_mod_res <- goric(est_res, VCOV = VCOV_est_res, 
-                         hypotheses = list(H1_mod_res = H1_mod_res), 
-                         comparison = "complement", type = "gorica")
+                         hypotheses = list(H1_mod_res = H1_mod_res))
 results_mod_res
 
 
@@ -829,12 +823,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
 # H1 <- "LogOdds < 0"
-H0 <- "LogOdds == 0" 
+H0 <- "LogOdds = 0" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has no support.
@@ -852,12 +846,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
 H1 <- "LogOdds < 0" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results <- goric(est, VCOV = VCOV_est, 
-                 hypotheses = list(H1), comparison = "complement", 
-                 type = "gorica") 
+                 hypotheses = list(H1)) 
 results
 #  
 # The order-restricted hypothesis ‘H1’ has (>>1 times) more support 
@@ -872,12 +866,12 @@ results
 
 # Hypothesis of interest
 H2 <- "LogOdds < -0.5" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H2 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H2 = H2), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H2 = H2)) 
 results_H2
 #  
 # The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
@@ -942,12 +936,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
 # H1 <- "abs(IncreaseLogOddsPerYear) > abs(IncreaseLogOddsPerAblat)"
-H0 <- "abs(IncreaseLogOddsPerYear) == abs(IncreaseLogOddsPerAblat)"
+H0 <- "abs(IncreaseLogOddsPerYear) = abs(IncreaseLogOddsPerAblat)"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has no support.
@@ -964,12 +958,12 @@ VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
 H1 <- "abs(IncreaseLogOddsPerYear) > abs(IncreaseLogOddsPerAblat)" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H1 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H1), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H1)) 
 results_H1
 #
 # The order-restricted hypothesis ‘H1’ has (>> 1 times) more support 
@@ -980,12 +974,12 @@ results_H1
 
 # Hypothesis of interest
 H2 <- "abs(IncreaseLogOddsPerYear) - abs(IncreaseLogOddsPerAblat) > 0.2"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H2 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H2 = H2), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H2 = H2)) 
 results_H2
 #
 # The order-restricted hypothesis ‘H1’ has (>> 1 times) more support 
@@ -1085,14 +1079,14 @@ names(est) <- c("RR_ref", "beta_dosage", "beta_baseline", "beta_interaction")
 VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
-# H1 <- "beta_baseline < 0; beta_dosage < 0; beta_interaction == 0"
-H0 <- "beta_baseline == 0; beta_dosage == 0; beta_interaction == 0" 
+# H1 <- "beta_baseline < 0; beta_dosage < 0; beta_interaction = 0"
+H0 <- "beta_baseline = 0; beta_dosage = 0; beta_interaction = 0" 
 # stating that they are equal to 0.
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has < 1 times more, so less, support 
@@ -1112,13 +1106,13 @@ names(est) <- c("RR_ref", "beta_dosage", "beta_baseline", "beta_interaction")
 VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
-H1 <- "beta_baseline < 0; beta_dosage < 0; beta_interaction == 0"
+H1 <- "beta_baseline < 0; beta_dosage < 0; beta_interaction = 0"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results <- goric(est, VCOV = VCOV_est, 
-                 hypotheses = list(H1), comparison = "complement", 
-                 type = "gorica") 
+                 hypotheses = list(H1)) 
 results
 #
 #  The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
@@ -1126,12 +1120,13 @@ results
 
 
 # It is possible to have competing hypotheses (but be aware in case of overlapping ones):
-H1a <- "beta_baseline < 0; beta_dosage == 0; beta_interaction == 0" 
-H1b <- "beta_baseline < 0; beta_dosage < 0; beta_interaction == 0" 
+H1a <- "beta_baseline < 0; beta_dosage = 0; beta_interaction = 0" 
+H1b <- "beta_baseline < 0; beta_dosage < 0; beta_interaction = 0" 
+# and unconstrained (default in case of multiple hypotheses)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_ab <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H1a = H1a, H1b = H1b),  
-                    type = "gorica") # default: unconstrained
+                    hypotheses = list(H1a = H1a, H1b = H1b)) 
 results_ab
 #
 # Both H1a and H1b not weak (i.e., better than unc), especially H1b.
@@ -1143,10 +1138,11 @@ results_ab
 
 # As another example:
 H2 <- "beta_baseline < 0" # so, other two parameters are free / unrestricted
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H2 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H2 = H2), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H2 = H2)) 
 results_H2
 #
 #  The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
@@ -1182,15 +1178,15 @@ VCOV_est <- vcov(metaan)
 # That is, RR_ref + beta_dosage2 < RR_ref and 
 # RR_ref + beta_dosage2 < RR_ref + beta_dosage3.
 # Thus, beta_dosage2 < 0 and beta_dosage2 < beta_dosage3.
-# Because of equalities: beta_dosage2 == 0 and beta_dosage2 == beta_dosage3
+# Because of equalities: beta_dosage2 = 0 and beta_dosage2 = beta_dosage3
 #
 # H1 <- "beta_dosage2 < 0; beta_dosage2 < beta_dosage3"
-H0 <- "beta_dosage2 == 0; beta_dosage2 == beta_dosage3" 
+H0 <- "beta_dosage2 = 0; beta_dosage2 = beta_dosage3" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
 #
 # The order-restricted hypothesis ‘H0’ has (> 1 times) more support 
@@ -1217,12 +1213,12 @@ VCOV_est <- vcov(metaan)
 # RR_ref + beta_dosage2 < RR_ref + beta_dosage3.
 # Thus, beta_dosage2 < 0 and beta_dosage2 < beta_dosage3.
 H1 <- "beta_dosage2 < 0; beta_dosage2 < beta_dosage3"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results <- goric(est, VCOV = VCOV_est, 
-                 hypotheses = list(H1), comparison = "complement", 
-                 type = "gorica") 
+                 hypotheses = list(H1)) 
 results
 #  
 # The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
@@ -1365,13 +1361,12 @@ names(est) <- c("logRR_ref", "beta_allocR", "beta_allocS",
 VCOV_est <- vcov(metaan)
 
 # Hypothesis of interest
-H0_alloc <- "beta_allocR == 0; beta_allocS == 0" 
+H0_alloc <- "beta_allocR = 0; beta_allocS = 0" 
+# vs its complement (default in case of one hypothesis)
 # 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0_alloc <- goric(est, VCOV = VCOV_est, 
-                          hypotheses = list(H0_alloc = H0_alloc), 
-                          comparison = "complement", 
-                          type = "gorica") 
+                          hypotheses = list(H0_alloc = H0_alloc)) 
 results_H0_alloc
 #
 # The order-restricted hypothesis ‘H0_alloc’ has (> 1 times) more support 
@@ -1388,13 +1383,12 @@ names(estG) <- c("beta_allocA", "beta_allocR", "beta_allocS",
 VCOV_estG <- vcov(metaanG)
 
 # Hypothesis of interest
-H0_alloc_G <- "beta_allocA == beta_allocR; beta_allocR == beta_allocS" 
+H0_alloc_G <- "beta_allocA = beta_allocR; beta_allocR = beta_allocS" 
+# vs its complement (default in case of one hypothesis)
 # 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0_alloc_G <- goric(estG, VCOV = VCOV_estG, 
-                            hypotheses = list(H0_alloc_G = H0_alloc_G), 
-                            comparison = "complement", 
-                            type = "gorica") 
+                            hypotheses = list(H0_alloc_G = H0_alloc_G)) 
 results_H0_alloc_G
 # Which evidently renders the same result as above.
 
@@ -1412,19 +1406,13 @@ VCOV_est <- vcov(metaan)
 # the random allocation is the lowest, implying:
 #H1 <- "beta_allocR < 0; beta_allocR < beta_allocS"
 # Because of needing equalities, this reduces to:
-H0 <- "beta_allocR == 0; beta_allocR == beta_allocS" 
+H0 <- "beta_allocR = 0; beta_allocR = beta_allocS" 
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA to obtain AIC weights
+# Apply GORICA (default here) to obtain AIC weights
 results_H0 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H0 = H0), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H0 = H0)) 
 results_H0
-#  
-#  Results:
-#        model  loglik  penalty  gorica  gorica.weights
-#1          H0   2.567    3.000   0.865           0.784
-#2  complement   3.276    5.000   3.447           0.216
-#---
 #  The order-restricted hypothesis ‘H0’ has (> 1 times) more support 
 #                                                 than its complement.
 # So, support for H0. 
@@ -1444,12 +1432,12 @@ VCOV_est <- vcov(metaan)
 # One could argue that the logRR for 
 # the random allocation is the lowest, implying:
 H1 <- "beta_allocR < 0; beta_allocR < beta_allocS"
+# vs its complement (default in case of one hypothesis)
 
-# Apply GORICA
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results <- goric(est, VCOV = VCOV_est, 
-                 hypotheses = list(H1), comparison = "complement", 
-                 type = "gorica") 
+                 hypotheses = list(H1)) 
 results
 #
 # The order-restricted hypothesis ‘H1’ has (> 1 times) more support 
@@ -1459,10 +1447,11 @@ results
 
 #As an alternative example:
 H2 <- "abs(beta_ablat) > abs(beta_year)"
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H2 <- goric(est, VCOV = VCOV_est, 
-                    hypotheses = list(H2 = H2), comparison = "complement", 
-                    type = "gorica") 
+                    hypotheses = list(H2 = H2)) 
 results_H2
 #  
 # The order-restricted hypothesis ‘H2’ has (> 1 times) more support 
@@ -1474,10 +1463,11 @@ results_H2
 #As an alternative example, one can specify both simultaneously:
 H12 <- "beta_allocR < 0; beta_allocR < beta_allocS; 
         abs(beta_ablat) > abs(beta_year)"
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H12 <- goric(est, VCOV = VCOV_est, 
-                     hypotheses = list(H12 = H12), comparison = "complement", 
-                     type = "gorica") 
+                     hypotheses = list(H12 = H12)) 
 results_H12
 #  
 # The order-restricted hypothesis ‘H12’ has (> 1 times) more support
@@ -1510,10 +1500,11 @@ VCOV_est <- vcov(metaan_orig)
 # intrcpt + factor(alloc)random + 22*year + 17*ablat < 0, 
 # that is,
 H3a <- "logRR_ref + beta_allocR + (1970-1948)*beta_year + (30-13)*beta_ablat < 0"
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H3a <- goric(est, VCOV = VCOV_est, 
-                     hypotheses = list(H3a = H3a), comparison = "complement", 
-                     type = "gorica") 
+                     hypotheses = list(H3a = H3a)) 
 results_H3a
 #
 # The order-restricted hypothesis ‘H3a’ has no support.
@@ -1525,10 +1516,11 @@ results_H3a
 #logRR_ref + beta_allocS +  5*beta_year +  5*beta_ablat
 #implying:
 H3b <- "beta_allocR - beta_allocS + (-4)*beta_year + 12*beta_ablat < 0"
+# vs its complement (default in case of one hypothesis)
+# GORICA (default here)
 set.seed(123) # set seed: to obtain the same results when you re-run it
 results_H3b <- goric(est, VCOV = VCOV_est, 
-                     hypotheses = list(H3b = H3b), comparison = "complement", 
-                     type = "gorica") 
+                     hypotheses = list(H3b = H3b)) 
 results_H3b
 #  
 # The order-restricted hypothesis ‘H3b’ has (> 1 times) more support

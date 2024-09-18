@@ -15,7 +15,7 @@ library(gorica)
 
 
 # Specify the confirmatory factor model
-# Note: The goric function cannot use the default labeling, so:
+# Note: The goric function can sometimes not use the default labeling, so:
 # Give your own labels to estimates by including them in the lavaan model:
 model1_r <- '
     A =~ A1*Ab + A2*Al + A3*Af + A4*An + A5*Ar + A6*Ac 
@@ -37,17 +37,20 @@ H1.1 <- "
 A1 > .6; A2 > .6; A3 > .6; A4 > .6; A5 > .6; A6 > .6; 
 B1 > .6; B2 > .6; B3 > .6; B4 > .6; B5 > .6; B6 > .6
 "
-# Note 1: The restrictions are 'connected' by using ';'
-# Note 2: in lavaan output, the labels are sometimes shortened,
-# but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
+# vs its complement (default in case of one hypothesis)
+#
+# Notes: - The restrictions are 'connected' by using ';'
+#        - In lavaan output, the labels are sometimes shortened,
+#          but our labeling is used and should thus be used above.
 
 
-# Call goric ('type = "gorica"')
+# Call goric 
+# Default in case of lavaan objects: type = "gorica"
 # Note: we need standardized estimates for a meaningful comparison ('standardized = TRUE').
 #
-# Calculate GORICA values and weights for H1.1 and its complement ('comparison = "complement"').
+# Calculate GORICA values and weights for H1.1 and its complement (default in case of one hypothesis).
 set.seed(100)
-results1_r <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), comparison = "complement", type = "gorica", standardized = TRUE) 
+results1_r <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), standardized = TRUE) 
 #summary(results1_r)
 results1_r
 # The order-restricted hypothesis ‘H1’ has (> 1 times) more support than its complement.
@@ -61,9 +64,9 @@ results1_r
 # Influence of seed in PT, but negligible:
 #
 set.seed(100100)
-results1_r_s1 <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), comparison = "complement", type = "gorica", standardized = TRUE)$result[,3]
+results1_r_s1 <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), standardized = TRUE)$result[,3]
 set.seed(123456)
-results1_r_s2 <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), comparison = "complement", type = "gorica", standardized = TRUE)$result[,3]
+results1_r_s2 <- goric(fit1_r, hypotheses = list(H1.1 = H1.1), standardized = TRUE)$result[,3]
 #
 results1_r$result[,3]
 results1_r_s1$result[,3]

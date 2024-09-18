@@ -14,19 +14,19 @@ fit.lm <- lm(y ~ -1 + D)
 fit.lm
 
 # Hypothesis of interest
-H1 <- "D1 < D2 < D3" 
-# this reflects mu1 = mu2 = mu3
+H1 <- "D1 < D2 < D3" # this reflects mu1 < mu2 < mu3
+# vs its complement (default, in case of one hypothesis)
 #
-# Note that the data (or at least X) possibly has to be  
+# Note that the data (or at least the predictors X) possibly have to be  
 # standardized to compare standardized parameters.
 
 # GORIC values and GORIC weights
-GORIC <- goric(fit.lm, hypotheses = list(H1), comparison = "complement") 
+GORIC <- goric(fit.lm, hypotheses = list(H1)) 
 GORIC
 # The order-restricted hypothesis ‘H1’ has > 1 times more support than its complement.
 
 # GORICc values and GORICc weights
-GORICc <- goric(fit.lm, hypotheses = list(H1), comparison = "complement",
+GORICc <- goric(fit.lm, hypotheses = list(H1),
               type = 'goricc') 
 GORICc
 #The order-restricted hypothesis ‘H1’ has > 1 times more support than its complement.

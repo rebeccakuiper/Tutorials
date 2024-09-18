@@ -36,10 +36,10 @@ fit3 <- sem(model3, data = sesamesim, std.lv = TRUE, group = "sex")
 # Notably, using our own labeling (which should be the same as those used below)
 H1.3 <- "Pre_boy < Pre_girl"
 # Note: in lavaan output, the labels are sometimes shortened,
-# but our labeling is used -- see coef(fit2_r) -- and should thus be used above.
+# but our labeling is used and should thus be used above.
 
 
-# Call goric ('type = "gorica"')
+# Call goric 
 # Note: we need standardized estimates for a meaningful comparison ('standardized = TRUE').
 #
 # Instead of using a lavaan object (as done in 'GORICA and SEM - Ex3 mutligroup regr - restriktor - lavaan object.R'),
@@ -48,10 +48,12 @@ H1.3 <- "Pre_boy < Pre_girl"
 # Obtain standardized(!) estimates from lavaan object (labelled or unlabelled):
 est_3 <- lavaan::standardizedsolution(fit3)[c(1,6), 'est.std']
 names(est_3) <- c("Pre_boy", "Pre_girl") # Note: This should be the same as the labeling used the H1.3.
+# Obtain covariance matrix of these standardized(!) estimates:
 vcov_3 <- lavInspect(fit3, "vcov.std.all")[c(1,4), c(1,4)] # Note: Use this in the 'VCOV = vcov_3' command.
+# Also, now, the default is: type = "gorica"
 #
-# Calculate GORICA values and weights for H1.3 and its complement ('comparison = "complement"').
-results3_r <- goric(est_3, VCOV = vcov_3, hypotheses = list(H1.3 = H1.3), comparison = "complement", type = "gorica") 
+# Calculate GORICA values and weights for H1.3 and its complement (default in case of one hypothesis).
+results3_r <- goric(est_3, VCOV = vcov_3, hypotheses = list(H1.3 = H1.3)) 
 #summary(results3_r) 
 results3_r
 # The order-restricted hypothesis ‘H1.3’ has about the same support as its complement.
@@ -76,9 +78,9 @@ results3_r
 # No influence of seed in PT:
 #
 set.seed(100100)
-results3_r_s1 <- goric(est_3, VCOV = VCOV_3, hypotheses = list(H1.3 = H1.3), comparison = "complement", type = "gorica")$result[,3]
+results3_r_s1 <- goric(est_3, VCOV = VCOV_3, hypotheses = list(H1.3 = H1.3)$result[,3]
 set.seed(123456)
-results3_r_s2 <- goric(est_3, VCOV = VCOV_3, hypotheses = list(H1.3 = H1.3), comparison = "complement", type = "gorica")$result[,3]
+results3_r_s2 <- goric(est_3, VCOV = VCOV_3, hypotheses = list(H1.3 = H1.3))$result[,3]
 #
 results3_r$result[,3]
 results3_r_s1$result[,3]
