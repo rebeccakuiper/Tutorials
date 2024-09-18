@@ -45,11 +45,12 @@ fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
 
 # (Informative) hypothesis
 H1 <- 'group1 > group2 > group3' 
+# vs complement (default)
 
 # GORIC
 set.seed(123) # Set seed value
 goric.PandG <- goric(fit.PandG, 
-                     hypotheses = list(H1), comparison = "complement")
+                     hypotheses = list(H1))
 goric.PandG
 #summary(goric.PandG)
 
@@ -67,9 +68,9 @@ plot(benchmarks.PandG)
 set.seed(123) # Set seed value
 est <- coef(fit.PandG)
 VCOV <- vcov(fit.PandG)
+# GORICA (default)
 gorica.PandG <- goric(est, VCOV = VCOV, 
-                       hypotheses = list(H1), 
-                       type = "gorica")
+                       hypotheses = list(H1))
 # Benchmarks #
 benchmarks.PandG_gorica <- benchmark(gorica.PandG, ncpus = 8)
 benchmarks.PandG_gorica

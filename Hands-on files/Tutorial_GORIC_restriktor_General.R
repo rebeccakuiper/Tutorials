@@ -7,9 +7,9 @@
 
 
 # Two types of analyses can be run: 
-# 1. type = "goric" (the default), 
+# 1. type = "goric" (the default for lm objects), 
 #                     which can be applied to multivariate normal linear models; 
-# 2. type = "gorica", 
+# 2. type = "gorica" (the default for all other input options), 
 #the approximation of the GORIC which can be applied to a broad range of models.
 #
 # Both balance fit (log likelihood) and complexity (penalty, that is, PT).
@@ -23,8 +23,8 @@
 # There is also an option 'comparison'.
 # There are three types of comparisons: 
 # a. none, 
-# b. unconstrained (default), and 
-# c. complement.
+# b. unconstrained (default in case of multiple hypotheses), and 
+# c. complement  (default in case of one hypothesis).
 #
 # If "none", then only hypotheses of interest are inspected. 
 # This can lead to choosing the best out of a set of weak hypotheses,
@@ -38,39 +38,30 @@
 # If at least one of the theory-based / informative hypotheses is not weak,
 # one can compare that/those to all other hypotheses in the set.
 #
-# Currently, "complement" only works for one hypothesis and not a whole set. 
-# Then, the complement of the hypothesis of interest is evaluated
-# and acts like a competing hypothesis. 
+# The "complement" of the hypothesis of interest acts like a competing hypothesis. 
 # Since there is per definition no overlap between the hypothesis and its 
 # complement, this is more powerful then including the unconstrained hypothesis.
-#
-# Note that the use of the complement of the set would not change the relative 
+# 
+# Note that, currently, "complement" only works for one hypothesis and not a whole set. 
+# However, the use of the complement of the set would not change the relative 
 # support between two competing theories. 
 # Hence, one can just use the unconstrained (as a failsafe then).
 #
-# The example below uses the default: comparison = "unconstrained".
 # At the end, there are three examples for the three types of comparisons.
 
 
-# The goric function of restriktor takes different forms of input 
-# (for model (parameter estimates) and constraints) 
+#The `goric` function of `restriktor` takes different forms of input.  
+#For model parameter estimates:  
+#* enter fitted unconstrained object (lm, glm, glmer, nlmer, lmer, or lavaan object);  
+#* enter the (structural) parameter estimates and their covariance matrix yourself.  
+#For constraints:  
+#* enter character constraints;  
+#* enter list with constraints matrix.
 #
-# A. when type = "goric" or "gorica":
-#   1.	Fitted unconstrained (lm or glm) object* + character constraints
-#   2.	Fitted unconstrained (lm or glm) object* + list with constraints matrix
-#   * In case of within effects, the goric cannot be calculated.
-#   3.	Fitted restriktor object(s).
-# B. Only when type = "gorica", one can also use:
-#   4.	Numeric vector + character constraints  
-#   5.	Numeric vector + list with constraints matrix
-#   Note that 
-#  - this can be especially helpful for objects other than (g)lm objects.
-#  - the numeric vector contains parameter estimates, and these can be obtained 
-#    from any type of model.
-#  - the estimates are assumed to be normally distributed. So for some models 
-#    when sample size is low, this assumption may not hold. In that case, it is
-#    often not clear how well the GORICA performs. See Altinisik et al 2021,
-#    for some simulations regarding logistic regression and SEM models.
+#Please note that:  
+#* The GORIC can only be calculated for lm objects.  
+#* The GORIC (type = 'goric') is the default for lm objects, while GORICA (type = 'gorica') is for the other input options.  
+#* In the GORICA, the estimates are assumed to be normally distributed. So, for some models when sample size is low, this assumption may not hold. In that case, it is often not clear how well the GORICA performs. See Altinisik et al 2021, for some simulations regarding logistic regression and SEM models (for which the GORICA performs well).
 #
 # Below you find examples
 
@@ -80,8 +71,9 @@
 # When 'character constraints':
 # - One can use '>', '<' and '=', but also '>=', '<=', and '=='.
 # - One can specify the restrictions 
-#  * all at once (e.g., beta1 > beta2 > beta3) or 
-#  * in a pairwise manner separated by ';' (e.g., beta1 > beta2; beta2 > beta3).
+#  * all at once (e.g., beta1 > beta2 < beta3) or 
+#  * in a pairwise manner separated by ';' or '&' 
+#    (e.g., beta1 > beta2; beta2 < beta3).
 # - Note that one should use the labels of the parameter estimates.
 # - One can also define terms that are a linear function of parameters and 
 # specify hypotheses on those (see 'Extra possibility specification hypotheses' 
@@ -122,6 +114,7 @@ library(restriktor) # for goric function
 #Note that one needs to install the package only once, 
 #but has to load the package each time the R script is run.
 
+##
 
 # Generate example data
 #
@@ -136,6 +129,7 @@ y <- 1 + x1 + x2 + x3 + rnorm(n)
 # Example for reading in data (with header) from the text file 'Data_Lucas.txt'. 
 # y <- read.table("Data_Lucas.txt", header=TRUE)
 
+##
 
 # Fit regression model
 fit.lm <- lm(y ~ x1 + x2 + x3)
@@ -143,29 +137,35 @@ fit.lm <- lm(y ~ x1 + x2 + x3)
 
 ######
 
+
 # Specify hypotheses and apply GORIC(A)
 
-# A. when type = "goric" or "gorica":
 
-#1.	Fitted unconstrained (lm or glm) object + character constraints 
+# A. lm object + use type = "goric" or "gorica":
+
+
+#1.	Fitted unconstrained lm object + character constraints 
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0" 
 # Note: If estimates of continuous predictor variables are compared 
 # (e.g., x1 < x2), then one should standardize the data; see below.
 #
-# goric (default)
+# GORIC (default)
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H1, H2)) # or: out <- goric(fit.lm, H1, H2, type = "goric")
+out <- goric(fit.lm, hypotheses = list(H1, H2)) 
+# or: out <- goric(fit.lm, H1, H2, type = "goric")
 out
 #summary(out) 
 #
-# gorica
+# GORICA
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H1, H2), type = "gorica")
+out <- goric(fit.lm, hypotheses = list(H1, H2), 
+             type = "gorica")
 out
 #summary(out)
 
-#2a.	Fitted unconstrained (lm or glm) object + list with constraints matrix
+
+#2a.	Fitted unconstrained lm object + list with constraints matrix
 # Notes: 
 # - When there is an intercept, this is part of constraint matrix as well.
 # - equality restrictions should be stated first.
@@ -174,19 +174,21 @@ H2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0))) #"x1 > 0; x2 > 0"
 # Btw list(constraints = c(0,-1,1,0)) reflects x1 < x2
 # Note: now, rhs and neq (number of equalities) are assumed to be 0.
 #
-# goric (default)
+# GORIC (default)
 set.seed(123) # Set seed value
 out <- goric(fit.lm, hypotheses = list(H1, H2))
 out
 #summary(out)
 #
-# gorica
+# GORICA
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H1, H2), type = "gorica")
+out <- goric(fit.lm, hypotheses = list(H1, H2), 
+             type = "gorica")
 out
 #summary(out)
 
-#2b.	Fitted unconstrained (lm or glm) object + list with constraints matrix
+
+#2b.	Fitted unconstrained lm object + list with constraints matrix
 # Notes: 
 # - When there is an intercept, this is part of constraint matrix as well.
 # - equality restrictions should be stated first.
@@ -194,47 +196,34 @@ H1 <- list(constraints = c(0,1,0,0), rhs = 2) # "x1 > 2"
 H2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)), rhs = c(1, 0), neq = 1)
 # "x1 = 1; x2 > 0"
 #
-# goric (default)
+# GORIC (default)
 set.seed(123) # Set seed value
 out <- goric(fit.lm, hypotheses = list(H1, H2))
 out
 #summary(out)
 #
-# gorica
+# GORICA
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H1, H2), type = "gorica")
+out <- goric(fit.lm, hypotheses = list(H1, H2), 
+             type = "gorica")
 out
 #summary(out)
 
 
-#3.	Fitted restriktor object(s).
-H1 <- "x1 > 0"
-H2 <- "x1 > 0; x2 > 0" # the ';' separates the restrictions in one hypothesis.
-fit1.restr <- restriktor(fit.lm, constraints = H1)
-fit2.restr <- restriktor(fit.lm, constraints = H2)
-#
-# goric (default)
-set.seed(123) # Set seed value
-out <- goric(fit1.restr, fit2.restr)
-out
-#summary(out)
-#
-# gorica
-set.seed(123) # Set seed value
-out <- goric(fit1.restr, fit2.restr, type = "gorica")
-out
-#summary(out)
 
-# B. Only when type = "gorica":
-# Note: This can be especially helpful for not (g)lm objects.
+# B. parameter estimates and their covariance matrix (then, type = "gorica"):
+# Note: This can be especially helpful for not-lm objects.
 
-#4a.	Numeric vector + character constraints
+
+#3a.	Numeric vector + character constraints
 est <- coef(fit.lm) 
 VCOV <- vcov(fit.lm)
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0"
+# GORICA (default)
 set.seed(123) # Set seed value
-out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, VCOV = VCOV, 
+             hypotheses = list(H1, H2))
 out
 #summary(out)
 #
@@ -246,8 +235,10 @@ est <- coef(fit.lm)[2:3] # these are the structural parameters,
 #                          since only 'x1' and 'x2' are part of the hypotheses.
 VCOV <- vcov(fit.lm)[2:3,2:3] # now, you also need this submatrix to obtain the 
 #                               corresponding covariance matrix
+# GORICA (default)
 set.seed(123) # Set seed value
-out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, VCOV = VCOV, 
+             hypotheses = list(H1, H2))
 out
 #summary(out)
 # Now, the exact same weights are obtained
@@ -256,18 +247,22 @@ out
 # The log likelihoods also change. 
 # But the differences in those between the hypotheses remain the same.
 
-#4b.	Relabeled numeric vector + character constraints
+
+#3b.	Relabeled numeric vector + character constraints
 est <- coef(fit.lm)
 names(est) <- c("beta1", "beta2", "beta3", "beta4") # You can rename parameters
 VCOV <- vcov(fit.lm)
 H1 <- "beta1 > 0" # use same names/labels as the ones of the estimates
 H2 <- "beta1 > 0; beta2 > 0"
+# GORICA (default)
 set.seed(123) # Set seed value
-out <- goric(est, VCOV = VCOV, hypotheses = list(H1, H2), type = "gorica")
+out <- goric(est, VCOV = VCOV, 
+             hypotheses = list(H1, H2))
 out
 #summary(out)
 
-#4c.	'Manual' numeric vector + character constraints
+
+#3c.	'Manual' numeric vector + character constraints
 # If you obtain the estimates via another program (or from an article or so):
 est <- as.vector(c(0.9867181,   1.1321274,   0.7792158,   0.8933787)) 
 names(est) <- c("beta1", "beta2", "beta3", "beta4") # Label estimates
@@ -278,18 +273,23 @@ VCOV <- matrix(c(0.143354252,  0.031582705,  0.049881853,  0.006769526,
                byrow = T, ncol = 4)
 H1 <- "beta1 > 0" # use same names/labels as the ones of the estimates
 H2 <- "beta1 > 0; beta2 > 0"
+# GORICA (default)
 set.seed(123) # Set seed value
-out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, VCOV = VCOV, 
+             hypotheses = list(H1, H2))
 out
 #summary(out)
 
-#5.	Numeric vector + list with constraints matrix
+
+#4.	Numeric vector + list with constraints matrix
 est <- coef(fit.lm)
 VCOV <- vcov(fit.lm)
 H1 <- list(constraints = c(0,1,0,0))
 H2 <- list(constraints = rbind(c(0,1,0,0), c(0,0,1,0)))
+# GORICA (default)
 set.seed(123) # Set seed value
-out <- goric(est, hypotheses = list(H1, H2), VCOV = VCOV, type = "gorica")
+out <- goric(est, VCOV = VCOV, 
+             hypotheses = list(H1, H2))
 out
 #summary(out)
 
@@ -324,12 +324,13 @@ y <- ratio[1]*data_s$x1 + ratio[2]*data_s$x2 + ratio[3]*data_s$x3 + rnorm(n)
 # Fit regression model
 fit.lm_s <- lm(y ~ -1 + x1 + x2 + x3, data = data_s)
 #
-#1.	Fitted unconstrained (lm or glm) object + character constraints 
+#1.	Fitted unconstrained lm object + character constraints 
 H1 <- "x1 < x2" 
+# vs its complement (default in case of one hypothesis)
 #
-# goric (default)
+# # GORIC (default)
 set.seed(123) # Set seed value
-out_s <- goric(fit.lm_s, hypotheses = list(H1), comparison = "complement")
+out_s <- goric(fit.lm_s, hypotheses = list(H1))
 out_s
 #summary(out_s)
 
@@ -366,7 +367,7 @@ m2 < m4
 m3 < m4
 "
 #
-# goric (default)
+# # GORIC (default)
 set.seed(123) # Set seed value
 out <- goric(fit.lm, hypotheses = list(H1)) 
 out
@@ -386,6 +387,7 @@ out
 #    space, that is, cover all possible theories/hypotheses.
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0"
+# GORIC
 set.seed(123) # Set seed value
 out <- goric(fit.lm, hypotheses = list(H1, H2), comparison = "none")
 out
@@ -396,29 +398,33 @@ out
 #    This safeguards from choosing a weak hypothesis as the best one.
 H1 <- "x1 > 0"
 H2 <- "x1 > 0; x2 > 0"
+# Default in case of multiple hypotheses: comparison = "unconstrained"
+# GORIC
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H1, H2)) # comparison = "unconstrained"
+out <- goric(fit.lm, hypotheses = list(H1, H2)) 
 out
 #summary(out)
 out$ratio.gw
 # Since at least one of, even both, H1 and H2 are not weak, one can compare
 # the support for H1 versus H2 (where H2 is 1.9 times more supported).
 
-# 3) Currently, "complement" only works for one hypothesis and not a whole set. 
-#    Then, the complement of the hypothesis of interest is evaluated
-#    and acts like a competing hypothesis. 
+# 3) The "complement" of the hypothesis of interest acts like a competing hypothesis. 
 #    Since there is per definition no overlap between the hypothesis and its 
 #    complement, this is more powerful then including the unconstrained.
 H1 <- "x1 > 0"
+# Default in case of one hypothesis: comparison = "complement"
+# GORIC
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H1), comparison = "complement")
+out <- goric(fit.lm, hypotheses = list(H1))
 out
 summary(out)
 summary(out, brief = FALSE)
 #
 H2 <- "x1 > 0; x2 > 0"
+# Default in case of one hypothesis: comparison = "complement"
+# GORIC
 set.seed(123) # Set seed value
-out <- goric(fit.lm, hypotheses = list(H2), comparison = "complement")
+out <- goric(fit.lm, hypotheses = list(H2))
 out
 #summary(out)
 # Note that the obtained weights for the two hypotheses cannot be compared. 
@@ -513,19 +519,19 @@ out$hypotheses_usr # gives the hypotheses that are inserted by the user as input
 #
 # Calculate goric for H1 and its complement
 #set.seed(123) # Set seed value
-#output_c_H1 <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "complement")
+#output_c_H1 <- goric(lm_fit_Lucas, hypotheses = list(H1)) # default: complement
 #output_c_H1
 ##summary(output_c_H1)
 #
 # Calculate goric for H2 and its complement
 #set.seed(123) # Set seed value
-#output_c_H2 <- goric(lm_fit_Lucas, hypotheses = list(H2), comparison = "complement")
+#output_c_H2 <- goric(lm_fit_Lucas, hypotheses = list(H2)) # default: complement
 #output_c_H2
 ##summary(output_c_H2)
 #
 # Calculate goric for H1 and H2 (and Hu):
 #set.seed(123) # Set seed value
-#output_H1H2 <- goric(lm_fit_Lucas, hypotheses = list(H1, H2)) # Note: default = vs unconstrained
+#output_H1H2 <- goric(lm_fit_Lucas, hypotheses = list(H1, H2)) # default: unconstrained
 #output_H1H2
 ##summary(output_H1H2)
 #output_H1H2$ratio.gw
@@ -539,12 +545,12 @@ out$hypotheses_usr # gives the hypotheses that are inserted by the user as input
 # Notably, you could derive the support from H1 vs H2 from 
 # their support versus that of Hu:
 #set.seed(123) # Set seed value
-#output_u_H1 <- goric(lm_fit_Lucas, hypotheses = list(H1))
+#output_u_H1 <- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = "unconstrained")
 #output_u_H1
 ##summary(output_u_H1)
 #
 #set.seed(123) # Set seed value
-#output_u_H2 <- goric(lm_fit_Lucas, hypotheses = list(H2))
+#output_u_H2 <- goric(lm_fit_Lucas, hypotheses = list(H2), comparison = "unconstrained")
 #output_u_H2
 ##summary(output_u_H2)
 #

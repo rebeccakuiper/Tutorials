@@ -84,13 +84,9 @@ lm_fit_Lucas <-  lm(Influence ~ group-1, data = Lucas)
 #    `lm_fit_Lucas`.
 
 
-# Check the names used in model
-names(coef(lm_fit_Lucas))
-# Specify restrictions using those names
-
-# Hypotheses Set
+# Informative hypothesis
 #
-# These are known before inspecting the lm results.
+# This is known before inspecting the lm results.
 #
 # To evaluate the hypotheses of interest, it is necessary to specify the 
 # restrictions in these hypotheses correctly:
@@ -98,25 +94,28 @@ names(coef(lm_fit_Lucas))
 #    the following operators: `>`, `<`, `=`, `<=`, `>=`, `==` 
 #    (where the last three denote the same constraint as the first three). 
 # * The `goric()` and the `restriktor()` functions can deal with:
-#   + pairwise restrictions separated by a semicolon `;` 
-#     (e.g., *"beta1 > beta2; beta2 = beta3"*).
+#   + pairwise restrictions separated by a semicolon `;` or '&' 
+#     (e.g., *"beta1 > beta2; beta2 > beta3"*).
 #   + combined restrictions consisting of more than one operator 
-#     (e.g., *"beta1 > beta2 = beta3"*).
+#     (e.g., *"beta1 > beta2 > beta3"*).
 #   Note that one should use the labels of the parameter estimates 
 #   (in the example above: group1-group5).
 # * One can also define hypothesis in terms of linear functions of parameters. 
 #   (For more details, see 'Extra possibility specification hypotheses' near the 
 #    end of the goric() tutorial called 'Tutorial_GORIC_restriktor_General').
+# * One can use 'abs()' in case one wants to specify an absolute strength; 
+#   e.g., abs(beta1) > abs(beta2); abs(beta2) > abs(beta3).
 #
-# Summary: 
-# - goric uses "=" or "==" to denote an equality restriction
-# - goric uses ";" to separate the restrictions within one hypothesis
+# Check the names used in model
+names(coef(lm_fit_Lucas))
+# Specify restrictions using those names
 #
 H1 <- 'group5 = group3 > (group1, group4) > group2'
 # which is the same as:
 #H1 <- 'group5 = group3 > group1 > group2; group3 > group4 > group2' 
 # Note: H1 is not full row-rank, 
 #       see below and the goric tutorial for more details.
+# This is evaluated against its complement (default in case of 1 hypothesis).
 
 # Calculate GORIC values and weights
 #
@@ -130,7 +129,7 @@ H1 <- 'group5 = group3 > (group1, group4) > group2'
 #
 set.seed(123) # Set seed value
 output_c <- goric(lm_fit_Lucas, 
-                  hypotheses = list(H_theory1 = H1), comparison = "complement")
+                  hypotheses = list(H_theory1 = H1))
 output_c
 #summary(output_c)
 #
@@ -152,11 +151,12 @@ fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
 
 # Informative hypothesis
 H1 <- 'group1 > group2 > group3' 
+# vs its complement (default, in case of 1 hypothesis).
 
 # GORIC
 set.seed(123) # Set seed value
 goric.PandG_c <- goric(fit.PandG, 
-                     hypotheses = list(H1 = H1), comparison = "complement")
+                     hypotheses = list(H1 = H1))
 goric.PandG_c
 #summary(goric.PandG_c)
 

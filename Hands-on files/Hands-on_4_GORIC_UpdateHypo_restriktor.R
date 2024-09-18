@@ -87,11 +87,10 @@ lm_fit_Monin <-  lm(attract ~ group-1, data = Monin)
 # 3. The results are collected in, what is called, an R-object, named 
 #    `lm_fit_Monin`.
 
-# Check the names used in model
-names(coef(lm_fit_Monin))
-# Specify restrictions using those names
 
-# Hypotheses Set
+# Hypotheses set
+#
+# This is known before inspecting the lm results.
 #
 # To evaluate the hypotheses of interest, it is necessary to specify the 
 # restrictions in these hypotheses correctly:
@@ -99,19 +98,20 @@ names(coef(lm_fit_Monin))
 #    the following operators: `>`, `<`, `=`, `<=`, `>=`, `==` 
 #    (where the last three denote the same constraint as the first three). 
 # * The `goric()` and the `restriktor()` functions can deal with:
-#   + pairwise restrictions separated by a semicolon `;` 
-#     (e.g., *"beta1 > beta2; beta2 = beta3"*).
+#   + pairwise restrictions separated by a semicolon `;` or '&'
+#     (e.g., *"beta1 > beta2; beta2 < beta3"*).
 #   + combined restrictions consisting of more than one operator 
-#     (e.g., *"beta1 > beta2 = beta3"*).
-#   Note that one should use the labels of the parameter estimates 
-#   (in the example above: group1-group5).
+#     (e.g., *"beta1 > beta2 < beta3"*).
+#   Note that one should use the labels of the parameter estimates.
 # * One can also define hypothesis in terms of linear functions of parameters. 
 #   (For more details, see 'Extra possibility specification hypotheses' near the 
 #    end of the goric() tutorial called 'Tutorial_GORIC_restriktor_General').
+# * One can use 'abs()' in case one wants to specify an absolute strength; 
+#   e.g., abs(beta1) > abs(beta2); abs(beta2) > abs(beta3).
 #
-# Summary: 
-# - goric uses "=" or "==" to denote an equality restriction
-# - goric uses ";" to separate the restrictions within one hypothesis
+# Check the names used in model
+names(coef(lm_fit_Monin))
+# Specify restrictions using those names
 #
 # On the Monin data set, we are going to do an exploratory analysis, 
 # which means that we are going to use all combinations with equalities 
@@ -133,7 +133,8 @@ H03 <- 'group2 = group3'
 #   of the penalty.
 #
 set.seed(123) # Set seed value
-goric(lm_fit_Monin, hypotheses = list(H00=H00, H01=H01, H02=H02, H03=H03))
+goric(lm_fit_Monin, 
+      hypotheses = list(H00=H00, H01=H01, H02=H02, H03=H03))
 #
 # It can be seen that $H_01$ ($\mu_1 = \mu_2, \mu_3$) receives the most support. 
 # Based on the means (see `descrstat`), 
@@ -192,9 +193,9 @@ output_repl
 # Hence, the study of Holubar did not replicate the findings of Monin.
 
 # In case you are only interested in the 'main hypothesis' $H_1$ found in Monin, 
-# you could also evaluate this against its complement:
+# you could also evaluate this against its complement (default):
 set.seed(123) # Set seed value
-goric(lm_fit_Holubar, hypotheses = list(H1), comparison = "complement")
+goric(lm_fit_Holubar, hypotheses = list(H1))
 # Since $H_1$ has < 1 times more, so less, support than its complement, 
 # it is a weak hypothesis. 
 # Hence, the study of Holubar did not replicate the findings of Monin.
@@ -207,8 +208,7 @@ goric(lm_fit_Holubar, hypotheses = list(H1), comparison = "complement")
 ##
 ## When you want to calculate the GORICA for $H_1$ and its complement, use:
 #set.seed(123) # Set seed value
-#goric(lm_fit_Holubar, hypotheses = list(H1), type = "gorica", 
-#       comparison = "complement")
+#goric(lm_fit_Holubar, hypotheses = list(H1), type = "gorica")
 
 
 ###################################################################################

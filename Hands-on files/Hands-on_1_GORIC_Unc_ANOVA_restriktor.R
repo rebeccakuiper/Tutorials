@@ -51,13 +51,36 @@ fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
 #summary(fit.PandG) # NHST
 
 
-# (Informative) hypotheses
+# Informative hypotheses
+#
+# These are known before inspecting the lm results.
+#
+# To evaluate the hypotheses of interest, it is necessary to specify the 
+# restrictions in these hypotheses correctly:
+#  * Within the `restriktor()` and `goric()` functions, it is possible to use 
+#    the following operators: `>`, `<`, `=`, `<=`, `>=`, `==` 
+#    (where the last three denote the same constraint as the first three). 
+# * The `goric()` and the `restriktor()` functions can deal with:
+#   + pairwise restrictions separated by a semicolon `;` or '&'
+#     (e.g., *"beta1 > beta2; beta2 < beta3"*).
+#   + combined restrictions consisting of more than one operator 
+#     (e.g., *"beta1 > beta2 < beta3"*).
+#   Note that one should use the labels of the parameter estimates 
+#   (in the example above: group1-group3).
+# * One can also define hypothesis in terms of linear functions of parameters. 
+#   (For more details, see 'Extra possibility specification hypotheses' near the 
+#    end of the goric() tutorial called 'Tutorial_GORIC_restriktor_General').
+# * One can use 'abs()' in case one wants to specify an absolute strength; 
+#   e.g., abs(beta1) > abs(beta2); abs(beta2) > abs(beta3).
+#
 names(coef(fit.PandG)) # To check labels to be used in hypotheses specification
 H0 <- 'group1 = group2 = group3' # Only if of interest!
 H1 <- 'group1 > group2 > group3' 
-# Note: if no comparison with, say, group3, then leave that out: 'group1 > group2' (not 'group1 > group2, group3' or so)
+# and unconstrained as failsafe (default, in case of multiple hypotheses)
 #
-# Note: If equalities are of interest, I would inspect about-equalities.
+# Notes: - if no comparison with, say, group3, then leave that out: 
+#          'group1 > group2' (not 'group1 > group2, group3' or so)
+#        - If equalities are of interest, I would inspect about-equalities.
 # For more details, see the tutorial(s) on my github page.
 
 
@@ -69,6 +92,9 @@ goric.PandG
 #goric.PandG$result
 #summary(goric.PandG)
 goric.PandG$ratio.gw
+#
+# Check whether at least one hypothesis is better than the unconstrained.
+# If so, you can compare the non-weak hypothesis/-es with the others (weak and non-weak) in the set. 
 
 ###
 
@@ -77,6 +103,7 @@ goric.PandG$ratio.gw
 # Informative hypotheses
 H1 <- 'group1 > group2 > group3' 
 H2 <- 'group1 > group2 < group3'
+# and unconstrained as failsafe (default, in case of multiple hypotheses)
 
 # GORIC
 set.seed(123) # Set seed value
@@ -85,6 +112,15 @@ goric.PandG_H2
 #goric.PandG_H2$result
 #summary(goric.PandG_H2)
 goric.PandG_H2$ratio.gw
+#
+# Check whether at least one hypothesis is better than the unconstrained.
+# If so, you can compare the non-weak hypothesis/-es with the others (weak and non-weak) in the set. 
+#
+# It can be seen that the order-restricted hypothesis $H_1$ has (>1 
+# times) more support than $H_u$ (the unconstrained hypothesis). 
+# Hence, $H_1$ is not a weak hypotheses and can be compared to the other (weak 
+# and non-weak) competing hypotheses: 
+# $H_1$ is (>1 times) more likely than $H_2$.
 
 
 #####################
@@ -141,11 +177,7 @@ lm_fit_Lucas <-  lm(Influence ~ group-1, data = Lucas)
 #    `lm_fit_Lucas`.
   
 
-# Check the names used in model
-names(coef(lm_fit_Lucas))
-# Specify restrictions using those names
-
-# Hypotheses Set
+# Informative hypotheses
 #
 # These are known before inspecting the lm results.
 #
@@ -155,19 +187,21 @@ names(coef(lm_fit_Lucas))
 #    the following operators: `>`, `<`, `=`, `<=`, `>=`, `==` 
 #    (where the last three denote the same constraint as the first three). 
 # * The `goric()` and the `restriktor()` functions can deal with:
-#   + pairwise restrictions separated by a semicolon `;` 
-#     (e.g., *"beta1 > beta2; beta2 = beta3"*).
+#   + pairwise restrictions separated by a semicolon `;` or '&' 
+#     (e.g., *"beta1 > beta2; beta2 < beta3"*).
 #   + combined restrictions consisting of more than one operator 
-#     (e.g., *"beta1 > beta2 = beta3"*).
+#     (e.g., *"beta1 > beta2 < beta3"*).
 #   Note that one should use the labels of the parameter estimates 
 #   (in the example above: group1-group5).
 # * One can also define hypothesis in terms of linear functions of parameters. 
 #   (For more details, see 'Extra possibility specification hypotheses' near the 
 #    end of the goric() tutorial called 'Tutorial_GORIC_restriktor_General').
+# * One can use 'abs()' in case one wants to specify an absolute strength; 
+#   e.g., abs(beta1) > abs(beta2); abs(beta2) > abs(beta3).
 #
-# Summary: 
-# - goric uses "=" or "==" to denote an equality restriction
-# - goric uses ";" to separate the restrictions within one hypothesis
+# Check the names used in model
+names(coef(lm_fit_Lucas))
+# Specify restrictions using those names
 #
 #H0 <- 'group1 = group2 = group3 = group4 = group5' # only when of interest!
 H1 <- 'group5 = group3 > (group1, group4) > group2'
@@ -176,6 +210,7 @@ H1 <- 'group5 = group3 > (group1, group4) > group2'
 # Note: H1 is not full row-rank, 
 #       see below and the goric tutorial for more details.
 H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
+# and unconstrained as failsafe (default, in case of multiple hypotheses)
 
 
 # Calculate GORIC values and weights
