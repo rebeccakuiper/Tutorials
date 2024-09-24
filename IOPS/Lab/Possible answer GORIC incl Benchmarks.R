@@ -12,6 +12,8 @@ library(psych) # for the function describeBy
 ###################################################################################
 
 
+# Exercise 1a&1b
+
 # Read/Load the Data # 
 # It comes from the bain package and is called sesamesim
 # I re-name it to data:
@@ -98,6 +100,8 @@ output$b.unrestr
 
 
 #####
+
+# Exercise 3
 
 # Benchmarks GORIC
 #

@@ -356,13 +356,15 @@ display: none;
 <p>This lab material consists of multiple exercises and introduces
 (informative) hypothesis evaluation using p-values and the GORIC(A),
 respectively.</p>
-<div id="data" class="section level2">
-<h2>Data</h2>
-<p>All exercises will be applied to the same data set: a simulated data
-set based on the Sesame Street data (Stevens, 1996), which is included
-as the dataset ‘sesamsim’ in the bain package. Thus, upon installing and
-loading the bain package, the sesamsim data set is automatically
-imported.</p>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>All sub-exercises will be applied to the same data set: a simulated
+data set based on the Sesame Street data (Stevens, 1996), which is
+included as the dataset ‘sesamsim’ in the bain package. Thus, upon
+installing and loading the bain package, the sesamsim data set is
+automatically imported.</p>
 <pre class="r"><code># Install and load packages
 #
 # Install and load the bain library because it contains the data &#39;sesamesim&#39;
@@ -400,8 +402,8 @@ background of a child and consists of 5 categories:</p>
 <pre class="r"><code># convert &#39;site&#39; into a factor 
 sesamesim$site &lt;- factor(sesamesim$site)</code></pre>
 </div>
-<div id="hypotheses" class="section level2">
-<h2>Hypotheses</h2>
+<div id="hypotheses" class="section level3">
+<h3>Hypotheses</h3>
 <p>Assume that a group of researchers has come up with the following
 expectations:<br />
 A. Children from a suburban advantaged background improve more than
@@ -431,8 +433,8 @@ one-way ANOVA with <code>site</code> as the grouping variable and the
 newly created change score variable <code>post_pre</code> as the
 dependent variable.</p>
 </div>
-<div id="exercise-classical-null-hypothesis-testing-nht" class="section level2">
-<h2>Exercise: Classical Null Hypothesis Testing (NHT)</h2>
+<div id="exercise-1a-classical-null-hypothesis-testing-nht" class="section level3">
+<h3>Exercise 1a: Classical Null Hypothesis Testing (NHT)</h3>
 <p>In this exercise, evaluate the aforementioned hypothesis using
 classical null hypothesis testing.</p>
 <details>
@@ -508,8 +510,8 @@ about the support for <span class="math inline">\(H_1\)</span>.</p>
 </details>
 <p> </p>
 </div>
-<div id="exercise-the-goric" class="section level2">
-<h2>Exercise: The GORIC</h2>
+<div id="exercise-1b-the-goric" class="section level3">
+<h3>Exercise 1b: The GORIC</h3>
 <p>In this exercise, evaluate the aforementioned theory-based hypothesis
 using the GORIC (or better: the ratio of GORIC weights).</p>
 <details>
@@ -616,8 +618,9 @@ suburban).</p>
 </details>
 <p> </p>
 </div>
-<div id="exercise-the-sky-is-the-limit" class="section level2">
-<h2>Exercise: The sky is the limit</h2>
+</div>
+<div id="exercise-2-the-sky-is-the-limit" class="section level2">
+<h2>Exercise 2: The sky is the limit</h2>
 <p>You can try out evaluating informative, theory-based hypotheses using
 other data sets; for example, one or more from the subfolder ‘data’ on
 the github repository <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a> or perhaps
@@ -630,8 +633,8 @@ files.</p>
 <p>You can of course, when available, also use your own data.</p>
 <p> </p>
 </div>
-<div id="exercise-benchmarks" class="section level2">
-<h2>Exercise: Benchmarks</h2>
+<div id="exercise-3-extra-benchmarks" class="section level2">
+<h2>Exercise 3 (Extra): Benchmarks</h2>
 <!-- Titel voor Lab GORIC one study: -->
 <!-- ## Extra: Exercise Benchmarks -->
 <p>The GORIC(A) weights and the (Bayesian) posterior model probabilities
@@ -655,8 +658,9 @@ More information can be found on the github repository <a href="https://github.c
 - ‘Guidelines_GORIC-benchmarks’ (html or pdf) and<br />
 - ‘Hands-on_123_Extra_Benchmarks_ANOVA_restriktor.R’ (in the Hands-on
 files folder).</p>
-<p>Exercise: When looking at the ratio of GORIC weights above, how would
-you label that (using the benchmark function)?</p>
+<p>Exercise: When looking at the ratio of GORIC weights above (from
+Exercise 1), how would you label that (using the benchmark
+function)?</p>
 <details>
 <summary>
 <b>Click to see benchmark code</b>
