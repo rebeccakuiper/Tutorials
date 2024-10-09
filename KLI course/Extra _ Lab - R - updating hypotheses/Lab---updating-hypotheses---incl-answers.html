@@ -11,7 +11,7 @@
 
 
 
-<title>Lab: p-values, the GORIC(A), and the Bayes factor</title>
+<title>Lab: Updating hypotheses</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,297 +348,298 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Lab: p-values, the GORIC(A), and the Bayes
-factor</h1>
+<h1 class="title toc-ignore">Lab: Updating hypotheses</h1>
 
 </div>
 
 
-<!-- subtitle: "Utrecht Summer School" -->
-<p>This lab meeting consists of three exercises and introduces
-(informative) hypothesis testing using p-values, the GORIC(A), and the
-Bayes factor, respectively.</p>
+<p>This lab material consists of two exercises and discusses informative
+hypothesis evaluation in combination with updating hypotheses.</p>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>All exercises will be applied to the same data set: a simulated data
-set based on the Sesame Street data (Stevens, 1996), which is included
-as the dataset ‘sesamsim’ in the bain package. Thus, upon installing and
-loading the bain package, the sesamsim data set is automatically
-imported.</p>
-<pre class="r"><code># Install and load the bain library because it contains the data &#39;sesamesim&#39;
-if (!require(&quot;bain&quot;)) install.packages(&quot;bain&quot;) # install this package first (once)
-library(bain)
+<pre class="r"><code># Install and load packages
+
+# In case one want to use Bayes factors:
+#if (!require(&quot;bain&quot;)) install.packages(&quot;bain&quot;) # install this package first (once)
+#library(bain) # for bain function
+
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) # install this package first (once)
-library(restriktor) # for the function goric
+library(restriktor) # for goric function
+
 if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;) # install this package first (once)
-library(psych) # for the function describeBy
-
-data(sesamesim) # load the data set</code></pre>
-<p>Since the exercises concern the effect of the children’s background
-on its increase in knowledge of numbers after watching Sesame street for
-one year, some data wrangling is required first. That is, a change score
-variable (i.e. the dependent variable) needs to be created, capturing
-the difference in knowledge after one year. To create the dependent
-variable, the children’s knowledge of numbers at baseline (prenumb) is
-subtracted from its knowledge of number after watching Sesame street for
-one year (postnumb):</p>
-<pre class="r"><code># create change score variable
-sesamesim$post_pre &lt;- sesamesim$postnumb - sesamesim$prenumb</code></pre>
-<p>In addition to the dependent variable, the grouping variable (site)
-needs to be transformed into a factor. The variable represents the
-background of a child and consists of 5 categories:</p>
+library(psych) # for the function describeBy</code></pre>
+<p>The data sets used in these exercises are retrieved from:</p>
 <ul>
-<li>disadvantaged inner city,</li>
-<li>advantaged suburban,</li>
-<li>advantaged rural,</li>
-<li>disadvantaged rural,</li>
-<li>disadvantaged Spanish speaking</li>
+<li><p>Janiszewski, C., &amp; Uy, D. (2008). Precision of the anchor
+influences the amount of adjustment. <em>Psychological Science,
+19</em>(2), 121–127. doi: 10.1111/j.1467-9280.2008.02057.x</p></li>
+<li><p>Chandler, J. (2015). Replication of Janiszewski &amp; Uy (2008,
+PS, study 4b). <em>Open Science Framework</em>. Retrieved from:
+osf.io/aaudl</p></li>
 </ul>
-<pre class="r"><code># convert &#39;site&#39; into a factor 
-sesamesim$site &lt;- factor(sesamesim$site)</code></pre>
+<p>Janiszewski and Uy (2008) execute an experiment with one dependent
+variable and two factors:<br />
+- The dependent variable is ‘the amount in which a number given by
+persons differs from an anchor number expressed by means of a
+z-score’.<br />
+- One factor is ‘is the anchor number rounded (e.g. 4989) or precise
+(e.g. 5000)’.<br />
+- The other factor is ‘is there a low or high motivation to change’,
+where in the low condition it is indicated in the instruction that the
+number the persons have to give is close to the anchor number, whereas
+for the high condition there is no such instruction (see below).<br />
+In the data files, the dependent variable is denotes by <code>z</code>,
+the groups by <code>g</code>, and the four groups are labelled
+<code>rl</code> (rounded, low), <code>rh</code> (rounded, high),
+<code>pl</code> (precise low), and <code>ph</code> (precise high).</p>
+<p>Note: The z-score for the dependent variable is the average of a
+number of questions provided to the persons. An example for such a
+question is: “The retail price of a TV is 5000 dollars (rounded). The
+actual price is only slightly lower (low) than the retail price. Can you
+guess the price?”<br />
+By changing 5000 to 4989 dollars, a precise anchor number is
+obtained.<br />
+By changing “slightly lower” to “lower”, a high motivation to change is
+obtained.</p>
 </div>
-<div id="hypotheses" class="section level2">
-<h2>Hypotheses</h2>
-<p>Assume that a group of researchers has come up with two a-priori
-hypotheses about the effect of watching Sesame street for one year on
-children their knowledge of numbers.</p>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<p>1a. Use the data of Janiszewski and Uy (2008) - contained in the file
+JU.txt:</p>
+<pre class="r"><code>JU &lt;- read.table(&quot;JU.txt&quot;, header=TRUE) # import the data set
+JU$g &lt;- factor(JU$g) # make the variable group a factor</code></pre>
+<p>Btw, make sure to save the dataset in your working directory.</p>
+<p>1b. Come up with an informative hypothesis that represents their
+results.<br />
+For further support, you can read the following parts from the paper
+(“Ex2oJaniszewski&amp;Uy.pdf”):<br />
+- Experiment 1 until Results,<br />
+- Experiment 2 until Results, and<br />
+- Experiment 4 (focus on 4a, because the data provided correspond to
+experiment 4).</p>
+<p>1c. Evaluate the informative hypothesis/-es using the GORIC.<br />
+Btw, also think of an appropriate safeguard hypothesis.</p>
+<details>
+<summary>
+<b>Click to show which steps are needed</b>
+</summary>
 <ul>
-<li><span class="math inline">\(H_1\)</span>: Compared to other regions,
-the increase in knowledge is lower in rural areas (groups 3 and 4),
-i.e. <span class="math inline">\(\{\mu_3, \mu_4\} &lt; \{\mu_1, \mu_2,
-\mu_5\}\)</span></li>
-<li><span class="math inline">\(H_2\)</span>: Children from an
-advantaged background (groups 2 and 3) improve faster than children from
-a disadvantaged background, i.e. <span class="math inline">\(\{\mu_2,
-\mu_3\} &gt; \{\mu_1, \mu_4, \mu_5\}\)</span></li>
+<li>Read the data; e.g., use read.table().</li>
+<li>Create factor(s); e.g., use factor().<br />
+</li>
+<li>Inspect data; e.g., use describeBy().<br />
+</li>
+<li>Estimate linear model; use lm().<br />
+</li>
+<li>Specify informative hypothesis/-es<br />
+(which should be known before seeing the data).</li>
+<li>Apply GORIC; use goric() from restriktor package.</li>
+<li>Interpret output<br />
+(possibly using `Guidelines_output_GORIC.html’ from <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>)</li>
 </ul>
-<p>However, the researchers also assume the second hypothesis to exert a
-stronger effect. Correspondingly, they want to test the combined effect,
-yielding the following hypothesis:</p>
-<ul>
-<li><span class="math inline">\(H_{12}\)</span>: Children from an
-advantaged background improve faster than children from a disadvantaged
-background, but the effect is lower for children from rural areas,
-i.e. <span class="math inline">\(\mu_2 &gt; \mu_3 &gt; \{\mu_1, \mu_5\}
-&gt; \mu_4\)</span>, that is, <span class="math inline">\(\mu_2 &gt;
-\mu_3 &gt; \mu_1 &gt; \mu_4, \ \mu_5 &gt; \mu_4\)</span></li>
-</ul>
-<p>The goal of this exercise is to evaluate these hypotheses using a
-one-way ANOVA with ‘site’ as the grouping variable and the newly created
-change score variable as the dependent variable.</p>
-</div>
-<div id="exercise-1-classical-null-hypothesis-testing" class="section level2">
-<h2>Exercise 1: Classical Null Hypothesis Testing</h2>
-<p>In this exercise, evaluate the aforementioned hypothesis using
-classical null hypothesis testing.</p>
-<details>
-<summary>
-<b>Click to show answers</b>
-</summary>
-<p> </p>
-<pre class="r"><code>head(sesamesim) # Look at first (6) rows of the data</code></pre>
-<pre><code>##   sex site setting viewenc age peabody prenumb postnumb funumb Bb Bl Bf Bn Br
-## 1   1    1       1       0  36      48      30       34      0 10 16  3 18  7
-## 2   1    3       1       1  61      28      24       31      0  8  7  2  7  7
-## 3   1    4       1       0  44      54      10       19      1 21  4 11 21  9
-## 4   1    3       1       1  40      20       3        3      2 16 21  8 20  8
-## 5   1    1       1       0  43      43      19       25      5 14 13  8  1 11
-## 6   1    1       2       0  55      30      24       26      6 21  8 13 23 13
-##   Bc Ab Al Af An Ar Ac post_pre
-## 1  8 22 18 11 27  9 13        4
-## 2  4 14  2  9 14 10  9        7
-## 3  9 34 36 22 17 11 13        9
-## 4  5 26 28 17 32 15 18        0
-## 5 10 22  7 10 10 10  9        6
-## 6 16 28 37 15 41 14 21        2</code></pre>
-<pre class="r"><code>describeBy(sesamesim$post_pre, sesamesim$site, mat=TRUE) # obtain descriptives by group</code></pre>
-<pre><code>##     item group1 vars  n      mean        sd median   trimmed     mad min max
-## X11    1      1    1 60  5.783333  8.328207    5.0  5.770833  7.4130 -17  30
-## X12    2      2    1 55 12.636364 11.005661   12.0 12.911111 10.3782 -24  32
-## X13    3      3    1 64  8.718750  7.818311    9.5  8.788462  6.6717  -8  29
-## X14    4      4    1 43  6.883721 10.270645    7.0  7.371429 10.3782 -21  23
-## X15    5      5    1 18 10.555556  8.318811   11.0 11.062500  5.9304 -11  24
-##     range        skew    kurtosis        se
-## X11    47  0.10322321  0.36054880 1.0751670
-## X12    56 -0.44957553  0.59529385 1.4840031
-## X13    37 -0.06399545 -0.13668115 0.9772889
-## X14    44 -0.42723461 -0.03212565 1.5662587
-## X15    35 -0.70156486  0.31385289 1.9607625</code></pre>
-<pre class="r"><code># run a one-way ANOVA
-lm_fit_sesam &lt;- lm(post_pre~site-1, data=sesamesim)
-summary(lm_fit_sesam)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = post_pre ~ site - 1, data = sesamesim)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -36.636  -5.783   0.281   6.281  24.217 
-## 
-## Coefficients:
-##       Estimate Std. Error t value Pr(&gt;|t|)    
-## site1    5.783      1.194   4.845 2.30e-06 ***
-## site2   12.636      1.247  10.135  &lt; 2e-16 ***
-## site3    8.719      1.156   7.544 9.96e-13 ***
-## site4    6.884      1.410   4.882 1.94e-06 ***
-## site5   10.556      2.179   4.843 2.32e-06 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 9.246 on 235 degrees of freedom
-## Multiple R-squared:  0.4951, Adjusted R-squared:  0.4843 
-## F-statistic: 46.08 on 5 and 235 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>Note that the information given in the output is quiet limited. We
-can see that the increase in knowledge of numbers among the five groups
-of children is significantly different from 0, but we can not infer any
-conclusions about the ordering of the group means. To evaluate this, the
-Bayes factor or the GORIC need to be employed.</p>
-</details>
-<p> </p>
-</div>
-<div id="exercise-2-the-goric" class="section level2">
-<h2>Exercise 2: The GORIC</h2>
-<p>In this exercise, evaluate the aforementioned hypothesis using the
-GORIC.</p>
-<details>
-<summary>
-<b>Click to show answers</b>
-</summary>
-<p> </p>
-<pre class="r"><code># Specify hypothesis
-H12_sesam &lt;- &quot;site2&gt;site3&gt;site1&gt;site4, site5&gt;site4&quot; # specify the hypothesis of interest
-# or: H12_sesam &lt;- &quot;site2&gt;site3&gt;site1&gt;site4 &amp; site5&gt;site4&quot;
-
-# Run GORIC
-set.seed(123)
-goric_sesam &lt;- goric(lm_fit_sesam, hypotheses = list(H12_sesam), comparison = &#39;complement&#39;)
-goric_sesam</code></pre>
-<pre><code>## restriktor (0.5-30): generalized order-restricted information criterion: 
-## 
-## Results:
-##         model    loglik  penalty     goric  loglik.weights  penalty.weights
-## 1          H1  -872.011    3.814  1751.650           0.455            0.886
-## 2  complement  -871.830    5.862  1755.384           0.545            0.114
-##    goric.weights
-## 1          0.866
-## 2          0.134
-## ---
-## The order-restricted hypothesis &#39;H1&#39; has 6.468 times more support than its complement.</code></pre>
-<pre class="r"><code>#summary(goric_sesam)</code></pre>
-<p>The GORIC provides evidence for our hypothesis: Compared to the
-unconstrained hypothesis, the GORIC indicates 6.5 more support for
-hypothesis <span class="math inline">\(H_{12}\)</span> than for its
-complement (i.e., all other possible orderings/theories).\ On average,
-the data thus supports our hypothesis that children from an advantaged
-background improve faster than children from a disadvantaged background
-and that this increase is lower among children from rural areas.</p>
-</details>
-<p> </p>
-</div>
-<div id="exercise-3-the-bayes-factor" class="section level2">
-<h2>Exercise 3: The Bayes Factor</h2>
-<p>In this exercise, evaluate the aforementioned hypothesis using a
-Bayes factor.</p>
-<details>
-<summary>
-<b>Click to show answers</b>
-</summary>
-<p> </p>
-<pre class="r"><code># Specify hypothesis
-H12_sesam &lt;- &quot;site2&gt;site3&gt;site1&gt;site4 &amp; site5&gt;site4&quot; # specify the hypothesis of interest
-
-# Run BMS
-set.seed(123) # set a seed
-bain(lm_fit_sesam, H12_sesam) # evaluate the hypotheses with a Bayes factor</code></pre>
-<pre><code>## Bayesian informative hypothesis testing for an object of class lm (ANOVA):
-## 
-##    Fit   Com   BF.u  BF.c  PMPa  PMPb  PMPc 
-## H1 0.231 0.033 7.041 8.851 1.000 0.876 0.898
-## Hu                               0.124      
-## Hc 0.769 0.967 0.796                   0.102
-## 
-## Hypotheses:
-##   H1: site2&gt;site3&gt;site1&gt;site4&amp;site5&gt;site4
-## 
-## Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconstrained hypothesis Hu. BF.c denotes the Bayes factor of the hypothesis at hand versus its complement. PMPa contains the posterior model probabilities of the hypotheses specified. PMPb adds Hu, the unconstrained hypothesis. PMPc adds Hc, the complement of the union of the hypotheses specified.</code></pre>
-<p>The results indicate that <span class="math inline">\(H_{12}\)</span>
-has 8.9 times more support compared to its complement. \ On average, the
-data thus supports our hypothesis that children from an advantaged
-background improve faster than children from a disadvantaged background
-and that this increase is lower among children from rural areas.</p>
-</details>
-<p> </p>
-</div>
-<div id="exercise-4-the-sky-is-the-limit" class="section level2">
-<h2>Exercise 4: The sky is the limit</h2>
-<p>You can try out evaluating informative hypotheses using other data
-sets, for example one or more from the subfolder ‘data’ on the github
-repository <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
-<p>You can also look into applying the GORIC(A) and/or bain on other
-types of models (e.g., SEM and (RI-)CLPM). Examples files for the
-GORIC(A) can be found on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>. Notably, in
-’_README.md’ you can find an overview of the (example and tutorial)
-files.</p>
-<p> </p>
-</div>
-<div id="exercise-5-benchmarks" class="section level2">
-<h2>Exercise 5: Benchmarks</h2>
-<p>The GORIC(A) weights and PMPs nicely quantify the support for your
-hypothesis of interest. Even though it is easily interpreted, you may
-have noticed that sometimes it is hard to label the support. In a way,
-we do not want to label it, because cut-off points can invoke
-questionable research practices, but benchmarks do ease the
-interpretation even further. Let us therefore inspect benchmarks for the
-GORIC(A).</p>
-<p>To use the benchmark function, first install and load it:</p>
-<pre class="r"><code># Install and load benchmark function
-if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-library(devtools)
-install_github(&quot;rebeccakuiper/benchmarks&quot;)
-library(benchmarks)
-# For more information regarding the included functions:
-#?benchmarks
-#?benchmarks_ANOVA</code></pre>
-<p>More information can be found on ‘Guidelines_GORIC-benchmarks’ (html
-or pdf) on the github repository <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
-<p>When looking at the GORIC results above, how would you label
-them?</p>
-<details>
-<summary>
-<b>Click to see benchmark code</b>
-</summary>
-<p> </p>
-<pre class="r"><code>pop.es &lt;- c(0)
-benchmarks_1c &lt;- benchmarks_ANOVA(goric_sesam, pop.es)
-benchmarks_1c$error.prob.pref.hypo</code></pre>
-<pre><code>## [1] 0.1338962</code></pre>
-<pre class="r"><code>benchmarks_1c$benchmarks.weight</code></pre>
-<pre><code>## $`pop.es = 0`
-##       Sample        5%       35%       50%       65%       95%
-## H1 0.8661038 0.2314983 0.7196067 0.7880296 0.8369776 0.8857286</code></pre>
-<pre class="r"><code>benchmarks_1c$benchmarks.ratios</code></pre>
-<pre><code>## $`pop.es = 0`
-##                     Sample        5%      35%      50%      65%      95%
-## H1 vs. H1         1.000000 1.0000000 1.000000 1.000000 1.000000 1.000000
-## H1 vs. complement 6.468473 0.3012379 2.566425 3.717641 5.134128 7.751093</code></pre>
 </details>
 <!-- &nbsp; -->
 <details>
 <summary>
+<b>Click to show notes on specifying hypotheses for goric()</b>
+</summary>
+<ul>
+<li>It is possible to use the following operators: <code>&gt;</code>,
+<code>&lt;</code>, <code>=</code>,
+<code>==</code>,<code>&lt;=</code>or<code>&gt;=</code> within the
+<code>goric()</code> function.
+<ul>
+<li><code>==</code> operator is interpreted in the same fashion as the
+<code>=</code>, meaning an equality.<br />
+</li>
+<li><code>&lt;=</code> and <code>&gt;=</code> operators are the same as
+<code>&lt;</code> and <code>&gt;</code>, respectively, denoting
+inequality constraints (i.e., smaller and larger than,
+respectively).</li>
+</ul></li>
+<li>The <code>goric()</code> function can deal with:
+<ul>
+<li>pairwise restrictions (e.g., “x1 &gt; x2; x2 &gt; x3”); one can also
+use a “&amp;” or “,” to separate the restrictions within one
+hypothesis.</li>
+<li>combined restrictions (e.g., “x1 &gt; x2 &gt; x3”)</li>
+</ul></li>
+</ul>
+<p>Remark:<br />
+* In a paper, hypotheses are specified in terms of population model
+parameters (often expressed as Greek letters).<br />
+* In R, hypotheses are specified in terms of<br />
+- the names of variables to which the parameters of interest belong to
+and/or<br />
+- the assigned labels of the parameters of interest.</p>
+</details>
+<p> </p>
+<!-- ANSWERS -->
+<details>
+<summary>
 <b>Click to show answers</b>
 </summary>
 <p> </p>
-<p>One can see that there is a 13.4% change that ‘H12_sesam’ is not the
-correct hypothesis.</p>
-<p>In the benchmark code above, the null population for which all means
-are equal is used. If you rather check for another null using say a
-small effect size, you can do that. You can either use a specific ANOVA
-effect size (pop.es) in the benchmarks_ANOVA function or specify a set
-of population estimations (pop.est) in the benchmarks function. When
-using the null where all means are equal:</p>
-<p>We can see that our finding is quite extreme under the null (in
-between 65 and 95%). Hence, there is high (compelling) support for
-‘H12_sesam’.</p>
+<p>For the purpose of this exercise, two competing hypotheses are
+assumed. That is:</p>
+<ul>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu_{grh} &gt; \mu_{gph} &gt; \mu_{grl} &gt;
+\mu_{gpl}\)</span></li>
+<li><span class="math inline">\(H_2\)</span>: <span class="math inline">\(\mu_{grh} &gt; \mu_{gph} = \mu_{grl} &gt;
+\mu_{gpl}\)</span></li>
+</ul>
+<p>Notably, it is possible to have two theories which are not competing.
+Say, one addressing comparison between men and women and another one
+addressing different education levels. Then, do not evaluate them
+together, but each separately against their own complement.</p>
+<pre class="r"><code># Specify the theory-based hypotheses
+H1_JU &lt;- &#39;grh &gt; gph &gt; grl &gt; gpl&#39;
+H2_JU &lt;- &#39;grh &gt; gph = grl &gt; gpl&#39;
+# and the unconstrained as failsafe 
+# (default, in case of multiple hypotheses)</code></pre>
+<pre class="r"><code># Check descriptive statistics
+head(JU) # Look at first (6) rows of the data</code></pre>
+<pre><code>##            z  g
+## 1 -0.5526437 pl
+## 2 -0.7892339 pl
+## 3 -0.6614403 pl
+## 4 -1.0524055 pl
+## 5 -0.7880652 pl
+## 6 -0.7064000 pl</code></pre>
+<pre class="r"><code>describeBy(JU$z, JU$g, mat=TRUE) # obtain descriptives by group</code></pre>
+<pre><code>##     item group1 vars  n  mean   sd     median     trimmed       mad        min
+## X11    1     ph    1 15 -0.04 0.28 -0.0987478 -0.07716972 0.1833731 -0.2984226
+## X12    2     pl    1 14 -0.76 0.17 -0.7532553 -0.75210987 0.1165529 -1.0836737
+## X13    3     rh    1 15  0.98 0.41  0.9513561  0.99662142 0.5155925  0.2688003
+## X14    4     rl    1 15 -0.23 0.48 -0.3521014 -0.24651035 0.4877177 -0.9112438
+##            max     range       skew   kurtosis         se
+## X11  0.7016290 1.0000515  1.3189938  0.9406750 0.07229569
+## X12 -0.5310078 0.5526659 -0.4023804 -0.7758545 0.04543441
+## X13  1.4751212 1.2063210 -0.4391714 -1.2519251 0.10586154
+## X14  0.6658783 1.5771220  0.3232025 -1.2765118 0.12393547</code></pre>
+<pre class="r"><code># Run a one_way ANOVA
+model1_JU &lt;-  lm(z ~ g-1, data=JU)</code></pre>
+<pre class="r"><code># compute GORIC value and weights
+set.seed(123) # Set seed value
+goric_JU &lt;- goric(model1_JU, 
+                  hypotheses = list(H1_JU = H1_JU, H2_JU = H2_JU))
+goric_JU</code></pre>
+<pre><code>## restriktor (0.5-90): generalized order-restricted information criterion: 
+## 
+## Results:
+##            model   loglik  penalty   goric  loglik.weights  penalty.weights
+## 1          H1_JU  -21.054    3.089  48.286           0.429            0.423
+## 2          H2_JU  -22.165    2.894  50.119           0.141            0.514
+## 3  unconstrained  -21.054    5.000  52.108           0.429            0.063
+##    goric.weights  goric.weights_without_unc
+## 1          0.646                      0.714
+## 2          0.258                      0.286
+## 3          0.096                           
+## ---
+## The order-restricted hypothesis &#39;H1_JU&#39; is not weak, with 2.501 times more support than H2_JU.</code></pre>
+<pre class="r"><code>goric_JU$ratio.gw</code></pre>
+<pre><code>##               vs. H1_JU vs. H2_JU vs. unconstrained
+## H1_JU         1.0000000 2.5011911          6.759846
+## H2_JU         0.3998095 1.0000000          2.702651
+## unconstrained 0.1479324 0.3700071          1.000000</code></pre>
+<pre class="r"><code>#summary(goric_JU)</code></pre>
+<p>The results indicate that both Hypothesis <span class="math inline">\(H_1\)</span> (i.e., H1_JU) and Hypothesis <span class="math inline">\(H_2\)</span> (i.e., H2_JU) are not weak, since
+they receive more support than the unconstrained hypothesis. Hence, one
+can compare the support for the competing hypotheses:</p>
+<p>Hypothesis H1_JU receives (0.65 <span class="math inline">\(/\)</span> 0.26 <span class="math inline">\(\approx\)</span>) 2.5 more support than hypothesis
+H2_JU.</p>
+<p>It can be seen that H1_JU receives the most support. But: H2_JU does
+obtain some support as well. Now, it is up to you as a researcher to
+decide whether you will only evaluate H1_JU or both H1_JU and H2_JU in
+the replication study (see next exercise).</p>
+</details>
+<p> </p>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>2a. Use the data of Chandler (2015) - contained in the file
+C.txt:</p>
+<pre class="r"><code>C &lt;- read.table(&quot;C.txt&quot;, header=TRUE) # import the data set
+C$g &lt;- factor(C$g) # make the variable group a factor</code></pre>
+<p>Note: The report by Chandler (2015) is also contained in the course
+materials (“Ex2r Chandler_final.docx”)</p>
+<p>2b. Specify the informative hypothesis/-es resulting from the
+original study (i.e., Exercise 1).</p>
+<p>2c. Evaluate whether this replication study supports the informative
+hypothesis/-es using the GORIC.</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p> </p>
+<p>For the purpose of this exercise, the same two competing hypotheses
+as in the previous exercise are evaluated. That is:</p>
+<ul>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu_{grh} &gt; \mu_{gph} &gt; \mu_{grl} &gt;
+\mu_{gpl}\)</span></li>
+<li><span class="math inline">\(H_2\)</span>: <span class="math inline">\(\mu_{grh} &gt; \mu_{gph} = \mu_{grl} &gt;
+\mu_{gpl}\)</span></li>
+</ul>
+<pre class="r"><code># Specify the theory-based hypotheses
+H1_C &lt;- &#39;grh &gt; gph &gt; grl &gt; gpl&#39;
+H2_C &lt;- &#39;grh &gt; gph = grl &gt; gpl&#39;
+# and the unconstrained as failsafe 
+# (default, in case of multiple hypotheses)</code></pre>
+<pre class="r"><code># Check descriptive statistics
+head(JU) # Look at first (6) rows of the data</code></pre>
+<pre><code>##            z  g
+## 1 -0.5526437 pl
+## 2 -0.7892339 pl
+## 3 -0.6614403 pl
+## 4 -1.0524055 pl
+## 5 -0.7880652 pl
+## 6 -0.7064000 pl</code></pre>
+<pre class="r"><code>describeBy(JU$z, JU$g, mat=TRUE) # obtain descriptives by group</code></pre>
+<pre><code>##     item group1 vars  n  mean   sd     median     trimmed       mad        min
+## X11    1     ph    1 15 -0.04 0.28 -0.0987478 -0.07716972 0.1833731 -0.2984226
+## X12    2     pl    1 14 -0.76 0.17 -0.7532553 -0.75210987 0.1165529 -1.0836737
+## X13    3     rh    1 15  0.98 0.41  0.9513561  0.99662142 0.5155925  0.2688003
+## X14    4     rl    1 15 -0.23 0.48 -0.3521014 -0.24651035 0.4877177 -0.9112438
+##            max     range       skew   kurtosis         se
+## X11  0.7016290 1.0000515  1.3189938  0.9406750 0.07229569
+## X12 -0.5310078 0.5526659 -0.4023804 -0.7758545 0.04543441
+## X13  1.4751212 1.2063210 -0.4391714 -1.2519251 0.10586154
+## X14  0.6658783 1.5771220  0.3232025 -1.2765118 0.12393547</code></pre>
+<pre class="r"><code># Run a one_way ANOVA
+model1_C &lt;-  lm(z ~ g-1, data=C)</code></pre>
+<pre class="r"><code># compute GORIC value and weights
+set.seed(123) # Set seed value
+goric_C &lt;- goric(model1_C, 
+                 hypotheses = list(H1_C = H1_C, H2_C= H2_C))
+goric_C</code></pre>
+<pre><code>## restriktor (0.5-90): generalized order-restricted information criterion: 
+## 
+## Results:
+##            model   loglik  penalty    goric  loglik.weights  penalty.weights
+## 1           H1_C  -42.888    3.084   91.943           0.500            0.424
+## 2           H2_C  -51.340    2.892  108.464           0.000            0.514
+## 3  unconstrained  -42.888    5.000   95.775           0.500            0.062
+##    goric.weights  goric.weights_without_unc
+## 1          0.872                      1.000
+## 2          0.000                      0.000
+## 3          0.128                           
+## ---
+## The order-restricted hypothesis &#39;H1_C&#39; is not weak, with 3.869e+03 times more support than H2_C.</code></pre>
+<pre class="r"><code>goric_C$ratio.gw</code></pre>
+<pre><code>##                   vs. H1_C  vs. H2_C vs. unconstrained
+## H1_C          1.0000000000 3868.9583       6.796978070
+## H2_C          0.0002584675    1.0000       0.001756798
+## unconstrained 0.1471242057  569.2174       1.000000000</code></pre>
+<pre class="r"><code>#summary(goric_C)</code></pre>
+<p>The results indicate that hypothesis <span class="math inline">\(H_1\)</span> (i.e., H1_C) is not weak, since it
+receives more support than the unconstrained hypothesis; and that <span class="math inline">\(H_2\)</span> (i.e., H2_C) is weak. Hence, one can
+compare the support for H1_C versus H2_C:</p>
+<p>Hypothesis H1_C receives (0.87 <span class="math inline">\(/\)</span>
+0 <span class="math inline">\(\approx\)</span>) 3869 more support than
+hypothesis H2_C.</p>
+<p>This replication study thus finds support for <span class="math inline">\(H_1\)</span> and, now, there is even compelling
+evidence for <span class="math inline">\(H_1: grh &gt; gph &gt; grl &gt;
+gpl\)</span>.</p>
 </details>
 <p> </p>
 </div>
