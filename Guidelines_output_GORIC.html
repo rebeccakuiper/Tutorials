@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Leonard Vanbrabant" />
 
-<meta name="date" content="2024-09-17" />
+<meta name="date" content="2025-01-14" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper and Leonard Vanbrabant</h4>
-<h4 class="date">17 September 2024</h4>
+<h4 class="date">14 January 2025</h4>
 
 </div>
 
@@ -1627,7 +1627,7 @@ complexity). Notably, the ratio of GORIC(A) weights together with other
 output can also denote support for their boundary/border, which is
 discussed in the Special cases Section.</p>
 <p>When inspecting a hypothesis versus its complement, one can interpret
-<span class="math inline">\(1 - w_m = w_c\)</span> as a error
+<span class="math inline">\(1 - w_m = w_c\)</span> as an error
 probability. That is, the probability that <span class="math inline">\(H_m\)</span> is not the best one is <span class="math inline">\(w_c*100\%\)</span>. Note that in case of multiple
 hypotheses, especially in case of overlapping hypotheses, I would not
 advise on using this (conditional) error probability interpretation,
@@ -1642,13 +1642,14 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # Denoting mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c &lt;- goric(fit, hypotheses = list(H1))
 results_1c</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -123.384    2.832  252.431           0.679            0.698          0.830
 2  complement  -124.133    3.668  255.601           0.321            0.302          0.170
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 4.88 times more support than its complement.</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is 0.83 <span class="math inline">\(/\)</span> 0.17 <span class="math inline">\(\approx\)</span> 4.88 time more supported than its
@@ -1706,13 +1707,14 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1u &lt;- goric(fit, hypotheses = list(H1), comparison = &quot;unconstrained&quot;)
 results_1u</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -123.384    2.832  252.431           0.500            0.763          0.763
 2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 0.763 / 0.237 &gt; 1 times more support than the unconstrained.</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
 \mu_1 &gt; \mu_2 &gt; \mu_3\)</span> is more supported than the
@@ -1836,15 +1838,20 @@ H2 &lt;- &quot;D1 &lt; D2 &lt; D3&quot; # mu1 &lt; mu2 &lt; mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
 1             H1  -123.384    2.832  252.431           0.500            0.433          0.763                      1.000
 2             H2  -131.346    2.832  268.356           0.000            0.433          0.000                      0.000
 3  unconstrained  -123.384    4.000  254.767           0.500            0.135          0.237                           
----
-The order-restricted hypothesis &#39;H1&#39; is not weak, with 2.871e+03 times more support than H2.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
+
+  * &#39;H1&#39; is 2.871e+03 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1  vs. H2 vs. unconstrained
 H1              1.00 2871.23              3.22
@@ -1910,13 +1917,14 @@ H2 &lt;- &quot;D1 &lt; D2&quot; # # =&gt; H2: D1 &lt; D2, D3 # mu1 &lt; mu2, mu3
 set.seed(123) 
 results_12 &lt;- goric(fit, hypotheses = list(H1, H2), comparison = &quot;none&quot;)
 results_12</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
    model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1     H1  -123.384    3.500  253.767           0.978            0.500          0.978
 2     H2  -127.183    3.500  261.366           0.022            0.500          0.022
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 44.68 times more support than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(results_12$ratio.gw, 2)</code></pre>
 <pre><code>   vs. H1 vs. H2
@@ -1992,13 +2000,14 @@ H1g &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt;  mu2 &gt; mu3
 set.seed(123) 
 results_1g &lt;- goric(fit, hypotheses = list(H1g = H1g))
 results_1g</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1         H1g  -123.384    2.832  252.431           0.831            0.698          0.919
 2  complement  -124.978    3.668  257.292           0.169            0.302          0.081
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1g&#39; has 11.36 times more support than its complement.</code></pre>
 <pre class="r"><code>round(results_1g$ratio.gw, 2)</code></pre>
 <pre><code>           vs. H1g vs. complement
@@ -2022,13 +2031,14 @@ H1m &lt;- &quot;D1 - D2 &gt; .1, D2 &gt; D3&quot; # mu1 - mu2 &gt; .1, mu2 &gt; 
 set.seed(123) 
 results_1m &lt;- goric(fit, hypotheses = list(H1m = H1m))
 results_1m</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1         H1m  -123.384    2.832  252.431           0.736            0.698          0.865
 2  complement  -124.409    3.668  256.154           0.264            0.302          0.135
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1m&#39; has 6.43 times more support than its complement.</code></pre>
 <pre class="r"><code>round(results_1m$ratio.gw, 2)</code></pre>
 <pre><code>           vs. H1m vs. complement
@@ -2135,15 +2145,20 @@ H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
 1             H1  -123.384    2.832  252.431           0.333            0.548          0.548                      0.661
 2             H2  -123.384    3.500  253.767           0.333            0.281          0.281                      0.339
 3  unconstrained  -123.384    4.000  254.767           0.333            0.171          0.171                           
----
-The order-restricted hypothesis &#39;H1&#39; is not weak, with 1.950 times more support than H2.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
+
+  * &#39;H1&#39; is 1.950 times more supported than &#39;H2&#39; (This relative support reached its maximum, see Note.).</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 3)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1             1.000  1.950             3.216
@@ -2191,15 +2206,20 @@ H2 &lt;- &quot;D1 &gt; D2&quot; # H2: D1 &gt; D2, D3  # mu1 &gt; mu2,  mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
 1             H1  -124.316    2.832  254.297           0.164            0.548          0.323                      0.434
 2             H2  -123.384    3.500  253.767           0.418            0.281          0.421                      0.566
 3  unconstrained  -123.384    4.000  254.767           0.418            0.171          0.255                           
----
-The order-restricted hypothesis &#39;H2&#39; is not weak, with 1.303 times more support than H1.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
+
+  * &#39;H2&#39; is 1.303 times more supported than &#39;H1&#39;.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00   0.77              1.27
@@ -2253,13 +2273,14 @@ Hn &lt;- &quot;D1 &gt; D2 &lt; D3&quot; # mu1 &gt; mu2 &lt; mu3
 set.seed(123) 
 results_n &lt;- goric(fit, hypotheses = list(Hn = Hn))
 results_n</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          Hn  -123.384    3.168  253.103           0.718            0.541          0.750
 2  complement  -124.316    3.332  255.297           0.282            0.459          0.250
----
+
+Conclusion:
 The order-restricted hypothesis &#39;Hn&#39; has 2.99 times more support than its complement.</code></pre>
 </div>
 </div>
@@ -2298,13 +2319,14 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_1c &lt;- goric(fit, hypotheses = list(H1))
 results_1c</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -123.450    2.832  252.564           0.483            0.698          0.683
 2  complement  -123.384    3.668  254.103           0.517            0.302          0.317
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 2.16 times more support than its complement.</code></pre>
 <pre class="r"><code>#
 coef(fit)</code></pre>
@@ -2359,7 +2381,7 @@ Hb3 &lt;- &quot;D1 = D2 = D3&quot; # mu1 = mu2 = mu3
 set.seed(123) 
 results_b123 &lt;- goric(fit, hypotheses = list(Hb1 = Hb1, Hb2 = Hb2, Hb3 = Hb3))
 results_b123</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
@@ -2367,8 +2389,14 @@ Results:
 2            Hb2  -123.450    2.500  251.900           0.458            0.258          0.725                      0.876
 3            Hb3  -126.570    2.000  257.139           0.020            0.426          0.053                      0.064
 4  unconstrained  -123.384    4.000  254.767           0.490            0.058          0.173                           
----
-The order-restricted hypothesis &#39;Hb2&#39; is not weak, with 14.611 times more support than Hb1 and 13.734 times more support than Hb3.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;Hb2&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;Hb2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;Hb2&#39; against the other order-restricted hypotheses:
+
+  * &#39;Hb2&#39; is 14.611 times more supported than &#39;Hb1&#39;.
+  * &#39;Hb2&#39; is 13.734 times more supported than &#39;Hb3&#39;.</code></pre>
 <p> </p>
 </div>
 </div>
@@ -2382,15 +2410,20 @@ H2 &lt;- &quot;D1 &gt; D2 &lt; D3&quot; # mu1 &gt; mu2 &lt; mu3
 set.seed(123) 
 results_12u &lt;- goric(fit, hypotheses = list(H1, H2))
 results_12u</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
 1             H1  -123.450    2.832  252.564           0.319            0.494          0.477                      0.567
 2             H2  -123.384    3.168  253.103           0.341            0.353          0.364                      0.433
 3  unconstrained  -123.384    4.000  254.767           0.341            0.154          0.159                           
----
-The order-restricted hypothesis &#39;H1&#39; is not weak, with 1.310 times more support than H2.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
+
+  * &#39;H1&#39; is 1.310 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00   1.31              3.01
@@ -2443,13 +2476,14 @@ Hb &lt;- &quot;D1 &gt; D2, -.1 &lt; D2 - D3 &lt; .1&quot; # mu1 &gt; mu2, -.1 &l
 set.seed(123) 
 results_b &lt;- goric(fit, hypotheses = list(Hb = Hb))
 results_b</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          Hb  -123.384    2.500  251.767           0.944            0.731          0.979
 2  complement  -126.207    3.500  259.413           0.056            0.269          0.021
----
+
+Conclusion:
 The order-restricted hypothesis &#39;Hb&#39; has 45.75 times more support than its complement.</code></pre>
 </div>
 </div>
@@ -2510,13 +2544,14 @@ He &lt;- &quot;D1 = D2 &gt; 0, D3 &gt; 0&quot; # mu1 = mu2 &gt; 0, mu3 &gt; 0
 set.seed(123) 
 results_e &lt;- goric(fit, hypotheses = list(He = He))
 results_e</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          He  -139.114    2.000  282.228           0.499            0.818          0.817
 2  complement  -139.111    3.500  285.222           0.501            0.182          0.183
----
+
+Conclusion:
 The order-restricted hypothesis &#39;He&#39; has 4.47 times more support than its complement.</code></pre>
 <pre class="r"><code>round(results_e$ratio.lw, 2) # ratio of loglik weights</code></pre>
 <pre><code>           vs. He vs. complement
@@ -2591,13 +2626,14 @@ Hae &lt;- &quot;-0.2 &lt; D1 - D2 &lt; .2, D1 &gt; 0, D2 &gt; 0, D3 &gt; 0&quot;
 set.seed(123) 
 results_ae &lt;- goric(fit, hypotheses = list(Hae = Hae))
 results_ae</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1         Hae  -139.111    2.000  282.222           0.926            0.818          0.983
 2  complement  -141.645    3.500  290.290           0.074            0.182          0.017
----
+
+Conclusion:
 The order-restricted hypothesis &#39;Hae&#39; has 56.48 times more support than its complement.</code></pre>
 <pre class="r"><code>round(results_ae$ratio.lw, 2) # ratio of loglik weights</code></pre>
 <pre><code>           vs. Hae vs. complement
@@ -2697,13 +2733,14 @@ H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
 set.seed(123) 
 results_c &lt;- goric(fit, hypotheses = list(H1 = H1))
 results_c</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -120.398    2.832  246.459           0.419            0.698          0.625
 2  complement  -120.072    3.668  247.481           0.581            0.302          0.375
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 1.67 times more support than its complement.</code></pre>
 <pre class="r"><code>round(results_c$ratio.gw, 2)</code></pre>
 <pre><code>           vs. H1 vs. complement
@@ -2740,13 +2777,14 @@ H1 &lt;- &quot;D1 - D2 &gt; .5, D2 &gt; D3&quot; # mu1 - mu2 &gt; .5, mu2 &gt; m
 set.seed(123) 
 results_i &lt;- goric(fit, hypotheses = list(H1 = H1))
 results_i</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -139.436    2.832  284.536           0.419            0.698          0.625
 2  complement  -139.111    3.668  285.558           0.581            0.302          0.375
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 1.67 times more support than its complement.</code></pre>
 <pre class="r"><code>round(results_i$ratio.gw, 3)</code></pre>
 <pre><code>           vs. H1 vs. complement
@@ -2911,13 +2949,14 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 set.seed(123) 
 results_i &lt;- goric(fit, hypotheses = list(H1))
 results_i</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -139.260    2.000  282.520           0.463            0.818          0.794
 2  complement  -139.111    3.500  285.222           0.537            0.182          0.206
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 3.86 times more support than its complement.</code></pre>
 <p>From the <code>bain</code> output, you can see (from BF.c) that the
 incorrect equality hypothesis <span class="math inline">\(H_1\)</span>
@@ -2971,14 +3010,15 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 set.seed(123) 
 results_i_N1000 &lt;- goric(fit, hypotheses = list(H1))
 results_i_N1000</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model     loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -1346.431    2.000  2696.861           0.045            0.818          0.175
 2  complement  -1343.380    3.500  2693.760           0.955            0.182          0.825
----
-The order-restricted hypothesis &#39;H1&#39; has 0.21 times more support than its complement.</code></pre>
+
+Conclusion:
+The order-restricted hypothesis &#39;H1&#39; has 0.175 / 0.825 &lt; 1 times more support than its complement. That is, the complement has 4.71 times more support than &#39;H1&#39; </code></pre>
 </div>
 </div>
 <div id="n-10000" class="section level3" number="6.2.3">
@@ -3009,14 +3049,15 @@ Note: BF.u denotes the Bayes factor of the hypothesis at hand versus the unconst
 set.seed(123) 
 results_i_N10000 &lt;- goric(fit, hypotheses = list(H1))
 results_i_N10000</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model      loglik  penalty      goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -13428.294    2.000  26860.588           0.000            0.818          0.000
 2  complement  -13411.461    3.500  26829.922           1.000            0.182          1.000
----
-The order-restricted hypothesis &#39;H1&#39; has 0.00 times more support than its complement.</code></pre>
+
+Conclusion:
+The order-restricted hypothesis &#39;H1&#39; has 0.000 / 1.000 &lt; 1 times more support than its complement. That is, the complement has Inf times more support than &#39;H1&#39; </code></pre>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 
 </div>

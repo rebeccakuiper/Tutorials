@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-09-17" />
+<meta name="date" content="2025-01-14" />
 
 <title>How to evaluate theory-based hypotheses in a SEM model using the GORICA</title>
 
@@ -2716,7 +2716,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a SEM model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">17 September 2024</h4>
+<h4 class="date">14 January 2025</h4>
 
 </div>
 
@@ -2786,8 +2786,8 @@ make sure to give your own labels to estimates by including them in the
 library(lavaanPlot)
 lavaanPlot(model = fit1, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
            edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-978eb4e9ec001f1c35d8" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-978eb4e9ec001f1c35d8">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-3402708182d849182359" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-3402708182d849182359">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n Ab; Al; Af; An; Ar; Ac; Bb; Bl; Bf; Bn; Br; Bc \n node [shape = oval] \n A; B \n \n edge [ color = grey ] \n  A->Ab [label = \"0.71\"] A->Al [label = \"0.81\"] A->Af [label = \"0.84\"] A->An [label = \"0.91\"] A->Ar [label = \"0.7\"] A->Ac [label = \"0.87\"] B->Bb [label = \"0.77\"] B->Bl [label = \"0.65\"] B->Bf [label = \"0.81\"] B->Bn [label = \"0.89\"] B->Br [label = \"0.72\"] B->Bc [label = \"0.83\"] B -> A [label = \"0.79\", dir = \"both\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>To call the <code>goric</code> function, we need to formulate the
 hypothesis of interest. The GORICA selects the best hypothesis out of a
 given set. Here, since we only have a single hypothesis, we will compare
@@ -2824,13 +2824,14 @@ results1 &lt;- goric(fit1,
 
 #summary(results1)
 results1</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1        H1.1  33.581    8.139  -50.884           0.669            0.977           0.988
 2  complement  32.879   11.886  -41.985           0.331            0.023           0.012
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1.1&#39; has 85.56 times more support than its complement.</code></pre>
 <p>From the comparison of hypotheses, it seems that the hypothesis H1.1
 is better supported by the data than its complement.</p>
@@ -2858,13 +2859,14 @@ results1_b &lt;- goric(fit1,
 
 #summary(results1_b)
 results1_b</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1        H1.1  33.581    8.152  -50.857           0.669            0.977           0.988
 2  complement  32.879   11.884  -41.990           0.331            0.023           0.012
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1.1&#39; has 84.26 times more support than its complement.</code></pre>
 <p>As you can see from the results, we arrive at the same GORICA weights
 as earlier.</p>
@@ -2910,8 +2912,8 @@ library(lavaanPlot)
 
 lavaanPlot(model = fit2, node_options = list(shape = &quot;box&quot;, fontname = &quot;Helvetica&quot;), 
            edge_options = list(color = &quot;grey&quot;), coefs = T, stand = T, covs = T)</code></pre>
-<div class="grViz html-widget html-fill-item" id="htmlwidget-75db6b30206e617633e6" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-75db6b30206e617633e6">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-765a41190d73238ce003" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-765a41190d73238ce003">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n prenumb; postnumb \n node [shape = oval] \n  \n \n edge [ color = grey ] \n prenumb->postnumb [label = \"0.68\"] prenumb->postnumb [label = \"0.67\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Proceed to formulate the hypothesis of interest using the same labels
 as in the model definition:</p>
 <pre class="r"><code>H2.1 &lt;- &quot;Pre_b &lt; Pre_g&quot;
@@ -2927,14 +2929,15 @@ results2 &lt;- goric(fit2, hypotheses = list(H2.1 = H2.1),
 
 #summary(results2)
 results2</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
 1        H2.1   4.420    1.500  -5.841           0.498            0.500           0.498
 2  complement   4.428    1.500  -5.856           0.502            0.500           0.502
----
-The order-restricted hypothesis &#39;H2.1&#39; has 0.99 times more support than its complement.</code></pre>
+
+Conclusion:
+The order-restricted hypothesis &#39;H2.1&#39; has 0.498 / 0.502 &lt; 1 times more support than its complement. That is, the complement has 1.01 times more support than &#39;H2.1&#39; </code></pre>
 <p>The output table shows that the hypothesis of interest and its
 complement are equally likely, since both have a weight of approximately
 .50. In other words, both are equally supported.</p>

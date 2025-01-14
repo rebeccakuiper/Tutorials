@@ -102,7 +102,7 @@ goric.PandG$ratio.gw
 
 # Informative hypotheses
 H1 <- 'group1 > group2 > group3' 
-H2 <- 'group1 > group2 < group3'
+H2 <- 'group2 > group1 > group3'
 # and unconstrained as failsafe (default, in case of multiple hypotheses)
 
 # GORIC

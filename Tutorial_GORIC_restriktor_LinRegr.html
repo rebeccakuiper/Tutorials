@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-09-17" />
+<meta name="date" content="2025-01-14" />
 
 <title>Evaluate a set of hypotheses with GORIC or GORICA: Linear Regression Example</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Evaluate a set of hypotheses with GORIC or
 GORICA: Linear Regression Example</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">17 September 2024</h4>
+<h4 class="date">14 January 2025</h4>
 
 </div>
 
@@ -1597,13 +1597,14 @@ weights for H1 and its complement</h2>
 should be evaluated against its complement.</p>
 <pre class="r"><code>set.seed(123) 
 goric(fit_Sesame, hypotheses = list(H1 = H1))</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -256.595    3.500  520.190           1.000            0.500          1.000
 2  complement  -268.116    3.500  543.232           0.000            0.500          0.000
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 100793.25 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that the support for H1 is many more
 supported / likely than its complement. Hence, there is compelling
@@ -1616,13 +1617,14 @@ weights for H1 and its complement</h2>
 goric_sesam_1c &lt;- goric(fit_Sesame, hypotheses = list(H1 = H1), type = &quot;gorica&quot;)
 #summary(goric_sesam_1c)
 goric_sesam_1c</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
 1          H1   6.082    2.500  -7.164           1.000            0.500           1.000
 2  complement  -5.859    2.500  16.718           0.000            0.500           0.000
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 153406.68 times more support than its complement.</code></pre>
 <p>From the output, it is concluded that the support for H1 is many more
 supported / likely than its complement. Hence, there is compelling

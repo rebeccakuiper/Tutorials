@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-09-17" />
+<meta name="date" content="2025-01-14" />
 
 <title>How to evaluate theory-based hypotheses in a (RI-)CLPM using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a (RI-)CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">17 September 2024</h4>
+<h4 class="date">14 January 2025</h4>
 
 </div>
 
@@ -2150,13 +2150,14 @@ goricaResults_Q1 &lt;- goric(est, VCOV = vcov, # then, default: type = &quot;gor
                           hypotheses = list(H1_Q1=H1_Q1))
 
 goricaResults_Q1</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1       H1_Q1  22.439   15.500  -13.878           0.632            0.500           0.632
 2  complement  21.898   15.500  -12.796           0.368            0.500           0.368
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1_Q1&#39; has 1.72 times more support than its complement.</code></pre>
 <pre class="r"><code>#summary(goricaResults_Q1)</code></pre>
 <p>The output shows that the order-restricted hypothesis <span class="math inline">\(H1\_Q1\)</span> has 1.7 times more support than
@@ -2168,20 +2169,28 @@ goricaResults_Q2 &lt;- goric(est, VCOV = vcov,
                           hypotheses = list(H1_Q2=H1_Q2))
 
 goricaResults_Q2</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
 1       H1_Q2  22.439   14.856  -15.167           0.513            0.568           0.581
 2  complement  22.387   15.131  -14.512           0.487            0.432           0.419
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H1_Q2&#39; has 1.39 times more support than its complement.</code></pre>
 <pre class="r"><code>#summary(goricaResults_Q2)</code></pre>
 <p>Furthermore, the order-restricted hypothesis <span class="math inline">\(H1\_Q2\)</span> has 1.4 times more support than
 its complement.</p>
-<p>Note that the results hold for the chosen time interval. Hence, the
+<p>Note 1: The results hold for the chosen time interval. Hence, the
 results are time-interval dependent. At the end, more information is
 given.</p>
+<p>Note 2: The log-likelihood (loglik) weights seem to be quite close.
+This could indicate that one or more of the inequality constraints can
+be replaced by (about-)equality constraints. One could investigate with
+the benchmarks function, using ‘output_type = “rlw”’, whether the loglik
+weights indeed are close.<br />
+For more information, see the guidelines
+(‘Guidelines_output_GORIC.html’) and/or the benchmark tutorial on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
 </div>
 <div id="example-2-measurement-level-analysis" class="section level1" number="2">
@@ -2514,18 +2523,25 @@ goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2,
                              hypotheses = list(H2_Q1=H2_Q1))
 
 goricaResults_H2_Q1</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
 1       H2_Q1  134.232   62.451  -143.562           0.483            0.735           0.722
 2  complement  134.301   63.473  -141.656           0.517            0.265           0.278
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H2_Q1&#39; has 2.59 times more support than its complement.</code></pre>
 <pre class="r"><code>#summary(goricaResults_H2_Q1)</code></pre>
 <p>The output shows that the order-restricted hypothesis <span class="math inline">\(H2\_Q1\)</span> has 2.6 times more support than
-its complement.</p>
-<p>We can proceed in the same manner for <span class="math inline">\(H2\_Q1\)</span>; however, because the default
+its complement. However, the log-likelihood (loglik) weights seem to be
+quite close. This could indicate that one or more of the inequality
+constraints can be replaced by (about-)equality constraints. One could
+investigate with the benchmarks function, using ‘output_type = “rlw”’,
+whether the loglik weights indeed are close.<br />
+For more information, see the guidelines
+(‘Guidelines_output_GORIC.html’) and/or the benchmark tutorial on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
+<p>We can proceed in the same manner for <span class="math inline">\(H2\_Q2\)</span>; however, because the default
 method takes too long to calculate the penalty of the GORICA, we use the
 bootstrap method. When using the bootstrapping the results do not
 change, but the computation time may decrease.</p>
@@ -2547,13 +2563,14 @@ goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2,
                                mix_weights = &quot;boot&quot;)
 
 goricaResults_H2_Q2_b</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
 1       H2_Q2  130.969   58.028  -145.881           0.034            0.997           0.933
 2  complement  134.301   63.995  -140.612           0.966            0.003           0.067
----
+
+Conclusion:
 The order-restricted hypothesis &#39;H2_Q2&#39; has 13.94 times more support than its complement.</code></pre>
 <pre class="r"><code>#summary(goricaResults_H2_Q2_b)</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H2\_Q2\)</span> has 14 times more support than its

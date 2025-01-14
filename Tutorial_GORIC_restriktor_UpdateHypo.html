@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2024-09-17" />
+<meta name="date" content="2025-01-14" />
 
 <title>Tutorial for updating hypotheses using the GORIC(A)</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for updating hypotheses using the
 GORIC(A)</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">17 September 2024</h4>
+<h4 class="date">14 January 2025</h4>
 
 </div>
 
@@ -1695,7 +1695,7 @@ using GORIC(A)</h3>
 values and weights</h4>
 <pre class="r"><code>set.seed(123) # Set seed value
 goric(lm_fit_Monin, hypotheses = list(H00 = H00, H01 = H01, H02 = H02, H03 = H03))</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
@@ -1704,8 +1704,15 @@ Results:
 3            H02  -145.404    3.000  296.809           0.005            0.164          0.009                      0.015
 4            H03  -148.907    3.000  303.815           0.000            0.164          0.000                      0.000
 5  unconstrained  -140.665    4.000  289.330           0.625            0.060          0.380                           
----
-The order-restricted hypothesis &#39;H01&#39; is not weak, with 2.244e+03 times more support than H00, 67.557 times more support than H02 and 2.244e+03 times more support than H03.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;H01&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;H01&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H01&#39; against the other order-restricted hypotheses:
+
+  * &#39;H01&#39; is 2.244e+03 times more supported than &#39;H00&#39;.
+  * &#39;H01&#39; is 67.557 times more supported than &#39;H02&#39;.
+  * &#39;H01&#39; is 2.244e+03 times more supported than &#39;H03&#39;.</code></pre>
 </div>
 <div id="calculate-gorica-values-and-weights" class="section level4" number="1.1.3.2">
 <h4><span class="header-section-number">1.1.3.2</span> Calculate GORICA
@@ -1790,7 +1797,7 @@ values and weights</h4>
 output_repl &lt;- goric(lm_fit_Holubar, hypotheses = list(H1, H2))
 #summary(output_repl)
 output_repl</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1798,9 +1805,12 @@ Results:
 2             H2  -144.981    2.803  295.569           0.111            0.376          0.224
 3  unconstrained  -143.038    4.000  294.076           0.777            0.114          0.473</code></pre>
 <pre><code>---
-Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal likelihood values (i.e., the hypotheses overlap). The GORIC(A) weights, are influenced only by changes in penalty values and have a maximum limit. If any overlapping hypothesis has the lowest GORIC(A) value in the entire set, it is recommended to further evaluate it against its complement.</code></pre>
-<pre><code>---
-The unconstrained hypothesis is the best hypothesis in the set, meaning that all order-restricted hypotheses in the set are weak.</code></pre>
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values. This indicates that they overlap and that the ratio of their GORIC(A) weights reached its maximum. If of interest, we recommend evaluating the overlap versus its complement. Run vignette(&quot;Guidelines_GORIC_output&quot;) in your console for more information and an example.</code></pre>
+<pre><code>
+Conclusion:
+- The unconstrained hypothesis is the best in the set, as it has the highest GORIC(A) weight. As a result, the order-restricted hypotheses are considered weak.
+
+- Since all the order-restricted hypotheses are weak, inspecting their relative support is not meaningful.</code></pre>
 <p>Since the support for <span class="math inline">\(H_1\)</span> and
 <span class="math inline">\(H_2\)</span> is lower than for <span class="math inline">\(H_u\)</span>, it can be concluded that both are
 weak hypotheses. Hence, the study of Holubar did not replicate the
@@ -1814,14 +1824,15 @@ evaluate this against its complement:</p>
 <pre class="r"><code>set.seed(123) # Set seed value
 output_repl_alt &lt;- goric(lm_fit_Holubar, hypotheses = list(H1))
 output_repl_alt</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1  -144.981    2.500  294.962           0.125            0.731          0.280
 2  complement  -143.038    3.500  293.076           0.875            0.269          0.720
----
-The order-restricted hypothesis &#39;H1&#39; has 0.39 times more support than its complement.</code></pre>
+
+Conclusion:
+The order-restricted hypothesis &#39;H1&#39; has 0.280 / 0.720 &lt; 1 times more support than its complement. That is, the complement has 2.57 times more support than &#39;H1&#39; </code></pre>
 <p>Since <span class="math inline">\(H_1\)</span> has only 0.39 <span class="math inline">\(&lt;\)</span> 1 times more, so less, support than
 its complement, it is a weak hypothesis. Hence, the study of Holubar did
 not replicate the findings of Monin.</p>
@@ -1912,15 +1923,20 @@ output_gorica_Altinisik &lt;- goric(est, VCOV = VCOV,
 # Note: because of est &amp; VCOV, &#39;type = &quot;gorica&quot;&#39; is default.
 #summary(output_gorica_Altinisik)
 output_gorica_Altinisik</code></pre>
-<pre><code>restriktor (0.5-90): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
 1             H1  -1.373    1.500   5.746           0.202            0.376           0.760                       0.785
 2             H2  -3.168    1.000   8.335           0.034            0.620           0.208                       0.215
 3  unconstrained  -0.045    6.000  12.089           0.764            0.004           0.032                            
----
-The order-restricted hypothesis &#39;H1&#39; is not weak, with 3.650 times more support than H2.</code></pre>
+
+Conclusion:
+- The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
+
+- Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
+
+  * &#39;H1&#39; is 3.650 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(output_gorica_Altinisik$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00   3.65             23.85

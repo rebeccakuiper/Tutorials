@@ -58,6 +58,7 @@ goric.PandG
 benchmarks.PandG <- benchmark(goric.PandG, model_type = "means", ncpus = 8)
 benchmarks.PandG
 plot(benchmarks.PandG)
+plot(benchmarks.PandG, log_scale = T)
 
 
 ###
@@ -75,6 +76,7 @@ gorica.PandG <- goric(est, VCOV = VCOV,
 benchmarks.PandG_gorica <- benchmark(gorica.PandG, ncpus = 8)
 benchmarks.PandG_gorica
 plot(benchmarks.PandG_gorica)
+plot(benchmarks.PandG_gorica, log_scale = T)
 
 
 #####################
@@ -119,6 +121,33 @@ goric.Lucas$ratio.gw
 benchmarks.Lucas <- benchmark(goric.Lucas, model_type = "means", ncpus = 8)
 benchmarks.Lucas
 plot(benchmarks.Lucas)
+plot(benchmarks.Lucas, log_scale = T)
+
+
+####
+
+
+set.seed(123) # Set seed value
+goric.Lucas_c <- goric(lm_fit_Lucas, 
+                  hypotheses = list(H_theory1 = H1),
+                  mix_weights = "boot")
+goric.Lucas_c
+
+#Note: The log-likelihood (loglik) weights seem to be quite close. 
+#This could then indicate that one or more of the inequality constraints 
+#can be replaced by (about-)equality constraints. 
+#Notably, one could investigate with the benchmarks function, 
+#using 'output_type = "rlw"', whether the loglik weights indeed are close.  
+#For more information, see the guidelines ('Guidelines_output_GORIC.html') 
+# and/or the benchmark tutorial on https://github.com/rebeccakuiper/Tutorials. 
+
+# Benchmarks #
+# Note that running this takes quite some time.
+benchmarks.Lucas <- benchmark(goric.Lucas_c, 
+                              model_type = "means", ncpus = 8)
+print(benchmarks.Lucas, output_type = "rlw")
+plot(benchmarks.Lucas, output_type = "rlw", log_scale = T)
+
 
 ################################################################################
 

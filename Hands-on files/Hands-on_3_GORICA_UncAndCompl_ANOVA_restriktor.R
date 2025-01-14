@@ -175,6 +175,14 @@ output_gorica_c
 #summary(output_gorica_c)
 # The order-restricted hypothesis $H_1$ has (>1 times) more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
+#
+#Note: The log-likelihood (loglik) weights seem to be quite close. 
+#This could then indicate that one or more of the inequality constraints 
+#can be replaced by (about-)equality constraints. 
+#Notably, one could investigate with the benchmarks function (discussed later), 
+#using 'output_type = "rlw"', whether the loglik weights indeed are close.  
+#For more information, see the guidelines ('Guidelines_output_GORIC.html') 
+# and/or the benchmark tutorial on https://github.com/rebeccakuiper/Tutorials. 
 
 
 ###
@@ -203,3 +211,11 @@ output_gorica_c_est
 #
 # The order-restricted hypothesis $H_1$ has (>1 times) more support than its 
 # complement (and the weights are once again the same as compared to the GORIC).
+#
+#Note: The log-likelihood (loglik) weights seem to be quite close. 
+#This could then indicate that one or more of the inequality constraints 
+#can be replaced by (about-)equality constraints. 
+#Notably, one could investigate with the benchmarks function (discussed later), 
+#using 'output_type = "rlw"', whether the loglik weights indeed are close.  
+#For more information, see the guidelines ('Guidelines_output_GORIC.html') 
+# and/or the benchmark tutorial on https://github.com/rebeccakuiper/Tutorials. 
