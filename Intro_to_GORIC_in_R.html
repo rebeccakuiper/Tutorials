@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-01-14" />
+<meta name="date" content="2025-01-22" />
 
 <title>Intro to GORIC in R</title>
 
@@ -1481,7 +1481,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Intro to GORIC in R</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">14 January 2025</h4>
+<h4 class="date">22 January 2025</h4>
 
 </div>
 
@@ -1961,8 +1961,9 @@ F-statistic: 63.58 on 4 and 236 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h4><span class="header-section-number">2.1.4.1</span> bain</h4>
 <p>The code for evaluating the informative hypothesis <span class="math inline">\(H_1: \mu_1 &lt; \mu_2 &lt; \mu_3 &lt;
 \mu_4\)</span> with <code>bain</code> is:</p>
-<pre class="r"><code>if (!require(&quot;bain&quot;)) install.packages(&quot;bain&quot;)
-library(bain)
+<pre class="r"><code>if (!require(&quot;bain&quot;)) install.packages(&quot;bain&quot;)</code></pre>
+<pre><code>Loading required package: bain</code></pre>
+<pre class="r"><code>library(bain)
 names(coef(anova2)) #check coefficient names</code></pre>
 <pre><code>[1] &quot;viewcat1&quot; &quot;viewcat2&quot; &quot;viewcat3&quot; &quot;viewcat4&quot;</code></pre>
 <pre class="r"><code>H1 &lt;- &quot;viewcat1 &lt; viewcat2 &lt; viewcat3 &lt; viewcat4&quot; 
@@ -1994,8 +1995,11 @@ possible orderings / theories.</p>
 <h4><span class="header-section-number">2.1.4.2</span> GORIC</h4>
 <p>The code for evaluating the informative hypothesis <span class="math inline">\(H_1: \mu_1 &lt; \mu_2 &lt; \mu_3 &lt;
 \mu_4\)</span> with <code>goric</code> is:</p>
-<pre class="r"><code>if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) #install package
-library(restriktor) #load package
+<pre class="r"><code>if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;) #install package</code></pre>
+<pre><code>Loading required package: restriktor</code></pre>
+<pre><code>This is restriktor 0.6-10</code></pre>
+<pre><code>Please report any bugs to info@restriktor.org</code></pre>
+<pre class="r"><code>library(restriktor) #load package
 
 names(coef(anova2)) #check coefficient names</code></pre>
 <pre><code>[1] &quot;viewcat1&quot; &quot;viewcat2&quot; &quot;viewcat3&quot; &quot;viewcat4&quot;</code></pre>
@@ -2282,7 +2286,6 @@ specify the hypothesis using these names:</p>
 <code>goric</code> function:</p>
 <pre class="r"><code>if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 library(restriktor)</code></pre>
-<p>outputvalues and ask of the summary.</p>
 <pre class="r"><code>out_lm &lt;- goric(lm2_s, 
                 hypotheses = list(H1_lm = H1_lm), comparison = &quot;complement&quot;)
 #summary(out_lm) 

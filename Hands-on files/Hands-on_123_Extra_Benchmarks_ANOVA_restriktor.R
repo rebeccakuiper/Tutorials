@@ -7,17 +7,17 @@
 
 ## First, install the packages, if you have not done this already:
 if (!require("psych")) install.packages("psych")
-if (!require("restriktor")) install.packages("restriktor")
+#if (!require("restriktor")) install.packages("restriktor")
 
 ## Then, load the packages:
 library(psych) # for the function describeBy
-library(restriktor) # for the goric function
+#library(restriktor) # for the goric function
 
 # If you want to use restriktor from github:
-#if (!require("devtools")) install.packages("devtools")
-#library(devtools) 
-#install_github("LeonardV/restriktor")
-#library(restriktor) # for goric function
+if (!require("devtools")) install.packages("devtools")
+library(devtools) 
+install_github("LeonardV/restriktor")
+library(restriktor) # for goric function
 
 
 ################################################################################
@@ -55,6 +55,7 @@ goric.PandG
 #summary(goric.PandG)
 
 # Benchmarks #
+set.seed(123) # Set seed value
 benchmarks.PandG <- benchmark(goric.PandG, model_type = "means", ncpus = 8)
 benchmarks.PandG
 plot(benchmarks.PandG)
@@ -66,13 +67,14 @@ plot(benchmarks.PandG, log_scale = T)
 # When using the estimates and their covariance matrix and thus gorica:
 # use default model_type 
 # and possible specify (null) population parameters (instead of effect sizes).
-set.seed(123) # Set seed value
 est <- coef(fit.PandG)
 VCOV <- vcov(fit.PandG)
 # GORICA (default)
+set.seed(123) # Set seed value
 gorica.PandG <- goric(est, VCOV = VCOV, 
                        hypotheses = list(H1))
 # Benchmarks #
+set.seed(123) # Set seed value
 benchmarks.PandG_gorica <- benchmark(gorica.PandG, ncpus = 8)
 benchmarks.PandG_gorica
 plot(benchmarks.PandG_gorica)
@@ -118,6 +120,7 @@ goric.Lucas
 goric.Lucas$ratio.gw
 
 # Benchmarks #
+set.seed(123) # Set seed value
 benchmarks.Lucas <- benchmark(goric.Lucas, model_type = "means", ncpus = 8)
 benchmarks.Lucas
 plot(benchmarks.Lucas)
@@ -143,10 +146,37 @@ goric.Lucas_c
 
 # Benchmarks #
 # Note that running this takes quite some time.
+set.seed(123) # Set seed value
 benchmarks.Lucas <- benchmark(goric.Lucas_c, 
                               model_type = "means", ncpus = 8)
 print(benchmarks.Lucas, output_type = "rlw")
 plot(benchmarks.Lucas, output_type = "rlw", log_scale = T)
+
+
+# Benchmarks - alternative: Specify several null populations #
+# Note that running this takes quite some time.
+est <- coef(lm_fit_Lucas)
+# Specify several null populations
+pop_est <- matrix(c(
+  # all means equal
+  rep(mean(est), 5), 
+  # means 1,3,4,5 equal
+  est[1], est[2], mean(est[c(1,3,4,5)]), mean(est[c(1,3,4,5)]), mean(est[c(1,3,4,5)]),
+  # means 3,5 equal
+  est[1], est[2], mean(est[c(3,5)]), est[4], mean(est[c(3,5)]),
+  # all means equal to sample means, so Observed
+  est[1], est[2], est[3], est[4], est[5]
+),
+byrow = TRUE, ncol = length(est))
+rownames(pop_est) <- c("PE_12345eq", "PE_1345eq", "PE_35eq", "Observed")
+set.seed(123) 
+benchmarks.Lucas <- benchmark(goric.Lucas_c, pop_est = pop_est, ncpus = 8)
+print(benchmarks.Lucas, output_type = "rlw")
+plot(benchmarks.Lucas, output_type = "rlw", log_scale = T)
+#
+# Btw 'PE_35eq' and 'Observed' seems to describe best.
+# But: because of overlap, we cannot rule out more equalities
+#      (or having a too low sample size)
 
 
 ################################################################################

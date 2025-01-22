@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Leonard Vanbrabant" />
 
-<meta name="date" content="2025-01-14" />
+<meta name="date" content="2025-01-22" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper and Leonard Vanbrabant</h4>
-<h4 class="date">14 January 2025</h4>
+<h4 class="date">22 January 2025</h4>
 
 </div>
 
@@ -1609,15 +1609,16 @@ are no competing hypotheses of interest. Then, I would advise you to
 evaluate it with its complement (the default option in the software), as
 opposed to the unconstrained hypothesis. Nevertheless, I will describe
 both situations next.</p>
-<div id="vs-complement" class="section level3" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> vs Complement</h3>
+<div id="vs-complement-h_c" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> vs Complement
+(<span class="math inline">\(H_c\)</span>)</h3>
 <p>The complement of a hypothesis denotes all the other possible
 hypotheses (i.e., all the other possible orderings); so, excluding the
 one of interest. The complement acts like a competing hypothesis. Either
 your (informative) hypothesis or its complement is the best and the
 ratio of their GORIC(A) weights denotes the relative strength.</p>
-<p>Say, your hypothesis of interest has a GORIC(A) weight of <span class="math inline">\(w_m\)</span> and, thus, its complement of <span class="math inline">\(w_c = 1 - w_m\)</span>. Then, your hypothesis has
-<span class="math inline">\(w_m/(1-w_m)\)</span> more support than its
+<p>Say, your hypothesis of interest (<span class="math inline">\(H_m\)</span>) has a GORIC(A) weight of <span class="math inline">\(w_m\)</span> and, thus, its complement (<span class="math inline">\(H_c\)</span>) of <span class="math inline">\(w_c =
+1 - w_m\)</span>. Then, your hypothesis has <span class="math inline">\(w_m/(1-w_m)\)</span> more support than its
 complement. This relative support can go from (approximately) zero to
 infinity - the first denoting <em>infinite support for the
 complement</em> and the latter <em>infinite support your
@@ -1672,6 +1673,37 @@ of loglik.weights). Since the loglik.weights differ (i.e., the ratio of
 loglik.weights is not close to 1), there is no support for the boundary
 of these hypotheses; only support for <span class="math inline">\(H_1\)</span>.</p>
 </div>
+<div id="vs-hc-together-with-boundary-hypothesis-heq" class="section level4" number="4.2.1.2">
+<h4><span class="header-section-number">4.2.1.2</span> vs Hc together
+with boundary-hypothesis Heq</h4>
+<p>Your hypothesis of interest (<span class="math inline">\(H_m\)</span>) does, by definition, not overlap
+with its complement (<span class="math inline">\(H_c\)</span>). However,
+they do share their boundaries. One of the boundaries is setting all the
+inequalities to equalities (<span class="math inline">\(H_{eq}\)</span>). If you want to include that
+boundary-hypothesis, possibly to rule out support for that hypothesis,
+you can use the code below. Note that the loglik weights can also denote
+support for a boundary (where at least one inequality is set to an
+equality). This is discussed in the Special cases section.</p>
+<pre class="r"><code># H1 vs complement
+H1 &lt;- &quot;D1 &gt; D2 &gt; D3&quot; # mu1 &gt; mu2 &gt; mu3
+
+# Apply GORIC #
+set.seed(123) 
+results_1c_eq &lt;- goric(fit, hypotheses = list(H1),
+                    Heq = T)
+results_1c_eq</code></pre>
+<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+
+Results:
+        model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_heq
+1         Heq  -131.346    2.000  266.692           0.000            0.616          0.001                           
+2          H1  -123.384    2.832  252.431           0.679            0.268          0.829                      0.830
+3  complement  -124.133    3.668  255.601           0.321            0.116          0.170                      0.170
+
+Conclusion:
+- The order-restricted hypothesis H1 is the best in the set, as it has the highest GORIC(A) weight. Since it has a higher GORIC(A) weight than the equality-restricted hypothesis (Heq), we can now inspect the relative support for the order-restricted hypothesis against its complement:
+  * &#39;H1&#39; is 4.880 times more supported than &#39;complement&#39;.</code></pre>
+</div>
 </div>
 <div id="vs-unconstrained-but-not-advised" class="section level3" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> vs Unconstrained
@@ -1712,8 +1744,10 @@ results_1u</code></pre>
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -123.384    2.832  252.431           0.500            0.763          0.763
-2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237
-
+2  unconstrained  -123.384    4.000  254.767           0.500            0.237          0.237</code></pre>
+<pre><code>---
+Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement?</code></pre>
+<pre><code>
 Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 0.763 / 0.237 &gt; 1 times more support than the unconstrained.</code></pre>
 <p>From this, you can conclude that <span class="math inline">\(H_1:
@@ -1848,9 +1882,7 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
   * &#39;H1&#39; is 2.871e+03 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1  vs. H2 vs. unconstrained
@@ -2151,14 +2183,14 @@ Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
 1             H1  -123.384    2.832  252.431           0.333            0.548          0.548                      0.661
 2             H2  -123.384    3.500  253.767           0.333            0.281          0.281                      0.339
-3  unconstrained  -123.384    4.000  254.767           0.333            0.171          0.171                           
-
+3  unconstrained  -123.384    4.000  254.767           0.333            0.171          0.171                           </code></pre>
+<pre><code>---
+Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values. This indicates that they overlap and that the ratio of their GORIC(A) weights reached its maximum. If of interest, we recommend evaluating the overlap versus its complement. Run vignette(&quot;Guidelines_GORIC_output&quot;) in your console for more information and an example.</code></pre>
+<pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 1.950 times more supported than &#39;H2&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H1&#39; is 1.950 times more supported than &#39;H2&#39; (This relative support reached its maximum, see Note).</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 3)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1             1.000  1.950             3.216
@@ -2216,9 +2248,7 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
   * &#39;H2&#39; is 1.303 times more supported than &#39;H1&#39;.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
@@ -2392,9 +2422,7 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;Hb2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;Hb2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;Hb2&#39; against the other order-restricted hypotheses:
-
   * &#39;Hb2&#39; is 14.611 times more supported than &#39;Hb1&#39;.
   * &#39;Hb2&#39; is 13.734 times more supported than &#39;Hb3&#39;.</code></pre>
 <p> </p>
@@ -2420,9 +2448,7 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
   * &#39;H1&#39; is 1.310 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(results_12u$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
@@ -3018,7 +3044,7 @@ Results:
 2  complement  -1343.380    3.500  2693.760           0.955            0.182          0.825
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.175 / 0.825 &lt; 1 times more support than its complement. That is, the complement has 4.71 times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 0.175 / 0.825 &lt; 1 times more support than its complement. That is, the complement has 4.71 times more support than &#39;H1&#39;</code></pre>
 </div>
 </div>
 <div id="n-10000" class="section level3" number="6.2.3">
@@ -3057,7 +3083,7 @@ Results:
 2  complement  -13411.461    3.500  26829.922           1.000            0.182          1.000
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.000 / 1.000 &lt; 1 times more support than its complement. That is, the complement has Inf times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 0.000 / 1.000 &lt; 1 times more support than its complement. That is, the complement has Inf times more support than &#39;H1&#39;</code></pre>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 
 </div>
