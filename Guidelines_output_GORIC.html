@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Leonard Vanbrabant" />
 
-<meta name="date" content="2025-01-22" />
+<meta name="date" content="2025-01-23" />
 
 <title>Guidelines interpretation GORIC(A) output</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Guidelines interpretation GORIC(A)
 output</h1>
 <h4 class="author">Rebecca M. Kuiper and Leonard Vanbrabant</h4>
-<h4 class="date">22 January 2025</h4>
+<h4 class="date">23 January 2025</h4>
 
 </div>
 
@@ -2097,23 +2097,47 @@ GORIC.<br />
 When I would sample more observations, the GORIC(A) weight of both <span class="math inline">\(H_{1g}\)</span> and <span class="math inline">\(H_{1m}\)</span> will converge to 1, reflecting
 full support; and the ratio of GORIC(A) weights of the hypothesis of
 interest versus its complement will go to infinity.</p>
+</div>
+<div id="notes" class="section level3" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Notes</h3>
 <p>Notes:</p>
 <ul>
-<li><p>When specifying a bound/treshold for a positive difference (e.g.,
-the .1 in the example above), you should use the minimum difference you
-would like to find. Notably, if you use a higher bound (in case of an
-<span class="math inline">\(&gt;\)</span> restriction) then needed, the
+<li><p>When specifying a bound/threshold for a positive difference
+(e.g., the .1 in the example above), you should use the minimum
+difference you would like to find.<br />
+Notably, if you use a higher bound (in case of an <span class="math inline">\(&gt;\)</span> restriction) then needed, the
 complexity does not change, while the fit decreases; which leads to less
 support for your hypothesis of interest.</p></li>
 <li><p>In case you want to inspect an absolute difference, you can make
-use of the abs() function. E.g., <span class="math inline">\(|\beta_1|
-&gt; |\beta_2|\)</span> can be reflected in the code - using b1 and b2 -
-by abs(b1) &gt; abs(b2); or, when using bounds/thresholds, abs(b1) -
-abs(b2) &gt; .1; and <span class="math inline">\(|\beta_1 - \beta_2|
-&gt;\)</span> .1 can be reflected in the code by abs(b1 - b2) &gt; .1.
-<!-- NB  --> <!-- abs(b1-b2)>.1 leidt naar ineq, zeg, b1-b2>.1 -->
+use of the abs() function.<br />
+E.g., <span class="math inline">\(|\beta_1| &gt; |\beta_2|\)</span> can
+be reflected in the code - using b1 and b2 - by abs(b1) &gt; abs(b2);
+or, when using bounds/thresholds, abs(b1) - abs(b2) &gt; .1; and <span class="math inline">\(|\beta_1 - \beta_2| &gt;\)</span> .1 can be
+reflected in the code by abs(b1 - b2) &gt; .1. <!-- NB  -->
+<!-- abs(b1-b2)>.1 leidt naar ineq, zeg, b1-b2>.1 -->
 <!-- Als juist about-eq, bijv, -.1<(b1-b2)<.1, dat leidt naar eq(!) in PT (en about-eq in LL) --></p></li>
 </ul>
+<p>Extra:<br />
+If you have many parameters and you want to use their absolute value,
+you could use the following code:</p>
+<pre class="r"><code># Example hypothesis
+Hm &lt;- &quot;(HC_Anx, HC_Valu) &gt; (HC_UncCon, HC_StudProg, HC_SelBel) &gt; (HC_Plan, HC_Diseng, HC_TaskMa) &gt; (HC_Pers, HC_FaiAvoi, HC_SelSab, HC_LearFo), 
+(FBB_Anx, FBB_StudProg, FBB_Plan) &gt; (FBB_Valu, FBB_FaiAvoi) &gt; (FBB_LearFo, FBB_SelBel, FBB_SelSab) &gt; (FBB_UncCon, FBB_Pers, FBB_TaskMa, FBB_Diseng), 
+(TIL_Valu) &gt; (TIL_FaiAvoi, TIL_SelBel, TIL_Plan, TIL_Anx, TIL_LearFo) &gt; (TIL_SelSab, TIL_UncCon, TIL_TaskMa, TIL_Pers) &gt; (TIL_StudProg, TIL_Diseng)&quot;
+#
+# Function to write abs() around the parameter names
+add_abs_to_names &lt;- function(hyp) {
+  names &lt;- unlist(regmatches(hyp, gregexpr(&quot;[A-Za-z_]+&quot;, hyp)))
+  for (name in unique(names)) {
+    hyp &lt;- gsub(paste0(name), paste0(&quot;abs(&quot;, name, &quot;)&quot;), hyp)
+  }
+  return(hyp)
+}
+#
+# Apply function to hypothesis above
+Hm_abs &lt;- add_abs_to_names(Hm)</code></pre>
+<pre class="r"><code>Hm_abs</code></pre>
+<pre><code>[1] &quot;(abs(HC_Anx), abs(HC_Valu)) &gt; (abs(HC_UncCon), abs(HC_StudProg), abs(HC_SelBel)) &gt; (abs(HC_Plan), abs(HC_Diseng), abs(HC_TaskMa)) &gt; (abs(HC_Pers), abs(HC_FaiAvoi), abs(HC_SelSab), abs(HC_LearFo)), \n(abs(FBB_Anx), abs(FBB_StudProg), abs(FBB_Plan)) &gt; (abs(FBB_Valu), abs(FBB_FaiAvoi)) &gt; (abs(FBB_LearFo), abs(FBB_SelBel), abs(FBB_SelSab)) &gt; (abs(FBB_UncCon), abs(FBB_Pers), abs(FBB_TaskMa), abs(FBB_Diseng)), \n(abs(TIL_Valu)) &gt; (abs(TIL_FaiAvoi), abs(TIL_SelBel), abs(TIL_Plan), abs(TIL_Anx), abs(TIL_LearFo)) &gt; (abs(TIL_SelSab), abs(TIL_UncCon), abs(TIL_TaskMa), abs(TIL_Pers)) &gt; (abs(TIL_StudProg), abs(TIL_Diseng))&quot;</code></pre>
 </div>
 </div>
 </div>
@@ -2514,7 +2538,7 @@ The order-restricted hypothesis &#39;Hb&#39; has 45.75 times more support than i
 </div>
 </div>
 </div>
-<div id="notes" class="section level3" number="5.1.3">
+<div id="notes-1" class="section level3" number="5.1.3">
 <h3><span class="header-section-number">5.1.3</span> Notes</h3>
 <p>Note 1:<br />
 A ratio of GORIC(A) weights of 1 means that the hypotheses are equally

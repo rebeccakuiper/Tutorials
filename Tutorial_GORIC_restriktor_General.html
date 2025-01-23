@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-01-14" />
+<meta name="date" content="2025-01-23" />
 
 <title>Tutorial for goric: How to evaluate theory-based hypotheses using the GORIC and GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for <code>goric</code>: How to
 evaluate theory-based hypotheses using the GORIC and GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">14 January 2025</h4>
+<h4 class="date">23 January 2025</h4>
 
 </div>
 
@@ -1691,10 +1691,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 <p>To obtain the GORICA values and weights instead:</p>
 <pre class="r"><code># GORICA
 set.seed(123) # Set seed value
@@ -1713,10 +1711,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 </div>
 <div id="fitted-unconstrained-lm-object-list-with-constraints-matrix" class="section level3" number="3.1.2">
 <h3><span class="header-section-number">3.1.2</span> Fitted
@@ -1747,10 +1743,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 <p>and the GORICA values and weights via:</p>
 <pre class="r"><code># GORICA
 set.seed(123) # Set seed value
@@ -1769,10 +1763,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 </div>
 <div id="fitted-unconstrained-lm-object-list-with-constraints-matrix-rhs-and-neq-non-zero" class="section level3" number="3.1.3">
 <h3><span class="header-section-number">3.1.3</span> Fitted
@@ -1800,8 +1792,8 @@ Results:
 3  unconstrained  -3.295    5.000  16.589           0.941            0.140          0.795
 
 Conclusion:
-- The unconstrained hypothesis is the best in the set, as it has the highest GORIC(A) weight. As a result, the order-restricted hypotheses are considered weak.
 
+- The unconstrained hypothesis is the best in the set, as it has the highest GORIC(A) weight. As a result, the order-restricted hypotheses are considered weak.
 - Since all the order-restricted hypotheses are weak, inspecting their relative support is not meaningful.</code></pre>
 <p>and the GORICA values and weights via:</p>
 <pre class="r"><code># GORICA
@@ -1818,8 +1810,8 @@ Results:
 3  unconstrained   3.622    4.000   0.756           0.908            0.140           0.697
 
 Conclusion:
-- The unconstrained hypothesis is the best in the set, as it has the highest GORIC(A) weight. As a result, the order-restricted hypotheses are considered weak.
 
+- The unconstrained hypothesis is the best in the set, as it has the highest GORIC(A) weight. As a result, the order-restricted hypotheses are considered weak.
 - Since all the order-restricted hypotheses are weak, inspecting their relative support is not meaningful.</code></pre>
 </div>
 </div>
@@ -1840,6 +1832,12 @@ variance-covariance matrix. Both can be extracted from the
 <code>fit.lm</code> object (also from non-lm objects).</p>
 <pre class="r"><code>est &lt;- coef(fit.lm)
 VCOV &lt;- vcov(fit.lm)</code></pre>
+<p>Notably, for some fit objects other functions are needed. E.g.,
+‘fixef’ &amp; ‘vcov’ or ‘ranef’ &amp; ‘VarCorr’ for a <em>lmer</em>
+object; or ‘standardizedSolution(fit)[indices, ’est.std’]’ &amp;
+‘standardizedSolution(fit, return.vcov = TRUE, type = “def.std.all”)’
+for the standardized estimates from a <em>lavaan</em> model (but lavaan
+objects themselves can be used as input as well)).</p>
 <p>Next, the hypotheses need to be specified using the labels of ‘est’
 (which can also be re-labelled as is done in the next subsection).</p>
 <pre class="r"><code>H1 &lt;- &quot;x1 &gt; 0&quot;
@@ -1864,10 +1862,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 <p>However, one could also use the structural parameters only, that is,
 the parameters used in all hypotheses in the set. In this case, the
 following code can be used:</p>
@@ -1895,10 +1891,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 <p>Now, the exact same weights are obtained. However, the penalties are
 two points lower than before, which is due to the fact that two
 unconstrained/free parameters are left out. The log-likelihoods also
@@ -1938,10 +1932,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 </div>
 <div id="manual-numeric-vector-character-constraints" class="section level3" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> ‘Manual’ numeric
@@ -1983,10 +1975,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 <p>#Numeric vector + list with constraints matrix (rhs, neq)</p>
 <p>When one only wants to use a list with a constraints matrix, the
 following code can be used:</p>
@@ -2016,10 +2006,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 </div>
 </div>
 <div id="standardized-data" class="section level2" number="3.3">
@@ -2072,7 +2060,7 @@ Results:
 2  complement  -3.295    4.500  15.589           0.896            0.500          0.896
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.104 / 0.896 &lt; 1 times more support than its complement. That is, the complement has 8.62 times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 0.104 / 0.896 &lt; 1 times more support than its complement. That is, the complement has 8.62 times more support than &#39;H1&#39;</code></pre>
 </div>
 <div id="defining-parameters" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span> Defining
@@ -2130,7 +2118,7 @@ Results:
 2  complement  -3.295    4.321  15.232           0.965            0.391          0.946
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.054 / 0.946 &lt; 1 times more support than its complement. That is, the complement has 17.52 times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has 0.054 / 0.946 &lt; 1 times more support than its complement. That is, the complement has 17.52 times more support than &#39;H1&#39;</code></pre>
 </div>
 </div>
 <div id="types-of-comparisons" class="section level1" number="4">
@@ -2165,7 +2153,7 @@ Results:
 Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values. This indicates that they overlap and that the ratio of their GORIC(A) weights reached its maximum. If of interest, we recommend evaluating the overlap versus its complement. Run vignette(&quot;Guidelines_GORIC_output&quot;) in your console for more information and an example.</code></pre>
 <pre><code>
 Conclusion:
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 </div>
 <div id="comparison-unconstrained" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Comparison =
@@ -2197,10 +2185,8 @@ Note: Hypotheses &#39;H1&#39; and &#39;H2&#39; have equal log-likelihood values.
 <pre><code>
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note.).</code></pre>
+  * &#39;H2&#39; is 1.921 times more supported than &#39;H1&#39; (This relative support reached its maximum, see Note).</code></pre>
 <p>Since at least one of, even both, H1 and H2 are not weak, one can
 compare the support for H1 versus H2 (where H2 is 1.921 times more
 supported).</p>
