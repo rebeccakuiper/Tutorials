@@ -54,6 +54,7 @@ Overview of the material per statistical model:
 
 - (RI-)CLPM:
 	- 'Tutorial_GORIC_restriktor_CLPM' (pdf or html)
+      - 'Tutorial_GORIC_restriktor_RICLPM' (pdf or html)
 	- Files in subfolder 'GORICA in RI-CLPM'
 
 - EffectLiteR:

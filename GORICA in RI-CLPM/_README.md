@@ -1,10 +1,13 @@
 
 In this github repository, you can find 
 - example code to evaluate theory-based hypotheses in a (random intercept) cross-lagged panel model ((RI-)CLPM).
-- the CLPM example is an (updated) example that belong to the article:
+- the RI-CLPM example uses data from: https://jeroendmulder.github.io/RI-CLPM/lavaan.html
+These are also used in "Tutorial_GORICA_restriktor_RICLPM".
+
+Note:
+"Tutorial_GORICA_restriktor_CLPM" contains the (updated) CLPM example that belong to the article:
 Snijders, I., Wijnia, L., Kuiper, R. M., Rikers, R. M. J. P., & Loyens, S. M. M. (2021). Relationship quality in higher education and the interplay with student engagement and loyalty. British Journal of Educational Psychology, 92(2), 425-446. 
 https://doi.org/10.1111/bjep.12455
-- the RI-CLPM example uses data from: https://jeroendmulder.github.io/RI-CLPM/lavaan.html
 
 
 How to download files from a github repository:

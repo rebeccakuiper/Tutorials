@@ -13,7 +13,7 @@
 
 <meta name="date" content="2025-02-11" />
 
-<title>How to evaluate theory-based hypotheses in a (RI-)CLPM using the GORICA</title>
+<title>How to evaluate theory-based hypotheses in a RI-CLPM using the GORICA</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1480,7 +1480,7 @@ border-radius: 0px;
 
 
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
-a (RI-)CLPM using the GORICA</h1>
+a RI-CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
 <h4 class="date">11 February 2025</h4>
 
@@ -1493,41 +1493,28 @@ width: 100%;
 margin: 0 auto;
 }
 </style>
-<p>This is a tutorial for using GORICA for (Random Intercept)
-Cross-lagged Panel Models ((RI-)CLPMs). The GORICA is an information
-criterion that can be used to evaluate theory-driven hypotheses.</p>
-<p>(RI-)CLPMs are a type of statistical models used in longitudinal data
+<p>This is a tutorial for using GORICA for Random Intercept Cross-lagged
+Panel Models (RI-CLPMs). The GORICA is an information criterion that can
+be used to evaluate theory-driven hypotheses.</p>
+<p>RI-CLPMs are a type of statistical models used in longitudinal data
 research to analyze the relations between variables measured at multiple
-time points. Panel data can be analyzed at the construct level and the
-dimension level. In the construct level model, the focus is on the
-latent constructs that the observed variables represent. In the
-dimension model, the focus is on the observed variables themselves,
-rather than the latent constructs.</p>
+time points.</p>
 <p>Here, two examples are presented for the use of the
 <code>goric</code> function in the restriktor package to evaluate
-hypotheses about a CLPM. These are based on the analysis in:<br />
-Snijders, I., Wijnia, L., Kuiper, R. M., Rikers, R. M. J. P., &amp;
-Loyens, S. M. M. (2021). Relationship quality in higher education and
-the interplay with student engagement and loyalty. <em>British Journal
-of Educational Psychology</em>. <a href="https://doi.org/10.1111/bjep.12455" class="uri">https://doi.org/10.1111/bjep.12455</a><br />
-The first example covers analysis at the construct level, while the
-second example covers analysis at the dimension level.<br />
-<strong>Other example files</strong> for evaluating (causal dominance)
-hypotheses in RI-CLPMs can be found on ‘<a href="https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM" class="uri">https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM</a>’.</p>
+hypotheses about a RI-CLPM. These are based on the analysis in:<br />
+Sukpan, C., &amp; Kuiper, R. M. (2024). How to Evaluate Causal Dominance
+Hypotheses in Lagged Effects Models. Structural Equation Modeling,
+31(3), 404-419. <a href="https://doi.org/10.1080/10705511.2023.2265065" class="uri">https://doi.org/10.1080/10705511.2023.2265065</a><br />
+The corresponding R files can be found on ‘<a href="https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM" class="uri">https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM</a>’.</p>
 <p>Note: For (more) information regarding interpreting the GORIC(A)
 output, see ‘Guidelines_output_GORIC’ (<a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).</p>
-<div id="example-1-construct-level-analysis" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Example 1: Construct
-Level Analysis</h1>
-<div id="r-packages" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> R packages</h2>
+<div id="r-packages" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> R packages</h1>
 <p>First, install and call the <code>lavaan</code> library and the
 <code>restriktor</code> library (to load the <code>goric</code>
 function). If needed, it is possible to view the description of the
 function with the <code>?</code> operator or the <code>help</code>
 command.</p>
-<p>The code presented here also requires the <code>tidyverse</code>
-package for data manipulation.</p>
 <pre class="r"><code># To install restriktor in R:
 #if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
@@ -1542,1107 +1529,905 @@ library(restriktor)
 
 # To install lavaan in R:
 # if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
-library(lavaan)
-
-# To install tidyverse in R:
-# if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
-library(tidyverse)</code></pre>
+library(lavaan)</code></pre>
 </div>
-<div id="data" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Data</h2>
-<p>Upload the data set to the R environment and select the columns used
-for analysis. The id column is renamed to <span class="math inline">\(ID\)</span> and the code in the data set for
-missing numbers -999.00 is replaced with <code>NAs</code>.</p>
-<pre class="r"><code>data &lt;- read.table(&quot;data/CLPM.dat&quot;, header = T)
-colnames(data)[1] &lt;- &quot;ID&quot;
-data &lt;- replace(data , data == -999.00, NA)
+<div id="example-1-wave-independent-parameters-model" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Example 1:
+`wave-independent’ parameters model</h1>
+<p>Next, you find the R code to evaluate causal dominance in
+lagged-effects `wave-independent’ parameters model using the GORICA
+(using the goric function). This is an example using a bivariate RI-CLPM
+with 2 variables and 5 time points.</p>
+<p>In this example, I will use the lavaan object with user-specified
+parameter labels.</p>
+<pre class="r"><code># Load the data set into R: Traditional RI-CLPM
+dat &lt;- read.table(&quot;data/RICLPM.dat&quot;, 
+                  col.names = c(
+                    &quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;, &quot;x4&quot;, &quot;x5&quot;, 
+                    &quot;y1&quot;, &quot;y2&quot;, &quot;y3&quot;, &quot;y4&quot;, &quot;y5&quot;)
+) 
 
-data_subset &lt;- select(data, 
-                  THT1_SS,
-                  TBT1_SS,
-                  ACOMT1_SS,
-                  SATT1_SS,
-                  AB_T1_SS,
-                  DE_T1_SS,
-                  VI_T1_SS,
-                  SLT1_SS,
-                  TH_T2_SS,
-                  TB_T2_SS,
-                  ACOMT2SS,
-                  SAT_T2SS,
-                  ABT2_SS,
-                  DET2_SS,
-                  VIT2_SS,
-                  SLT2SS)</code></pre>
-</div>
-<div id="measurement-invariance" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> Measurement
-invariance</h2>
-<p>Next, we fit the CLPM using <code>lavaan</code>. The ‘RQ’ dimension
-is split into two sub-dimensions (cf. Snijders et al., 2021). Model 1 is
-fit to investigate configural invariance. The model is specified and fit
-in the following two steps.</p>
-<pre class="r"><code>CLPM_M1 &lt;- &#39;
-  
-  #####################
-  # MEASUREMENT MODEL #
-  #####################
-  
-  # Factor models for RQ1 at 2 waves.
-  RQ11 =~ THT1_SS  + TBT1_SS  
-  RQ12 =~ TH_T2_SS + TB_T2_SS 
-  #RQ1  =~ 1 * RQ11 + 1 * RQ12
-  
-  # Factor models for RQ2 at 2 waves.
-  RQ21 =~ ACOMT1_SS + SATT1_SS
-  RQ22 =~ ACOMT2SS  + SAT_T2SS
-  #RQ2  =~ 1 * RQ21 + 1 * RQ22
-  
-  # Factor models for SE at 2 waves.
-  SE1 =~ AB_T1_SS + DE_T1_SS + VI_T1_SS
-  SE2 =~ ABT2_SS  + DET2_SS  + VIT2_SS
+# Standardize the data
+dat &lt;- scale(dat)
 
-  
-  ############
-  # DYNAMICS #
-  ############
-  
-  # Specify the lagged effects between the latent variables.
-  RQ12 + RQ22 + SE2 + SLT2SS ~ RQ11 + RQ21 + SE1 + SLT1_SS
-  
-  # Estimate the correlations within the same wave.
-  # T1
-  RQ11 ~~ RQ21 + SE1 + SLT1_SS
-  RQ21 ~~ SE1 + SLT1_SS
-  SE1 ~~ SLT1_SS
-  # T2
-  RQ12 ~~ RQ22 + SE2 + SLT2SS
-  RQ22 ~~ SE2 + SLT2SS
-  SE2 ~~ SLT2SS
+# Hypothesis w.r.t. cross-lagged effects (as specified in the model)
+H1 &lt;- &quot;abs(b) &lt; abs(c)&quot; 
+# versus it complement, that is, versus all other possibilities 
+# (here: versus abs(b) &gt; abs(c))
+# default in case of one hypothesis
 
-&#39;</code></pre>
-<pre class="r"><code>CLPM_M1.fit &lt;- sem(CLPM_M1, data = data_subset, missing = &#39;ML&#39;)</code></pre>
-<p>When fitting the model R returns the following warning message:</p>
-<p><code>Warning message:</code>
-<code>In lav_object_post_check(object) :</code>
-<code>lavaan WARNING: covariance matrix of latent variables</code>
-<code>is not positive definite;</code></p>
-<p>So, we use <code>lavInspect(fit, &quot;cov.lv&quot;)</code> to investigate
-further.</p>
-<pre class="r"><code>lavInspect(CLPM_M1.fit, &quot;cov.lv&quot;)</code></pre>
-<pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
-RQ11  7.757                                   
-RQ12  4.985  8.573                            
-RQ21  8.547  5.629  9.481                     
-RQ22  5.317  9.563  7.673 11.391              
-SE1   4.433  3.928  6.694  6.074  9.840       
-SE2   3.768  5.091  5.077  7.265  9.183 11.039</code></pre>
-<pre class="r"><code>lavInspect(CLPM_M1.fit, &quot;cor.lv&quot;)</code></pre>
-<pre><code>      RQ11  RQ12  RQ21  RQ22   SE1   SE2
-RQ11 1.000                              
-RQ12 0.611 1.000                        
-RQ21 0.997 0.624 1.000                  
-RQ22 0.566 0.968 0.738 1.000            
-SE1  0.507 0.428 0.693 0.574 1.000      
-SE2  0.407 0.523 0.496 0.648 0.881 1.000</code></pre>
-<p>The correlations between RQ11 &amp; RQ21 and between RQ22 &amp; RQ12
-are very high, which is to be expected considered that these two
-sub-dimensions belong to one dimension. Given that the warning does not
-point to a model misspecification, we continue the analysis.</p>
-<pre class="r"><code>fitMeasures(CLPM_M1.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
-<pre><code>  chisq      df 
-715.867  78.000 </code></pre>
-<p>The output reports the following: <code>chisq      df</code>
-<code>715.867    78.000</code></p>
-<p>Based on these results we continue to Model 2, which investigates
-weak factorial invariance.</p>
-<pre class="r"><code>CLPM_M2 &lt;- &#39;
+# Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-independent parameters:
+RICLPM5 &lt;- &#39;
+  # Create between components (random intercepts)
+  RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
+  RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
   
-  #####################
-  # MEASUREMENT MODEL #
-  #####################
+  # Create within-person centered variables
+  wx1 =~ 1*x1
+  wx2 =~ 1*x2
+  wx3 =~ 1*x3 
+  wx4 =~ 1*x4
+  wx5 =~ 1*x5
+  wy1 =~ 1*y1
+  wy2 =~ 1*y2
+  wy3 =~ 1*y3
+  wy4 =~ 1*y4
+  wy5 =~ 1*y5
   
-  # Factor models for RQ1 at 2 waves.
-  RQ11 =~ L1 * THT1_SS  + L2 * TBT1_SS  
-  RQ12 =~ L1 * TH_T2_SS + L2 * TB_T2_SS 
+  # Estimate lagged effects between within-person centered variables 
+  # (constrained)
+  wx2 ~ a*wx1 + b*wy1 
+  wy2 ~ c*wx1 + d*wy1
+  wx3 ~ a*wx2 + b*wy2
+  wy3 ~ c*wx2 + d*wy2
+  wx4 ~ a*wx3 + b*wy3
+  wy4 ~ c*wx3 + d*wy3
+  wx5 ~ a*wx4 + b*wy4
+  wy5 ~ c*wx4 + d*wy4
   
-  # Factor models for RQ2 at 2 waves.
-  RQ21 =~ L3 * ACOMT1_SS + L4 * SATT1_SS
-  RQ22 =~ L3 * ACOMT2SS  + L4 * SAT_T2SS
+  # Estimate covariances between residuals of within-person centered variables 
+  # (i.e., innovations, constrained)
+  wx2 ~~ cov*wy2
+  wx3 ~~ cov*wy3
+  wx4 ~~ cov*wy4 
+  wx5 ~~ cov*wy5
   
-  # Factor models for SE at 2 waves.
-  SE1 =~ L5 * AB_T1_SS + L6 * DE_T1_SS + L7 * VI_T1_SS
-  SE2 =~ L5 * ABT2_SS  + L6 * DET2_SS  + L7 * VIT2_SS
+  # Estimate covariance between within-person centered variables at first wave
+  wx1 ~~ wy1 # Covariance
+  
+  # Estimate variance and covariance of random intercepts
+  RIx ~~ RIx
+  RIy ~~ RIy
+  RIx ~~ RIy
+  
+  # Estimate (residual) variance of within-person centered variables 
+  # (constrained)
+  wx1 ~~ wx1 # Variance
+  wy1 ~~ wy1 
+  wx2 ~~ vx*wx2 # Residual variance
+  wy2 ~~ vy*wy2 
+  wx3 ~~ vx*wx3 
+  wy3 ~~ vy*wy3 
+  wx4 ~~ vx*wx4 
+  wy4 ~~ vy*wy4 
+  wx5 ~~ vx*wx5
+  wy5 ~~ vy*wy5
+  
+  # Constrain grand means over time
+  x1 + x2 + x3 + x4 + x5 ~ mx*1
+  y1 + y2 + y3 + y4 + y5 ~ my*1
+&#39;
+RICLPM5.fit &lt;- lavaan(RICLPM5, 
+                      data = dat, 
+                      missing = &#39;ML&#39;, 
+                      meanstructure = T, 
+                      int.ov.free = T
+) 
+summary(RICLPM5.fit, standardized = T)</code></pre>
+<pre><code>lavaan 0.6-19 ended normally after 30 iterations
 
-  
-  ############
-  # DYNAMICS #
-  ############
-  
-  # Specify the lagged effects between the latent variables.
-  RQ12 + RQ22 + SE2 + SLT2SS ~ RQ11 + RQ21 + SE1 + SLT1_SS
-  
-  # Estimate the correlations within the same wave.
-  # T1
-  RQ11 ~~ RQ21 + SE1 + SLT1_SS
-  RQ21 ~~ SE1 + SLT1_SS
-  SE1 ~~ SLT1_SS
-  # T2
-  RQ12 ~~ RQ22 + SE2 + SLT2SS
-  RQ22 ~~ SE2 + SLT2SS
-  SE2 ~~ SLT2SS
-  
-&#39;</code></pre>
-<pre class="r"><code>CLPM_M2.fit &lt;- sem(CLPM_M2, data = data_subset, missing = &#39;ML&#39;)</code></pre>
-<p>R returns the same warning as before; so, we check the correlations
-again.</p>
-<pre class="r"><code>lavInspect(CLPM_M2.fit, &quot;cov.lv&quot;)</code></pre>
-<pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
-RQ11  7.734                                   
-RQ12  4.986  8.595                            
-RQ21  8.460  5.589  9.308                     
-RQ22  5.342  9.632  7.651 11.528              
-SE1   4.481  4.000  6.718  6.212 10.282       
-SE2   3.729  5.031  4.984  7.210  9.183 10.540</code></pre>
-<pre class="r"><code>lavInspect(CLPM_M2.fit, &quot;cor.lv&quot;)</code></pre>
-<pre><code>      RQ11  RQ12  RQ21  RQ22   SE1   SE2
-RQ11 1.000                              
-RQ12 0.611 1.000                        
-RQ21 0.997 0.625 1.000                  
-RQ22 0.566 0.968 0.739 1.000            
-SE1  0.502 0.425 0.687 0.571 1.000      
-SE2  0.413 0.529 0.503 0.654 0.882 1.000</code></pre>
-<p>Again, there is no sign the model needs revision, so we continue.</p>
-<pre class="r"><code>fitMeasures(CLPM_M2.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
-<pre><code>  chisq      df 
-721.021  82.000 </code></pre>
-<p>We obtain these results: <code>chisq      df</code>
-<code>721.021    82.000</code></p>
-<p>We perform a Chi-square difference test to check whether Models 1 and
-2 differ significantly.</p>
-<p>Df = 82 - 78 = 4<br />
-Check the constrained factor loadings = 1 + 1 + 2 = 4<br />
-Chi-square difference = 721.021 - 715.867 = 5.154<br />
-<a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
-<p>The <span class="math inline">\(p\)</span> value is .271858. Hence,
-the result is not significant at <span class="math inline">\(\alpha
-=\)</span> .05.</p>
-<p>When the chi-square test is non-significant, this implies the factor
-loadings are not significantly different from each other over time. In
-other words, we can assume weak factorial invariance holds.</p>
-<p>So, we move on to strong factorial invariance using Model 3:</p>
-<pre class="r"><code>CLPM_M3 &lt;- &#39;
-  
-  #####################
-  # MEASUREMENT MODEL #
-  #####################
-  
-  # Factor models for RQ1 at 2 waves.
-  RQ11 =~ L1 * THT1_SS  + L2 * TBT1_SS  
-  RQ12 =~ L1 * TH_T2_SS + L2 * TB_T2_SS 
-  
-  # Factor models for RQ2 at 2 waves.
-  RQ21 =~ L3 * ACOMT1_SS + L4 * SATT1_SS
-  RQ22 =~ L3 * ACOMT2SS  + L4 * SAT_T2SS
-  
-  # Factor models for SE at 2 waves.
-  SE1 =~ L5 * AB_T1_SS + L6 * DE_T1_SS + L7 * VI_T1_SS
-  SE2 =~ L5 * ABT2_SS  + L6 * DET2_SS  + L7 * VIT2_SS
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        44
+  Number of equality constraints                    29
 
+  Number of observations                          1189
+  Number of missing patterns                         1
 
-  # Constrained intercepts over time
-  THT1_SS ~ int_th*1 
-  TH_T2_SS ~ int_th*1
-  TBT1_SS ~ int_tb*1 
-  TB_T2_SS ~ int_tb*1 
-  ACOMT1_SS ~ int_acom*1 
-  ACOMT2SS ~ int_acom*1 
-  SATT1_SS ~ int_sat*1 
-  SAT_T2SS ~ int_sat*1 
-  #
-  AB_T1_SS ~ int_ab*1 
-  ABT2_SS  ~ int_ab*1 
-  DE_T1_SS ~ int_de*1 
-  DET2_SS ~ int_de*1 
-  VI_T1_SS ~ int_vi*1 
-  VIT2_SS ~ int_vi*1 
-  #
-  SLT1_SS ~ int_sl*1 
-  SLT2SS ~ int_sl*1 
-  
-  
-  # Free latent means on t=2
-  RQ12 + RQ22 + SE2 + RQ11 + RQ21 + SE1 ~ 1
+Model Test User Model:
+                                                      
+  Test statistic                               111.561
+  Degrees of freedom                                50
+  P-value (Chi-square)                           0.000
 
-  
-  ############
-  # DYNAMICS #
-  ############
-  
-  # Specify the lagged effects between the latent variables.
-  RQ12 + RQ22 + SE2 + SLT2SS ~ RQ11 + RQ21 + SE1 + SLT1_SS
-  
-  # Estimate the correlations within the same wave.
-  # T1
-  RQ11 ~~ RQ21 + SE1 + SLT1_SS
-  RQ21 ~~ SE1 + SLT1_SS
-  SE1 ~~ SLT1_SS
-  # T2
-  RQ12 ~~ RQ22 + SE2 + SLT2SS
-  RQ22 ~~ SE2 + SLT2SS
-  SE2 ~~ SLT2SS
+Parameter Estimates:
 
-&#39;</code></pre>
-<pre class="r"><code>CLPM_M3.fit &lt;- sem(CLPM_M3, data = data_subset, missing = &#39;ML&#39;)</code></pre>
-<p>Given the warning, we investigate correlations again.</p>
-<pre class="r"><code>lavInspect(CLPM_M3.fit, &quot;cov.lv&quot;)</code></pre>
-<pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
-RQ11  7.764                                   
-RQ12  5.006  8.632                            
-RQ21  8.487  5.608  9.328                     
-RQ22  5.358  9.665  7.670 11.553              
-SE1   4.489  4.009  6.727  6.219 10.280       
-SE2   3.735  5.042  4.991  7.218  9.181 10.537</code></pre>
-<pre class="r"><code>lavInspect(CLPM_M3.fit, &quot;cor.lv&quot;)</code></pre>
-<pre><code>      RQ11  RQ12  RQ21  RQ22   SE1   SE2
-RQ11 1.000                              
-RQ12 0.611 1.000                        
-RQ21 0.997 0.625 1.000                  
-RQ22 0.566 0.968 0.739 1.000            
-SE1  0.502 0.426 0.687 0.571 1.000      
-SE2  0.413 0.529 0.503 0.654 0.882 1.000</code></pre>
-<p>Then, move on to the results of the model:</p>
-<pre class="r"><code>fitMeasures(CLPM_M3.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
-<pre><code>   chisq       df 
-725.4913  84.0000 </code></pre>
-<p>Because Models 2 and 3 are also nested, we perform another Chi-square
-difference test:</p>
-<p>Df = 84 - 82 = 2<br />
-Check the constrained parameters = 8 - 6 = 2<br />
-Chi-square difference = 725.4913 - 721.021 = 4.4703<br />
-<a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
-<p>The <span class="math inline">\(p\)</span> value is .106976. Hence,
-the result is not significant: <span class="math inline">\(p
-&gt;\)</span> .05.</p>
-<p>If this chi-square difference test is non-significant, this means we
-can assume that strong factorial invariance holds over time. In that
-case we could consider investigating whether the means change over time.
-This is just optional.</p>
-<p>Model 4 investigates strong factorial invariance without free latent
-means, meaning they are constrained over time). We repeat similar steps
-as above:</p>
-<pre class="r"><code>CLPM_M4 &lt;- &#39;
-  
-  #####################
-  # MEASUREMENT MODEL #
-  #####################
-  
-  # Factor models for RQ1 at 2 waves.
-  RQ11 =~ L1 * THT1_SS  + L2 * TBT1_SS  
-  RQ12 =~ L1 * TH_T2_SS + L2 * TB_T2_SS 
-  
-  # Factor models for RQ2 at 2 waves.
-  RQ21 =~ L3 * ACOMT1_SS + L4 * SATT1_SS
-  RQ22 =~ L3 * ACOMT2SS  + L4 * SAT_T2SS
-  
-  # Factor models for SE at 2 waves.
-  SE1 =~ L5 * AB_T1_SS + L6 * DE_T1_SS + L7 * VI_T1_SS
-  SE2 =~ L5 * ABT2_SS  + L6 * DET2_SS  + L7 * VIT2_SS
+  Standard errors                             Standard
+  Information                                 Observed
+  Observed information based on                Hessian
 
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  RIx =~                                                                
+    x1                1.000                               0.449    0.447
+    x2                1.000                               0.449    0.450
+    x3                1.000                               0.449    0.450
+    x4                1.000                               0.449    0.450
+    x5                1.000                               0.449    0.450
+  RIy =~                                                                
+    y1                1.000                               0.557    0.539
+    y2                1.000                               0.557    0.560
+    y3                1.000                               0.557    0.562
+    y4                1.000                               0.557    0.563
+    y5                1.000                               0.557    0.563
+  wx1 =~                                                                
+    x1                1.000                               0.899    0.894
+  wx2 =~                                                                
+    x2                1.000                               0.892    0.893
+  wx3 =~                                                                
+    x3                1.000                               0.891    0.893
+  wx4 =~                                                                
+    x4                1.000                               0.891    0.893
+  wx5 =~                                                                
+    x5                1.000                               0.891    0.893
+  wy1 =~                                                                
+    y1                1.000                               0.869    0.842
+  wy2 =~                                                                
+    y2                1.000                               0.823    0.828
+  wy3 =~                                                                
+    y3                1.000                               0.819    0.827
+  wy4 =~                                                                
+    y4                1.000                               0.818    0.827
+  wy5 =~                                                                
+    y5                1.000                               0.818    0.827
 
-  # Constrained intercepts over time
-  THT1_SS ~ int_th*1 
-  TH_T2_SS ~ int_th*1
-  TBT1_SS ~ int_tb*1 
-  TB_T2_SS ~ int_tb*1 
-  ACOMT1_SS ~ int_acom*1 
-  ACOMT2SS ~ int_acom*1 
-  SATT1_SS ~ int_sat*1 
-  SAT_T2SS ~ int_sat*1 
-  #
-  AB_T1_SS ~ int_ab*1 
-  ABT2_SS  ~ int_ab*1 
-  DE_T1_SS ~ int_de*1 
-  DET2_SS ~ int_de*1 
-  VI_T1_SS ~ int_vi*1 
-  VIT2_SS ~ int_vi*1 
-  #
-  SLT1_SS ~ int_sl*1 
-  SLT2SS ~ int_sl*1 
-  
-  
-  ############
-  # DYNAMICS #
-  ############
-  
-  # Specify the lagged effects between the latent variables.
-  RQ12 + RQ22 + SE2 + SLT2SS ~ RQ11 + RQ21 + SE1 + SLT1_SS
-  
-  # Estimate the correlations within the same wave.
-  # T1
-  RQ11 ~~ RQ21 + SE1 + SLT1_SS
-  RQ21 ~~ SE1 + SLT1_SS
-  SE1 ~~ SLT1_SS
-  # T2
-  RQ12 ~~ RQ22 + SE2 + SLT2SS
-  RQ22 ~~ SE2 + SLT2SS
-  SE2 ~~ SLT2SS
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  wx2 ~                                                                 
+    wx1        (a)    0.282    0.022   13.049    0.000    0.284    0.284
+    wy1        (b)    0.007    0.020    0.367    0.713    0.007    0.007
+  wy2 ~                                                                 
+    wx1        (c)    0.090    0.018    4.991    0.000    0.098    0.098
+    wy1        (d)    0.220    0.023    9.542    0.000    0.232    0.232
+  wx3 ~                                                                 
+    wx2        (a)    0.282    0.022   13.049    0.000    0.282    0.282
+    wy2        (b)    0.007    0.020    0.367    0.713    0.007    0.007
+  wy3 ~                                                                 
+    wx2        (c)    0.090    0.018    4.991    0.000    0.098    0.098
+    wy2        (d)    0.220    0.023    9.542    0.000    0.221    0.221
+  wx4 ~                                                                 
+    wx3        (a)    0.282    0.022   13.049    0.000    0.282    0.282
+    wy3        (b)    0.007    0.020    0.367    0.713    0.007    0.007
+  wy4 ~                                                                 
+    wx3        (c)    0.090    0.018    4.991    0.000    0.098    0.098
+    wy3        (d)    0.220    0.023    9.542    0.000    0.220    0.220
+  wx5 ~                                                                 
+    wx4        (a)    0.282    0.022   13.049    0.000    0.282    0.282
+    wy4        (b)    0.007    0.020    0.367    0.713    0.007    0.007
+  wy5 ~                                                                 
+    wx4        (c)    0.090    0.018    4.991    0.000    0.098    0.098
+    wy4        (d)    0.220    0.023    9.542    0.000    0.220    0.220
 
-&#39;</code></pre>
-<p>Fit the model:</p>
-<pre class="r"><code>CLPM_M4.fit &lt;- sem(CLPM_M4, data = data_subset, missing = &#39;ML&#39;)</code></pre>
-<p>Inspect the correlations:</p>
-<pre class="r"><code>lavInspect(CLPM_M4.fit, &quot;cov.lv&quot;)</code></pre>
-<pre><code>       RQ11   RQ12   RQ21   RQ22    SE1    SE2
-RQ11  7.813                                   
-RQ12  4.945  8.645                            
-RQ21  8.391  5.831  9.761                     
-RQ22  5.396  9.651  7.340 11.492              
-SE1   4.494  4.012  6.627  6.171 10.258       
-SE2   3.694  5.065  5.132  7.205  9.182 10.552</code></pre>
-<pre class="r"><code>lavInspect(CLPM_M4.fit, &quot;cor.lv&quot;)</code></pre>
-<pre><code>      RQ11  RQ12  RQ21  RQ22   SE1   SE2
-RQ11 1.000                              
-RQ12 0.602 1.000                        
-RQ21 0.961 0.635 1.000                  
-RQ22 0.570 0.968 0.693 1.000            
-SE1  0.502 0.426 0.662 0.568 1.000      
-SE2  0.407 0.530 0.506 0.654 0.883 1.000</code></pre>
-<p>Obtain the results:</p>
-<pre class="r"><code>fitMeasures(CLPM_M4.fit)[c(&quot;chisq&quot;,&quot;df&quot;)]</code></pre>
-<pre><code>   chisq       df 
-757.1568  90.0000 </code></pre>
-<p>We proceed with the Chi-squared difference test with the previous
-model:<br />
-Df = 90 - 84 = 6<br />
-Check the constrained / freed means = 6<br />
-Chi-square difference = 757.1568 - 725.4913 = 31.6655<br />
-<a href="https://www.socscistatistics.com/pvalues/chidistribution.aspx" class="uri">https://www.socscistatistics.com/pvalues/chidistribution.aspx</a></p>
-<p>The <span class="math inline">\(p\)</span> value is .000019. Hence,
-the result is significant: <span class="math inline">\(p &lt;\)</span>
-.05.</p>
-<p>Thus, we reject Model 4 and proceed with Model 3 (i.e., strong
-factorial invariance - with freed means = CLPM_M3.fit).</p>
-<p>We can now move further by specifying the lagged effects between the
-latent variables.</p>
-</div>
-<div id="clpm" class="section level2" number="1.4">
-<h2><span class="header-section-number">1.4</span> CLPM</h2>
-<pre class="r"><code>clpmModel &lt;- &#39;
-  
-  #####################
-  # MEASUREMENT MODEL #
-  #####################
-  
-  # Factor models for RQ1 at 2 waves.
-  RQ11 =~ L1 * THT1_SS  + L2 * TBT1_SS  
-  RQ12 =~ L1 * TH_T2_SS + L2 * TB_T2_SS 
-  
-  # Factor models for RQ2 at 2 waves.
-  RQ21 =~ L3 * ACOMT1_SS + L4 * SATT1_SS
-  RQ22 =~ L3 * ACOMT2SS  + L4 * SAT_T2SS
-  
-  # Factor models for SE at 2 waves.
-  SE1 =~ L5 * AB_T1_SS + L6 * DE_T1_SS + L7 * VI_T1_SS
-  SE2 =~ L5 * ABT2_SS  + L6 * DET2_SS  + L7 * VIT2_SS
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+ .wx2 ~~                                                                
+   .wy2      (cov)    0.146    0.013   11.594    0.000    0.217    0.217
+ .wx3 ~~                                                                
+   .wy3      (cov)    0.146    0.013   11.594    0.000    0.217    0.217
+ .wx4 ~~                                                                
+   .wy4      (cov)    0.146    0.013   11.594    0.000    0.217    0.217
+ .wx5 ~~                                                                
+   .wy5      (cov)    0.146    0.013   11.594    0.000    0.217    0.217
+  wx1 ~~                                                                
+    wy1               0.279    0.029    9.617    0.000    0.357    0.357
+  RIx ~~                                                                
+    RIy               0.153    0.019    8.235    0.000    0.611    0.611
 
+Intercepts:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+   .x1        (mx)   -0.000    0.019   -0.000    1.000   -0.000   -0.000
+   .x2        (mx)    0.000    0.019    0.000    1.000    0.000    0.000
+   .x3        (mx)   -0.000    0.019   -0.000    1.000   -0.000   -0.000
+   .x4        (mx)    0.000    0.019    0.000    1.000    0.000    0.000
+   .x5        (mx)    0.000    0.019    0.000    1.000    0.000    0.000
+   .y1        (my)    0.000    0.021    0.000    1.000    0.000    0.000
+   .y2        (my)    0.000    0.021    0.000    1.000    0.000    0.000
+   .y3        (my)   -0.000    0.021   -0.000    1.000   -0.000   -0.000
+   .y4        (my)    0.000    0.021    0.000    1.000    0.000    0.000
+   .y5        (my)   -0.000    0.021   -0.000    1.000   -0.000   -0.000
 
-  # Constrained intercepts over time
-  THT1_SS ~ int_th*1 
-  TH_T2_SS ~ int_th*1
-  TBT1_SS ~ int_tb*1 
-  TB_T2_SS ~ int_tb*1 
-  ACOMT1_SS ~ int_acom*1 
-  ACOMT2SS ~ int_acom*1 
-  SATT1_SS ~ int_sat*1 
-  SAT_T2SS ~ int_sat*1 
-  #
-  AB_T1_SS ~ int_ab*1 
-  ABT2_SS  ~ int_ab*1 
-  DE_T1_SS ~ int_de*1 
-  DET2_SS ~ int_de*1 
-  VI_T1_SS ~ int_vi*1 
-  VIT2_SS ~ int_vi*1 
-  #
-  SLT1_SS ~ int_sl*1 
-  SLT2SS ~ int_sl*1 
-  
-  
-  # Free latent means on t=2
-  RQ12 + RQ22 + SE2 + RQ11 + RQ21 + SE1 ~ 1
-
-  
-  ############
-  # DYNAMICS #
-  ############
-  
-  # Specify the lagged effects between the latent variables.
-  RQ12 ~ Phi11 * RQ11 + Phi12 * RQ21 + Phi13 * SE1 + Phi14 * SLT1_SS
-  RQ22 ~ Phi21 * RQ11 + Phi22 * RQ21 + Phi23 * SE1 + Phi24 * SLT1_SS
-  #
-  SE2 ~ Phi31 * RQ11 + Phi32 * RQ21 + Phi33 * SE1 + Phi34 * SLT1_SS
-  SLT2SS ~ Phi41 * RQ11 + Phi42 * RQ21 + Phi43 * SE1 + Phi44 * SLT1_SS
-  
-  
-  # Estimate the correlations within the same wave.
-  # T1
-  RQ11 ~~ RQ21 + SE1 + SLT1_SS
-  RQ21 ~~ SE1 + SLT1_SS
-  SE1 ~~ SLT1_SS
-  # T2
-  RQ12 ~~ RQ22 + SE2 + SLT2SS
-  RQ22 ~~ SE2 + SLT2SS
-  SE2 ~~ SLT2SS
-
-&#39;</code></pre>
-<p>Next, we fit the model with the lagged relations:</p>
-<pre class="r"><code>clpmUnc &lt;- sem(clpmModel, data = data_subset, missing = &#39;ML&#39;)</code></pre>
-<p>Using the <code>summary</code> function we obtain the results of the
-model fit and estimates. The standardized solution contains the p-values
-of standardized effects.</p>
-<pre class="r"><code>fitMeasures(clpmUnc)</code></pre>
-<pre><code>                        npar                         fmin                        chisq                           df                       pvalue               baseline.chisq                  baseline.df              baseline.pvalue                          cfi                          tli                   cfi.robust                   tli.robust                         nnfi                          rfi                          nfi                         pnfi                          ifi                          rni                  nnfi.robust                   rni.robust                         logl            unrestricted.logl                          aic                          bic                       ntotal                         bic2                        rmsea               rmsea.ci.lower               rmsea.ci.upper               rmsea.ci.level                 rmsea.pvalue               rmsea.close.h0        rmsea.notclose.pvalue            rmsea.notclose.h0                 rmsea.robust        rmsea.ci.lower.robust        rmsea.ci.upper.robust          rmsea.pvalue.robust rmsea.notclose.pvalue.robust                          rmr                   rmr_nomean 
-                      68.000                        0.220                      725.491                       84.000                        0.000                    11555.091                      120.000                        0.000                        0.944                        0.920                        0.902                        0.860                        0.920                        0.910                        0.937                        0.656                        0.944                        0.944                        0.860                        0.902                   -35727.898                   -35365.152                    71591.795                    71959.534                     1649.000                    71743.509                        0.068                        0.064                        0.073                        0.900                        0.000                        0.050                        0.000                        0.080                        0.130                        0.119                        0.141                        0.000                        1.000                        0.852                        0.901 
-                        srmr                 srmr_bentler          srmr_bentler_nomean                         crmr                  crmr_nomean                   srmr_mplus            srmr_mplus_nomean                        cn_05                        cn_01                          gfi                         agfi                         pgfi                          mfi                         ecvi 
-                       0.053                        0.053                        0.056                        0.055                        0.059                        0.053                        0.055                      242.829                      267.063                        0.988                        0.977                        0.546                        0.823                        0.522 </code></pre>
-<pre class="r"><code>stdClpmUnc &lt;- standardizedsolution(clpmUnc, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE, 
-                                   pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, 
-                                   remove.eq = TRUE, remove.ineq = TRUE, remove.def = FALSE, 
-                                   partable = NULL, GLIST = NULL, est = NULL)
-stdClpmUnc</code></pre>
-<pre><code>         lhs op       rhs    label est.std    se       z pvalue ci.lower ci.upper
-1       RQ11 =~   THT1_SS       L1   0.860 0.010  87.184  0.000    0.841    0.880
-2       RQ11 =~   TBT1_SS       L2   0.892 0.009  98.450  0.000    0.874    0.909
-3       RQ12 =~  TH_T2_SS       L1   0.891 0.009 104.577  0.000    0.874    0.907
-4       RQ12 =~  TB_T2_SS       L2   0.933 0.007 132.024  0.000    0.920    0.947
-5       RQ21 =~ ACOMT1_SS       L3   0.755 0.015  50.807  0.000    0.726    0.784
-6       RQ21 =~  SATT1_SS       L4   0.797 0.014  57.832  0.000    0.770    0.824
-7       RQ22 =~  ACOMT2SS       L3   0.850 0.011  77.025  0.000    0.829    0.872
-8       RQ22 =~  SAT_T2SS       L4   0.863 0.011  81.286  0.000    0.843    0.884
-9        SE1 =~  AB_T1_SS       L5   0.843 0.011  74.549  0.000    0.821    0.866
-10       SE1 =~  DE_T1_SS       L6   0.840 0.012  68.560  0.000    0.816    0.864
-11       SE1 =~  VI_T1_SS       L7   0.847 0.011  74.234  0.000    0.825    0.869
-12       SE2 =~   ABT2_SS       L5   0.856 0.012  71.260  0.000    0.833    0.880
-13       SE2 =~   DET2_SS       L6   0.836 0.013  66.520  0.000    0.811    0.860
-14       SE2 =~   VIT2_SS       L7   0.858 0.012  72.268  0.000    0.835    0.881
-15   THT1_SS ~1             int_th   9.880 0.732  13.505  0.000    8.446   11.314
-16  TH_T2_SS ~1             int_th   9.700 0.740  13.105  0.000    8.249   11.150
-17   TBT1_SS ~1             int_tb   9.375 0.758  12.376  0.000    7.891   10.860
-18  TB_T2_SS ~1             int_tb   9.309 0.774  12.034  0.000    7.793   10.825
-19 ACOMT1_SS ~1           int_acom   7.678 0.307  24.994  0.000    7.076    8.281
-20  ACOMT2SS ~1           int_acom   7.773 0.317  24.505  0.000    7.151    8.395
-21  SATT1_SS ~1            int_sat   8.035 0.325  24.716  0.000    7.398    8.672
-22  SAT_T2SS ~1            int_sat   7.824 0.322  24.279  0.000    7.192    8.456
-23  AB_T1_SS ~1             int_ab   9.533 0.345  27.664  0.000    8.857   10.208
-24   ABT2_SS ~1             int_ab   9.558 0.386  24.730  0.000    8.801   10.316
-25  DE_T1_SS ~1             int_de  10.664 0.351  30.340  0.000    9.975   11.353
-26   DET2_SS ~1             int_de  10.484 0.396  26.507  0.000    9.709   11.259
-27  VI_T1_SS ~1             int_vi   9.709 0.348  27.927  0.000    9.028   10.391
-28   VIT2_SS ~1             int_vi   9.714 0.391  24.834  0.000    8.947   10.480
-29   SLT1_SS ~1             int_sl   4.075 0.094  43.518  0.000    3.891    4.258
-30    SLT2SS ~1             int_sl   3.864 0.098  39.350  0.000    3.672    4.057
-31      RQ12 ~1                     -2.610 1.541  -1.694  0.090   -5.629    0.410
-32      RQ22 ~1                     -2.196 1.921  -1.143  0.253   -5.962    1.569
-33       SE2 ~1                      0.759 1.806   0.420  0.674   -2.782    4.300
-34      RQ11 ~1                     -5.844 0.833  -7.013  0.000   -7.477   -4.210
-35      RQ21 ~1                     -5.302 0.390 -13.588  0.000   -6.067   -4.538
-36       SE1 ~1                     -7.281 0.387 -18.821  0.000   -8.039   -6.523
-37      RQ12  ~      RQ11    Phi11   0.149 0.542   0.275  0.783   -0.913    1.211
-38      RQ12  ~      RQ21    Phi12   0.415 0.685   0.606  0.544   -0.927    1.758
-39      RQ12  ~       SE1    Phi13   0.034 0.147   0.232  0.817   -0.254    0.322
-40      RQ12  ~   SLT1_SS    Phi14   0.046 0.142   0.324  0.746   -0.233    0.325
-41      RQ22  ~      RQ11    Phi21   1.721 0.889   1.936  0.053   -0.021    3.462
-42      RQ22  ~      RQ21    Phi22  -1.808 1.137  -1.591  0.112   -4.036    0.420
-43      RQ22  ~       SE1    Phi23   0.597 0.223   2.671  0.008    0.159    1.034
-44      RQ22  ~   SLT1_SS    Phi24   0.517 0.215   2.408  0.016    0.096    0.937
-45       SE2  ~      RQ11    Phi31  -1.018 0.663  -1.534  0.125   -2.318    0.282
-46       SE2  ~      RQ21    Phi32   1.319 0.848   1.556  0.120   -0.342    2.981
-47       SE2  ~       SE1    Phi33   0.752 0.168   4.467  0.000    0.422    1.082
-48       SE2  ~   SLT1_SS    Phi34  -0.389 0.163  -2.394  0.017   -0.708   -0.071
-49    SLT2SS  ~      RQ11    Phi41   0.716 0.544   1.316  0.188   -0.351    1.783
-50    SLT2SS  ~      RQ21    Phi42  -0.708 0.693  -1.023  0.306   -2.066    0.649
-51    SLT2SS  ~       SE1    Phi43   0.289 0.142   2.027  0.043    0.009    0.568
-52    SLT2SS  ~   SLT1_SS    Phi44   0.596 0.136   4.388  0.000    0.330    0.862
-53      RQ11 ~~      RQ21            0.997 0.013  75.177  0.000    0.971    1.023
-54      RQ11 ~~       SE1            0.502 0.028  17.884  0.000    0.447    0.558
-55      RQ11 ~~   SLT1_SS            0.675 0.019  34.754  0.000    0.637    0.713
-56      RQ21 ~~       SE1            0.687 0.026  26.784  0.000    0.637    0.737
-57      RQ21 ~~   SLT1_SS            0.815 0.017  47.545  0.000    0.782    0.849
-58       SE1 ~~   SLT1_SS            0.681 0.020  34.112  0.000    0.642    0.720
-59      RQ12 ~~      RQ22            0.805 0.102   7.909  0.000    0.605    1.004
-60      RQ12 ~~       SE2            0.484 0.121   3.987  0.000    0.246    0.722
-61      RQ12 ~~    SLT2SS            0.509 0.068   7.511  0.000    0.376    0.642
-62      RQ22 ~~       SE2            0.140 0.223   0.628  0.530   -0.297    0.577
-63      RQ22 ~~    SLT2SS            0.661 0.068   9.773  0.000    0.528    0.794
-64       SE2 ~~    SLT2SS            0.382 0.173   2.208  0.027    0.043    0.721
-65   THT1_SS ~~   THT1_SS            0.260 0.017  15.290  0.000    0.226    0.293
-66   TBT1_SS ~~   TBT1_SS            0.205 0.016  12.694  0.000    0.173    0.237
-67  TH_T2_SS ~~  TH_T2_SS            0.207 0.015  13.624  0.000    0.177    0.236
-68  TB_T2_SS ~~  TB_T2_SS            0.129 0.013   9.748  0.000    0.103    0.155
-69 ACOMT1_SS ~~ ACOMT1_SS            0.430 0.022  19.201  0.000    0.387    0.474
-70  SATT1_SS ~~  SATT1_SS            0.365 0.022  16.631  0.000    0.322    0.408
-71  ACOMT2SS ~~  ACOMT2SS            0.277 0.019  14.767  0.000    0.240    0.314
-72  SAT_T2SS ~~  SAT_T2SS            0.254 0.018  13.873  0.000    0.219    0.290
-73  AB_T1_SS ~~  AB_T1_SS            0.289 0.019  15.128  0.000    0.251    0.326
-74  DE_T1_SS ~~  DE_T1_SS            0.295 0.021  14.329  0.000    0.254    0.335
-75  VI_T1_SS ~~  VI_T1_SS            0.283 0.019  14.635  0.000    0.245    0.321
-76   ABT2_SS ~~   ABT2_SS            0.267 0.021  12.976  0.000    0.227    0.307
-77   DET2_SS ~~   DET2_SS            0.301 0.021  14.345  0.000    0.260    0.343
-78   VIT2_SS ~~   VIT2_SS            0.264 0.020  12.971  0.000    0.224    0.304
-79    SLT2SS ~~    SLT2SS            0.510 0.064   7.992  0.000    0.385    0.635
-80   SLT1_SS ~~   SLT1_SS            1.000 0.000      NA     NA    1.000    1.000
-81      RQ11 ~~      RQ11            1.000 0.000      NA     NA    1.000    1.000
-82      RQ12 ~~      RQ12            0.611 0.055  11.157  0.000    0.504    0.719
-83      RQ21 ~~      RQ21            1.000 0.000      NA     NA    1.000    1.000
-84      RQ22 ~~      RQ22            0.707 0.164   4.308  0.000    0.385    1.029
-85       SE1 ~~       SE1            1.000 0.000      NA     NA    1.000    1.000
-86       SE2 ~~       SE2            0.292 0.099   2.946  0.003    0.098    0.486</code></pre>
-</div>
-<div id="gorica" class="section level2" number="1.5">
-<h2><span class="header-section-number">1.5</span> GORICA</h2>
-<p>Next, you will find two ways of applying the GORICA to a lavaan
-model.</p>
-<div id="input-option-1" class="section level3" number="1.5.1">
-<h3><span class="header-section-number">1.5.1</span> Input option 1</h3>
-<div id="extract-estimates-of-interest-and-their-covariance-matrix" class="section level4" number="1.5.1.1">
-<h4><span class="header-section-number">1.5.1.1</span> Extract estimates
-of interest and their covariance matrix</h4>
-<p>Next, we extract the standardized estimates of interest (thus, based
-on the parameters mentioned in our set of hypotheses) and their
-covariance matrix, which can be used as input for the <code>goric</code>
-function.</p>
-<pre class="r"><code># indices of estimates of interest
-indices &lt;- 37:52
-
-# select estimates from the column &#39;Std.all&#39; in the results summary above
-est &lt;- stdClpmUnc[indices, &#39;est.std&#39;]
-
-names(est) &lt;- c(&quot;RQ12_RQ11&quot;, &quot;RQ12_RQ21&quot;, &quot;RQ12_SE1&quot;, &quot;RQ12_SL1&quot;, 
-                &quot;RQ22_RQ11&quot;, &quot;RQ22_RQ21&quot;, &quot;RQ22_SE1&quot;, &quot;RQ22_SL1&quot;, 
-                &quot;SE2_RQ11&quot;, &quot;SE2_RQ21&quot;, &quot;SE2_SE1&quot;, &quot;SE2_SL1&quot;,
-                &quot;SL2_RQ11&quot;, &quot;SL2_RQ21&quot;, &quot;SL2_SE1&quot;, &quot;SL2_SL1&quot;
-)
-
-# the covariance matrix for these estimates
-vcov &lt;- lavInspect(clpmUnc, &quot;vcov.std.all&quot;)[indices-6, indices-6]</code></pre>
-</div>
-<div id="hypotheses" class="section level4" number="1.5.1.2">
-<h4><span class="header-section-number">1.5.1.2</span> Hypotheses</h4>
-<p>Next, we specify the hypotheses to be evaluated (which are known
-before seeing the data). Note the use of the <code>abs</code> function:
-This is because we are interested in the size of the relations and we
-want to compare absolute effects. In cases where the sign of the values
-is of interest, one should look at the regular/raw/non-absolute effect
-(e.g., estimate_x &gt; .3 or estimate_y &lt; 0).</p>
-<p>Here, there are two sets of hypotheses, <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span>, which focus on different
-relations in the model. The decisions of whether multiple hypotheses
-should be split in different sets and how to divide them are driven by
-theory, and depend on what the researchers intend to evaluate. When
-multiple hypotheses are included in one set, as in <span class="math inline">\(H1\_Q2\)</span>, they are handled by the
-<code>goric</code> function as a whole, not individually.</p>
-<pre class="r"><code># Q1: Phi_21 &gt; Phi_12
-H1_Q1 &lt;- &quot;
-abs(RQ22_RQ11) &gt; abs(RQ12_RQ21)
-&quot;
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+    RIx               0.202    0.023    8.738    0.000    1.000    1.000
+    RIy               0.310    0.025   12.530    0.000    1.000    1.000
+    wx1               0.807    0.040   20.170    0.000    1.000    1.000
+    wy1               0.755    0.037   20.302    0.000    1.000    1.000
+   .wx2       (vx)    0.730    0.018   40.589    0.000    0.918    0.918
+   .wy2       (vy)    0.624    0.017   37.190    0.000    0.920    0.920
+   .wx3       (vx)    0.730    0.018   40.589    0.000    0.919    0.919
+   .wy3       (vy)    0.624    0.017   37.190    0.000    0.931    0.931
+   .wx4       (vx)    0.730    0.018   40.589    0.000    0.920    0.920
+   .wy4       (vy)    0.624    0.017   37.190    0.000    0.931    0.931
+   .wx5       (vx)    0.730    0.018   40.589    0.000    0.920    0.920
+   .wy5       (vy)    0.624    0.017   37.190    0.000    0.931    0.931
+   .x1                0.000                               0.000    0.000
+   .x2                0.000                               0.000    0.000
+   .x3                0.000                               0.000    0.000
+   .x4                0.000                               0.000    0.000
+   .x5                0.000                               0.000    0.000
+   .y1                0.000                               0.000    0.000
+   .y2                0.000                               0.000    0.000
+   .y3                0.000                               0.000    0.000
+   .y4                0.000                               0.000    0.000
+   .y5                0.000                               0.000    0.000</code></pre>
+<pre class="r"><code># Compute GORICA values and weights
+set.seed(123)
+GORICA.Result &lt;- goric(RICLPM5.fit, 
+                       hypotheses = list(H1)) 
+# Defaults: comparison = &quot;complement&quot; 
+#           type = &quot;gorica&quot;
 #
-# Q2
-H1_Q2 &lt;- &quot;
-abs(SE2_RQ11) &gt; abs(RQ12_SE1);
-abs(SL2_RQ11) &gt; abs(RQ12_SL1);
-abs(SE2_RQ21) &gt; abs(RQ22_SE1);
-abs(SL2_RQ21) &gt; abs(RQ22_SL1)
-&quot;</code></pre>
-</div>
-<div id="gorica-1" class="section level4" number="1.5.1.3">
-<h4><span class="header-section-number">1.5.1.3</span> GORICA</h4>
-<p>We obtain the GORICA results for <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span> in two steps (where each is
-evaluated against their own complement). Note the use of
-<code>set.seed</code> to ensure that the results are reproducible.</p>
-<pre class="r"><code>set.seed(123)
-
-#H1_Q1 vs its complement, using GORICA
-goricaResults_Q1 &lt;- goric(est, VCOV = vcov, # then, default: type = &quot;gorica&quot;
-                          hypotheses = list(H1_Q1=H1_Q1))
-
-goricaResults_Q1</code></pre>
+GORICA.Result</code></pre>
 <pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1       H1_Q1  22.439   15.500  -13.878           0.632            0.500           0.632
-2  complement  21.898   15.500  -12.796           0.368            0.500           0.368
+1          H1  28.317    8.500  -39.634           0.999            0.500           0.999
+2  complement  21.651    8.500  -26.301           0.001            0.500           0.001
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_Q1&#39; has 1.72 times more support than its complement.</code></pre>
-<pre class="r"><code>#summary(goricaResults_Q1)</code></pre>
-<p>The output shows that the order-restricted hypothesis <span class="math inline">\(H1\_Q1\)</span> has 1.7 times more support than
-its complement.</p>
-<pre class="r"><code>set.seed(123)
-
-#H1_Q2 vs its complement, using GORICA
-goricaResults_Q2 &lt;- goric(est, VCOV = vcov, 
-                          hypotheses = list(H1_Q2=H1_Q2))
-
-goricaResults_Q2</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
-
-Results:
-        model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1       H1_Q2  22.439   14.856  -15.167           0.513            0.568           0.581
-2  complement  22.387   15.131  -14.512           0.487            0.432           0.419
-
-Conclusion:
-The order-restricted hypothesis &#39;H1_Q2&#39; has 1.39 times more support than its complement.</code></pre>
-<pre class="r"><code>#summary(goricaResults_Q2)</code></pre>
-<p>Furthermore, the order-restricted hypothesis <span class="math inline">\(H1\_Q2\)</span> has 1.4 times more support than
-its complement.</p>
-<p>Note 1: The results hold for the chosen time interval. That is, the
+The order-restricted hypothesis &#39;H1&#39; has 785.56 times more support than its complement.</code></pre>
+<pre class="r"><code>#summary(GORICA.Result)</code></pre>
+<p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 786 times more support than its
+complement.</p>
+<p>Note that the results hold for the chosen time interval. That is, the
 results are time-interval dependent. At the end, more information is
 given.</p>
-<p>Note 2: The log-likelihood (loglik) weights seem to be quite close.
-This could indicate that one or more of the inequality constraints can
-be replaced by (about-)equality constraints. One could investigate with
-the benchmarks function, using ‘output_type = “rlw”’, whether the loglik
-weights indeed are close.<br />
-For more information, see the guidelines
-(‘Guidelines_output_GORIC.html’) and/or the benchmark tutorial on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
 </div>
-</div>
-<div id="input-option-2" class="section level3" number="1.5.2">
-<h3><span class="header-section-number">1.5.2</span> Input option 2</h3>
-<p>Instead of extracting the (standardized) estimates and their
-covariance matrix, you can use the lavaan object. The easiest is to
-label the estimates (of interest); like done earlier in this example.
-You can then use these labels in specifying your hypotheses. To make a
-fair comparison, we need to look at the standardized estimates, so we
-should include ‘standardized = T’.</p>
-<p>The R code to do it this ways follows next.<br />
-Note the use of <code>set.seed</code> to ensure that the results are
-reproducible.</p>
-<pre class="r"><code># Q1
-H1_Q1_lav &lt;- &quot;
-abs(Phi21) &gt; abs(Phi12)
-&quot;
-#
-# Q2
-H1_Q2_lav &lt;- &quot;
-abs(Phi31) &gt; abs(Phi13);
-abs(Phi41) &gt; abs(Phi14);
-abs(Phi32) &gt; abs(Phi23);
-abs(Phi42) &gt; abs(Phi24)
-&quot;
+<div id="example-2-wave-specific-parameters-model" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Example 2:
+`wave-specific’ parameters model</h1>
+<p>Next, you find the R code to evaluate causal dominance in
+lagged-effects `wave-independent’ parameters model using the GORICA
+(using the goric function). This is an example using a bivariate RI-CLPM
+with 2 variables and 5 time points.</p>
+<p>Two types of input will be shown:<br />
+- the lavaan object with user-specified parameter labels;<br />
+- the extracted standardized estimates and their covariance matrix.</p>
+<div id="input-option-1-lavaan-object" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Input option 1:
+lavaan object</h2>
+<p>In this example, I will use the lavaan object with user-specified
+parameter labels.</p>
+<pre class="r"><code># Load the data set into R: Traditional RI-CLPM
+dat &lt;- read.table(&quot;data/RICLPM.dat&quot;, 
+                  col.names = c(
+                    &quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;, &quot;x4&quot;, &quot;x5&quot;, 
+                    &quot;y1&quot;, &quot;y2&quot;, &quot;y3&quot;, &quot;y4&quot;, &quot;y5&quot;)
+) 
 
+# Hypothesis w.r.t. wave-specific cross-lagged effects (as specified in the model)
+H1ws.l &lt;- &quot;abs(b2) &lt; abs(c2); abs(b3) &lt; abs(c3); 
+         abs(b4) &lt; abs(c4); abs(b5) &lt; abs(c5)&quot; 
+# versus it complement, that is, versus all other possibilities
+# default in case of one hypothesis
+
+# Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-specific parameters:
+RICLPM.l &lt;- &#39;
+  # Create between components (random intercepts)
+  RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
+  RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
+  
+  # Create within-person centered variables
+  wx1 =~ 1*x1
+  wx2 =~ 1*x2
+  wx3 =~ 1*x3 
+  wx4 =~ 1*x4
+  wx5 =~ 1*x5
+  wy1 =~ 1*y1
+  wy2 =~ 1*y2
+  wy3 =~ 1*y3
+  wy4 =~ 1*y4
+  wy5 =~ 1*y5
+
+  # Estimate lagged effects between within-person centered variables
+  wx2 ~ a2*wx1 + b2*wy1 
+  wy2 ~ c2*wx1 + d2*wy1
+  wx3 ~ a3*wx2 + b3*wy2
+  wy3 ~ c3*wx2 + d3*wy2
+  wx4 ~ a4*wx3 + b4*wy3
+  wy4 ~ c4*wx3 + d4*wy3
+  wx5 ~ a5*wx4 + b5*wy4
+  wy5 ~ c5*wx4 + d5*wy4
+  
+
+  # Estimate covariance between within-person centered variables at first wave
+  wx1 ~~ wy1 # Covariance
+  
+  # Estimate covariances between residuals of within-person centered variables 
+  # (i.e., innovations)
+  wx2 ~~ wy2
+  wx3 ~~ wy3
+  wx4 ~~ wy4
+  wx5 ~~ wy5
+  
+  # Estimate variance and covariance of random intercepts
+  RIx ~~ RIx
+  RIy ~~ RIy
+  RIx ~~ RIy
+
+  # Estimate (residual) variance of within-person centered variables
+  wx1 ~~ wx1 # Variances
+  wy1 ~~ wy1 
+  wx2 ~~ wx2 # Residual variances
+  wy2 ~~ wy2 
+  wx3 ~~ wx3 
+  wy3 ~~ wy3 
+  wx4 ~~ wx4 
+  wy4 ~~ wy4 
+  wx5 ~~ wx5
+  wy5 ~~ wy5
+&#39;
+RICLPM.fit.l &lt;- lavaan(RICLPM.l,
+                     data = dat, 
+                     missing = &quot;ML&quot;, 
+                     meanstructure = T, 
+                     int.ov.free = T
+)
+summary(RICLPM.fit.l, standardized = T)</code></pre>
+<pre><code>lavaan 0.6-19 ended normally after 116 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        44
+
+  Number of observations                          1189
+  Number of missing patterns                         1
+
+Model Test User Model:
+                                                      
+  Test statistic                                25.806
+  Degrees of freedom                                21
+  P-value (Chi-square)                           0.214
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Observed
+  Observed information based on                Hessian
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  RIx =~                                                                
+    x1                1.000                               0.096    0.390
+    x2                1.000                               0.096    0.473
+    x3                1.000                               0.096    0.475
+    x4                1.000                               0.096    0.461
+    x5                1.000                               0.096    0.465
+  RIy =~                                                                
+    y1                1.000                               0.178    0.569
+    y2                1.000                               0.178    0.558
+    y3                1.000                               0.178    0.535
+    y4                1.000                               0.178    0.525
+    y5                1.000                               0.178    0.533
+  wx1 =~                                                                
+    x1                1.000                               0.227    0.921
+  wx2 =~                                                                
+    x2                1.000                               0.179    0.881
+  wx3 =~                                                                
+    x3                1.000                               0.178    0.880
+  wx4 =~                                                                
+    x4                1.000                               0.185    0.887
+  wx5 =~                                                                
+    x5                1.000                               0.183    0.885
+  wy1 =~                                                                
+    y1                1.000                               0.257    0.822
+  wy2 =~                                                                
+    y2                1.000                               0.265    0.830
+  wy3 =~                                                                
+    y3                1.000                               0.281    0.845
+  wy4 =~                                                                
+    y4                1.000                               0.288    0.851
+  wy5 =~                                                                
+    y5                1.000                               0.282    0.846
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  wx2 ~                                                                 
+    wx1       (a2)    0.232    0.028    8.314    0.000    0.294    0.294
+    wy1       (b2)    0.009    0.026    0.329    0.742    0.012    0.012
+  wy2 ~                                                                 
+    wx1       (c2)    0.174    0.045    3.888    0.000    0.149    0.149
+    wy1       (d2)    0.004    0.046    0.092    0.927    0.004    0.004
+  wx3 ~                                                                 
+    wx2       (a3)    0.241    0.037    6.509    0.000    0.242    0.242
+    wy2       (b3)    0.026    0.024    1.082    0.279    0.039    0.039
+  wy3 ~                                                                 
+    wx2       (c3)    0.156    0.054    2.871    0.004    0.099    0.099
+    wy2       (d3)    0.262    0.039    6.747    0.000    0.247    0.247
+  wx4 ~                                                                 
+    wx3       (a4)    0.279    0.038    7.267    0.000    0.269    0.269
+    wy3       (b4)    0.010    0.023    0.431    0.666    0.015    0.015
+  wy4 ~                                                                 
+    wx3       (c4)    0.185    0.055    3.367    0.001    0.114    0.114
+    wy3       (d4)    0.296    0.035    8.362    0.000    0.288    0.288
+  wx5 ~                                                                 
+    wx4       (a5)    0.290    0.035    8.244    0.000    0.293    0.293
+    wy4       (b5)   -0.004    0.022   -0.186    0.852   -0.006   -0.006
+  wy5 ~                                                                 
+    wx4       (c5)    0.124    0.048    2.612    0.009    0.082    0.082
+    wy4       (d5)    0.392    0.031   12.644    0.000    0.400    0.400
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  wx1 ~~                                                                
+    wy1               0.021    0.002    9.372    0.000    0.364    0.364
+ .wx2 ~~                                                                
+   .wy2               0.009    0.002    5.168    0.000    0.196    0.196
+ .wx3 ~~                                                                
+   .wy3               0.013    0.002    7.837    0.000    0.274    0.274
+ .wx4 ~~                                                                
+   .wy4               0.013    0.002    8.177    0.000    0.277    0.277
+ .wx5 ~~                                                                
+   .wy5               0.007    0.001    4.916    0.000    0.160    0.160
+  RIx ~~                                                                
+    RIy               0.010    0.001    7.992    0.000    0.587    0.587
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+   .x1                0.241    0.007   33.687    0.000    0.241    0.977
+   .x2                0.173    0.006   29.331    0.000    0.173    0.851
+   .x3                0.186    0.006   31.646    0.000    0.186    0.918
+   .x4                0.117    0.006   19.288    0.000    0.117    0.559
+   .x5                0.111    0.006   18.427    0.000    0.111    0.534
+   .y1                0.336    0.009   37.099    0.000    0.336    1.076
+   .y2                0.348    0.009   37.686    0.000    0.348    1.093
+   .y3                0.319    0.010   33.098    0.000    0.319    0.960
+   .y4                0.384    0.010   39.097    0.000    0.384    1.134
+   .y5                0.388    0.010   40.056    0.000    0.388    1.162
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+    RIx               0.009    0.001    8.722    0.000    1.000    1.000
+    RIy               0.032    0.003   12.351    0.000    1.000    1.000
+    wx1               0.052    0.002   21.067    0.000    1.000    1.000
+    wy1               0.066    0.004   17.985    0.000    1.000    1.000
+   .wx2               0.029    0.001   20.793    0.000    0.911    0.911
+   .wy2               0.068    0.004   17.503    0.000    0.977    0.977
+   .wx3               0.030    0.001   20.467    0.000    0.935    0.935
+   .wy3               0.072    0.003   21.324    0.000    0.918    0.918
+   .wx4               0.032    0.001   21.445    0.000    0.925    0.925
+   .wy4               0.074    0.003   21.876    0.000    0.884    0.884
+   .wx5               0.031    0.001   21.680    0.000    0.915    0.915
+   .wy5               0.065    0.003   22.446    0.000    0.813    0.813
+   .x1                0.000                               0.000    0.000
+   .x2                0.000                               0.000    0.000
+   .x3                0.000                               0.000    0.000
+   .x4                0.000                               0.000    0.000
+   .x5                0.000                               0.000    0.000
+   .y1                0.000                               0.000    0.000
+   .y2                0.000                               0.000    0.000
+   .y3                0.000                               0.000    0.000
+   .y4                0.000                               0.000    0.000
+   .y5                0.000                               0.000    0.000</code></pre>
+<pre class="r"><code># Compute GORICA values and weights
+# Make sure to use: standardized = T
 set.seed(123)
-#H1_Q2_lav vs its complement, using GORICA
-goricaResults_Q2_lav &lt;- goric(clpmUnc, # then, default: type = &quot;gorica&quot;
+GORICA.Result.ws.l &lt;- goric(RICLPM.fit.l, 
                           standardized = T,
-                          hypotheses = list(H1_Q2_lav=H1_Q2_lav))
-
-goricaResults_Q2_lav</code></pre>
+                          hypotheses = list(H1ws.l = H1ws.l)) 
+# Defaults: comparison = &quot;complement&quot; 
+#           type = &quot;gorica&quot;
+#
+GORICA.Result.ws.l</code></pre>
 <pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1   H1_Q2_lav  48.468   26.856  -43.224           0.513            0.568           0.581
-2  complement  48.415   27.131  -42.568           0.487            0.432           0.419
+1      H1ws.l  39.996   13.966  -52.061           0.684            0.858           0.929
+2  complement  39.222   15.767  -46.910           0.316            0.142           0.071
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_Q2_lav&#39; has 1.39 times more support than its complement.</code></pre>
-<pre class="r"><code>#summary(goricaResults_Q2_lav)</code></pre>
-<p>This of course renders the same results as above (and thus also the
-same notes hold true).</p>
+The order-restricted hypothesis &#39;H1ws.l&#39; has 13.14 times more support than its complement.</code></pre>
+<pre class="r"><code>#summary(GORICA.Result.ws.l)</code></pre>
+<p>The order-restricted hypothesis <span class="math inline">\(H1ws.l\)</span> has 13 times more support than its
+complement.</p>
+<p>Note that the results hold for the chosen time interval. That is, the
+results are time-interval dependent. At the end, more information is
+given.</p>
 </div>
-</div>
-</div>
-<div id="example-2-measurement-level-analysis" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Example 2: Measurement
-Level Analysis</h1>
-<div id="r-packages-1" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> R packages</h2>
-<p>First, install and call the <code>lavaan</code> library to create a
-CLPM and the <code>restriktor</code> library to load the
-<code>goric</code> function. If needed, it is possible to view the
-description of the function with the <code>?</code> operator or the
-<code>help</code> command.</p>
-<p>The code presented here also requires the <code>tidyverse</code>
-package for data manipulation.</p>
-<pre class="r"><code># To install restriktor in R:
-#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
+<div id="input-option-2-extracted-standardized-estimates-and-their-covariance-matrix" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Input option 2:
+extracted standardized estimates and their covariance matrix</h2>
+<p>In this example, I will use the extracted standardized estimates and
+their covariance matrix as input.</p>
+<pre class="r"><code># Hypothesis w.r.t. wave-specific cross-lagged effects
+H1ws &lt;- &quot;abs(beta2) &lt; abs(gamma2); abs(beta3) &lt; abs(gamma3); 
+         abs(beta4) &lt; abs(gamma4); abs(beta5) &lt; abs(gamma5)&quot; 
+# versus it complement, that is, versus all other possibilities 
+# default in case of one hypothesis
 
-# To install restriktor from github:
-# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-# library(devtools) 
-# install_github(&quot;LeonardV/restriktor&quot;)
-library(restriktor)
-
-# print docs in the help-tab to view arguments and explanations for the function
-#?goric
-
-# To install lavaan in R:
-# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
-library(lavaan)
-
-# To install tidyverse in R:
-# if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
-library(tidyverse)</code></pre>
-</div>
-<div id="data-1" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Data</h2>
-<p>Upload the data set to the R environment and select the columns used
-for analysis. The id column is renamed to <span class="math inline">\(ID\)</span> and the code in the data set for
-missing numbers -999.00 is replaced with <code>NAs</code>.</p>
-<pre class="r"><code>data &lt;- read.table(&quot;data/CLPM.dat&quot;, header = T)
-colnames(data)[1] &lt;- &quot;ID&quot;
-data &lt;- replace(data , data == -999.00, NA)
-
-data_subset &lt;- select(data, 
-                  THT1_SS,
-                  TBT1_SS,
-                  ACOMT1_SS,
-                  SATT1_SS,
-                  AB_T1_SS,
-                  DE_T1_SS,
-                  VI_T1_SS,
-                  SLT1_SS,
-                  TH_T2_SS,
-                  TB_T2_SS,
-                  ACOMT2SS,
-                  SAT_T2SS,
-                  ABT2_SS,
-                  DET2_SS,
-                  VIT2_SS,
-                  SLT2SS)</code></pre>
-</div>
-<div id="clpm-1" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> CLPM</h2>
-<p>Next, we fit the CLPM on sum scores using the <code>lavaan</code>
-package. Here we specify all the relations of the model.</p>
-<pre class="r"><code>clpmModel_2 &lt;- &#39;
+# Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-specific parameters:
+RICLPM &lt;- &#39;
+  # Create between components (random intercepts)
+  RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
+  RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
   
-  ############
-  # DYNAMICS #
-  ############
-  
-  # Specify the lagged effects between the latent variables.
-  TH_T2_SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  TB_T2_SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  ACOMT2SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  SAT_T2SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  #
-  ABT2_SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  DET2_SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  VIT2_SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  #
-  SLT2SS ~ THT1_SS + TBT1_SS + ACOMT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-  
-  
-  # Estimate the correlations within the same wave.
-  # T1
-   ACOMT1_SS ~~ THT1_SS + TBT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-   THT1_SS ~~ TBT1_SS + SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-   TBT1_SS ~~ SATT1_SS + AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-   SATT1_SS ~~ AB_T1_SS + DE_T1_SS + VI_T1_SS + SLT1_SS
-   AB_T1_SS ~~ DE_T1_SS + VI_T1_SS + SLT1_SS
-   DE_T1_SS ~~ VI_T1_SS + SLT1_SS
-   VI_T1_SS ~~ SLT1_SS
-   # T2
-   TH_T2_SS ~~ TB_T2_SS + SAT_T2SS + ACOMT2SS + ABT2_SS + DET2_SS + VIT2_SS + SLT2SS
-   TB_T2_SS ~~ SAT_T2SS + ACOMT2SS + ABT2_SS + DET2_SS + VIT2_SS + SLT2SS
-   SAT_T2SS ~~ ACOMT2SS + ABT2_SS + DET2_SS + VIT2_SS + SLT2SS
-   ACOMT2SS ~~ ABT2_SS + DET2_SS + VIT2_SS + SLT2SS
-   ABT2_SS ~~ DET2_SS + VIT2_SS + SLT2SS
-   DET2_SS ~~ VIT2_SS + SLT2SS
-   VIT2_SS ~~ SLT2SS
-   
-&#39;</code></pre>
-<p>We fit the model using the <code>sem</code> function:</p>
-<pre class="r"><code>clpmUnc_2 &lt;- sem(clpmModel_2, data = data_subset, missing = &#39;ML&#39;)</code></pre>
-<p>Using the <code>summary</code> function we obtain the results of the
-model fit and estimates. The standardized solution contains the p-values
-of standardized effects.</p>
-<pre class="r"><code>fitMeasures(clpmUnc_2)</code></pre>
-<pre><code>                        npar                         fmin                        chisq                           df                       pvalue               baseline.chisq                  baseline.df              baseline.pvalue                          cfi                          tli                   cfi.robust                   tli.robust                         nnfi                          rfi                          nfi                         pnfi                          ifi                          rni                  nnfi.robust                   rni.robust                         logl            unrestricted.logl                          aic                          bic                       ntotal                         bic2                        rmsea               rmsea.ci.lower               rmsea.ci.upper               rmsea.ci.level                 rmsea.pvalue               rmsea.close.h0        rmsea.notclose.pvalue            rmsea.notclose.h0                 rmsea.robust        rmsea.ci.lower.robust        rmsea.ci.upper.robust          rmsea.pvalue.robust rmsea.notclose.pvalue.robust                          rmr                   rmr_nomean 
-                     152.000                        0.000                        0.000                        0.000                           NA                    11555.091                      120.000                        0.000                        1.000                        1.000                        1.000                        1.000                        1.000                        1.000                        1.000                        0.000                        1.000                        1.000                        1.000                        1.000                   -35365.152                   -35365.152                    71034.304                    71856.308                     1649.000                    71373.428                        0.000                        0.000                        0.000                        0.900                           NA                        0.050                           NA                        0.080                        0.000                        0.000                        0.000                           NA                           NA                        0.000                        0.000 
-                        srmr                 srmr_bentler          srmr_bentler_nomean                         crmr                  crmr_nomean                   srmr_mplus            srmr_mplus_nomean                        cn_05                        cn_01                          gfi                         agfi                         pgfi                          mfi                         ecvi 
-                       0.000                        0.000                        0.000                        0.000                        0.000                        0.000                        0.000                           NA                           NA                        0.998                        1.000                        0.000                        1.000                        0.184 </code></pre>
-<pre class="r"><code>stdClpmUnc_2 &lt;- standardizedsolution(clpmUnc_2, type = &quot;std.all&quot;, se = TRUE, zstat = TRUE, 
-                                   pvalue = TRUE, ci = TRUE, level = 0.95, cov.std = TRUE, 
-                                   remove.eq = TRUE, remove.ineq = TRUE, remove.def = FALSE, 
-                                   partable = NULL, GLIST = NULL, est = NULL)
-stdClpmUnc_2</code></pre>
-<pre><code>          lhs op       rhs est.std    se      z pvalue ci.lower ci.upper
-1    TH_T2_SS  ~   THT1_SS   0.191 0.094  2.033  0.042    0.007    0.374
-2    TH_T2_SS  ~   TBT1_SS   0.072 0.098  0.739  0.460   -0.120    0.265
-3    TH_T2_SS  ~ ACOMT1_SS  -0.017 0.076 -0.225  0.822   -0.167    0.132
-4    TH_T2_SS  ~  SATT1_SS   0.122 0.093  1.319  0.187   -0.059    0.304
-5    TH_T2_SS  ~  AB_T1_SS  -0.030 0.083 -0.362  0.718   -0.192    0.132
-6    TH_T2_SS  ~  DE_T1_SS   0.075 0.101  0.738  0.460   -0.124    0.273
-7    TH_T2_SS  ~  VI_T1_SS   0.086 0.088  0.981  0.327   -0.086    0.259
-8    TH_T2_SS  ~   SLT1_SS   0.140 0.086  1.617  0.106   -0.030    0.309
-9    TB_T2_SS  ~   THT1_SS   0.019 0.092  0.203  0.839   -0.162    0.200
-10   TB_T2_SS  ~   TBT1_SS   0.384 0.094  4.084  0.000    0.200    0.568
-11   TB_T2_SS  ~ ACOMT1_SS   0.019 0.074  0.257  0.797   -0.126    0.164
-12   TB_T2_SS  ~  SATT1_SS   0.051 0.091  0.562  0.574   -0.127    0.230
-13   TB_T2_SS  ~  AB_T1_SS  -0.106 0.081 -1.299  0.194   -0.265    0.054
-14   TB_T2_SS  ~  DE_T1_SS   0.037 0.101  0.361  0.718   -0.162    0.235
-15   TB_T2_SS  ~  VI_T1_SS   0.127 0.087  1.456  0.145   -0.044    0.297
-16   TB_T2_SS  ~   SLT1_SS   0.142 0.085  1.679  0.093   -0.024    0.308
-17   ACOMT2SS  ~   THT1_SS  -0.027 0.087 -0.315  0.753   -0.198    0.143
-18   ACOMT2SS  ~   TBT1_SS   0.002 0.091  0.023  0.981   -0.176    0.180
-19   ACOMT2SS  ~ ACOMT1_SS   0.329 0.068  4.838  0.000    0.195    0.462
-20   ACOMT2SS  ~  SATT1_SS   0.018 0.086  0.204  0.838   -0.151    0.186
-21   ACOMT2SS  ~  AB_T1_SS   0.022 0.076  0.288  0.773   -0.128    0.171
-22   ACOMT2SS  ~  DE_T1_SS   0.115 0.094  1.230  0.219   -0.068    0.299
-23   ACOMT2SS  ~  VI_T1_SS   0.078 0.082  0.959  0.337   -0.082    0.238
-24   ACOMT2SS  ~   SLT1_SS   0.202 0.079  2.547  0.011    0.047    0.357
-25   SAT_T2SS  ~   THT1_SS  -0.081 0.090 -0.899  0.368   -0.257    0.095
-26   SAT_T2SS  ~   TBT1_SS   0.126 0.094  1.343  0.179   -0.058    0.310
-27   SAT_T2SS  ~ ACOMT1_SS   0.033 0.073  0.456  0.648   -0.109    0.176
-28   SAT_T2SS  ~  SATT1_SS   0.325 0.087  3.751  0.000    0.155    0.494
-29   SAT_T2SS  ~  AB_T1_SS  -0.088 0.079 -1.111  0.266   -0.242    0.067
-30   SAT_T2SS  ~  DE_T1_SS   0.098 0.097  1.013  0.311   -0.092    0.288
-31   SAT_T2SS  ~  VI_T1_SS   0.125 0.084  1.487  0.137   -0.040    0.289
-32   SAT_T2SS  ~   SLT1_SS   0.147 0.082  1.796  0.073   -0.013    0.308
-33    ABT2_SS  ~   THT1_SS   0.001 0.079  0.014  0.989   -0.154    0.156
-34    ABT2_SS  ~   TBT1_SS   0.072 0.085  0.845  0.398   -0.094    0.238
-35    ABT2_SS  ~ ACOMT1_SS  -0.063 0.064 -0.974  0.330   -0.189    0.064
-36    ABT2_SS  ~  SATT1_SS  -0.019 0.082 -0.237  0.813   -0.180    0.141
-37    ABT2_SS  ~  AB_T1_SS   0.645 0.063 10.167  0.000    0.521    0.770
-38    ABT2_SS  ~  DE_T1_SS   0.118 0.086  1.368  0.171   -0.051    0.286
-39    ABT2_SS  ~  VI_T1_SS   0.028 0.074  0.378  0.706   -0.116    0.172
-40    ABT2_SS  ~   SLT1_SS   0.018 0.070  0.259  0.795   -0.120    0.156
-41    DET2_SS  ~   THT1_SS  -0.124 0.080 -1.550  0.121   -0.280    0.033
-42    DET2_SS  ~   TBT1_SS   0.214 0.085  2.500  0.012    0.046    0.381
-43    DET2_SS  ~ ACOMT1_SS  -0.105 0.065 -1.625  0.104   -0.232    0.022
-44    DET2_SS  ~  SATT1_SS   0.062 0.082  0.751  0.453   -0.100    0.223
-45    DET2_SS  ~  AB_T1_SS   0.054 0.070  0.771  0.441   -0.083    0.192
-46    DET2_SS  ~  DE_T1_SS   0.685 0.078  8.737  0.000    0.531    0.838
-47    DET2_SS  ~  VI_T1_SS   0.037 0.075  0.498  0.619   -0.109    0.184
-48    DET2_SS  ~   SLT1_SS  -0.051 0.071 -0.708  0.479   -0.190    0.089
-49    VIT2_SS  ~   THT1_SS   0.025 0.079  0.311  0.756   -0.131    0.180
-50    VIT2_SS  ~   TBT1_SS   0.151 0.085  1.770  0.077   -0.016    0.318
-51    VIT2_SS  ~ ACOMT1_SS  -0.155 0.064 -2.417  0.016   -0.281   -0.029
-52    VIT2_SS  ~  SATT1_SS  -0.021 0.082 -0.255  0.798   -0.183    0.141
-53    VIT2_SS  ~  AB_T1_SS   0.230 0.069  3.338  0.001    0.095    0.365
-54    VIT2_SS  ~  DE_T1_SS   0.072 0.088  0.823  0.411   -0.100    0.244
-55    VIT2_SS  ~  VI_T1_SS   0.574 0.069  8.372  0.000    0.440    0.708
-56    VIT2_SS  ~   SLT1_SS  -0.074 0.070 -1.057  0.291   -0.212    0.064
-57     SLT2SS  ~   THT1_SS  -0.026 0.081 -0.318  0.751   -0.184    0.133
-58     SLT2SS  ~   TBT1_SS   0.021 0.086  0.244  0.807   -0.148    0.190
-59     SLT2SS  ~ ACOMT1_SS  -0.013 0.066 -0.203  0.839   -0.142    0.116
-60     SLT2SS  ~  SATT1_SS   0.215 0.082  2.631  0.009    0.055    0.375
-61     SLT2SS  ~  AB_T1_SS   0.083 0.070  1.186  0.236   -0.054    0.221
-62     SLT2SS  ~  DE_T1_SS   0.134 0.087  1.537  0.124   -0.037    0.306
-63     SLT2SS  ~  VI_T1_SS  -0.043 0.075 -0.568  0.570   -0.190    0.104
-64     SLT2SS  ~   SLT1_SS   0.468 0.068  6.840  0.000    0.334    0.602
-65    THT1_SS ~~ ACOMT1_SS   0.611 0.019 31.414  0.000    0.573    0.649
-66    TBT1_SS ~~ ACOMT1_SS   0.637 0.018 34.602  0.000    0.601    0.673
-67  ACOMT1_SS ~~  SATT1_SS   0.603 0.020 30.608  0.000    0.564    0.641
-68  ACOMT1_SS ~~  AB_T1_SS   0.467 0.024 19.248  0.000    0.419    0.515
-69  ACOMT1_SS ~~  DE_T1_SS   0.586 0.020 28.750  0.000    0.546    0.626
-70  ACOMT1_SS ~~  VI_T1_SS   0.528 0.022 23.450  0.000    0.484    0.572
-71  ACOMT1_SS ~~   SLT1_SS   0.651 0.018 36.260  0.000    0.616    0.686
-72    THT1_SS ~~   TBT1_SS   0.767 0.013 59.792  0.000    0.742    0.792
-73    THT1_SS ~~  SATT1_SS   0.710 0.015 46.179  0.000    0.680    0.741
-74    THT1_SS ~~  AB_T1_SS   0.281 0.029  9.855  0.000    0.225    0.337
-75    THT1_SS ~~  DE_T1_SS   0.449 0.025 18.208  0.000    0.401    0.498
-76    THT1_SS ~~  VI_T1_SS   0.343 0.027 12.482  0.000    0.289    0.397
-77    THT1_SS ~~   SLT1_SS   0.592 0.020 29.322  0.000    0.552    0.631
-78    TBT1_SS ~~  SATT1_SS   0.740 0.014 52.720  0.000    0.713    0.768
-79    TBT1_SS ~~  AB_T1_SS   0.323 0.028 11.659  0.000    0.269    0.377
-80    TBT1_SS ~~  DE_T1_SS   0.454 0.024 18.541  0.000    0.406    0.502
-81    TBT1_SS ~~  VI_T1_SS   0.377 0.027 14.158  0.000    0.325    0.429
-82    TBT1_SS ~~   SLT1_SS   0.594 0.020 29.545  0.000    0.555    0.633
-83   SATT1_SS ~~  AB_T1_SS   0.311 0.028 11.178  0.000    0.257    0.366
-84   SATT1_SS ~~  DE_T1_SS   0.467 0.024 19.374  0.000    0.420    0.514
-85   SATT1_SS ~~  VI_T1_SS   0.390 0.026 14.824  0.000    0.338    0.441
-86   SATT1_SS ~~   SLT1_SS   0.621 0.019 32.617  0.000    0.584    0.659
-87   AB_T1_SS ~~  DE_T1_SS   0.688 0.016 42.342  0.000    0.656    0.720
-88   AB_T1_SS ~~  VI_T1_SS   0.760 0.013 58.074  0.000    0.735    0.786
-89   AB_T1_SS ~~   SLT1_SS   0.482 0.024 20.323  0.000    0.435    0.528
-90   DE_T1_SS ~~  VI_T1_SS   0.680 0.017 40.772  0.000    0.647    0.712
-91   DE_T1_SS ~~   SLT1_SS   0.703 0.016 44.880  0.000    0.672    0.734
-92   VI_T1_SS ~~   SLT1_SS   0.535 0.022 24.146  0.000    0.491    0.578
-93   TH_T2_SS ~~  TB_T2_SS   0.781 0.019 42.220  0.000    0.745    0.818
-94   TH_T2_SS ~~  SAT_T2SS   0.685 0.024 28.242  0.000    0.637    0.732
-95   TH_T2_SS ~~  ACOMT2SS   0.643 0.029 22.348  0.000    0.586    0.699
-96   TH_T2_SS ~~   ABT2_SS   0.231 0.054  4.268  0.000    0.125    0.338
-97   TH_T2_SS ~~   DET2_SS   0.353 0.050  7.097  0.000    0.256    0.451
-98   TH_T2_SS ~~   VIT2_SS   0.229 0.055  4.180  0.000    0.122    0.337
-99   TH_T2_SS ~~    SLT2SS   0.494 0.041 12.049  0.000    0.414    0.575
-100  TB_T2_SS ~~  SAT_T2SS   0.727 0.023 32.276  0.000    0.683    0.772
-101  TB_T2_SS ~~  ACOMT2SS   0.698 0.027 26.170  0.000    0.646    0.750
-102  TB_T2_SS ~~   ABT2_SS   0.303 0.055  5.496  0.000    0.195    0.412
-103  TB_T2_SS ~~   DET2_SS   0.368 0.052  7.086  0.000    0.266    0.470
-104  TB_T2_SS ~~   VIT2_SS   0.259 0.057  4.519  0.000    0.147    0.371
-105  TB_T2_SS ~~    SLT2SS   0.502 0.043 11.688  0.000    0.418    0.586
-106  ACOMT2SS ~~  SAT_T2SS   0.652 0.028 23.001  0.000    0.596    0.708
-107  SAT_T2SS ~~   ABT2_SS   0.254 0.054  4.706  0.000    0.148    0.360
-108  SAT_T2SS ~~   DET2_SS   0.328 0.051  6.469  0.000    0.229    0.427
-109  SAT_T2SS ~~   VIT2_SS   0.249 0.055  4.533  0.000    0.141    0.356
-110  SAT_T2SS ~~    SLT2SS   0.494 0.041 12.185  0.000    0.415    0.574
-111  ACOMT2SS ~~   ABT2_SS   0.346 0.052  6.706  0.000    0.245    0.447
-112  ACOMT2SS ~~   DET2_SS   0.453 0.046  9.769  0.000    0.362    0.544
-113  ACOMT2SS ~~   VIT2_SS   0.358 0.052  6.850  0.000    0.256    0.461
-114  ACOMT2SS ~~    SLT2SS   0.549 0.039 14.179  0.000    0.474    0.625
-115   ABT2_SS ~~   DET2_SS   0.568 0.041 13.762  0.000    0.487    0.648
-116   ABT2_SS ~~   VIT2_SS   0.621 0.037 16.797  0.000    0.549    0.693
-117   ABT2_SS ~~    SLT2SS   0.314 0.055  5.762  0.000    0.207    0.421
-118   DET2_SS ~~   VIT2_SS   0.547 0.044 12.402  0.000    0.461    0.633
-119   DET2_SS ~~    SLT2SS   0.508 0.045 11.328  0.000    0.420    0.596
-120   VIT2_SS ~~    SLT2SS   0.377 0.054  7.009  0.000    0.272    0.483
-121  TH_T2_SS ~~  TH_T2_SS   0.722 0.043 16.911  0.000    0.639    0.806
-122  TB_T2_SS ~~  TB_T2_SS   0.646 0.044 14.620  0.000    0.559    0.733
-123  ACOMT2SS ~~  ACOMT2SS   0.600 0.044 13.611  0.000    0.513    0.686
-124  SAT_T2SS ~~  SAT_T2SS   0.649 0.043 15.050  0.000    0.565    0.734
-125   ABT2_SS ~~   ABT2_SS   0.434 0.040 10.971  0.000    0.356    0.511
-126   DET2_SS ~~   DET2_SS   0.455 0.041 11.069  0.000    0.374    0.535
-127   VIT2_SS ~~   VIT2_SS   0.420 0.038 11.004  0.000    0.345    0.495
-128    SLT2SS ~~    SLT2SS   0.464 0.042 11.136  0.000    0.382    0.545
-129   THT1_SS ~~   THT1_SS   1.000 0.000     NA     NA    1.000    1.000
-130   TBT1_SS ~~   TBT1_SS   1.000 0.000     NA     NA    1.000    1.000
-131 ACOMT1_SS ~~ ACOMT1_SS   1.000 0.000     NA     NA    1.000    1.000
-132  SATT1_SS ~~  SATT1_SS   1.000 0.000     NA     NA    1.000    1.000
-133  AB_T1_SS ~~  AB_T1_SS   1.000 0.000     NA     NA    1.000    1.000
-134  DE_T1_SS ~~  DE_T1_SS   1.000 0.000     NA     NA    1.000    1.000
-135  VI_T1_SS ~~  VI_T1_SS   1.000 0.000     NA     NA    1.000    1.000
-136   SLT1_SS ~~   SLT1_SS   1.000 0.000     NA     NA    1.000    1.000
-137  TH_T2_SS ~1             1.839 0.286  6.420  0.000    1.277    2.400
-138  TB_T2_SS ~1             1.186 0.275  4.308  0.000    0.646    1.726
-139  ACOMT2SS ~1             0.759 0.258  2.941  0.003    0.253    1.265
-140  SAT_T2SS ~1             0.925 0.264  3.499  0.000    0.407    1.443
-141   ABT2_SS ~1             0.305 0.237  1.284  0.199   -0.160    0.770
-142   DET2_SS ~1             1.058 0.244  4.340  0.000    0.580    1.536
-143   VIT2_SS ~1             0.466 0.240  1.943  0.052   -0.004    0.937
-144    SLT2SS ~1             0.365 0.237  1.540  0.124   -0.100    0.830
-145   THT1_SS ~1             4.869 0.111 43.722  0.000    4.651    5.088
-146   TBT1_SS ~1             4.140 0.096 43.136  0.000    3.952    4.329
-147 ACOMT1_SS ~1             3.686 0.086 42.940  0.000    3.518    3.854
-148  SATT1_SS ~1             3.805 0.089 42.896  0.000    3.631    3.979
-149  AB_T1_SS ~1             3.429 0.080 42.754  0.000    3.272    3.586
-150  DE_T1_SS ~1             4.508 0.102 44.130  0.000    4.308    4.708
-151  VI_T1_SS ~1             3.542 0.083 42.581  0.000    3.379    3.705
-152   SLT1_SS ~1             4.082 0.094 43.588  0.000    3.899    4.266</code></pre>
-<p>In this case, the results shows we obtain a ‘perfect’ model fit, that
-is because the degrees of freedom are 0, meaning the model is saturated
-(i.e., you have as much parameters as you have data points).</p>
-</div>
-<div id="gorica-2" class="section level2" number="2.4">
-<h2><span class="header-section-number">2.4</span> GORICA</h2>
-<p>We select the estimates relevant to our hypotheses in order to use
-the <code>goric</code> function.</p>
-<pre class="r"><code># indices of estimates of interest
-indices_2 &lt;- 1:64
+  # Create within-person centered variables
+  wx1 =~ 1*x1
+  wx2 =~ 1*x2
+  wx3 =~ 1*x3 
+  wx4 =~ 1*x4
+  wx5 =~ 1*x5
+  wy1 =~ 1*y1
+  wy2 =~ 1*y2
+  wy3 =~ 1*y3
+  wy4 =~ 1*y4
+  wy5 =~ 1*y5
 
-# select estimates from the column &#39;Std.all&#39; in the results summary above
-est_2 &lt;- stdClpmUnc_2[indices_2, &#39;est.std&#39;]
+  # Estimate lagged effects between within-person centered variables
+  wx2 + wy2 ~ wx1 + wy1
+  wx3 + wy3 ~ wx2 + wy2
+  wx4 + wy4 ~ wx3 + wy3
+  wx5 + wy5 ~ wx4 + wy4
+  
 
-names(est_2) &lt;- c(&quot;TH2_TH1&quot;, &quot;TH2_TB1&quot;, &quot;TH2_ACOM1&quot;, &quot;TH2_SAT1&quot;, &quot;TH2_AB1&quot;, &quot;TH2_DE1&quot;, &quot;TH2_VI1&quot;, &quot;TH2_SL1&quot;,
-                &quot;TB2_TH1&quot;, &quot;TB2_TB1&quot;, &quot;TB2_ACOM1&quot;, &quot;TB2_SAT1&quot;, &quot;TB2_AB1&quot;, &quot;TB2_DE1&quot;, &quot;TB2_VI1&quot;, &quot;TB2_SL1&quot;,
-                &quot;ACOM2_TH1&quot;, &quot;ACOM2_TB1&quot;, &quot;ACOM2_ACOM1&quot;, &quot;ACOM2_SAT1&quot;, &quot;ACOM2_AB1&quot;, &quot;ACOM2_DE1&quot;, &quot;ACOM2_VI1&quot;, &quot;ACOM2_SL1&quot;,
-                &quot;SAT2_TH1&quot;, &quot;SAT2_TB1&quot;, &quot;SAT2_ACOM1&quot;, &quot;SATM2_SAT1&quot;, &quot;SAT2_AB1&quot;, &quot;SAT2_DE1&quot;, &quot;SAT2_VI1&quot;, &quot;SAT2_SL1&quot;,
-                #
-                &quot;AB2_TH1&quot;, &quot;AB2_TB1&quot;, &quot;AB2_ACOM1&quot;, &quot;AB2_SAT1&quot;, &quot;AB2_AB1&quot;, &quot;AB2_DE1&quot;, &quot;AB2_VI1&quot;, &quot;AB2_SL1&quot;,
-                &quot;DE2_TH1&quot;, &quot;DE2_TB1&quot;, &quot;DE2_ACOM1&quot;, &quot;DE2_SAT1&quot;, &quot;DE2_AB1&quot;, &quot;DE2_DE1&quot;, &quot;DE2_VI1&quot;, &quot;DE2_SL1&quot;,
-                &quot;VI2_TH1&quot;, &quot;VI2_TB1&quot;, &quot;VI2_ACOM1&quot;, &quot;VI2_SAT1&quot;, &quot;VI2_AB1&quot;, &quot;VI2_DE1&quot;, &quot;VI2_VI1&quot;, &quot;VI2_SL1&quot;,
-                #
-                &quot;SL2_TH1&quot;, &quot;SL2_TB1&quot;, &quot;SL2_ACOM1&quot;, &quot;SL2_SAT1&quot;, &quot;SL2_AB1&quot;, &quot;SL2_DE1&quot;, &quot;SL2_VI1&quot;, &quot;SL2_SL1&quot;
+  # Estimate covariance between within-person centered variables at first wave
+  wx1 ~~ wy1 # Covariance
+  
+  # Estimate covariances between residuals of within-person centered variables 
+  # (i.e., innovations)
+  wx2 ~~ wy2
+  wx3 ~~ wy3
+  wx4 ~~ wy4
+  wx5 ~~ wy5
+  
+  # Estimate variance and covariance of random intercepts
+  RIx ~~ RIx
+  RIy ~~ RIy
+  RIx ~~ RIy
+
+  # Estimate (residual) variance of within-person centered variables
+  wx1 ~~ wx1 # Variances
+  wy1 ~~ wy1 
+  wx2 ~~ wx2 # Residual variances
+  wy2 ~~ wy2 
+  wx3 ~~ wx3 
+  wy3 ~~ wy3 
+  wx4 ~~ wx4 
+  wy4 ~~ wy4 
+  wx5 ~~ wx5
+  wy5 ~~ wy5
+&#39;
+RICLPM.fit &lt;- lavaan(RICLPM,
+                     data = dat, 
+                     missing = &quot;ML&quot;, 
+                     meanstructure = T, 
+                     int.ov.free = T
 )
+summary(RICLPM.fit, standardized = T)</code></pre>
+<pre><code>lavaan 0.6-19 ended normally after 116 iterations
 
-# the covariance matrix for these estimates
-vcov_2 &lt;- lavInspect(clpmUnc_2, &quot;vcov.std.all&quot;)[indices_2, indices_2]</code></pre>
-<p>Next, we specify the hypotheses to be evaluated. Note the use of the
-use of the <code>abs</code> function; that is because we are interested
-in the size of the relations and we want to compare absolute effects. In
-cases where the sign of the values is of interest, one should not use
-absolute values (e.g., estimate_x &gt; .3 or estimate_y &lt; 0).</p>
-<p>Here, there are two sets of hypotheses, <span class="math inline">\(H1\_Q1\)</span> and <span class="math inline">\(H1\_Q2\)</span>, which focus on different
-relations in the model. The decisions of whether multiple hypotheses
-should be split in different sets and how to divide them are driven by
-theory, and depend on what the researchers intend to evaluate. When
-multiple hypotheses are included in one set they are handled by the
-<code>goric</code> function as a whole, not individually.</p>
-<pre class="r"><code># Q1
-H2_Q1 &lt;- &quot;
-abs(ACOM2_TH1) &gt; abs(TH2_ACOM1); abs(SAT2_TH1) &gt; abs(TH2_SAT1);
-abs(ACOM2_TB1) &gt; abs(TB2_ACOM1); abs(SAT2_TB1) &gt; abs(TB2_SAT1)
-&quot;
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        44
 
-# Q2
-H2_Q2 &lt;- &quot;
-abs(AB2_TH1) &gt; abs(TH2_AB1); abs(DE2_TH1) &gt; abs(TH2_DE1); abs(VI2_TH1) &gt; abs(TH2_VI1); abs(SL2_TH1) &gt; abs(TH2_SL1);
-abs(AB2_TB1) &gt; abs(TB2_AB1); abs(DE2_TB1) &gt; abs(TB2_DE1); abs(VI2_TB1) &gt; abs(TB2_VI1); abs(SL2_TB1) &gt; abs(TB2_SL1);
-abs(AB2_ACOM1) &gt; abs(ACOM2_AB1); abs(DE2_ACOM1) &gt; abs(ACOM2_DE1); abs(VI2_ACOM1) &gt; abs(ACOM2_VI1); abs(SL2_ACOM1) &gt; abs(ACOM2_SL1);
-abs(AB2_SAT1) &gt; abs(SAT2_AB1); abs(DE2_SAT1) &gt; abs(SAT2_DE1); abs(VI2_SAT1) &gt; abs(SAT2_VI1); abs(SL2_SAT1) &gt; abs(SAT2_SL1)
-&quot;</code></pre>
-<p>We obtain the GORICA results for <span class="math inline">\(H2\_Q1\)</span> and <span class="math inline">\(H2\_Q2\)</span> in two steps. Note the use of
-<code>set.seed</code> to ensure that the results are reproducible.</p>
-<pre class="r"><code>set.seed(123)
+  Number of observations                          1189
+  Number of missing patterns                         1
 
-#H2_Q1 vs its complement, using GORICA
-goricaResults_H2_Q1 &lt;- goric(est_2, VCOV = vcov_2, 
-                             hypotheses = list(H2_Q1=H2_Q1))
+Model Test User Model:
+                                                      
+  Test statistic                                25.806
+  Degrees of freedom                                21
+  P-value (Chi-square)                           0.214
 
-goricaResults_H2_Q1</code></pre>
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Observed
+  Observed information based on                Hessian
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  RIx =~                                                                
+    x1                1.000                               0.096    0.390
+    x2                1.000                               0.096    0.473
+    x3                1.000                               0.096    0.475
+    x4                1.000                               0.096    0.461
+    x5                1.000                               0.096    0.465
+  RIy =~                                                                
+    y1                1.000                               0.178    0.569
+    y2                1.000                               0.178    0.558
+    y3                1.000                               0.178    0.535
+    y4                1.000                               0.178    0.525
+    y5                1.000                               0.178    0.533
+  wx1 =~                                                                
+    x1                1.000                               0.227    0.921
+  wx2 =~                                                                
+    x2                1.000                               0.179    0.881
+  wx3 =~                                                                
+    x3                1.000                               0.178    0.880
+  wx4 =~                                                                
+    x4                1.000                               0.185    0.887
+  wx5 =~                                                                
+    x5                1.000                               0.183    0.885
+  wy1 =~                                                                
+    y1                1.000                               0.257    0.822
+  wy2 =~                                                                
+    y2                1.000                               0.265    0.830
+  wy3 =~                                                                
+    y3                1.000                               0.281    0.845
+  wy4 =~                                                                
+    y4                1.000                               0.288    0.851
+  wy5 =~                                                                
+    y5                1.000                               0.282    0.846
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  wx2 ~                                                                 
+    wx1               0.232    0.028    8.314    0.000    0.294    0.294
+    wy1               0.009    0.026    0.329    0.742    0.012    0.012
+  wy2 ~                                                                 
+    wx1               0.174    0.045    3.888    0.000    0.149    0.149
+    wy1               0.004    0.046    0.092    0.927    0.004    0.004
+  wx3 ~                                                                 
+    wx2               0.241    0.037    6.509    0.000    0.242    0.242
+    wy2               0.026    0.024    1.082    0.279    0.039    0.039
+  wy3 ~                                                                 
+    wx2               0.156    0.054    2.871    0.004    0.099    0.099
+    wy2               0.262    0.039    6.747    0.000    0.247    0.247
+  wx4 ~                                                                 
+    wx3               0.279    0.038    7.267    0.000    0.269    0.269
+    wy3               0.010    0.023    0.431    0.666    0.015    0.015
+  wy4 ~                                                                 
+    wx3               0.185    0.055    3.367    0.001    0.114    0.114
+    wy3               0.296    0.035    8.362    0.000    0.288    0.288
+  wx5 ~                                                                 
+    wx4               0.290    0.035    8.244    0.000    0.293    0.293
+    wy4              -0.004    0.022   -0.186    0.852   -0.006   -0.006
+  wy5 ~                                                                 
+    wx4               0.124    0.048    2.612    0.009    0.082    0.082
+    wy4               0.392    0.031   12.644    0.000    0.400    0.400
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  wx1 ~~                                                                
+    wy1               0.021    0.002    9.372    0.000    0.364    0.364
+ .wx2 ~~                                                                
+   .wy2               0.009    0.002    5.168    0.000    0.196    0.196
+ .wx3 ~~                                                                
+   .wy3               0.013    0.002    7.837    0.000    0.274    0.274
+ .wx4 ~~                                                                
+   .wy4               0.013    0.002    8.177    0.000    0.277    0.277
+ .wx5 ~~                                                                
+   .wy5               0.007    0.001    4.916    0.000    0.160    0.160
+  RIx ~~                                                                
+    RIy               0.010    0.001    7.992    0.000    0.587    0.587
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+   .x1                0.241    0.007   33.687    0.000    0.241    0.977
+   .x2                0.173    0.006   29.331    0.000    0.173    0.851
+   .x3                0.186    0.006   31.646    0.000    0.186    0.918
+   .x4                0.117    0.006   19.288    0.000    0.117    0.559
+   .x5                0.111    0.006   18.427    0.000    0.111    0.534
+   .y1                0.336    0.009   37.099    0.000    0.336    1.076
+   .y2                0.348    0.009   37.686    0.000    0.348    1.093
+   .y3                0.319    0.010   33.098    0.000    0.319    0.960
+   .y4                0.384    0.010   39.097    0.000    0.384    1.134
+   .y5                0.388    0.010   40.056    0.000    0.388    1.162
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+    RIx               0.009    0.001    8.722    0.000    1.000    1.000
+    RIy               0.032    0.003   12.351    0.000    1.000    1.000
+    wx1               0.052    0.002   21.067    0.000    1.000    1.000
+    wy1               0.066    0.004   17.985    0.000    1.000    1.000
+   .wx2               0.029    0.001   20.793    0.000    0.911    0.911
+   .wy2               0.068    0.004   17.503    0.000    0.977    0.977
+   .wx3               0.030    0.001   20.467    0.000    0.935    0.935
+   .wy3               0.072    0.003   21.324    0.000    0.918    0.918
+   .wx4               0.032    0.001   21.445    0.000    0.925    0.925
+   .wy4               0.074    0.003   21.876    0.000    0.884    0.884
+   .wx5               0.031    0.001   21.680    0.000    0.915    0.915
+   .wy5               0.065    0.003   22.446    0.000    0.813    0.813
+   .x1                0.000                               0.000    0.000
+   .x2                0.000                               0.000    0.000
+   .x3                0.000                               0.000    0.000
+   .x4                0.000                               0.000    0.000
+   .x5                0.000                               0.000    0.000
+   .y1                0.000                               0.000    0.000
+   .y2                0.000                               0.000    0.000
+   .y3                0.000                               0.000    0.000
+   .y4                0.000                               0.000    0.000
+   .y5                0.000                               0.000    0.000</code></pre>
+<pre class="r"><code># One could label the parameters, similarly to example with constrained parameters, 
+# but then using unique names.
+# Alternatively, one can extract the standardized cross-lagged estimates 
+# and their covariance matrix:
+#
+# Standardize parameter estimates and there covariance matrix
+StdEst &lt;- standardizedsolution(RICLPM.fit, type = &quot;std.nox&quot;)
+vcov_StdEst &lt;- lavInspect(RICLPM.fit, &quot;vcov.std.nox&quot;)
+#
+# Check which are the indices for the parameters of interest:
+StdEst</code></pre>
+<pre><code>   lhs op rhs est.std    se      z pvalue ci.lower ci.upper
+1  RIx =~  x1   0.390 0.022 17.562  0.000    0.347    0.434
+2  RIx =~  x2   0.473 0.026 18.155  0.000    0.422    0.524
+3  RIx =~  x3   0.475 0.027 17.625  0.000    0.422    0.528
+4  RIx =~  x4   0.461 0.026 17.931  0.000    0.411    0.511
+5  RIx =~  x5   0.465 0.025 18.299  0.000    0.415    0.515
+6  RIy =~  y1   0.569 0.021 27.060  0.000    0.528    0.611
+7  RIy =~  y2   0.558 0.022 25.123  0.000    0.515    0.602
+8  RIy =~  y3   0.535 0.021 25.795  0.000    0.495    0.576
+9  RIy =~  y4   0.525 0.020 26.393  0.000    0.486    0.564
+10 RIy =~  y5   0.533 0.019 27.588  0.000    0.495    0.571
+11 wx1 =~  x1   0.921 0.009 97.752  0.000    0.902    0.939
+12 wx2 =~  x2   0.881 0.014 62.978  0.000    0.854    0.908
+13 wx3 =~  x3   0.880 0.015 60.555  0.000    0.852    0.909
+14 wx4 =~  x4   0.887 0.013 66.480  0.000    0.861    0.914
+15 wx5 =~  x5   0.885 0.013 66.330  0.000    0.859    0.911
+16 wy1 =~  y1   0.822 0.015 56.430  0.000    0.794    0.851
+17 wy2 =~  y2   0.830 0.015 55.545  0.000    0.801    0.859
+18 wy3 =~  y3   0.845 0.013 64.256  0.000    0.819    0.870
+19 wy4 =~  y4   0.851 0.012 69.350  0.000    0.827    0.875
+20 wy5 =~  y5   0.846 0.012 69.509  0.000    0.822    0.870
+21 wx2  ~ wx1   0.294 0.034  8.661  0.000    0.227    0.360
+22 wx2  ~ wy1   0.012 0.038  0.329  0.742   -0.061    0.086
+23 wy2  ~ wx1   0.149 0.039  3.865  0.000    0.073    0.225
+24 wy2  ~ wy1   0.004 0.045  0.092  0.927   -0.084    0.092
+25 wx3  ~ wx2   0.242 0.036  6.710  0.000    0.172    0.313
+26 wx3  ~ wy2   0.039 0.036  1.081  0.280   -0.031    0.108
+27 wy3  ~ wx2   0.099 0.035  2.873  0.004    0.032    0.167
+28 wy3  ~ wy2   0.247 0.036  6.817  0.000    0.176    0.318
+29 wx4  ~ wx3   0.269 0.036  7.388  0.000    0.197    0.340
+30 wx4  ~ wy3   0.015 0.035  0.431  0.666   -0.053    0.083
+31 wy4  ~ wx3   0.114 0.034  3.366  0.001    0.048    0.181
+32 wy4  ~ wy3   0.288 0.033  8.593  0.000    0.222    0.353
+33 wx5  ~ wx4   0.293 0.035  8.466  0.000    0.225    0.361
+34 wx5  ~ wy4  -0.006 0.034 -0.187  0.852   -0.073    0.060
+35 wy5  ~ wx4   0.082 0.031  2.609  0.009    0.020    0.143
+36 wy5  ~ wy4   0.400 0.030 13.486  0.000    0.342    0.459
+37 wx1 ~~ wy1   0.364 0.031 11.655  0.000    0.303    0.425
+38 wx2 ~~ wy2   0.196 0.035  5.577  0.000    0.127    0.265
+39 wx3 ~~ wy3   0.274 0.031  8.816  0.000    0.213    0.335
+40 wx4 ~~ wy4   0.277 0.030  9.240  0.000    0.218    0.336
+41 wx5 ~~ wy5   0.160 0.031  5.146  0.000    0.099    0.220
+42 RIx ~~ RIx   1.000 0.000     NA     NA    1.000    1.000
+43 RIy ~~ RIy   1.000 0.000     NA     NA    1.000    1.000
+44 RIx ~~ RIy   0.587 0.050 11.802  0.000    0.490    0.685
+45 wx1 ~~ wx1   1.000 0.000     NA     NA    1.000    1.000
+46 wy1 ~~ wy1   1.000 0.000     NA     NA    1.000    1.000
+47 wx2 ~~ wx2   0.911 0.019 48.081  0.000    0.874    0.948
+48 wy2 ~~ wy2   0.977 0.011 90.944  0.000    0.956    0.998
+49 wx3 ~~ wx3   0.935 0.018 50.856  0.000    0.899    0.971
+50 wy3 ~~ wy3   0.918 0.021 44.242  0.000    0.877    0.959
+51 wx4 ~~ wx4   0.925 0.019 48.074  0.000    0.887    0.963
+52 wy4 ~~ wy4   0.884 0.022 40.250  0.000    0.841    0.927
+53 wx5 ~~ wx5   0.915 0.019 47.242  0.000    0.877    0.953
+54 wy5 ~~ wy5   0.813 0.024 33.316  0.000    0.765    0.861
+55  x1 ~~  x1   0.000 0.000     NA     NA    0.000    0.000
+56  x2 ~~  x2   0.000 0.000     NA     NA    0.000    0.000
+57  x3 ~~  x3   0.000 0.000     NA     NA    0.000    0.000
+58  x4 ~~  x4   0.000 0.000     NA     NA    0.000    0.000
+59  x5 ~~  x5   0.000 0.000     NA     NA    0.000    0.000
+60  y1 ~~  y1   0.000 0.000     NA     NA    0.000    0.000
+61  y2 ~~  y2   0.000 0.000     NA     NA    0.000    0.000
+62  y3 ~~  y3   0.000 0.000     NA     NA    0.000    0.000
+63  y4 ~~  y4   0.000 0.000     NA     NA    0.000    0.000
+64  y5 ~~  y5   0.000 0.000     NA     NA    0.000    0.000
+65  x1 ~1       0.977 0.035 27.987  0.000    0.909    1.045
+66  x2 ~1       0.851 0.034 25.215  0.000    0.784    0.917
+67  x3 ~1       0.918 0.034 26.726  0.000    0.850    0.985
+68  x4 ~1       0.559 0.031 17.974  0.000    0.498    0.620
+69  x5 ~1       0.534 0.031 17.274  0.000    0.474    0.595
+70  y1 ~1       1.076 0.036 29.812  0.000    1.005    1.147
+71  y2 ~1       1.093 0.036 30.327  0.000    1.022    1.164
+72  y3 ~1       0.960 0.035 27.811  0.000    0.892    1.028
+73  y4 ~1       1.134 0.037 30.973  0.000    1.062    1.206
+74  y5 ~1       1.162 0.037 31.268  0.000    1.089    1.234
+75 RIx ~1       0.000 0.000     NA     NA    0.000    0.000
+76 RIy ~1       0.000 0.000     NA     NA    0.000    0.000
+77 wx1 ~1       0.000 0.000     NA     NA    0.000    0.000
+78 wx2 ~1       0.000 0.000     NA     NA    0.000    0.000
+79 wx3 ~1       0.000 0.000     NA     NA    0.000    0.000
+80 wx4 ~1       0.000 0.000     NA     NA    0.000    0.000
+81 wx5 ~1       0.000 0.000     NA     NA    0.000    0.000
+82 wy1 ~1       0.000 0.000     NA     NA    0.000    0.000
+83 wy2 ~1       0.000 0.000     NA     NA    0.000    0.000
+84 wy3 ~1       0.000 0.000     NA     NA    0.000    0.000
+85 wy4 ~1       0.000 0.000     NA     NA    0.000    0.000
+86 wy5 ~1       0.000 0.000     NA     NA    0.000    0.000</code></pre>
+<pre class="r"><code>index_StdEst &lt;- c(22,23, 26,27, 30,31, 34,35)
+# CHECK: StdEst[index_StdEst, ] 
+# and what the indices for the corresponding covariance matrix:
+vcov_StdEst</code></pre>
+<pre><code>         wx2~wx1 wx2~wy1 wy2~wx1 wy2~wy1 wx3~wx2 wx3~wy2 wy3~wx2 wy3~wy2 wx4~wx3 wx4~wy3 wy4~wx3 wy4~wy3 wx5~wx4 wx5~wy4 wy5~wx4 wy5~wy4 wx1~~wy1 wx2~~wy2 wx3~~wy3 wx4~~wy4 wx5~~wy5 RIx~~RIx RIy~~RI RIx~~RIy wx1~~wx1 wy1~~1 wx2~~wx2 wy2~~2 wx3~~wx3 wy3~~3 wx4~~wx4 wy4~~4 wx5~~wx5 wy5~~5   x1~1   x2~1   x3~1   x4~1   x5~1   y1~1   y2~1   y3~1   y4~1   y5~1
+wx2~wx1    0.001                                                                                                                                                                                                                                                                                                                                                     
+wx2~wy1    0.000   0.001                                                                                                                                                                                                                                                                                                                                             
+wy2~wx1    0.000   0.000   0.001                                                                                                                                                                                                                                                                                                                                     
+wy2~wy1    0.000   0.000  -0.001   0.002                                                                                                                                                                                                                                                                                                                             
+wx3~wx2    0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                                                                     
+wx3~wy2    0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                                                             
+wy3~wx2    0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                                                     
+wy3~wy2    0.000   0.000   0.000   0.001   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                                             
+wx4~wx3    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                                     
+wx4~wy3    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                             
+wy4~wx3    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                                     
+wy4~wy3    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                             
+wx5~wx4    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                                     
+wx5~wy4    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                             
+wy5~wx4    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                                     
+wy5~wy4    0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.001                                                                                                                                                                                                                             
+wx1~~wy1   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.001                                                                                                                                                                                                                    
+wx2~~wy2   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.001                                                                                                                                                                                                           
+wx3~~wy3   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.001                                                                                                                                                                                                  
+wx4~~wy4   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.001                                                                                                                                                                                         
+wx5~~wy5   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.001                                                                                                                                                                                
+RIx~~RIx   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000                                                                                                                                                                       
+RIy~~RIy   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000                                                                                                                                                               
+RIx~~RIy   0.000   0.000  -0.001   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.002                                                                                                                                                      
+wx1~~wx1   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000                                                                                                                                             
+wy1~~wy1   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000                                                                                                                                      
+wx2~~wx2  -0.001   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000                                                                                                                             
+wy2~~wy2   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000                                                                                                                      
+wx3~~wx3   0.000   0.000   0.000   0.000  -0.001   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000                                                                                                             
+wy3~~wy3   0.000   0.000   0.000   0.000   0.000   0.000   0.000  -0.001   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000                                                                                                      
+wx4~~wx4   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000  -0.001   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000                                                                                             
+wy4~~wy4   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000  -0.001   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000                                                                                      
+wx5~~wx5   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000  -0.001   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000                                                                             
+wy5~~wy5   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000  -0.001    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.001                                                                      
+x1~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.001                                                               
+x2~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.001                                                        
+x3~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.001                                                 
+x4~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.001                                          
+x5~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.000  0.001                                   
+y1~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.001                            
+y2~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.001                     
+y3~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.001  0.001              
+y4~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.001  0.001       
+y5~1       0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000    0.000    0.000    0.000    0.000    0.000    0.000   0.000    0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.001  0.001</code></pre>
+<pre class="r"><code>index_vcov &lt;- c(2,3, 6,7, 10,11, 14,15)
+# CHECK: vcov_StdEst[index_vcov, index_vcov]
+#
+est  &lt;- StdEst[index_StdEst, 4] # Standardize parameter estimates
+# label estimates, and these labels should be used in the hypothesis/-es:
+names(est) &lt;- c(&quot;beta2&quot;, &quot;gamma2&quot;, &quot;beta3&quot;, &quot;gamma3&quot;, &quot;beta4&quot;, &quot;gamma4&quot;, &quot;beta5&quot;, &quot;gamma5&quot;)
+vcov &lt;- vcov_StdEst[index_vcov, index_vcov] # Covariance matrix of standardize parameter estimates
+#
+# Note: make sure to change the numbers 
+#       such that they correspond to the correct estimates.
+
+# Compute GORICA values and weights
+set.seed(123)
+GORICA.Result.ws &lt;- goric(est, VCOV = vcov, 
+                          hypotheses = list(H1ws = H1ws)) 
+# Defaults: comparison = &quot;complement&quot; 
+#           type = &quot;gorica&quot;
+#
+GORICA.Result.ws</code></pre>
 <pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
 
 Results:
-        model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
-1       H2_Q1  134.232   62.451  -143.562           0.483            0.735           0.722
-2  complement  134.301   63.473  -141.656           0.517            0.265           0.278
+        model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
+1        H1ws  19.591    5.966  -27.250           0.684            0.858           0.929
+2  complement  18.817    7.767  -22.099           0.316            0.142           0.071
 
 Conclusion:
-The order-restricted hypothesis &#39;H2_Q1&#39; has 2.59 times more support than its complement.</code></pre>
-<pre class="r"><code>#summary(goricaResults_H2_Q1)</code></pre>
-<p>The output shows that the order-restricted hypothesis <span class="math inline">\(H2\_Q1\)</span> has 2.6 times more support than
-its complement. However, the log-likelihood (loglik) weights seem to be
-quite close. This could indicate that one or more of the inequality
-constraints can be replaced by (about-)equality constraints. One could
-investigate with the benchmarks function, using ‘output_type = “rlw”’,
-whether the loglik weights indeed are close.<br />
-For more information, see the guidelines
-(‘Guidelines_output_GORIC.html’) and/or the benchmark tutorial on <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>.</p>
-<p>We can proceed in the same manner for <span class="math inline">\(H2\_Q2\)</span>; however, because the default
-method takes too long to calculate the penalty of the GORICA, we use the
-bootstrap method. When using the bootstrapping the results do not
-change, but the computation time may decrease.</p>
-<pre class="r"><code>set.seed(123)
-
-##H2_Q2 vs its complement, using GORICA
-#goricaResults_H2_Q2 &lt;- goric(est_2, VCOV = vcov_2, 
-#                             hypotheses = list(H2_Q2=H2_Q2))
-#goricaResults_H2_Q2
-##summary(goricaResults_H2_Q2)
-
-# if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;)
-#library(parallel)
-#
-#nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)
-#
-goricaResults_H2_Q2_b &lt;- goric(est_2, VCOV = vcov_2, 
-                               hypotheses = list(H2_Q2=H2_Q2), 
-                               mix_weights = &quot;boot&quot;)
-
-goricaResults_H2_Q2_b</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
-
-Results:
-        model   loglik  penalty    gorica  loglik.weights  penalty.weights  gorica.weights
-1       H2_Q2  130.969   58.028  -145.881           0.034            0.997           0.933
-2  complement  134.301   63.995  -140.612           0.966            0.003           0.067
-
-Conclusion:
-The order-restricted hypothesis &#39;H2_Q2&#39; has 13.94 times more support than its complement.</code></pre>
-<pre class="r"><code>#summary(goricaResults_H2_Q2_b)</code></pre>
-<p>The order-restricted hypothesis <span class="math inline">\(H2\_Q2\)</span> has 14 times more support than its
+The order-restricted hypothesis &#39;H1ws&#39; has 13.14 times more support than its complement.</code></pre>
+<pre class="r"><code>#summary(GORICA.Result.ws)</code></pre>
+<p>This of course gives the same results as when using the lavaan
+object, that is:<br />
+The order-restricted hypothesis <span class="math inline">\(H1ws\)</span> has 13 times more support than its
 complement.</p>
 <p>Note that the results hold for the chosen time interval. That is, the
 results are time-interval dependent. Next, more information is
 given.</p>
 </div>
 </div>
-<div id="note-on-time-interval-dependency" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Note on time-interval
+<div id="note-on-time-interval-dependency" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Note on time-interval
 dependency</h1>
 <p>The parameter estimates in a (RI-)CLPM are time-interval dependent,
 and thus the GORICA results as well. By using the CTmeta package:</p>
@@ -2656,37 +2441,10 @@ library(CTmeta)
 choices of time intervals. Based on this plot (and/or on other
 information), one can evaluate the hypotheses using the GORICA for
 different choices of time intervals.</p>
-<!-- ```{r} -->
-<!-- library(CTmeta) -->
-<!-- # Create Phi matrix from this and make Phi plot -->
-<!-- Phi <- matrix(est_2, byrow=T, ncol = sqrt(length(est_2))) -->
-<!-- #Phi -->
-<!-- #PhiPlot(DeltaT = 1, Phi) -->
-<!-- # Denote which of the Phi elements we want to plot based on Q1 -->
-<!-- WhichEl_Q1 <- matrix(c( -->
-<!--   0, 0, 1, 1, 0, 0, 0, 0, -->
-<!--   0, 0, 1, 1, 0, 0, 0, 0, -->
-<!--   1, 1, 0, 0, 0, 0, 0, 0, -->
-<!--   1, 1, 0, 0, 0, 0, 0, 0, -->
-<!--   0, 0, 0, 0, 0, 0, 0, 0, -->
-<!--   0, 0, 0, 0, 0, 0, 0, 0, -->
-<!--   0, 0, 0, 0, 0, 0, 0, 0, -->
-<!--   0, 0, 0, 0, 0, 0, 0, 0 -->
-<!-- ), ncol = sqrt(length(est_2)))  -->
-<!-- PhiPlot(DeltaT = 1, Phi, Min = 0, Max = 10, Step = 0.05, WhichElements = WhichEl_Q1, Labels = NULL, Col = NULL, Lty = NULL, Title = NULL) -->
-<!-- # Denote which of the Phi elements we want to plot based on Q2 -->
-<!-- WhichEl_Q2 <- matrix(c( -->
-<!--   0, 0, 0, 0, 1, 1, 1, 1, -->
-<!--   0, 0, 0, 0, 1, 1, 1, 1, -->
-<!--   0, 0, 0, 0, 1, 1, 1, 1, -->
-<!--   0, 0, 0, 0, 1, 1, 1, 1, -->
-<!--   1, 1, 1, 1, 0, 0, 0, 0, -->
-<!--   1, 1, 1, 1, 0, 0, 0, 0, -->
-<!--   1, 1, 1, 1, 0, 0, 0, 0, -->
-<!--   1, 1, 1, 1, 0, 0, 0, 0 -->
-<!-- ), ncol = sqrt(length(est_2)))  -->
-<!-- PhiPlot(DeltaT = 1, Phi, Min = 0, Max = 10, Step = 0.05, WhichElements = WhichEl_Q2, Labels = NULL, Col = NULL, Lty = NULL, Title = NULL) -->
-<!-- ``` -->
+<p>Note that this function is developed for CLPM estimates. It is not
+clear yet whether this can also be used for the RI-CLPM estimates.
+Nevertheless, one needs to bear in mind that also RI-CLPM estimates are
+time-interval dependent.</p>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 
 </div>
