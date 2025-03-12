@@ -78,7 +78,11 @@ restriktor::goric(est, VCOV = VCOV,
 
 # 3. Is there full mediation?
 
-H_full <- "abs(indirect) > 0.05; abs(direct) < 0.05"
+#H_full <- "abs(indirect) > 0.05; abs(direct) < 0.05"
+## vs its compliment
+#
+# Probably better because of approximate equality for direct effect:
+H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
 # vs its compliment
 
 restriktor::goric(est, VCOV = VCOV,
@@ -93,7 +97,8 @@ restriktor::goric(est, VCOV = VCOV,
 # 2. & 3. Partial vs Full mediation
 
 H_part <- "abs(indirect) > 0.05; abs(direct) > 0.05"
-H_full <- "abs(indirect) > 0.05; abs(direct) < 0.05"
+#H_full <- "abs(indirect) > 0.05; abs(direct) < 0.05"
+H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
 # and unconstrained as failsafe
 
 # In case you want to select the best fitting mediation type, 
@@ -113,7 +118,8 @@ restriktor::goric(est, VCOV = VCOV,
 
 # You can also specify any effect's direction.
 
-H_full_pos <- "indirect > 0.05; abs(direct) < 0.05"
+#H_full_pos <- "indirect > 0.05; abs(direct) < 0.05"
+H_full_pos <- "indirect > 0.05; -0.05 < direct < 0.05"
 # vs its compliment
 
 restriktor::goric(est, VCOV = VCOV,
