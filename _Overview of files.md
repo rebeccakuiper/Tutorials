@@ -51,6 +51,7 @@ Overview of the material per statistical model:
 - SEM:
 	- 'Tutorial_GORIC_restriktor_SEM' (pdf or html)
 	- Files in subfolder 'GORICA in SEM'
+	- Files in subfolder 'GORICA for mediation'
 
 - (RI-)CLPM:
 	- 'Tutorial_GORIC_restriktor_CLPM' (pdf or html)
