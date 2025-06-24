@@ -48,12 +48,14 @@ library(restriktor) # for the goric function
 PandG_data <- read.table("data/Data_PalmerAndGough.txt", header=TRUE)
 PandG_data$group <- factor(PandG_data$group) 
 
-# NHST: pairwise testing
-pairwise.t.test(PandG_data$Importance, PandG_data$group, p.adj = 'bonferroni')
 
 # Fit object, also NHST
 fit.PandG <- lm(Importance ~ group - 1, data = PandG_data)
 #summary(fit.PandG) # NHST
+
+
+# NHST: pairwise testing
+pairwise.t.test(PandG_data$Importance, PandG_data$group, p.adj = 'bonferroni')
 
 
 # (Informative) hypotheses
