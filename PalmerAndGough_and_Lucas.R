@@ -45,7 +45,11 @@ library(restriktor) # for the goric function
 # Example Palmer & Gough
 
 # Data
+# In case the data file is stored in your working directory, that is, the same folder as this R file:
+PandG_data <- read.table("Data_PalmerAndGough.txt", header=TRUE)
+# In case the data file is stored in a subfolder called 'data':
 PandG_data <- read.table("data/Data_PalmerAndGough.txt", header=TRUE)
+# Make sure variable group is a factor / grouping variable:
 PandG_data$group <- factor(PandG_data$group) 
 
 
