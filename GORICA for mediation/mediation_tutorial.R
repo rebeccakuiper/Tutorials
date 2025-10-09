@@ -36,14 +36,14 @@ summary(fit, std = T)
 
 # Extract standardized estimates of the defined parameters and their var-cov matrix 
 # which parameters are needed
-indices <- c(which(standardizedSolution(fit)[, 'label'] == "direct"),
-             which(standardizedSolution(fit)[, 'label'] == "indirect"))
+label_names <- c("direct", "indirect")
+indices <- which(standardizedSolution(fit)[, 'label'] %in% label_names)
 # Extract them
 est <- standardizedSolution(fit)[indices, 'est.std'] # defined parameters' estimates
-VCOV <- lavInspect(fit, "vcov.def.std.all") # VCOV matrix of parameters
+VCOV <- lavInspect(fit, "vcov.def.std.all")[label_names, label_names] # VCOV matrix of parameters
 # Label estimates - here, use labels from VCOV.
 # Note: if own labels, possibly rename or remove labels VCOV
-names(est) <- colnames(VCOV)
+names(est) <- colnames(VCOV) # label_names
 
 
 # Now, let's evaluate various mediation hypotheses
@@ -54,6 +54,7 @@ names(est) <- colnames(VCOV)
 H_any <- "abs(indirect) > 0.05"
 # vs its compliment
 
+set.seed(123) # for reproducibility
 gorica_indirect <- restriktor::goric(est, VCOV = VCOV,
                                   hypotheses = list(H_any = H_any))
 gorica_indirect
@@ -67,6 +68,7 @@ gorica_indirect
 H_part <- "abs(indirect) > 0.05; abs(direct) > 0.05"
 # vs its compliment
 
+set.seed(123) # for reproducibility
 restriktor::goric(est, VCOV = VCOV,
                   hypotheses = list(H_part = H_part))
 
@@ -85,6 +87,7 @@ restriktor::goric(est, VCOV = VCOV,
 H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
 # vs its compliment
 
+set.seed(123) # for reproducibility
 restriktor::goric(est, VCOV = VCOV,
                   hypotheses = list(H_full = H_full))
 
@@ -105,6 +108,7 @@ H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
 # you can compare both hypotheses with the unconstrained 
 # to make sure none of them is weak.
 
+set.seed(123) # for reproducibility
 restriktor::goric(est, VCOV = VCOV,
                   hypotheses = list(H_part = H_part, 
                                     H_full = H_full))
@@ -122,6 +126,7 @@ restriktor::goric(est, VCOV = VCOV,
 H_full_pos <- "indirect > 0.05; -0.05 < direct < 0.05"
 # vs its compliment
 
+set.seed(123) # for reproducibility
 restriktor::goric(est, VCOV = VCOV,
                   hypotheses = list(H_full_pos = H_full_pos))
 
