@@ -1,7 +1,7 @@
 # Install and load packages
 
 if (!require("bain")) install.packages("bain") # install this package first (once)
-library(bain) # for bain function
+library(bain) # for the data 'sesamesim' and for the function bain
 
 if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
 library(restriktor) # for goric function
@@ -72,10 +72,10 @@ summary(lm_fit_sesam)
 #2. Then, you can change the seed value to check the sensitivity of the penalty value.
 #   If it is sensitive, then increase number of iterations used in calculation of the penalty.
 set.seed(123) # Set seed value
-output <- goric(lm_fit_sesam, 
+goric_sesam <- goric(lm_fit_sesam, 
                 hypotheses = list(H1_sesam = H1_sesam))
-output
-#summary(output)
+goric_sesam
+#summary(goric_sesam)
 #
 #The order-restricted hypothesis ‘H1_sesam’ has  more support than its complement.
 #
@@ -90,18 +90,18 @@ output
 
 
 #In case you want to inspect the order-restricted maximum likelihood estimates (or-mle), inspect:
-output$ormle
+goric_sesam$ormle
 
 # Note
-output$ormle
-output$b.unrestr 
+goric_sesam$ormle
+goric_sesam$b.unrestr 
 # Our hypothesis is thus in agreement with data;
 # as we could also see from the maximum log likelihood values.
 
 
 #####
 
-# Exercise 3
+# Exercise 2
 
 # Benchmarks GORIC
 #
@@ -115,13 +115,55 @@ output$b.unrestr
 #all means are equal is used. 
 # Use 'pop_es' to specify own null population(s).	
 #  
-# Benchmarks:
-benchmarks_sesam <- benchmark(goric_sesam, model_type = "means", ncpus = 8)
+# Benchmarks (based on GORICA):
+benchmarks_sesam <- benchmark(goric_sesam, 
+                              ncpus = 8, iter = 2000)
 benchmarks_sesam 
-plot(benchmarks_sesam, x_lim = c(0, 14))
+plot(benchmarks_sesam, x_lim = c(0, 15))
+plot(benchmarks_sesam, log_scale = T)
 # Our finding is very extreme under the null:
 # Namely, our sample value is higher than the 95th percentile under the null. 
 # Hence, there is tremendous support for 'H1_sesam' (cf. 'Guidelines_GORIC-benchmarks').
+#
+# Inspection of the weights of the preferred hypothesis:
+benchmarks_sesam_means$benchmarks_goric_weights
+plot(benchmarks_sesam, output_type = "gw")
+plot(benchmarks_sesam, output_type = "gw", log_scale = T)
+
+
+# Extra for those who noticed and want to know :-) #
+# Note that the difference in sample value is due to using est&VCOV (gorica) instead of lm object (goric or gorica):
+# Technical info:
+# This has to do with using a different scaling of the covariance matrix:
+# namely, dividing by N (lm object) vs N-k (using vcov() function).
+#
+set.seed(123) # Set seed value
+gorica_sesam <- goric(lm_fit_sesam, 
+                      hypotheses = list(H1_sesam = H1_sesam),
+                      type = "gorica")
+#
+set.seed(123) # Set seed value
+est <- coef(lm_fit_sesam)
+VCOV <- vcov(lm_fit_sesam)
+gorica_sesam_est <- goric(est, VCOV = VCOV,
+                          hypotheses = list(H1_sesam = H1_sesam),
+                          type = "gorica")
+gorica_sesam_est
+#
+# This way it does resemble the output when using the lm object:
+set.seed(123) # Set seed value
+est <- coef(lm_fit_sesam)
+N_min_k <- lm_fit_sesam$df.residual
+N <- N_min_k + lm_fit_sesam$rank
+VCOV <- vcov(lm_fit_sesam)*N_min_k/N
+gorica_sesam_est_Nmink <- goric(est, VCOV = VCOV,
+                                hypotheses = list(H1_sesam = H1_sesam),
+                                type = "gorica")
+#
+goric_sesam
+gorica_sesam
+gorica_sesam_est
+gorica_sesam_est_Nmink
 
 
 ###################################################################################
