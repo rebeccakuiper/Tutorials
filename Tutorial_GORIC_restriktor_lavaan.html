@@ -1826,51 +1826,45 @@ H_full &lt;- &quot;abs(indirect) &gt; 0.1; -0.1 &lt; direct &lt; 0.1&quot;
 fit_med &lt;- sem(model_med, data = Data)
 # summary(fit_med, standardized = TRUE)
 
-# Calculate GORICA values and weights # Based on object set.seed(100) # Needed
-# for reproducibilty &amp; sensitivity check results_med &lt;- goric(fit_med,
-# hypotheses = list(H_part = H_part, H_full = H_full), standardized = TRUE)
-# #summary(results_med) results_med Based on extracted estimates Extract
-# standardized estimates of the defined parameters and their var-cov matrix
-# which parameters are needed
-label_names &lt;- c(&quot;direct&quot;, &quot;indirect&quot;, &quot;betaYM&quot;)
-# or: label_names &lt;- c(&#39;direct&#39;, &#39;indirect&#39;, &#39;betaMX&#39;)
-indices &lt;- which(standardizedSolution(fit_med)[, &quot;label&quot;] %in% label_names)
-# Extract them
-est &lt;- standardizedSolution(fit_med)[indices, &quot;est.std&quot;]  # defined parameters&#39; estimates
-VCOV &lt;- lavInspect(fit_med, &quot;vcov.def.std.all&quot;)[label_names, label_names]  # VCOV matrix of parameters
-# Label estimates - here, use labels from VCOV.  Note: if own labels, possibly
-# rename or remove labels VCOV
-names(est) &lt;- colnames(VCOV)
-# GORICA
-set.seed(123)  # for reproducibility &amp; possibly sensitivity check
-results_med &lt;- goric(est, VCOV = VCOV, hypotheses = list(H_part = H_part, H_full = H_full))
-# summary(results_med)
+# Calculate GORICA values and weights Based on object
+set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+results_med &lt;- goric(fit_med, hypotheses = list(H_part = H_part, H_full = H_full),
+    standardized = TRUE)</code></pre>
+<pre><code>
+restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
+<pre class="r"><code># summary(results_med)
 results_med</code></pre>
 <pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
 
 Results:
-           model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
-1         H_part   4.982    1.922  -6.120           0.322            0.349           0.542                       0.856
-2         H_full   2.779    1.500  -2.558           0.036            0.532           0.091                       0.144
-3  unconstrained   5.671    3.000  -5.341           0.642            0.119           0.367                            
+           model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1         H_part  10.541    4.922  -11.239           0.249            0.349           0.262                       0.303
+2         H_full  10.955    4.500  -12.910           0.376            0.532           0.604                       0.697
+3  unconstrained  10.955    6.000   -9.910           0.376            0.119           0.135                            
 
 Conclusion:
-- The order-restricted hypothesis &#39;H_part&#39; is the best in the set, as it has the highest GORIC(A) weight.
-- Since &#39;H_part&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H_part&#39; against the other order-restricted hypotheses:
-  * &#39;H_part&#39; is 5.935 times more supported than &#39;H_full&#39;.</code></pre>
-<!-- Conclusion:   -->
-<!-- - The order-restricted hypothesis ‘H_full’ is the best in the set, as it has the highest GORIC(A) weight.   -->
-<!-- - Since ‘H_full’ has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak.   -->
-<!-- We can now inspect the relative support for ‘H_full’ against the other order-restricted hypotheses:   -->
-<!--   * ‘H_full’ is 2.306 times more supported than ‘H_part’. -->
-<p>Conclusion:<br />
-- The order-restricted hypothesis ‘H_part’ is the best in the set, as it
-has the highest GORIC(A) weight.<br />
-- Since ‘H_part’ has a higher GORIC(A) weight than the unconstrained
-hypothesis, it is not considered weak.<br />
-We can now inspect the relative support for ‘H_part’ against the other
-order-restricted hypotheses:<br />
-* ‘H_part’ is 5.935 times more supported than ‘H_full’.</p>
+- The order-restricted hypothesis &#39;H_full&#39; is the best in the set, as it has the highest GORIC(A) weight.
+- Since &#39;H_full&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H_full&#39; against the other order-restricted hypotheses:
+  * &#39;H_full&#39; is 2.306 times more supported than &#39;H_part&#39;.</code></pre>
+<pre class="r"><code># # Based on extracted estimates # Extract standardized estimates of the
+# defined parameters and their var-cov matrix # which parameters are needed
+# label_names &lt;- c(&#39;indirect&#39;, &#39;direct&#39;, &#39;betaYM&#39;) # or: label_names &lt;-
+# c(&#39;indirect&#39;, &#39;direct&#39;, &#39;betaMX&#39;) indices &lt;-
+# which(standardizedSolution(fit_med)[, &#39;label&#39;] %in% label_names) # Extract
+# them est &lt;- standardizedSolution(fit_med)[indices, &#39;est.std&#39;] # defined
+# parameters&#39; estimates VCOV &lt;- lavInspect(fit_med,
+# &#39;vcov.def.std.all&#39;)[label_names, label_names] # VCOV matrix of parameters #
+# Label estimates - here, use labels from VCOV.  # Note: if own labels,
+# possibly rename or remove labels VCOV names(est) &lt;- colnames(VCOV) # GORICA
+# set.seed(123) # for reproducibility &amp; possibly sensitivity check results_med
+# &lt;- goric(est, VCOV = VCOV, hypotheses = list(H_part = H_part, H_full =
+# H_full)) #summary(results_med) results_med</code></pre>
+<p>Conclusion: - The order-restricted hypothesis ‘H_full’ is the best in
+the set, as it has the highest GORIC(A) weight. - Since ‘H_full’ has a
+higher GORIC(A) weight than the unconstrained hypothesis, it is not
+considered weak. We can now inspect the relative support for ‘H_full’
+against the other order-restricted hypotheses: * ‘H_full’ is 2.306 times
+more supported than ‘H_part’.</p>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 
 </div>
