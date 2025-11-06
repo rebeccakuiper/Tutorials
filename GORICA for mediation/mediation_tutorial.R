@@ -39,16 +39,14 @@ summary(fit, std = T)
 
 
 # Extract standardized estimates of the defined parameters and their var-cov matrix 
-# which parameters are needed
+label_names <- c("direct", "indirect", "betaYM") # or: c("direct", "indirect", "betaMX")
 label_names <- c("indirect", "direct", "betaYM")
-# or: label_names <- c("indirect", "direct", "betaMX")
-indices <- which(standardizedSolution(fit)[, 'label'] %in% label_names)
-# Extract them
-est <- standardizedSolution(fit)[indices, 'est.std'] # defined parameters' estimates
+est <- as.vector(standardizedSolution(fit)['est.std'])$est.std
+names(est) <- standardizedSolution(fit)$label
+est <- est[label_names]
+#est
 VCOV <- lavInspect(fit, "vcov.def.std.all")[label_names, label_names] # VCOV matrix of parameters
-# Label estimates - here, use labels from VCOV.
-# Note: if own labels, possibly rename or remove labels VCOV
-names(est) <- colnames(VCOV) # label_names
+
 
 
 # Now, let's evaluate various mediation hypotheses
