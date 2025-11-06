@@ -1847,18 +1847,14 @@ Conclusion:
 - Since &#39;H_full&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H_full&#39; against the other order-restricted hypotheses:
   * &#39;H_full&#39; is 2.306 times more supported than &#39;H_part&#39;.</code></pre>
 <pre class="r"><code># # Based on extracted estimates # Extract standardized estimates of the
-# defined parameters and their var-cov matrix # which parameters are needed
-# label_names &lt;- c(&#39;indirect&#39;, &#39;direct&#39;, &#39;betaYM&#39;) # or: label_names &lt;-
-# c(&#39;indirect&#39;, &#39;direct&#39;, &#39;betaMX&#39;) indices &lt;-
-# which(standardizedSolution(fit_med)[, &#39;label&#39;] %in% label_names) # Extract
-# them est &lt;- standardizedSolution(fit_med)[indices, &#39;est.std&#39;] # defined
-# parameters&#39; estimates VCOV &lt;- lavInspect(fit_med,
-# &#39;vcov.def.std.all&#39;)[label_names, label_names] # VCOV matrix of parameters #
-# Label estimates - here, use labels from VCOV.  # Note: if own labels,
-# possibly rename or remove labels VCOV names(est) &lt;- colnames(VCOV) # GORICA
-# set.seed(123) # for reproducibility &amp; possibly sensitivity check results_med
-# &lt;- goric(est, VCOV = VCOV, hypotheses = list(H_part = H_part, H_full =
-# H_full)) #summary(results_med) results_med</code></pre>
+# defined parameters and their var-cov matrix label_names &lt;- c(&#39;direct&#39;,
+# &#39;indirect&#39;) est &lt;-
+# as.vector(standardizedSolution(fit_med)[&#39;est.std&#39;])$est.std names(est) &lt;-
+# standardizedSolution(fit_med)$label est &lt;- est[label_names] #est VCOV &lt;-
+# lavInspect(fit_med, &#39;vcov.def.std.all&#39;)[label_names, label_names] # VCOV
+# matrix of parameters # GORICA set.seed(123) # for reproducibility &amp; possibly
+# sensitivity check results_med &lt;- goric(est, VCOV = VCOV, hypotheses =
+# list(H_part = H_part, H_full = H_full)) #summary(results_med) results_med</code></pre>
 <p>Conclusion: - The order-restricted hypothesis ‘H_full’ is the best in
 the set, as it has the highest GORIC(A) weight. - Since ‘H_full’ has a
 higher GORIC(A) weight than the unconstrained hypothesis, it is not
