@@ -25,7 +25,11 @@ model <- "X =~ X1 + X2 + X3 + X4 + X5
           Y ~ b*M
           Y ~ c*X
           indirect := a*b
-          direct := c"
+          direct := c
+# Next, needed because of the a*b, you need one of the following:
+          #betaMX := a
+          betaYM := b
+"
 
 # Fit the model
 fit <- lavaan::sem(model, sim_data)
@@ -36,7 +40,8 @@ summary(fit, std = T)
 
 # Extract standardized estimates of the defined parameters and their var-cov matrix 
 # which parameters are needed
-label_names <- c("direct", "indirect")
+label_names <- c("direct", "indirect", "betaYM")
+# or: label_names <- c("direct", "indirect", "betaMX")
 indices <- which(standardizedSolution(fit)[, 'label'] %in% label_names)
 # Extract them
 est <- standardizedSolution(fit)[indices, 'est.std'] # defined parameters' estimates
@@ -54,7 +59,7 @@ names(est) <- colnames(VCOV) # label_names
 H_any <- "abs(indirect) > 0.05"
 # vs its compliment
 
-set.seed(123) # for reproducibility
+set.seed(123) # for reproducibility & possibly sensitivity check
 gorica_indirect <- restriktor::goric(est, VCOV = VCOV,
                                   hypotheses = list(H_any = H_any))
 gorica_indirect
