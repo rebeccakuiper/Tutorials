@@ -40,8 +40,8 @@ summary(fit, std = T)
 
 # Extract standardized estimates of the defined parameters and their var-cov matrix 
 # which parameters are needed
-label_names <- c("direct", "indirect", "betaYM")
-# or: label_names <- c("direct", "indirect", "betaMX")
+label_names <- c("indirect", "direct", "betaYM")
+# or: label_names <- c("indirect", "direct", "betaMX")
 indices <- which(standardizedSolution(fit)[, 'label'] %in% label_names)
 # Extract them
 est <- standardizedSolution(fit)[indices, 'est.std'] # defined parameters' estimates
@@ -63,6 +63,14 @@ set.seed(123) # for reproducibility & possibly sensitivity check
 gorica_indirect <- restriktor::goric(est, VCOV = VCOV,
                                   hypotheses = list(H_any = H_any))
 gorica_indirect
+#
+# # or use lavaan object (with standardized = TRUE):
+# set.seed(123) # for reproducibility & possibly sensitivity check
+# gorica_indirect_fit <- restriktor::goric(fit,
+#                                      hypotheses = list(H_any = H_any),
+#                                      standardized = TRUE)
+# gorica_indirect_fit # gives the same:
+# gorica_indirect 
 
 # Here, we evaluate support for the presence of 
 # an indirect effect of a given (non-negligible) magnitude in any direction.
