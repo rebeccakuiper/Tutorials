@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-11-06" />
+<meta name="date" content="2025-11-07" />
 
 <title>How to evaluate theory-based hypotheses in a lavaan model using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a lavaan model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">06 november 2025</h4>
+<h4 class="date">07 november 2025</h4>
 
 </div>
 
@@ -1812,9 +1812,6 @@ model_med &lt;- &quot; # direct effect
              indirect := a*b
            # direct effect (c)
              direct := c
-           # Next, needed because of the a*b, you need one of the following:
-          #betaMX := a
-          betaYM := b
          &quot;
 
 # Hypotheses
@@ -1838,9 +1835,9 @@ results_med</code></pre>
 
 Results:
            model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
-1         H_part  10.541    4.922  -11.239           0.249            0.349           0.262                       0.303
-2         H_full  10.955    4.500  -12.910           0.376            0.532           0.604                       0.697
-3  unconstrained  10.955    6.000   -9.910           0.376            0.119           0.135                            
+1         H_part   8.382    3.922   -8.919           0.249            0.349           0.262                       0.303
+2         H_full   8.795    3.500  -10.590           0.376            0.532           0.604                       0.697
+3  unconstrained   8.795    5.000   -7.590           0.376            0.119           0.135                            
 
 Conclusion:
 - The order-restricted hypothesis &#39;H_full&#39; is the best in the set, as it has the highest GORIC(A) weight.
