@@ -26,9 +26,6 @@ model <- "X =~ X1 + X2 + X3 + X4 + X5
           Y ~ c*X
           indirect := a*b
           direct := c
-# Next, needed because of the a*b, you need one of the following:
-          #betaMX := a
-          betaYM := b
 "
 
 # Fit the model
@@ -39,8 +36,13 @@ summary(fit, std = T)
 
 
 # Extract standardized estimates of the defined parameters and their var-cov matrix 
-label_names <- c("direct", "indirect", "betaYM") # or: c("direct", "indirect", "betaMX")
-label_names <- c("indirect", "direct", "betaYM")
+#
+# In the hypotheses below, we address both the indirect and direct effect/relationship;
+# so we need to extract those estimates and their covariance matrix.
+# Btw If the hypothesis (set) only regards indirect (like in H_any), 
+# it suffices to only have that estimate and its variance.
+#
+label_names <- c("indirect", "direct")
 est <- as.vector(standardizedSolution(fit)['est.std'])$est.std
 names(est) <- standardizedSolution(fit)$label
 est <- est[label_names]
