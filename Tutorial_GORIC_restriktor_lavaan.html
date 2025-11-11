@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-11-07" />
+<meta name="date" content="2025-11-11" />
 
 <title>How to evaluate theory-based hypotheses in a lavaan model using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a lavaan model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">07 november 2025</h4>
+<h4 class="date">11 november 2025</h4>
 
 </div>
 
@@ -1535,11 +1535,15 @@ HS.model &lt;- &quot; visual  =~ lambda_v1*x1 + lambda_v2*x2 + lambda_v3*x3
               textual =~ lambda_t1*x4 + lambda_t2*x5 + lambda_t3*x6
               speed   =~ lambda_s1*x7 + lambda_s2*x8 + lambda_s3*x9 &quot;</code></pre>
 <p>Next, we need to formulate the hypothesis of interest. Let us say
-that the hypothesis is that all factor loadings are at least (in
-absolute sense) .6. Notably, it is also possible to compare the height
-of (absolute values of) factor loadings. Since we are interested in one
-theory-based hypothesis, we compare it to its complement (reflecting all
-the other possibilities); which is done by default (i.e., by default:
+that the hypothesis is that all standardized factor loadings are at
+least (in absolute sense) .6. Note that we compare the factor loadings
+to a number, which is often the most meaningful when inspecting
+standardized factor loadings; then, use
+<code>standardized = TRUE</code>. As another note, it is also possible
+to compare the height of (absolute values of) standardized factor
+loadings. Since we are interested in one theory-based hypothesis, we
+compare it to its complement (reflecting all the other possibilities);
+which is done by default (i.e., by default:
 <code>comparison = &quot;complement&quot;</code>).</p>
 <pre class="r"><code># Hypotheses
 H1_cfa &lt;- &quot;
@@ -1555,12 +1559,11 @@ abs(lambda_s1) &gt; .6; abs(lambda_s2) &gt; .6; abs(lambda_s3) &gt; .6;
 fit_cfa &lt;- cfa(HS.model, data = HolzingerSwineford1939, std.lv = TRUE)</code></pre>
 <p>Now, we can call the <code>goric</code> function. Here, we use GORICA
 (i.e.,<code>type = &quot;gorica&quot;</code>) by default, because of entering a
-lavaan object. Notably, if one needs standardized estimates to obtain a
-meaningful comparison, add <code>standardized = TRUE</code>.</p>
+lavaan object.</p>
 <pre class="r"><code># Calculate GORICA values and weights for H1_cfa and its complement.
 
 set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
-results_cfa &lt;- goric(fit_cfa, hypotheses = list(H1_cfa = H1_cfa))</code></pre>
+results_cfa &lt;- goric(fit_cfa, hypotheses = list(H1_cfa = H1_cfa), standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_cfa)
@@ -1569,13 +1572,13 @@ results_cfa</code></pre>
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1      H1_cfa  15.546    5.172  -20.749           0.296            0.977           0.948
-2  complement  16.414    8.943  -14.944           0.704            0.023           0.052
+1      H1_cfa  16.167    4.478  -23.378           0.011            0.989           0.497
+2  complement  20.685    8.984  -23.402           0.989            0.011           0.503
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_cfa&#39; has 18.22 times more support than its complement.</code></pre>
-<p>Conclusion: The order-restricted hypothesis ‘H1_cfa’ has 18.22 times
-more support than its complement.</p>
+The order-restricted hypothesis &#39;H1_cfa&#39; has 0.497 / 0.503 &lt; 1 times more support than its complement. That is, the complement has 1.01 times more support than &#39;H1_cfa&#39;</code></pre>
+<p>Conclusion: The order-restricted hypothesis ‘H1_cfa’ has <span class="math inline">\(&lt; 1\)</span> times more, so, less, support than
+its complement.</p>
 </div>
 <div id="example-2-multiple-group-cfa" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Example 2: Multiple
@@ -1584,9 +1587,9 @@ Group CFA</h1>
 structure (cf. <a href="https://www.lavaan.ugent.be/tutorial/groups.html" class="uri">https://www.lavaan.ugent.be/tutorial/groups.html</a>). There
 are two groups: 1. Pasteur and 2. Grant-White. Each will have there own
 parameter estimates and thus also need there own labeling. In this
-example, we will evaluate whether the factor loadings in the second
-group are higher than the corresponding ones in the first group (i.e.,
-in the first group lower than in the second).</p>
+example, we will evaluate whether the standardized factor loadings in
+the second group are higher than the corresponding ones in the first
+group (i.e., in the first group lower than in the second).</p>
 <pre class="r"><code># specify the model, using own labeling (per group!)
 HS.model_mgcfa &lt;- &quot; visual  =~ c(lambda_v1_P, lambda_v1_GW)*x1 + c(lambda_v2_P, lambda_v2_GW)*x2 + c(lambda_v3_P, lambda_v3_GW)*x3      
               textual =~ c(lambda_t1_P, lambda_t1_GW)*x4 + c(lambda_t2_P, lambda_t2_GW)*x5 + c(lambda_t3_P, lambda_t3_GW)*x6
@@ -1607,7 +1610,7 @@ fit_mgcfa &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot
 
 # Calculate GORICA values and weights
 set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
-results_mgcfa &lt;- goric(fit_mgcfa, hypotheses = list(H1_mgcfa = H1_mgcfa))</code></pre>
+results_mgcfa &lt;- goric(fit_mgcfa, hypotheses = list(H1_mgcfa = H1_mgcfa), standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_mgcfa)
@@ -1616,13 +1619,13 @@ results_mgcfa</code></pre>
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1    H1_mgcfa  24.950   14.170  -21.561           0.119            0.978           0.855
-2  complement  26.948   17.943  -18.011           0.881            0.022           0.145
+1    H1_mgcfa  33.392   13.450  -39.884           0.146            0.989           0.941
+2  complement  35.159   17.985  -34.348           0.854            0.011           0.059
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_mgcfa&#39; has 5.90 times more support than its complement.</code></pre>
-<p>Conclusion: The order-restricted hypothesis ‘H1_mgcfa’ has 5.90 times
-more support than its complement.</p>
+The order-restricted hypothesis &#39;H1_mgcfa&#39; has 15.92 times more support than its complement.</code></pre>
+<p>Conclusion: The order-restricted hypothesis ‘H1_mgcfa’ has (<span class="math inline">\(&gt; 1\)</span> times) more support than its
+complement.</p>
 </div>
 <div id="example-3-structural-equation-modeling-sem" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Example 3: Structural
