@@ -11,7 +11,7 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-11-11" />
+<meta name="date" content="2025-11-13" />
 
 <title>How to evaluate theory-based hypotheses in a lavaan model using the GORICA</title>
 
@@ -1482,7 +1482,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a lavaan model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">11 november 2025</h4>
+<h4 class="date">13 november 2025</h4>
 
 </div>
 
@@ -1494,11 +1494,12 @@ margin: 0 auto;
 }
 </style>
 <!-- # Tutorial GORICA on SEM -->
-<p>This is a tutorial for applying the AIC-type criterion GORICA to a
-lavaan object. The GORICA is an information criterion that can be used
-to evaluate theory-driven, informative, order-restricted hypotheses. The
-GORICA selects the best hypothesis out of a given set. Below, you will
-find examples for the use of the <code>goric</code> function in the
+<p>This is a tutorial for applying the AIC-type criterion GORICA, using
+the <code>goric</code> function, to a <code>lavaan</code> object. The
+GORICA is an information criterion that can be used to evaluate
+theory-driven, informative, order-restricted hypotheses. The GORICA
+selects the best hypothesis out of a given set. Below, you will find
+examples for the use of the <code>goric</code> function in the
 <code>restriktor</code> R package when you have a lavaan object.</p>
 <p>Note: For (more) information (tutorials and example R scripts) is
 available from <a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>, including a
@@ -1527,9 +1528,9 @@ library(lavaan)</code></pre>
 Factor Analysis</h1>
 <p>In this example, we will look at the Confirmatory Factor Analysis
 (CFA) lavaan example (<a href="https://www.lavaan.ugent.be/tutorial/cfa.html" class="uri">https://www.lavaan.ugent.be/tutorial/cfa.html</a>).</p>
-<p>To specify your hypotheses in terms of model parameters, it is often
-handy (and sometimes even necessary) to give your own labels to
-estimates by including them in the <code>lavaan</code> model.</p>
+<p>To specify your hypotheses in terms of model parameters, you should
+give your own labels to estimates by including them in the
+<code>lavaan</code> model.</p>
 <pre class="r"><code># specify the model, using own labeling
 HS.model &lt;- &quot; visual  =~ lambda_v1*x1 + lambda_v2*x2 + lambda_v3*x3      
               textual =~ lambda_t1*x4 + lambda_t2*x5 + lambda_t3*x6
@@ -1538,13 +1539,13 @@ HS.model &lt;- &quot; visual  =~ lambda_v1*x1 + lambda_v2*x2 + lambda_v3*x3
 that the hypothesis is that all standardized factor loadings are at
 least (in absolute sense) .6. Note that we compare the factor loadings
 to a number, which is often the most meaningful when inspecting
-standardized factor loadings; then, use
-<code>standardized = TRUE</code>. As another note, it is also possible
-to compare the height of (absolute values of) standardized factor
-loadings. Since we are interested in one theory-based hypothesis, we
-compare it to its complement (reflecting all the other possibilities);
-which is done by default (i.e., by default:
-<code>comparison = &quot;complement&quot;</code>).</p>
+standardized factor loadings; then, use <code>standardized = TRUE</code>
+in the <code>goric</code> function. As another note, it is also possible
+to compare the height of (absolute values of) various standardized
+factor loadings. Since we are interested in one theory-based hypothesis,
+we compare it to its complement (reflecting all the other
+possibilities); which is done by default in the <code>goric</code>
+function (i.e., by default: <code>comparison = &quot;complement&quot;</code>).</p>
 <pre class="r"><code># Hypotheses
 H1_cfa &lt;- &quot;
 abs(lambda_v1) &gt; .6; abs(lambda_v2) &gt; .6; abs(lambda_v3) &gt; .6; 
@@ -1578,7 +1579,9 @@ Results:
 Conclusion:
 The order-restricted hypothesis &#39;H1_cfa&#39; has 0.497 / 0.503 &lt; 1 times more support than its complement. That is, the complement has 1.01 times more support than &#39;H1_cfa&#39;</code></pre>
 <p>Conclusion: The order-restricted hypothesis ‘H1_cfa’ has <span class="math inline">\(&lt; 1\)</span> times more, so, less, support than
-its complement.</p>
+its complement. Thus, we did not find support for our hypothesis, that
+is, there is at least one standardized factor loading less than 0.6 (in
+absolute sense).</p>
 </div>
 <div id="example-2-multiple-group-cfa" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Example 2: Multiple
@@ -1587,45 +1590,141 @@ Group CFA</h1>
 structure (cf. <a href="https://www.lavaan.ugent.be/tutorial/groups.html" class="uri">https://www.lavaan.ugent.be/tutorial/groups.html</a>). There
 are two groups: 1. Pasteur and 2. Grant-White. Each will have there own
 parameter estimates and thus also need there own labeling. In this
-example, we will evaluate whether the standardized factor loadings in
-the second group are higher than the corresponding ones in the first
-group (i.e., in the first group lower than in the second).</p>
-<pre class="r"><code># specify the model, using own labeling (per group!)
-HS.model_mgcfa &lt;- &quot; visual  =~ c(lambda_v1_P, lambda_v1_GW)*x1 + c(lambda_v2_P, lambda_v2_GW)*x2 + c(lambda_v3_P, lambda_v3_GW)*x3      
-              textual =~ c(lambda_t1_P, lambda_t1_GW)*x4 + c(lambda_t2_P, lambda_t2_GW)*x5 + c(lambda_t3_P, lambda_t3_GW)*x6
-              speed   =~ c(lambda_s1_P, lambda_s1_GW)*x7 + c(lambda_s2_P, lambda_s2_GW)*x8 + c(lambda_s3_P, lambda_s3_GW)*x9 &quot;
+example, we will evaluate hypothesis regarding the latent means of the
+two schools. Before we do, we need to establish measurement invariance,
+such that we can fairly compare the means.</p>
+<div id="measurement-invariance" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Measurement
+invariance</h2>
+<p>We could use the GORICA to check for measurement invariance. When you
+can specify ranges of values for which the parameters, say, loadings,
+are the same for each group, then there is an added value of using the
+GORICA. Here, we will inspect the case where we set the the parameters,
+say, loadings, to be equal across groups. Then, one can use the AIC as
+well, where we will also determine the AIC weights for a more in-depth
+comparison.<br />
+Note that we compare parameters across groups, so they are alerady on a
+comparable scale, since they denote the same relationship in each group.
+Therefore, we do not need the standardized values.</p>
+<pre class="r"><code># specify the model
+HS.model_mgcfa &lt;- &quot; 
+              visual  =~ x1 + x2 + x3
+              textual =~ x4 + x5 + x6
+              speed   =~ x7 + x8 + x9 
+&quot;
+
+# configural invariance
+fit_ci &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot;school&quot;)
+
+# weak invariance
+fit_wi &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot;school&quot;, group.equal = &quot;loadings&quot;)
+
+# strong invariance
+fit_si &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot;school&quot;, group.equal = c(&quot;intercepts&quot;,
+    &quot;loadings&quot;))
+
+# strict invariance
+fit_strict &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot;school&quot;,
+    group.equal = c(&quot;intercepts&quot;, &quot;loadings&quot;, &quot;residuals&quot;))
+
+# model comparison with AIC
+AIC_meas.invar &lt;- lavTestLRT(fit_ci, fit_wi, fit_si, fit_strict)$AIC
+hypo.names &lt;- c(&quot;configural&quot;, &quot;weak&quot;, &quot;strong&quot;, &quot;strict&quot;)
+AIC_weights &lt;- calc_ICweights(AIC_meas.invar, hypo.names)
+# print(AIC_weights, use_scientific = FALSE, digits = 3)
+AIC_weights$ratio_IC_weights</code></pre>
+<pre><code>           vs_configural      vs_weak    vs_strong    vs_strict
+configural  1.000000e+00 1.489865e-01 1.845625e+05 1.373106e+05
+weak        6.712019e+00 1.000000e+00 1.238787e+06 9.216313e+05
+strong      5.418218e-06 8.072412e-07 1.000000e+00 7.439787e-01
+strict      7.282760e-06 1.085033e-06 1.344124e+00 1.000000e+00</code></pre>
+<pre class="r"><code>AIC_weights$ratio_IC_weights[&quot;weak&quot;, ]</code></pre>
+<pre><code>vs_configural       vs_weak     vs_strong     vs_strict 
+ 6.712019e+00  1.000000e+00  1.238787e+06  9.216313e+05 </code></pre>
+<p>The weak invariance (equal factor loadings) is the best of the set,
+since it has the lowest value. From the AIC weights, we can see that it
+is about 20 times more supported than configural invariance, and many
+times more supported than strong and strict invariance. Therefore, it is
+unwise to directly compare the values of the latent means across the two
+groups.</p>
+<p>To still show how one can do that using the GORICA, we do proceed
+here.</p>
+</div>
+<div id="hypothesis-evaluation-using-gorica" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Hypothesis evaluation
+using GORICA</h2>
+<p>From here on, we assume that strong (or even strict) measurement
+invariance was established, such that we can fairly compare the latent
+means. Let us say that our expectation is the latent means of our three
+factors are in absolute sense higher Pasteur group than in the
+Grant-White group.<br />
+First, we will create the model such that we obtain these latent means.
+Second, we specify our hypothesis. Third, we run the model. Fourth, we
+evaluate our hypothesis using the GORICA.</p>
+<pre class="r"><code># specify the model, using own labeling (per group!)  Specify model, such that
+# we obtain the latent means.
+HS.model_mgcfa &lt;- &quot;
+# make loadings equal across groups
+  visual  =~  1*x1 + v2*x2 + v3*x3
+  textual =~  1*x4 + v5*x5 + v6*x6
+  speed   =~  1*x7 + v8*x8 + v9*x9 
+
+# make intercepts equal across groups
+  x1 ~  0*1
+  x2 ~ i2*1
+  x3 ~ i3*1
+  x4 ~ i4*1
+  x5 ~ i5*1
+  x6 ~ i6*1
+  x7 ~ i7*1
+  x8 ~ i8*1
+  x9 ~ i9*1
+ 
+# latent variable intercepts; here: 
+# the latent means
+visual  ~ c(mean_v_P, mean_v_GW) * 1
+textual ~ c(mean_t_P, mean_t_GW) * 1
+speed   ~ c(mean_s_P, mean_s_GW) * 1
+&quot;
+
 
 # Hypotheses
 H1_mgcfa &lt;- &quot;
-abs(lambda_v1_P) &lt; abs(lambda_v1_GW); abs(lambda_v2_P) &lt; abs(lambda_v2_GW); abs(lambda_v3_P) &lt; abs(lambda_v3_GW); 
-abs(lambda_t1_P) &lt; abs(lambda_t1_GW); abs(lambda_t2_P) &lt; abs(lambda_t2_GW); abs(lambda_t3_P) &lt; abs(lambda_t3_GW);  
-abs(lambda_s1_P) &lt; abs(lambda_s1_GW); abs(lambda_s2_P) &lt; abs(lambda_s2_GW); abs(lambda_s3_P) &lt; abs(lambda_s3_GW); 
+abs(mean_v_P) &gt; abs(mean_v_GW); 
+abs(mean_t_P) &gt; abs(mean_t_GW); 
+abs(mean_s_P) &gt; abs(mean_s_GW)
 &quot;
 # vs its complement (default)
 
-# fit the model fixing the variances of all the latent variables in a CFA model
-# to unity (std.lv = TRUE; https://www.lavaan.ugent.be/tutorial/syntax2.html)
-fit_mgcfa &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot;school&quot;,
-    std.lv = TRUE)
+# fit the model
+fit_mgcfa &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot;school&quot;)
+
+# In this case, we need to extract the estimates and their covariance matrix
+# ourselves:
+names_param &lt;- c(&quot;mean_v_P&quot;, &quot;mean_v_GW&quot;, &quot;mean_t_P&quot;, &quot;mean_t_GW&quot;, &quot;mean_s_P&quot;, &quot;mean_s_GW&quot;)
+est &lt;- coef(fit_mgcfa)[names_param]
+VCOV &lt;- vcov(fit_mgcfa)[names_param, names_param]
 
 # Calculate GORICA values and weights
 set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
-results_mgcfa &lt;- goric(fit_mgcfa, hypotheses = list(H1_mgcfa = H1_mgcfa), standardized = TRUE)</code></pre>
-<pre><code>
-restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
-<pre class="r"><code># summary(results_mgcfa)
+results_mgcfa &lt;- goric(est, VCOV = VCOV, hypotheses = list(H1_mgcfa = H1_mgcfa))
+
+# summary(results_mgcfa)
 results_mgcfa</code></pre>
 <pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1    H1_mgcfa  33.392   13.450  -39.884           0.146            0.989           0.941
-2  complement  35.159   17.985  -34.348           0.854            0.011           0.059
+1    H1_mgcfa  10.638    4.383  -12.509           0.500            0.790           0.790
+2  complement  10.637    5.710   -9.856           0.500            0.210           0.210
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_mgcfa&#39; has 15.92 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1_mgcfa&#39; has 3.77 times more support than its complement.</code></pre>
 <p>Conclusion: The order-restricted hypothesis ‘H1_mgcfa’ has (<span class="math inline">\(&gt; 1\)</span> times) more support than its
-complement.</p>
+complement. That is, there is support for the latent means being in
+absolute sense higher in the Pasteur group than in the Grant-White
+group.</p>
+</div>
 </div>
 <div id="example-3-structural-equation-modeling-sem" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Example 3: Structural
@@ -1636,9 +1735,9 @@ equation modeling (SEM)</h1>
 parameters; so, we only need to label these. We want to compare the
 strengths of the predictive relationships; hence, we need standardized
 estimates for a meaningful comparison; that is, add
-<code>standardized = TRUE</code>. We expect that the predictive
-relationship of ind60 for dem60 is (in absolute sense) higher that that
-for dem65.</p>
+<code>standardized = TRUE</code> in the <code>goric</code> function. We
+expect that the predictive relationship of ind60 for dem60 is (in
+absolute sense) higher that that for dem65.</p>
 <pre class="r"><code># specify the model, using own labeling
 model_sem &lt;- &quot;
   # measurement model
@@ -1681,8 +1780,9 @@ Results:
 
 Conclusion:
 The order-restricted hypothesis &#39;H1_sem&#39; has 6.26 times more support than its complement.</code></pre>
-<p>Conclusion: The order-restricted hypothesis ‘H1_sem’ has 6.06 times
-more support than its complement.</p>
+<p>Conclusion: The order-restricted hypothesis ‘H1_sem’ has (<span class="math inline">\(&gt; 1\)</span> times) more support than its
+complement. Thus, we found support that the predictive relationship of
+ind60 for dem60 is (in absolute sense) higher that that for dem65.</p>
 </div>
 <div id="example-4-multilevel-sem" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Example 4: Multilevel
@@ -1693,8 +1793,9 @@ example (cf. <a href="https://www.lavaan.ugent.be/tutorial/multilevel.html" cla
 parameters; so, we only need to label these. We want to compare the
 strengths of the predictive relationships; hence, we need standardized
 estimates for a meaningful comparison; that is, add
-<code>standardized = TRUE</code>. We expect that the order of the
-(absolute) height in predictive relationships for fw is x1, x2, x3.</p>
+<code>standardized = TRUE</code> in the <code>goric</code> function. We
+expect that the order of the (absolute) height in predictive
+relationships for fw is x1, x2, x3.</p>
 <pre class="r"><code># specify the model, using own labeling
 model_msem &lt;- &quot;
     level: 1
@@ -1730,8 +1831,9 @@ Results:
 
 Conclusion:
 The order-restricted hypothesis &#39;H1_msem&#39; has 465.55 times more support than its complement.</code></pre>
-<p>Conclusion: The order-restricted hypothesis ‘H1_msem’ has 465.55
-times more support than its complement.</p>
+<p>Conclusion: The order-restricted hypothesis ‘H1_msem’ has (<span class="math inline">\(&gt; 1\)</span> times) more support than its
+complement. Thus, we found support that the order of the (absolute)
+height in predictive relationships for fw is x1, x2, x3.</p>
 </div>
 <div id="example-5-linear-growth-model-with-a-time-varying-covariate" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Example 5: linear
@@ -1787,8 +1889,10 @@ Results:
 Conclusion:
 The order-restricted hypothesis &#39;H1_growth&#39; has 14251239710235289453804.00 times more support than its complement.</code></pre>
 <p>Conclusion: The order-restricted hypothesis ‘H1_growth’ has many more
-(nl., 14251239710235289453804.00) times more support than its
-complement.</p>
+(<span class="math inline">\(&gt;&gt;  1\)</span> times more) support
+than its complement. Thus, we found support that the intercept of the
+slope s is (in absolute sense) higher than the intercept of the
+intercept i.</p>
 </div>
 <div id="example-6-mediation" class="section level1" number="7">
 <h1><span class="header-section-number">7</span> Example 6:
@@ -1806,7 +1910,8 @@ Y &lt;- 0.7 * M + rnorm(100)
 Data &lt;- data.frame(X = X, Y = Y, M = M)
 
 # specify the model, using own labeling
-model_med &lt;- &quot; # direct effect
+model_med &lt;- &quot; 
+           # direct effect
              Y ~ c*X
            # mediator
              M ~ a*X
@@ -1859,8 +1964,9 @@ Conclusion:
 the set, as it has the highest GORIC(A) weight. - Since ‘H_full’ has a
 higher GORIC(A) weight than the unconstrained hypothesis, it is not
 considered weak. We can now inspect the relative support for ‘H_full’
-against the other order-restricted hypotheses: * ‘H_full’ is 2.306 times
-more supported than ‘H_part’.</p>
+against the other order-restricted hypotheses: * ‘H_full’ has (<span class="math inline">\(&gt;  1\)</span> times) more support than
+‘H_part’.<br />
+Thus, we found support for full mediation.</p>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 
 </div>
