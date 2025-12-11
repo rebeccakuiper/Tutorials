@@ -27,6 +27,9 @@ model <- "X =~ X1 + X2 + X3 + X4 + X5
           indirect := a*b
           direct := c
 "
+# Note that we define the direct relationship, labelled as c, here as well.
+# This is needed to be able to obtain the covariance between 
+# the direct and indirect relationship.
 
 # Fit the model
 fit <- lavaan::sem(model, sim_data)
@@ -35,45 +38,46 @@ fit <- lavaan::sem(model, sim_data)
 summary(fit, std = T)
 
 
-# Extract standardized estimates of the defined parameters and their var-cov matrix 
+# Below, we demonstrate how several mediation hypotheses can be evaluated.
+# This can be done using the 
+# A. fit object (and using the goric argument 'standardized = TRUE')
+# B. extracted standardized estimates of the defined parameters and their covariance matrix 
 #
-# In the hypotheses below, we address both the indirect and direct effect/relationship;
-# so we need to extract those estimates and their covariance matrix.
+# If B.:
+# In the hypotheses below, we address both the indirect and direct relationships;
+# So, we need to extract those estimates and their covariance matrix.
 # Btw If the hypothesis (set) only regards indirect (like in H_any), 
 # it suffices to only have that estimate and its variance.
-#
 label_names <- c("indirect", "direct")
 est <- as.vector(standardizedSolution(fit)['est.std'])$est.std
 names(est) <- standardizedSolution(fit)$label
 est <- est[label_names]
 #est
-VCOV <- lavInspect(fit, "vcov.def.std.all")[label_names, label_names] # VCOV matrix of parameters
+VCOV <- lavInspect(fit, "vcov.def.std.all")[label_names, label_names] 
+# VCOV matrix of defined parameters. 
+# This is why we needed to define the direct relationship as well.
 
 
 
 # Now, let's evaluate various mediation hypotheses
 
-# 1. Is there an arbitrarily small indirect effect?
+# 1. Is there a non-negligible indirect effect/relationship?
 # Recall the concept of SESOI (smallest effect size of interest)
 
 H_any <- "abs(indirect) > 0.05"
 # vs its compliment
 
 set.seed(123) # for reproducibility & possibly sensitivity check
-gorica_indirect <- restriktor::goric(est, VCOV = VCOV,
-                                  hypotheses = list(H_any = H_any))
+# A.
+gorica_indirect <- restriktor::goric(fit, standardized = TRUE,
+                                     hypotheses = list(H_any = H_any))
+# B.
+#gorica_indirect <- restriktor::goric(est, VCOV = VCOV,
+#                                  hypotheses = list(H_any = H_any))
 gorica_indirect
-#
-# # or use lavaan object (with standardized = TRUE):
-# set.seed(123) # for reproducibility & possibly sensitivity check
-# gorica_indirect_fit <- restriktor::goric(fit,
-#                                      hypotheses = list(H_any = H_any),
-#                                      standardized = TRUE)
-# gorica_indirect_fit # gives the same:
-# gorica_indirect 
 
-# Here, we evaluate support for the presence of 
-# an indirect effect of a given (non-negligible) magnitude in any direction.
+# Here, we evaluate support for the presence of an indirect effect/relationship 
+# of a given (non-negligible) magnitude in any direction.
 
 
 # 2. Is there partial mediation?
@@ -82,66 +86,71 @@ H_part <- "abs(indirect) > 0.05; abs(direct) > 0.05"
 # vs its compliment
 
 set.seed(123) # for reproducibility
-restriktor::goric(est, VCOV = VCOV,
+restriktor::goric(fit, standardized = TRUE,
                   hypotheses = list(H_part = H_part))
+#restriktor::goric(est, VCOV = VCOV,
+#                  hypotheses = list(H_part = H_part))
 
 # Here, we evaluate support for the presence of 
 # partial mediation of a given magnitude in any direction.
-# In other words, we evaluate whether both the direct and the indirect effect 
-# of a non-negligible size (in any direction) are present.
+# In other words, we evaluate whether both the direct and the indirect 
+# effect/relationship of a non-negligible size (in any direction) are present.
 
 
 # 3. Is there full mediation?
+# with an approximate equality for the direct relationship
 
-#H_full <- "abs(indirect) > 0.05; abs(direct) < 0.05"
-## vs its compliment
-#
-# Probably better because of approximate equality for direct effect:
 H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
 # vs its compliment
 
 set.seed(123) # for reproducibility
-restriktor::goric(est, VCOV = VCOV,
+restriktor::goric(fit, standardized = TRUE,
                   hypotheses = list(H_full = H_full))
+#restriktor::goric(est, VCOV = VCOV,
+#                  hypotheses = list(H_full = H_full))
 
 # Here, we evaluate support for the presence of 
 # full mediation of any magnitude and direction.
-# Namely, we evaluate whether a meaningful indirect effect is present 
-# while the direct is, at most, negligible.
+# Namely, we evaluate whether a meaningful indirect relationship is present, 
+# while the direct relationship is, at most, negligible.
 
 
 # 2. & 3. Partial vs Full mediation
 
 H_part <- "abs(indirect) > 0.05; abs(direct) > 0.05"
-#H_full <- "abs(indirect) > 0.05; abs(direct) < 0.05"
 H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
 # and unconstrained as failsafe
 
 # In case you want to select the best fitting mediation type, 
-# you can compare both hypotheses with the unconstrained 
+# you can compare both hypotheses together with the unconstrained 
 # to make sure none of them is weak.
 
 set.seed(123) # for reproducibility
-restriktor::goric(est, VCOV = VCOV,
+restriktor::goric(fit, standardized = TRUE,
                   hypotheses = list(H_part = H_part, 
                                     H_full = H_full))
+#restriktor::goric(est, VCOV = VCOV,
+#                  hypotheses = list(H_part = H_part, 
+#                                    H_full = H_full))
 
 # Second, you can compare the best hypothesis against its complement.
-restriktor::goric(est, VCOV = VCOV,
+restriktor::goric(fit, standardized = TRUE,
                   hypotheses = list(H_part = H_part))
+#restriktor::goric(est, VCOV = VCOV,
+#                  hypotheses = list(H_part = H_part))
 
 
 # 4. Directional hypothesis
 
-# You can also specify any effect's direction.
+# You can also specify any effect's/relationship's direction.
 
-#H_full_pos <- "indirect > 0.05; abs(direct) < 0.05"
 H_full_pos <- "indirect > 0.05; -0.05 < direct < 0.05"
 # vs its compliment
 
 set.seed(123) # for reproducibility
-restriktor::goric(est, VCOV = VCOV,
+restriktor::goric(fit, standardized = TRUE,
                   hypotheses = list(H_full_pos = H_full_pos))
-
+#restriktor::goric(est, VCOV = VCOV,
+#                  hypotheses = list(H_full_pos = H_full_pos))
 
 
