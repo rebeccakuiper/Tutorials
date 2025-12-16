@@ -5,7 +5,7 @@
 #which then often contain orderings of (standardized) parameters. 
 #For example, one may hypothesize that a cross-lagged relationship is 
 #higher than another one; often referred to as ‘causal dominance’. 
-#Such a causal dominance hypothesis can be evaluated with the GORICA (Sukpan and Kuiper, 2024).  
+#Such a causal dominance hypothesis can be evaluated with the GORICA (Sukpan and Kuiper, 2024).
 #
 #Below you find some code to evaluate a causal dominance hypothesis using the GORICA. 
 #
@@ -31,7 +31,7 @@
 # R code to run a `wave-specific' parameters model
 # A bivariate RI-CLPM with 2 variables and 5 time points
 
-# Using the lavaan object with user-specified parameter labels
+# Using extracted standardized estimates and their covariance matrix as input
 
 library(lavaan)
 library(restriktor)
@@ -43,24 +43,31 @@ dat <- read.table("RICLPM.dat",
                     "y1", "y2", "y3", "y4", "y5")
 )
 
-# Hypothesis w.r.t. wave-specific cross-lagged effects (as specified in the model)
-H1ws.l <- "abs(b2) < abs(c2); abs(b3) < abs(c3); 
-         abs(b4) < abs(c4); abs(b5) < abs(c5)" 
+# Hypothesis w.r.t. random intercept variances
+H_RIvar <- "varRIx > 0 & varRIy > 0" 
 # versus it complement, that is, versus all other possibilities
+# default in case of one hypothesis
+#
+# Hypothesis w.r.t. wave-specific cross-lagged effects
+H_dominance.ws <- "abs(beta2) < abs(gamma2); abs(beta3) < abs(gamma3); 
+         abs(beta4) < abs(gamma4); abs(beta5) < abs(gamma5)" 
+# versus it complement, that is, versus all other possibilities 
 # default in case of one hypothesis
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-specific parameters:
-RICLPM.l <- '
+RICLPM_ws <- '
   # Create between components (random intercepts)
   RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
   RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
   
   # Create within-person centered variables
+  #
   wx1 =~ 1*x1
   wx2 =~ 1*x2
   wx3 =~ 1*x3 
   wx4 =~ 1*x4
   wx5 =~ 1*x5
+  #
   wy1 =~ 1*y1
   wy2 =~ 1*y2
   wy3 =~ 1*y3
@@ -68,14 +75,10 @@ RICLPM.l <- '
   wy5 =~ 1*y5
 
   # Estimate lagged effects between within-person centered variables
-  wx2 ~ a2*wx1 + b2*wy1 
-  wy2 ~ c2*wx1 + d2*wy1
-  wx3 ~ a3*wx2 + b3*wy2
-  wy3 ~ c3*wx2 + d3*wy2
-  wx4 ~ a4*wx3 + b4*wy3
-  wy4 ~ c4*wx3 + d4*wy3
-  wx5 ~ a5*wx4 + b5*wy4
-  wy5 ~ c5*wx4 + d5*wy4
+  wx2 + wy2 ~ wx1 + wy1
+  wx3 + wy3 ~ wx2 + wy2
+  wx4 + wy4 ~ wx3 + wy3
+  wx5 + wy5 ~ wx4 + wy4
   
 
   # Estimate covariance between within-person centered variables at first wave
@@ -105,24 +108,78 @@ RICLPM.l <- '
   wx5 ~~ wx5
   wy5 ~~ wy5
 '
-RICLPM.fit.l <- lavaan(RICLPM.l,
+RICLPM_ws.fit <- lavaan(RICLPM_ws,
                      data = dat, 
                      missing = "ML", 
                      meanstructure = T, 
                      int.ov.free = T
 )
-summary(RICLPM.fit.l, standardized = T)
+summary(RICLPM_ws.fit, standardized = T)
+
+
+
+
+# One could label the parameters, similarly to example with constrained parameters, 
+# but then using unique names.
+# Alternatively, one can extract the parameters of interest:
+#
+#
+# Extract the (unstandardized) RI variance estimates 
+# and their covariance matrix:
+est_RIvar <- coef(RICLPM_ws.fit)[c(22,23)]
+names(est_RIvar) <- c("varRIx", "varRIy")
+vcov_RIvar <- vcov(RICLPM_ws.fit)[c(22,23), c(22,23)]
+#
+#
+# Extract the standardized cross-lagged estimates 
+# and their covariance matrix:
+#
+# Standardized parameter estimates and there covariance matrix
+StdEst <- standardizedsolution(RICLPM_ws.fit, type = "std.nox")
+vcov_StdEst <- lavInspect(RICLPM_ws.fit, "vcov.std.nox")
+#
+# Check which are the indices for the parameters of interest:
+StdEst
+index_StdEst <- c(22,23, 26,27, 30,31, 34,35)
+# CHECK: StdEst[index_StdEst, ] 
+# and what the indices for the corresponding covariance matrix:
+vcov_StdEst
+index_vcov <- c(2,3, 6,7, 10,11, 14,15)
+# CHECK: vcov_StdEst[index_vcov, index_vcov]
+#
+est  <- StdEst[index_StdEst, 4] # Standardize parameter estimates
+# label estimates, and these labels should be used in the hypothesis/-es:
+names(est) <- c("beta2", "gamma2", "beta3", "gamma3", "beta4", "gamma4", "beta5", "gamma5")
+vcov <- vcov_StdEst[index_vcov, index_vcov] # Covariance matrix of standardize parameter estimates
+#
+# Note: make sure to change the numbers 
+#       such that they correspond to the correct estimates.
 
 
 # Compute GORICA values and weights
-# Make sure to use: standardized = T
+#
+# Hypothesis w.r.t. random intercept variances
+# H_RIvar <- "varRIx > 0 & varRIy > 0" 
+# versus it complement, that is, versus all other possibilities
 set.seed(123)
-GORICA.Result.ws.l <- goric(RICLPM.fit.l, 
-                          standardized = T,
-                          hypotheses = list(H1ws.l = H1ws.l)) 
+GORICA.Result.ws_est_RIvar <- goric(est_RIvar, VCOV = vcov_RIvar, 
+                             hypotheses = list(H_RIvar = H_RIvar)) 
 # Defaults: comparison = "complement" 
 #           type = "gorica"
 #
-GORICA.Result.ws.l
-#summary(GORICA.Result.ws.l)
+GORICA.Result.ws_est_RIvar
+#summary(GORICA.Result.ws_est_RIvar)
+#
+# Hypothesis w.r.t. wave-specific cross-lagged effects (as specified in the model)
+#H_dominance.ws <- "abs(beta2) < abs(gamma2); abs(beta3) < abs(gamma3); 
+#         abs(beta4) < abs(gamma4); abs(beta5) < abs(gamma5)"
+# versus it complement, that is, versus all other possibilities
+set.seed(123)
+GORICA.Result.ws_est <- goric(est, VCOV = vcov, 
+                          hypotheses = list(H_dominance.ws = H_dominance.ws)) 
+# Defaults: comparison = "complement" 
+#           type = "gorica"
+#
+GORICA.Result.ws_est
+#summary(GORICA.Result.ws_est)
 

@@ -45,24 +45,31 @@ dat <- read.table("RICLPM.dat",
 # Standardize the data
 dat <- scale(dat)
 
+# Hypothesis w.r.t. random intercept variances
+H_RIvar <- "varRIx > 0 & varRIy > 0" 
+# versus it complement, that is, versus all other possibilities
+# default in case of one hypothesis
+#
 # Hypothesis w.r.t. cross-lagged effects (as specified in the model)
-H1 <- "abs(b) < abs(c)" 
+H_dominance <- "abs(beta) < abs(gamma)" 
 # versus it complement, that is, versus all other possibilities 
-# (here: versus abs(b) > abs(c))
+# (here: versus abs(beta) > abs(gamma))
 # default in case of one hypothesis
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-independent parameters:
-RICLPM5 <- '
+RICLPM_labelled <- '
   # Create between components (random intercepts)
   RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
   RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
   
   # Create within-person centered variables
+  #
   wx1 =~ 1*x1
   wx2 =~ 1*x2
   wx3 =~ 1*x3 
   wx4 =~ 1*x4
   wx5 =~ 1*x5
+  #
   wy1 =~ 1*y1
   wy2 =~ 1*y2
   wy3 =~ 1*y3
@@ -71,14 +78,20 @@ RICLPM5 <- '
   
   # Estimate lagged effects between within-person centered variables 
   # (constrained)
-  wx2 ~ a*wx1 + b*wy1 
-  wy2 ~ c*wx1 + d*wy1
-  wx3 ~ a*wx2 + b*wy2
-  wy3 ~ c*wx2 + d*wy2
-  wx4 ~ a*wx3 + b*wy3
-  wy4 ~ c*wx3 + d*wy3
-  wx5 ~ a*wx4 + b*wy4
-  wy5 ~ c*wx4 + d*wy4
+  #
+  wx2 ~ alpha*wx1 + beta*wy1 
+  wy2 ~ gamma*wx1 + delta*wy1
+  #
+  wx3 ~ alpha*wx2 + beta*wy2
+  wy3 ~ gamma*wx2 + delta*wy2
+  #
+  wx4 ~ alpha*wx3 + beta*wy3
+  wy4 ~ gamma*wx3 + delta*wy3
+  #
+  wx5 ~ alpha*wx4 + beta*wy4
+  wy5 ~ gamma*wx4 + delta*wy4
+  #
+  # Note that lavaan constraints the unstandarized parameters.
   
   # Estimate covariances between residuals of within-person centered variables 
   # (i.e., innovations, constrained)
@@ -91,8 +104,8 @@ RICLPM5 <- '
   wx1 ~~ wy1 # Covariance
   
   # Estimate variance and covariance of random intercepts
-  RIx ~~ RIx
-  RIy ~~ RIy
+  RIx ~~ varRIx*RIx
+  RIy ~~ varRIy*RIy
   RIx ~~ RIy
   
   # Estimate (residual) variance of within-person centered variables 
@@ -112,19 +125,37 @@ RICLPM5 <- '
   x1 + x2 + x3 + x4 + x5 ~ mx*1
   y1 + y2 + y3 + y4 + y5 ~ my*1
 '
-RICLPM5.fit <- lavaan(RICLPM5, 
-                      data = dat, 
-                      missing = 'ML', 
-                      meanstructure = T, 
-                      int.ov.free = T
+RICLPM_labelled.fit <- lavaan(RICLPM_labelled, 
+                              data = dat, 
+                              missing = 'ML', 
+                              meanstructure = T, 
+                              int.ov.free = T
 ) 
-summary(RICLPM5.fit, standardized = T)
+summary(RICLPM_labelled.fit, standardized = T)
 
 
 # Compute GORICA values and weights
+#
+# Hypothesis w.r.t. random intercept variances
+# H_RIvar <- "varRIx > 0 & varRIy > 0" 
+# versus it complement, that is, versus all other possibilities
 set.seed(123)
-GORICA.Result <- goric(RICLPM5.fit, 
-                       hypotheses = list(H1)) 
+GORICA.Result_RIvar <- goric(RICLPM_labelled.fit, 
+                       hypotheses = list(H_RIvar = H_RIvar)) 
+# Defaults: comparison = "complement" 
+#           type = "gorica"
+#
+GORICA.Result_RIvar
+#summary(GORICA.Result_RIvar)
+#
+# Hypothesis w.r.t. cross-lagged effects (as specified in the model)
+# H1 <- "abs(beta) < abs(gamma)" 
+# versus it complement, that is, versus all other possibilities
+# Note that lavaan constraints the unstandarized parameters.
+set.seed(123)
+GORICA.Result <- goric(RICLPM_labelled.fit,
+                       hypotheses = list(H_dominance = H_dominance)
+                       ) 
 # Defaults: comparison = "complement" 
 #           type = "gorica"
 #
