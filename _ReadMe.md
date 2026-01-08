@@ -12,7 +12,7 @@ There are several types of files on this tutorial github page:
 	- 'Decision trees - Choice hypotheses.pdf'
 	- Parts in 'Guidelines_output_GORIC.html'
 
-- Files that help you with interpretating the GORIC output:
+- Files that help you with interpreting the GORIC output:
 	- 'Guidelines_output_GORIC.html'
 	- 'Decision tree - Interpretation.pdf' - a summary of the html above.
 	- Possibly: 'Guidelines_GORIC-benchmarks.html'
@@ -56,6 +56,7 @@ Overview of the material per statistical model:
 	- Also: 'Tutorial_GORIC_restriktor_General' (pdf or html)
 
 - SEM:
+	- 'Tutorial_GORICA_restriktor_lavaan' (pdf or html)
 	- 'Tutorial_GORIC_restriktor_SEM' (pdf or html)
 	- Files in subfolder 'GORICA in SEM'
 	- Files in subfolder 'GORICA for mediation'
@@ -68,6 +69,7 @@ Overview of the material per statistical model:
 - EffectLiteR:
 	- 'Tutorial_GORIC_restriktor_EffectLiteR' (pdf or html)
 	- Files in subfolder 'GORICA for EffectLiteR'
+
 
 * multiple data sets *
 
