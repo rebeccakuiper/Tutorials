@@ -1,3 +1,14 @@
+
+################################################################################
+
+# R code to run informative hypothesis evaluation for
+# a `wave-independent' parameters model
+# A bivariate RI-CLPM with 2 variables and 5 time points
+
+# Using the lavaan object with user-specified parameter labels
+
+################################################################################
+
 #Causal dominance hypothesis evaluation
 #When the interest lies in evaluating a theory-based, informative hypothesis, 
 #one can use the AIC-type criterion called GORICA (Altinisik et al., 2021). 
@@ -6,8 +17,14 @@
 #For example, one may hypothesize that a cross-lagged relationship is 
 #higher than another one; often referred to as ‘causal dominance’. 
 #Such a causal dominance hypothesis can be evaluated with the GORICA (Sukpan and Kuiper, 2024)
+# Before evaluating the ‘causal dominance’ hypothesis/-es, one may want to 
+# examine whether a RI-CLPM or CLPM should be used, by evaluating whether the
+# RI variances are positive or not (also using the GORICA).
 #
-#Below you find some code to evaluate a causal dominance hypothesis using the GORICA. 
+#Below, you find some code to  
+# - evaluate whether the RIs should included (nl when the RI variances are positive)
+# - evaluate the a causal dominance hypothesis 
+# both using the GORICA. 
 #
 #Additionally, html tutorials and R scripts for evaluating informative hypotheses 
 #using the GORIC(A) in R can be found on https://github.com/rebeccakuiper/Tutorials.
@@ -24,16 +41,30 @@
 #How to Evaluate Causal Dominance Hypotheses in Lagged Effects Models. 
 #Structural Equation Modeling, 31(3), 404-419. 
 #https://doi.org/10.1080/10705511.2023.2265065
+#
+#Sukpan, C., & Kuiper, R. M. (in press). 
+#Selecting the correct RI-CLPM using Chi-square-type tests and AIC-type criteria
+#Structural Equation Modeling: A Multidisciplinary Journal
 
 
-# How to evaluate causal dominance in lagged effects models
-# R code to run a `wave-independent' parameters model
+################################################################################
+
+# R code to run informative hypothesis evaluation for
+# a `wave-independent' parameters model
 # A bivariate RI-CLPM with 2 variables and 5 time points
 
 # Using the lavaan object with user-specified parameter labels
 
+
+## Packages ##
+# Load packages (if needed, install first)
+if (!require("lavaan")) install.packages("lavaan")
+if (!require("restriktor")) install.packages("restriktor")
 library(lavaan)
 library(restriktor)
+
+
+## Data ##
 
 # Load the data set into R: Traditional RI-CLPM
 dat <- read.table("RICLPM.dat", 
@@ -44,17 +75,26 @@ dat <- read.table("RICLPM.dat",
 
 # Standardize the data
 dat <- scale(dat)
+#
+# Note that lavaan constraints the unstandardized parameters.
+# Hence, the data were standardized to constrain the standardized parameters.
+
+
+## Hypotheses ##
 
 # Hypothesis w.r.t. random intercept variances
 H_RIvar <- "varRIx > 0 & varRIy > 0" 
 # versus it complement, that is, versus all other possibilities
 # default in case of one hypothesis
-#
-# Hypothesis w.r.t. cross-lagged effects (as specified in the model)
+
+# Hypothesis w.r.t. standardized cross-lagged effects (as specified in the model)
 H_dominance <- "abs(beta) < abs(gamma)" 
 # versus it complement, that is, versus all other possibilities 
 # (here: versus abs(beta) > abs(gamma))
 # default in case of one hypothesis
+
+
+## Fit model ##
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-independent parameters:
 RICLPM_labelled <- '
@@ -134,6 +174,8 @@ RICLPM_labelled.fit <- lavaan(RICLPM_labelled,
 summary(RICLPM_labelled.fit, standardized = T)
 
 
+## GORICA ##
+
 # Compute GORICA values and weights
 #
 # Hypothesis w.r.t. random intercept variances
@@ -148,10 +190,13 @@ GORICA.Result_RIvar <- goric(RICLPM_labelled.fit,
 GORICA.Result_RIvar
 #summary(GORICA.Result_RIvar)
 #
-# Hypothesis w.r.t. cross-lagged effects (as specified in the model)
+# Hypothesis w.r.t. standardized cross-lagged effects (as specified in the model)
 # H1 <- "abs(beta) < abs(gamma)" 
 # versus it complement, that is, versus all other possibilities
-# Note that lavaan constraints the unstandarized parameters.
+#
+# Note that lavaan constraints the unstandardized parameters.
+# Hence, the data were standardized to constrain the standardized parameters.
+#
 set.seed(123)
 GORICA.Result <- goric(RICLPM_labelled.fit,
                        hypotheses = list(H_dominance = H_dominance)

@@ -1,3 +1,14 @@
+
+################################################################################
+
+# R code to run informative hypothesis evaluation for
+# a `wave-independent' parameters model
+# A bivariate RI-CLPM with 2 variables and 5 time points
+
+# Using extracted standardized estimates and their covariance matrix as input
+
+################################################################################
+
 #Causal dominance hypothesis evaluation
 #When the interest lies in evaluating a theory-based, informative hypothesis, 
 #one can use the AIC-type criterion called GORICA (Altinisik et al., 2021). 
@@ -6,12 +17,17 @@
 #For example, one may hypothesize that a cross-lagged relationship is 
 #higher than another one; often referred to as ‘causal dominance’. 
 #Such a causal dominance hypothesis can be evaluated with the GORICA (Sukpan and Kuiper, 2024).
+# Before evaluating the ‘causal dominance’ hypothesis/-es, one may want to 
+# examine whether a RI-CLPM or CLPM should be used, by evaluating whether the
+# RI variances are positive or not (also using the GORICA).
 #
-#Below you find some code to evaluate a causal dominance hypothesis using the GORICA. 
+#Below, you find some code to  
+# - evaluate whether the RIs should included (nl when the RI variances are positive)
+# - evaluate the a causal dominance hypothesis 
+# both using the GORICA. 
 #
 #Additionally, html tutorials and R scripts for evaluating informative hypotheses 
 #using the GORIC(A) in R can be found on https://github.com/rebeccakuiper/Tutorials.
-#
 #
 #
 # references
@@ -25,16 +41,30 @@
 #How to Evaluate Causal Dominance Hypotheses in Lagged Effects Models. 
 #Structural Equation Modeling, 31(3), 404-419. 
 #https://doi.org/10.1080/10705511.2023.2265065
+#
+#Sukpan, C., & Kuiper, R. M. (in press). 
+#Selecting the correct RI-CLPM using Chi-square-type tests and AIC-type criteria
+#Structural Equation Modeling: A Multidisciplinary Journal
 
 
-# How to evaluate causal dominance in lagged effects models
-# R code to run a `wave-specific' parameters model
+################################################################################
+
+# R code to run informative hypothesis evaluation for
+# a `wave-specific' parameters model
 # A bivariate RI-CLPM with 2 variables and 5 time points
 
 # Using extracted standardized estimates and their covariance matrix as input
 
+
+## Packages ##
+# Load packages (if needed, install first)
+if (!require("lavaan")) install.packages("lavaan")
+if (!require("restriktor")) install.packages("restriktor")
 library(lavaan)
 library(restriktor)
+
+
+## Data ##
 
 # Load the data set into R
 dat <- read.table("RICLPM.dat", 
@@ -43,16 +73,22 @@ dat <- read.table("RICLPM.dat",
                     "y1", "y2", "y3", "y4", "y5")
 )
 
+
+## Hypotheses ##
+
 # Hypothesis w.r.t. random intercept variances
 H_RIvar <- "varRIx > 0 & varRIy > 0" 
 # versus it complement, that is, versus all other possibilities
 # default in case of one hypothesis
-#
-# Hypothesis w.r.t. wave-specific cross-lagged effects
+
+# Hypothesis w.r.t. wave-specific standardized cross-lagged effects
 H_dominance.ws <- "abs(beta2) < abs(gamma2); abs(beta3) < abs(gamma3); 
          abs(beta4) < abs(gamma4); abs(beta5) < abs(gamma5)" 
 # versus it complement, that is, versus all other possibilities 
 # default in case of one hypothesis
+
+
+## Fit model ##
 
 # Fitting a RI-CLPM; here, a bivariate RI-CLPM with wave-specific parameters:
 RICLPM_ws <- '
@@ -115,9 +151,10 @@ RICLPM_ws.fit <- lavaan(RICLPM_ws,
                      int.ov.free = T
 )
 summary(RICLPM_ws.fit, standardized = T)
+summary(RICLPM_labelled.fit, standardized = T)
 
 
-
+## GORICA ##
 
 # One could label the parameters, similarly to example with constrained parameters, 
 # but then using unique names.
@@ -135,8 +172,8 @@ vcov_RIvar <- vcov(RICLPM_ws.fit)[c(22,23), c(22,23)]
 # and their covariance matrix:
 #
 # Standardized parameter estimates and there covariance matrix
-StdEst <- standardizedsolution(RICLPM_ws.fit, type = "std.nox")
-vcov_StdEst <- lavInspect(RICLPM_ws.fit, "vcov.std.nox")
+StdEst <- standardizedsolution(RICLPM_ws.fit, type = "std.nox") # or "std.all"
+vcov_StdEst <- lavInspect(RICLPM_ws.fit, "vcov.std.nox") # or "vcov.std.all"
 #
 # Check which are the indices for the parameters of interest:
 StdEst
@@ -170,7 +207,7 @@ GORICA.Result.ws_est_RIvar <- goric(est_RIvar, VCOV = vcov_RIvar,
 GORICA.Result.ws_est_RIvar
 #summary(GORICA.Result.ws_est_RIvar)
 #
-# Hypothesis w.r.t. wave-specific cross-lagged effects (as specified in the model)
+# Hypothesis w.r.t. wave-specific standardized cross-lagged effects (as specified in the model)
 #H_dominance.ws <- "abs(beta2) < abs(gamma2); abs(beta3) < abs(gamma3); 
 #         abs(beta4) < abs(gamma4); abs(beta5) < abs(gamma5)"
 # versus it complement, that is, versus all other possibilities
