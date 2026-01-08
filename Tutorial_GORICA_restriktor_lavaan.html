@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper and Yves Rosseel" />
 
-<meta name="date" content="2025-12-08" />
 
 <title>How to evaluate theory-based hypotheses in a lavaan model using the GORICA</title>
 
@@ -1482,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a lavaan model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper and Yves Rosseel</h4>
-<h4 class="date">08 december 2025</h4>
+<h4 class="date">08 januari 2026</h4>
 
 </div>
 
@@ -1562,13 +1561,13 @@ a lavaan object, we use GORICA (i.e.,<code>type = &quot;gorica&quot;</code>) by
 default.</p>
 <pre class="r"><code># Calculate GORICA values and weights for H1_cfa and its complement.
 
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+set.seed(100)  # Needed for reproducibility &amp; sensitivity check
 results_cfa &lt;- goric(fit_cfa, hypotheses = list(H1_cfa = H1_cfa), standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_cfa)
 results_cfa</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1691,31 +1690,29 @@ fit_mgcfa &lt;- cfa(HS.model_mgcfa, data = HolzingerSwineford1939, group = &quot
     group.equal = c(&quot;intercepts&quot;, &quot;loadings&quot;), marker.int.zero = TRUE)
 
 # Calculate GORICA values and weights
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+set.seed(100)  # Needed for reproducibility &amp; sensitivity check
 results_mgcfa &lt;- goric(fit_mgcfa, hypotheses = list(H1_mgcfa = H1_mgcfa))</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
-<pre class="r"><code># Altrenative: In the case you want to extract the estimates and their
-# covariance matrix yourself and use that as input for the goric function:
-# Extract estimates and their covariance matrix
-names_param &lt;- c(&quot;mean_v_P&quot;, &quot;mean_v_GW&quot;, &quot;mean_t_P&quot;, &quot;mean_t_GW&quot;, &quot;mean_s_P&quot;, &quot;mean_s_GW&quot;)
-est &lt;- coef(fit_mgcfa)[names_param]
-VCOV &lt;- vcov(fit_mgcfa)[names_param, names_param]
-# Calculate GORICA values and weights
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
-results_mgcfa &lt;- goric(est, VCOV = VCOV, hypotheses = list(H1_mgcfa = H1_mgcfa))
-
-# GORICA values and weights summary(results_mgcfa)
-results_mgcfa</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
+<pre class="r"><code>results_mgcfa</code></pre>
+<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
 1    H1_mgcfa  -2.500    4.774  14.549           0.000            0.649           0.000
-2  complement   9.594    5.391  -8.407           1.000            0.351           1.000
+2  complement   9.594    5.390  -8.408           1.000            0.351           1.000
 
 Conclusion:
 The order-restricted hypothesis &#39;H1_mgcfa&#39; has less support (namely,  0.000 / 1.000 &lt; 1 times more support) than its complement. That is, the complement has Inf times more support than &#39;H1_mgcfa&#39;</code></pre>
+<pre class="r"><code># # Alternative: # In the case you want to extract the estimates and their
+# covariance matrix yourself and use that as input for the goric function: # #
+# Extract estimates and their covariance matrix names_param &lt;- c(&#39;mean_v_P&#39;,
+# &#39;mean_v_GW&#39;, &#39;mean_t_P&#39;, &#39;mean_t_GW&#39;, &#39;mean_s_P&#39;, &#39;mean_s_GW&#39;) est &lt;-
+# coef(fit_mgcfa)[names_param] VCOV &lt;- vcov(fit_mgcfa)[names_param,
+# names_param] # # Calculate GORICA values and weights set.seed(100) # Needed
+# for reproducibility &amp; sensitivity check results_mgcfa &lt;- goric(est, VCOV =
+# VCOV, hypotheses = list(H1_mgcfa = H1_mgcfa)) # GORICA values and weights
+# #summary(results_mgcfa) results_mgcfa</code></pre>
 <p>Conclusion: The order-restricted hypothesis ‘H1_mgcfa’ has less
 support (namely, <span class="math inline">\(&lt; 1\)</span> times more
 support) than its complement. That is, there is support for the latent
@@ -1767,13 +1764,13 @@ abs(beta_dem65_dem60) &gt; abs(beta_dem65_ind60)
 fit_sem &lt;- sem(model_sem, data = PoliticalDemocracy)
 
 # Calculate GORICA values and weights
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+set.seed(100)  # Needed for reproducibility &amp; sensitivity check
 results_sem &lt;- goric(fit_sem, hypotheses = list(H1_sem = H1_sem), standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_sem)
 results_sem</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1834,13 +1831,13 @@ abs(beta_x1) &gt; abs(beta_x2) &gt; abs(beta_x3)
 fit_msem &lt;- sem(model = model_msem, data = Demo.twolevel, cluster = &quot;cluster&quot;)
 
 # Calculate GORICA values and weights
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+set.seed(100)  # Needed for reproducibility &amp; sensitivity check
 results_msem &lt;- goric(fit_msem, hypotheses = list(H1_msem = H1_msem), standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_msem)
 results_msem</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1893,13 +1890,13 @@ abs(s_2) &gt; abs(s_1)
 fit_growth &lt;- growth(model_growth, data = Demo.growth)
 
 # Calculate GORICA values and weights
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+set.seed(100)  # Needed for reproducibility &amp; sensitivity check
 results_growth &lt;- goric(fit_growth, hypotheses = list(H1_growth = H1_growth), standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_growth)
 results_growth</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1940,8 +1937,8 @@ model_med &lt;- &quot;
              Y ~ b*M
            # indirect effect (a*b)
              indirect := a*b
-           # direct effect (c)
-             direct := c
+           # direct effect (c) # Optional
+             direct := c       # Could leave this out and use c
          &quot;
 
 # Hypotheses
@@ -1954,39 +1951,14 @@ fit_med &lt;- sem(model_med, data = Data)
 # summary(fit_med, standardized = TRUE)
 
 # Calculate GORICA values and weights: 1. based on the object
-set.seed(100)  # Needed for reproducibilty &amp; sensitivity check
+set.seed(100)  # Needed for reproducibility &amp; sensitivity check
 results_med &lt;- goric(fit_med, hypotheses = list(H_part = H_part, H_full = H_full),
     standardized = TRUE)</code></pre>
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_med)
 results_med</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
-
-Results:
-           model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
-1         H_part   8.382    3.922   -8.919           0.249            0.349           0.262                       0.303
-2         H_full   8.795    3.500  -10.590           0.376            0.532           0.604                       0.697
-3  unconstrained   8.795    5.000   -7.590           0.376            0.119           0.135                            
-
-Conclusion:
-- The order-restricted hypothesis &#39;H_full&#39; is the best in the set, as it has the highest GORIC(A) weight.
-- Since &#39;H_full&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H_full&#39; against the other order-restricted hypotheses:
-  * &#39;H_full&#39; is 2.306 times more supported than &#39;H_part&#39;.</code></pre>
-<pre class="r"><code># 2. based on extracted estimates Extract standardized estimates of the defined
-# parameters and their covariance matrix
-label_names &lt;- c(&quot;direct&quot;, &quot;indirect&quot;)
-est &lt;- as.vector(standardizedSolution(fit_med)[&quot;est.std&quot;])$est.std
-names(est) &lt;- standardizedSolution(fit_med)$label
-est &lt;- est[label_names]
-# est
-VCOV &lt;- lavInspect(fit_med, &quot;vcov.def.std.all&quot;)[label_names, label_names]  # VCOV matrix of parameters
-# GORICA
-set.seed(123)  # for reproducibility &amp; possibly sensitivity check
-results_med &lt;- goric(est, VCOV = VCOV, hypotheses = list(H_part = H_part, H_full = H_full))
-# summary(results_med)
-results_med</code></pre>
-<pre><code>restriktor (0.6-20): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
@@ -1998,6 +1970,16 @@ Conclusion:
 - The order-restricted hypothesis &#39;H_full&#39; is the best in the set, as it has the highest GORIC(A) weight.
 - Since &#39;H_full&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H_full&#39; against the other order-restricted hypotheses:
   * &#39;H_full&#39; is 2.306 times more supported than &#39;H_part&#39;.</code></pre>
+<pre class="r"><code># # Alternative: # 2. based on extracted estimates # Extract standardized
+# estimates of the defined parameters and their covariance matrix label_names
+# &lt;- c(&#39;direct&#39;, &#39;indirect&#39;) est &lt;-
+# as.vector(standardizedSolution(fit_med)[&#39;est.std&#39;])$est.std names(est) &lt;-
+# standardizedSolution(fit_med)$label est &lt;- est[label_names] #est VCOV &lt;-
+# lavInspect(fit_med, &#39;vcov.def.std.all&#39;)[label_names, label_names] # VCOV #
+# covariance matrix of parameter estimates # # GORICA set.seed(123) # for
+# reproducibility &amp; possibly sensitivity check results_med &lt;- goric(est, VCOV =
+# VCOV, hypotheses = list(H_part = H_part, H_full = H_full))
+# #summary(results_med) results_med</code></pre>
 <!-- Conclusion: -->
 <!-- - The order-restricted hypothesis ‘H_full’ is the best in the set, as it has the highest GORIC(A) weight. -->
 <!-- - Since ‘H_full’ has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. -->
