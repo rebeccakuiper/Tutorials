@@ -36,7 +36,7 @@ library(restriktor) # for the goric function
 ########################
 
 
-# Example Palmer & Gough
+###  Example Palmer & Gough ### 
 
 # Data
 PandG_data <- read.table("Data_PalmerAndGough.txt", header=TRUE)
@@ -85,8 +85,18 @@ H1 <- 'group1 > group2 > group3'
 
 
 # GORIC
-set.seed(123) # Set seed value
-goric.PandG <- goric(fit.PandG, hypotheses = list(Hnull = H0, H1 = H1))
+#
+#In the calculation of the GORIC, an iterative process is needed to calculate 
+#the penalty / complexity part. Therefore, one needs to set a seed value:
+#1. Then, you will obtain the same penalty value every time you run this code.
+#2. Then, you can change the seed value to check the sensitivity of the penalty 
+#   value.
+#   If it is sensitive, then increase number of iterations used in calculation 
+#   of the penalty (see below).
+#
+set.seed(123) # Set seed value, for reproducibility and option for sensitive check
+goric.PandG <- goric(fit.PandG, 
+                     hypotheses = list(Hnull = H0, H1 = H1))
 #goric.PandG$result[,1] <- c("H0","H1","Hu")
 goric.PandG
 #goric.PandG$result
@@ -223,7 +233,7 @@ H2 <- 'group3 > group1; group1 > group4; group4 = group5; group5 > group2'
 #   If it is sensitive, then increase number of iterations used in calculation 
 #   of the penalty (see below).
 #
-set.seed(123) # Set seed value
+set.seed(123) # Set seed value, for reproducibility and option for sensitive check
 output <- goric(lm_fit_Lucas, hypotheses = list(H1 = H1, H2 = H2))
 output
 #summary(output)
@@ -237,7 +247,7 @@ output$ratio.gw
 
 
 
-## Two methods to calculate the penalty ##
+## Extra: Two methods to calculate the penalty ##
 
 # There are two methods that can be used in calculating the penalty. 
 # The default method is often much faster and needs less input specification. 
@@ -249,3 +259,4 @@ output$ratio.gw
 
 
 ################################################################################
+

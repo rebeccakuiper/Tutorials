@@ -132,7 +132,7 @@ H03 <- 'group2 = group3'
 #   If it is sensitive, then increase number of iterations used in calculation 
 #   of the penalty.
 #
-set.seed(123) # Set seed value
+set.seed(123) # Set seed value, for reproducibility and option for sensitive check
 goric(lm_fit_Monin, 
       hypotheses = list(H00=H00, H01=H01, H02=H02, H03=H03))
 #
@@ -183,7 +183,7 @@ H2 <- 'gr2 > gr1 > gr3'
 
 # Calculate GORIC values and weights
 #
-set.seed(123) # Set seed value
+set.seed(123) # Set seed value, for reproducibility and option for sensitive check
 output_repl <- goric(lm_fit_Holubar, hypotheses = list(H1, H2))
 output_repl
 #summary(output_repl)
