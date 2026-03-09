@@ -37,6 +37,11 @@ model <- "X =~ X1 + X2 + X3 + X4 + X5
 
 # Fit the model
 fit <- lavaan::sem(model, sim_data)
+# Note:
+# By default, the standard errors for these defined parameters are computed by 
+# using the so-called Delta method. 
+# As with other models, bootstrap standard errors can be requested simply by 
+# specifying se = "bootstrap" in the fitting function.
 
 # See the results
 summary(fit, std = T)
@@ -169,27 +174,40 @@ gorica_full
 
 H_part <- "abs(indirect) > 0.05; abs(direct) > 0.05"
 H_full <- "abs(indirect) > 0.05; -0.05 < direct < 0.05"
-# and unconstrained as failsafe
+# and unconstrained as failsafe or use specify the 'complement' hypothesis.
 #
 # Note:
 # Here the goal is to compare partial with full mediation.
-# If you want to (better) rule out no mediation, you can include a 
-# no-mediation hypothesis as well:
-# H_no <- "-0.05 < indirect < 0.05"
-
 # In case you want to select the best fitting mediation type, 
 # you can compare both hypotheses together with the unconstrained 
 # to make sure none of them is weak.
+# Since we can also specify the other possibilities,
+# or when you want to (better) rule out no mediation, 
+# you can include a no-mediation hypothesis as well:
+H_no <- "-0.05 < indirect < 0.05"
+# If you include thus, then all options are included in the hypotheses set,
+# and no failsafe is needed anymore.
 
+## If unconstrained:
+#set.seed(123) # for reproducibility
+#gorica_partialVSfull <- restriktor::goric(fit, 
+#                                          standardized = TRUE,
+#                                          hypotheses = list(H_part = H_part, 
+#                                                            H_full = H_full))
+#gorica_partialVSfull
+#
+# If specifying all possibilities:
 set.seed(123) # for reproducibility
 gorica_partialVSfull <- restriktor::goric(fit, 
                                           standardized = TRUE,
                                           hypotheses = list(H_part = H_part, 
-                                                            H_full = H_full))
+                                                            H_full = H_full,
+                                                            H_no = H_no),
+                                          comparison = 'none')
 gorica_partialVSfull
 
-# Insight relative support for all pairs of hypotheses
-gorica_partialVSfull$ratio.gw
+## Insight relative support for all pairs of hypotheses
+#gorica_partialVSfull$ratio.gw
 
 
 # Second, you can compare the best hypothesis against its complement.
