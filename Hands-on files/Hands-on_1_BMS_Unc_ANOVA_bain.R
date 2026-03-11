@@ -110,11 +110,3 @@ output <- bain(lm_fit_Lucas, Hypotheses)
 output
 #summary(output)
 
-#Alternative using estimates (x) and covariance matrix (Sigma)
-#(then also sample size (n) is needed):
-#set.seed(123) # Set seed value
-#bain(x = coef(lm_fit_Lucas), Sigma = vcov(lm_fit_Lucas), 
-#     n = nobs(lm_fit_Lucas), hypothesis = Hypotheses)
-
-
-################################################################################
