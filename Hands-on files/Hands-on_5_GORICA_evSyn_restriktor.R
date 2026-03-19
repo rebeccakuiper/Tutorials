@@ -70,13 +70,13 @@ Hypo_studies <- list(H0 = H0, Hpos = Hpos, Hneg = Hneg)
 safeguard <- "none"
 
 
-# GORICA evidence synthesis #
+# GORICA evidence synthesis -- added #
 # Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
 # type = "added" (default) or type = "equal"
 # In this case, we will use the default added-evidence approach.
 evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
                           hypotheses = Hypo_studies,
-                          #type = "added", # Default
+                          #type_ev = "added", # Default
                           comparison = safeguard)
 
 evSyn_trust
@@ -90,12 +90,33 @@ safeguard <- "complement"
 #
 evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
                      hypotheses = Hypo_studies,
-                     #type = "added", # Default
+                     #type_ev = "added", # Default
                      comparison = safeguard)
 #
 evSyn_trust
 #summary(evSyn_trust)
 plot(evSyn_trust)
+
+
+###
+
+
+# GORICA evidence synthesis -- equal #
+# Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
+# type = "added" (default) or type = "equal"
+# In this case, we will use the equal-evidence approach.
+Hypo_studies <- list(Hpos = Hpos)
+safeguard <- "complement"
+#
+evSyn_trust_eq <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
+                     hypotheses = Hypo_studies,
+                     type_ev = "equal", 
+                     comparison = safeguard)
+#
+evSyn_trust_eq
+#summary(evSyn_trust_eq)
+plot(evSyn_trust_eq)
+
 
 ###################################################################################
 
