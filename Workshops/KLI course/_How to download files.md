@@ -6,5 +6,5 @@ How to download the files:
 2. Download zip (last option in list).
 3. Unzip it on your machine (that folder is now your working directory).
 4. The unzipped main folder ('Tutorials') contains tutorial and example files.
-   In this folder, you find the subfolder 'KLI course', 
-   which contains the presentations and lab material.
+   In this folder, you find the subfolder 'Workshops' containing a subfolder for this workshop, 
+   which contains the presentations and lab material for this workshop.
