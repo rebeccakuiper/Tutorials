@@ -116,11 +116,11 @@ goric_sesam$b.unrestr
 # Use 'pop_es' to specify own null population(s).	
 #  
 # Benchmarks (based on GORICA)
-iter <- 2000 # 500
+iter <- 100 # faster to run, in practice perhaps use: # 2000 # 500
 benchmarks_sesam <- benchmark(goric_sesam, 
                               ncpus = 8, iter = iter)
 benchmarks_sesam 
-plot(benchmarks_sesam, x_lim = c(0, 15))
+#plot(benchmarks_sesam, x_lim = c(0, 15))
 plot(benchmarks_sesam, log_scale = T)
 # Our finding is very extreme under the null:
 # Namely, our sample value is higher than the 95th percentile under the null. 
@@ -128,7 +128,7 @@ plot(benchmarks_sesam, log_scale = T)
 #
 # Inspection of the weights of the preferred hypothesis:
 benchmarks_sesam_means$benchmarks_goric_weights
-plot(benchmarks_sesam, output_type = "gw")
+#plot(benchmarks_sesam, output_type = "gw")
 plot(benchmarks_sesam, output_type = "gw", log_scale = T)
 #
 #plot(benchmarks_sesam, output_type = "rlw", log_scale = T)
