@@ -120,3 +120,190 @@ plot(evSyn_trust_eq)
 
 ###################################################################################
 
+### Berkey example (using data.frame) ###
+
+# Data #
+#if (!require("metafor")) install.packages("metafor")
+library(metafor)
+dat <- dat.berkey1998
+#
+# print docs in the help-tab to view explanations for the data set
+#?dat.berkey1998
+
+
+# (study-specific) hypotheses #
+#
+#Parameter names to be used in the hypotheses:
+#- If one outcome: 'theta'.
+#- Labels used in specified outcome column/variable:
+#Here, 'AL' and 'PD', levels of the variable 'outcome'. 
+#
+# All studies have the same hypotheses in the set:
+H_absComp_Gr <- "abs(AL) > abs(PD)"
+# Complement of H_absComp_Gr, included by default.
+#
+# Here, the hypotheses are the same for all studies,
+# then, only specify one list:
+Hypo_studies <- list(H_absComp = H_absComp_Gr)
+
+
+# Study names #
+# Instead of using numbers for the studies, one can also attach names to them.
+# Here, the author names will be used, listed in the variable author in the data.frame:
+study_names <- dat[dat$outcome=="AL",]$author
+
+
+# GORICA evidence synthesis #
+#
+#if (!require("restriktor")) install.packages("restriktor")
+#library(restriktor)
+results_Set3_Gr <- evSyn(object = dat, 
+                         outcome_col = "outcome", # column with 'AL' & 'PB'
+                         hypotheses = Hypo_studies,
+                         #type = "added", # Default
+                         #comparison = "complement", # Default
+                         study_names = study_names)
+#
+#results_Set3_Gr
+summary(results_Set3_Gr)
+plot(results_Set3_Gr)
+
+# # Save plot
+# #if (!require("ggplot2")) install.packages("ggplot2")
+# library(ggplot2)
+# evSyn_plot_Berkey_Set3_Gr <- plot(results_Set3_Gr)
+# ggsave(
+#   filename = "EvSyn_Berkey_Set3_Gr.png",  # file name
+#   plot = evSyn_plot_Berkey_Set3_Gr,             # the plot object
+#   width = 8,                                    # width in inches
+#   height = 6,                                   # height in inches
+#   dpi = 300                                     # resolution
+# )
+
+
+########## evSyn options ########## 
+
+
+# (re-)order studies #
+#
+# It can be helpful to order the studies based on study-specific support for the overall best hypothesis 
+# (order_studies = "ascending" or "descending"). 
+# This way, it is more clear which studies do not find support for the overall best hypothesis, 
+# and one can look at study characteristics to find a possible alternative explanation. 
+#
+# This of course does not affect the overall evidence/support.
+
+#if (!require("restriktor")) install.packages("restriktor")
+#library(restriktor)
+results_Set3_Gr_asc <- evSyn(object = dat, 
+                         outcome_col = "outcome", # column with 'AL' & 'PB'
+                         hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
+                         #type = "added", # Default
+                         #comparison = "complement", # Default
+                         study_names = study_names,
+                         order_studies = "ascending")
+#
+#results_Set3_Gr_asc
+summary(results_Set3_Gr_asc)
+plot(results_Set3_Gr_asc)
+
+# # Save plot
+# #if (!require("ggplot2")) install.packages("ggplot2")
+# library(ggplot2)
+# evSyn_plot_Berkey_Set3_Gr_asc <- plot(results_Set3_Gr_asc)
+# ggsave(
+#   filename = "EvSyn_Berkey_Set3_Gr_asc.png",  # file name
+#   plot = evSyn_plot_Berkey_Set3_Gr_asc,             # the plot object
+#   width = 8,                                    # width in inches
+#   height = 6,                                   # height in inches
+#   dpi = 300                                     # resolution
+# )
+
+
+#If of interest, one can also specify their own order perhaps based on one of the study characteristics:
+order_ascYear <- order(dat[dat$outcome=="AL",]$year)
+results_Set3_Gr_ascYear <- evSyn(object = dat, outcome_col = "outcome",
+                                 hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
+                                 study_names = study_names,
+                                 order_studies = order_ascYear)
+results_Set3_Gr_ascYear
+plot(results_Set3_Gr_ascYear)
+
+# # Save plot
+# #if (!require("ggplot2")) install.packages("ggplot2")
+# library(ggplot2)
+# evSyn_plot_Berkey_Set3_Gr_ascYear <- plot(results_Set3_Gr_ascYear)
+# ggsave(
+#   filename = "EvSyn_Berkey_Set3_Gr_ascYear.png",  # file name
+#   plot = evSyn_plot_Berkey_Set3_Gr_ascYear,     # the plot object
+#   width = 8,                                    # width in inches
+#   height = 6,                                   # height in inches
+#   dpi = 300                                     # resolution
+# )
+
+
+
+# Leave 1 study out #
+#
+#The function `leave1studyout` can be used to obtain insight into possible outlier or influential studies; 
+#or stated otherwise: to do a sensitivity analyses on the GORICA Evidence Synthesis.
+
+leave1out_Set3_Gr <- leave1studyout(results_Set3_Gr)
+leave1out_Set3_Gr 
+#leave1out_Set3_Gr$OverallGoricaWeights
+
+#In this example, the results are sensitive to the choice of set of studies.
+#The conclusion even changes when study nr. 2 called 'Lindhe et al.' is left out. 
+#When one would leave that study out, the complement of H_absComp_Gr is the overall best hypothesis (or better: central theory), 
+#receiving almost full support.
+#When one of the other studies would be left out, 
+#then the overall GORICA weight for H_absComp_Gr varies between 0,7 and 1.
+
+
+#In case you want to perform GORICA evidence synthesis for the set of studies leaving the second one out:
+dat_subset <- dat[dat$trial!=2,]
+study_names_subset <- study_names[-1]
+results_Set3_Gr_asc_subset <- evSyn(object = dat_subset, outcome_col = "outcome",
+                                 hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
+                                 order_studies = "ascending",
+                                 study_names = study_names_subset)
+results_Set3_Gr_asc_subset
+plot(results_Set3_Gr_asc_subset)
+
+
+####
+
+### WORK IN PROGRESS ###
+
+# Publication bias #
+
+# Weight overall preferred hypothesis
+n <- dat[dat$outcome=="AL",]$ni 
+ICweights <- results_Set3_Gr$GORICA_weight_m[,1]
+#
+plot(n, ICweights)
+
+# Ratio of weights overall preferred hypothesis
+n <- dat[dat$outcome=="AL",]$ni 
+ratioICweights <- log(results_Set3_Gr$GORICA_weight_m[,1] / results_Set3_Gr$GORICA_weight_m[,2])
+#
+plot(n, ratioICweights)
+abline(a = 1, b = 0, col = "gray")
+#
+plot(n, log(ratioICweights))
+abline(a = 0, b = 0, col = "gray")
+
+
+# Measures of variation #
+
+# Weight overall preferred hypothesis
+ICweights <- results_Set3_Gr$GORICA_weight_m[,1]
+quantile(ICweights, probs = c(0, .25, .50, .75, 1.00))
+
+# Ratio of weights overall preferred hypothesis
+ratioICweights <- results_Set3_Gr$GORICA_weight_m[,1] / results_Set3_Gr$GORICA_weight_m[,2]
+quantile(ratioICweights, probs = c(0, .25, .50, .75, 1.00))
+
+
+###################################################################################
+
