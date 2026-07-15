@@ -17,6 +17,10 @@ library(restriktor) # for evSyn and also goric function
 #library(devtools) 
 #install_github("LeonardV/restriktor")
 #library(restriktor) # for evSyn and also goric function
+#
+# Or possibly:
+#remotes::install_github("LeonardV/restriktor", ref = "Branch_Rebec")
+
 
 # print docs in the help-tab to view arguments and explanations for the function
 #?evSyn
@@ -26,6 +30,7 @@ library(restriktor) # for evSyn and also goric function
 
 
 #### 4 trust studies described in Kuiper et al (2013): H0, Hpos, Hneg ####
+
 #In this example, we will use the data and hypotheses used in Kuiper et al. (2013). 
 #This article describes four diverse trust studies where each have a theory about the sign of the parameter of interest ($H_0$, $H_{pos}$ and $H_{neg}$). 
 #
@@ -68,6 +73,7 @@ Hypo_studies <- list(H0 = H0, Hpos = Hpos, Hneg = Hneg)
 # In this example, the whole space of theories is covered by the three hypotheses. 
 # Therefore, we do not need a safeguard-hypothesis here.
 safeguard <- "none"
+# Notably, if not specified, the unconstrained would be used.
 
 
 # GORICA evidence synthesis -- added #
@@ -86,39 +92,53 @@ plot(evSyn_trust)
 
 # Alternatively, you could do (which is what I would do):
 Hypo_studies <- list(Hpos = Hpos)
-safeguard <- "complement"
+# versus its complement: 
+# comparison = "complement" # which is the default option in case of one hypothesis of interest
 #
 evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
-                     hypotheses = Hypo_studies,
+                     hypotheses = Hypo_studies
                      #type_ev = "added", # Default
-                     comparison = safeguard)
+                     #comparison = "complement" # Default
+                     )
 #
 evSyn_trust
 #summary(evSyn_trust)
 plot(evSyn_trust)
 
 
+#Conclusion:
+#Support for Hpos is highest: favor Hpos over H0 and Hneg, resp., its compleemnt (Hneg).
+#Hence, previous experience has a positive effect on trust; which receives full support.
+
+
 ###
 
 
-# GORICA evidence synthesis -- equal #
+# GORICA evidence synthesis -- equal-evidence approach #
+
 # Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
-# type = "added" (default) or type = "equal"
-# In this case, we will use the equal-evidence approach.
+# type_ev = "added" (default) or type_ev = "equal"
+# Next, we will use the equal-evidence approach:
+
 Hypo_studies <- list(Hpos = Hpos)
-safeguard <- "complement"
+#versus its complement, which is the default option in case of one hypothesis of interest
 #
 evSyn_trust_eq <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
                      hypotheses = Hypo_studies,
-                     type_ev = "equal", 
-                     comparison = safeguard)
+                     type_ev = "equal")
 #
 evSyn_trust_eq
 #summary(evSyn_trust_eq)
 plot(evSyn_trust_eq)
 
 
+#Conclusion:
+#Support for Hpos is highest; thus, favor Hpos over its complement (Hneg).
+#Hence, previous experience has a positive effect on trust, which receives full support.
+
+
 ###################################################################################
+
 
 ### Berkey example (using data.frame) ###
 
@@ -129,6 +149,7 @@ dat <- dat.berkey1998
 #
 # print docs in the help-tab to view explanations for the data set
 #?dat.berkey1998
+# and/or check out: https://www.metafor-project.org/doku.php/analyses:berkey1998
 
 
 # (study-specific) hypotheses #
@@ -179,6 +200,13 @@ plot(results_Set3_Gr)
 #   height = 6,                                   # height in inches
 #   dpi = 300                                     # resolution
 # )
+
+
+#Conclusion:
+#Support for H_absComp is highest: favor H_absComp over its complement.
+#On study level: mixed support; combined: preference for H_absComp.
+#H_absComp is $0.744 / 0.256 \approx 2.9$ times more likely than its complement.
+#Preference for central theory 'the difference in symptom reduction between surgery and non-surgery is larger for AL than for PB'.
 
 
 ########## evSyn options ########## 
@@ -272,6 +300,8 @@ plot(results_Set3_Gr_asc_subset)
 
 
 ####
+
+###################################################################################
 
 ### WORK IN PROGRESS ###
 

@@ -1,11 +1,14 @@
-if (!require("psych")) install.packages("psych") # install this package first (once)
-library(psych) # for the function describeBy
+# Install and load packages
 
-if (!require("bain")) install.packages("bain") # install this package first (once)
-library(bain) # for bain function
+# In case one want to use Bayes factors:
+#if (!require("bain")) install.packages("bain") # install this package first (once)
+#library(bain) # for bain function
 
 if (!require("restriktor")) install.packages("restriktor") # install this package first (once)
 library(restriktor) # for goric function
+
+if (!require("psych")) install.packages("psych") # install this package first (once)
+library(psych) # for the function describeBy
 
 ###################################################################################
 
@@ -49,7 +52,8 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU)
 names(coef(lm_fit_JU))
 # Specify restrictions using those names
 
-# Hypotheses Set
+
+# Hypotheses Set (specify before seeing the data)
 
 #On the JU data set, we could do an exploratory analysis, 
 # which means that we are going to use all combinations with equalities (and no restrictions).
@@ -59,8 +63,9 @@ names(coef(lm_fit_JU))
 #I just assume, the following two exist in the literature 
 # (you can of course specify different ones or even only one):
 H1_JU <- 'grh > gph > grl > gpl'   # hypothesis could also be specified as pairwise restrictions
-H2_JU <- 'grh > gph == grl > gpl'  
+H2_JU <- 'grh > gph = grl > gpl'  
 # Note, these are used as competing hypotheses. 
+# Evaluate these and the unconstrained as failsafe (default, in case of multiple hypotheses)
 #
 # It is possible to have two theories which are not competing.
 # Say, one addressing comparison between men and women and another one addressing different education levels.
@@ -75,16 +80,23 @@ H2_JU <- 'grh > gph == grl > gpl'
 #2. Then, you can change the seed value to check the sensitivity of the penalty value.
 #   If it is sensitive, then increase number of iterations used in calculation of the penalty.
 set.seed(123) # Set seed value
-goric_JU <- goric(lm_fit_JU, hypotheses = list(H1_JU, H2_JU))
+goric_JU <- goric(lm_fit_JU, 
+                  hypotheses = list(H1_JU, H2_JU))
 goric_JU
-summary(goric_JU)
+goric_JU$ratio.gw
+#summary(goric_JU)
 # Both H1 and H2 are not weak hypotheses, since their support is stronger than for the unconstrained.
 # Since at least one of the competing hypotheses is not weak, one can compare their support.
 #
 # It can be seen that H1_JU receives the most support. 
-# But H2 does obtain some support as well.
-# Now, it is up to you as a researcher to decide whether you will only evaluate H1_JU or both H1_JU and H2_JU in the replication study.
-
+# But H2_JU does obtain some support as well.
+# Now, it is up to you as a researcher to decide whether 
+# you will only evaluate H1_JU or both H1_JU and H2_JU 
+# in the replication study (see next exercise).
+#
+# Note that H2_JU is a subset of H1_JU.
+# Therefore, I would only include it when of real interest.
+# Possibly, I would specify an about-equality instead of the equality.
 
 
 ### Replication of the JU study: C
@@ -101,24 +113,28 @@ C$g <- factor(C$g) # this command tells R that gr is a factor and not a continuo
 #print(descrip)
 
 # lm object (of ANOVA model)
-lm_fit_C <-  lm(z ~ g-1, data = C)
+lm_fit_C <- lm(z ~ g-1, data = C)
 
 # Check names used in model
 names(coef(lm_fit_C))
 # Specify restrictions using those names
 
-# Set hypotheses
+
+# Set hypotheses  (specify before seeing the data)
 # Based on the results of JU, we perhaps only want to inspect H1_JU.
 # Note that if you evaluated only equalities in the first set,
 # you can use the sample means to come to order-restricted hypotheses.
 # Then, use those here (so, then you update your hypotheses).
 H1_C <- H1_JU
+# versus it complement (default, in case of one hypothesis)
 
 # Calculate GORIC values and weights
 set.seed(123) # Set seed value
-goric_c <- goric(lm_fit_C, hypotheses = list(H1_C), comparison = 'complement')
+goric_c <- goric(lm_fit_C, 
+                 hypotheses = list(H1_C = H1_C))
 goric_c
-summary(goric_c)
-# The order-restricted hypothesis ‘H1_C’ has 25.826 times more support than its complement.
+#summary(goric_c)
+# The order-restricted hypothesis ‘H1_C’ has 25.83 times more support than its complement.
+# This replication study thus finds support for 'H1'.
 
 ###################################################################################
