@@ -20,7 +20,11 @@ if (!require("psych")) install.packages("psych")
 library(psych) # for descriptive stats
 
 ###
-  
+
+# Below, you find some possible answers to the lab material.
+# Notably, the lab html also contains code and conclusions.
+
+###
 
 # Exercise 1: Aggregating evidence from two studies
   
@@ -339,7 +343,7 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
 
   # Conclusion:
   #
-  # Support for Hpos is highest: thus favor Hpos over H0 and Hneg.
+  # Support for Hpos is highest: thus, favor Hpos over H0 and Hneg.
   # More precise, because of the added-evidence approach, 
   # it is most likely that Hpos is correct in all studies. 
   #
@@ -356,4 +360,6 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   # on https://github.com/rebeccakuiper/Tutorials.
   #
   # There, you can find code and conclusions for multiple possible sets of hypotheses.
+  # Notably, the lab html also contains code and conclusions (for one set of hypotheses).
+  
   

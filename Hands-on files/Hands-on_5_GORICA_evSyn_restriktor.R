@@ -59,7 +59,7 @@ CovMx_studies <- list(vcov_est_1, vcov_est_2, vcov_est_3, vcov_est_4)
 
 ## Evidence synthesis using the GORICA ##
 
-# Set hypotheses #
+# Set of hypotheses #
 
 # Now, we need to specify the hypotheses for all studies. 
 # In this example, all studies have the same set of hypotheses (consisting of three hypotheses)
@@ -76,7 +76,8 @@ safeguard <- "none"
 # Notably, if not specified, the unconstrained would be used.
 
 
-# GORICA evidence synthesis -- added #
+# GORICA evidence synthesis (the added-evidence approach) #
+
 # Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
 # type = "added" (default) or type = "equal"
 # In this case, we will use the default added-evidence approach.
@@ -85,8 +86,13 @@ evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies,
                           #type_ev = "added", # Default
                           comparison = safeguard)
 
+# Show output
 evSyn_trust
+# Final ratios of GORICA weights:
+#round(evSyn_trust$Final_ratio_GORICA_weights, 2)
+# Study-specific and final/overall output:
 #summary(evSyn_trust)
+# evSyn plot:
 plot(evSyn_trust)
 
 
@@ -101,34 +107,46 @@ evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies,
                      #comparison = "complement" # Default
                      )
 #
+# Show output
 evSyn_trust
+# Final ratios of GORICA weights:
+#round(evSyn_trust$Final_ratio_GORICA_weights, 2)
+# Study-specific and final/overall output:
 #summary(evSyn_trust)
+# evSyn plot:
 plot(evSyn_trust)
 
 
 #Conclusion:
-#Support for Hpos is highest: favor Hpos over H0 and Hneg, resp., its compleemnt (Hneg).
+#Support for Hpos is highest: favor Hpos over H0 and Hneg, resp., its complement (Hneg).
 #Hence, previous experience has a positive effect on trust; which receives full support.
 
 
 ###
 
 
-# GORICA evidence synthesis -- equal-evidence approach #
+# GORICA evidence synthesis (the equal-evidence approach) #
 
 # Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
 # type_ev = "added" (default) or type_ev = "equal"
 # Next, we will use the equal-evidence approach:
 
+# Set of hypotheses #
 Hypo_studies <- list(Hpos = Hpos)
 #versus its complement, which is the default option in case of one hypothesis of interest
-#
+
+# GORICA evidence synthesis -- the equal-evidence approach #
 evSyn_trust_eq <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
                      hypotheses = Hypo_studies,
                      type_ev = "equal")
-#
+
+# Show output
 evSyn_trust_eq
+# Final ratios of GORICA weights:
+#round(evSyn_trust_eq$Final_ratio_GORICA_weights, 2)
+# Study-specific and final/overall output:
 #summary(evSyn_trust_eq)
+# evSyn plot:
 plot(evSyn_trust_eq)
 
 
@@ -165,7 +183,7 @@ H_absComp_Gr <- "abs(AL) > abs(PD)"
 #
 # Here, the hypotheses are the same for all studies,
 # then, only specify one list:
-Hypo_studies <- list(H_absComp = H_absComp_Gr)
+Hypo_studies <- list(H_absComp = H_absComp_Gr) # here, you can (re-)label hypotheses
 
 
 # Study names #
@@ -174,7 +192,7 @@ Hypo_studies <- list(H_absComp = H_absComp_Gr)
 study_names <- dat[dat$outcome=="AL",]$author
 
 
-# GORICA evidence synthesis #
+# GORICA evidence synthesis (the added-evidence approach) #
 #
 #if (!require("restriktor")) install.packages("restriktor")
 #library(restriktor)
@@ -185,8 +203,13 @@ results_Set3_Gr <- evSyn(object = dat,
                          #comparison = "complement", # Default
                          study_names = study_names)
 #
+# Show output
 #results_Set3_Gr
+# Final ratios of GORICA weights:
+#round(results_Set3_Gr$Final_ratio_GORICA_weights, 2)
+# Study-specific and final/overall output:
 summary(results_Set3_Gr)
+# evSyn plot:
 plot(results_Set3_Gr)
 
 # # Save plot
