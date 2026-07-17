@@ -16,7 +16,8 @@ library(restriktor) # for the goric function
 # If you want to use restriktor from github:
 #if (!require("devtools")) install.packages("devtools")
 #library(devtools) 
-#install_github("LeonardV/restriktor")
+##install_github("LeonardV/restriktor") # , force = TRUE)
+#pak::pak("LeonardV/restriktor")
 #library(restriktor) # for goric function
 
 ################################################################################

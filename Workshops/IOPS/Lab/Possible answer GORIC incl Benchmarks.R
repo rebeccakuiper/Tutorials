@@ -115,26 +115,60 @@ goric_sesam$b.unrestr
 #all means are equal is used. 
 # Use 'pop_es' to specify own null population(s).	
 #  
-# Benchmarks (based on GORICA):
-benchmarks_sesam <- benchmark(goric_sesam, ncpus = 8)
+# Benchmarks (based on GORICA)
+iter <- 100 # faster to run, in practice perhaps use: # 2000 # 500
+benchmarks_sesam <- benchmark(goric_sesam, 
+                              ncpus = 8, iter = iter)
 benchmarks_sesam 
-plot(benchmarks_sesam, x_lim = c(0, 15))
+#plot(benchmarks_sesam, x_lim = c(0, 15))
 plot(benchmarks_sesam, log_scale = T)
 # Our finding is very extreme under the null:
 # Namely, our sample value is higher than the 95th percentile under the null. 
 # Hence, there is tremendous support for 'H1_sesam' (cf. 'Guidelines_GORIC-benchmarks').
+#
+# Inspection of the weights of the preferred hypothesis:
+benchmarks_sesam_means$benchmarks_goric_weights
+#plot(benchmarks_sesam, output_type = "gw")
+plot(benchmarks_sesam, output_type = "gw", log_scale = T)
+#
+#plot(benchmarks_sesam, output_type = "rlw", log_scale = T)
 
 
 # Extra for those who noticed and want to know :-) #
-# Note that the difference in sample value is due to using gorica instead of goric:
+# Note that the difference in sample value is due to using est&VCOV (gorica) instead of lm object (goric or gorica):
+# Technical info:
+# This has to do with using a different scaling of the covariance matrix:
+# namely, dividing by N (lm object) vs N-k (using vcov() function).
+#
 set.seed(123) # Set seed value
 gorica_sesam <- goric(lm_fit_sesam, 
                       hypotheses = list(H1_sesam = H1_sesam),
                       type = "gorica")
+#
+set.seed(123) # Set seed value
+est <- coef(lm_fit_sesam)
+VCOV <- vcov(lm_fit_sesam)
+gorica_sesam_est <- goric(est, VCOV = VCOV,
+                          hypotheses = list(H1_sesam = H1_sesam),
+                          type = "gorica")
+gorica_sesam_est
 gorica_sesam
-# Technical info:
-# This has to do with using a different scaling of the covariance matrix:
-# namely, dividing by N vs N-1.
+#
+# This way it does resemble the output when using the lm object:
+set.seed(123) # Set seed value
+est <- coef(lm_fit_sesam)
+N_min_k <- lm_fit_sesam$df.residual
+N <- N_min_k + lm_fit_sesam$rank
+VCOV <- vcov(lm_fit_sesam)*N_min_k/N
+gorica_sesam_est_Nmink <- goric(est, VCOV = VCOV,
+                                hypotheses = list(H1_sesam = H1_sesam),
+                                type = "gorica")
+#
+goric_sesam
+gorica_sesam
+gorica_sesam_est_Nmink
+gorica_sesam_est
+
 
 
 ###################################################################################
