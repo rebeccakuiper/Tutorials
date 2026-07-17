@@ -7,17 +7,18 @@
 
 ## First, install the packages, if you have not done this already:
 if (!require("psych")) install.packages("psych")
-#if (!require("restriktor")) install.packages("restriktor")
+if (!require("restriktor")) install.packages("restriktor")
 
 ## Then, load the packages:
 library(psych) # for the function describeBy
-#library(restriktor) # for the goric function
+library(restriktor) # for the goric function
 
-# If you want to use restriktor from github:
-if (!require("devtools")) install.packages("devtools")
-library(devtools) 
-install_github("LeonardV/restriktor")
-library(restriktor) # for goric function
+# If you want to use restriktor from github: 
+#if (!require("pak")) install.packages("pak") 
+#library(pak) 
+#pak::pak("LeonardV/restriktor") 
+##pak::pkg_install("LeonardV/restriktor") 
+#library(restriktor) # for goric function 
 
 
 ################################################################################

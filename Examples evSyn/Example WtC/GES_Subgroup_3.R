@@ -1,9 +1,7 @@
 ###
 # If you want to use restriktor from github:
-#if (!require("devtools")) install.packages("devtools")
-#library(devtools) 
-#install_github("LeonardV/restriktor")
-#install_github("LeonardV/restriktor", force = TRUE)
+#remotes::install_github("LeonardV/restriktor") 
+#remotes::install_github("LeonardV/restriktor", force = TRUE)
 #
 # If you want to use restriktor from CRAN:
 if (!require("restriktor")) install.packages("restriktor")

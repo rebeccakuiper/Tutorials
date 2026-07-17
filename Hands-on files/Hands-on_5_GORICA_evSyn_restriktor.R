@@ -12,15 +12,18 @@ if (!require("restriktor")) install.packages("restriktor")
 ## Then, load the package:
 library(restriktor) # for evSyn and also goric function
 
-# If you want to use restriktor from github:
-#if (!require("devtools")) install.packages("devtools")
-#library(devtools) 
-#install_github("LeonardV/restriktor")
-#library(restriktor) # for evSyn and also goric function
+# If you want to use restriktor from github: 
+#if (!require("pak")) install.packages("pak") 
+#library(pak) 
+#pak::pak("LeonardV/restriktor") 
+##pak::pkg_install("LeonardV/restriktor") 
+#library(restriktor) # for goric and evSyn function 
 #
-# Or possibly:
-#remotes::install_github("LeonardV/restriktor", ref = "Branch_Rebec")
-
+# Or possibly (for extra functionalities): 
+#remotes::install_github("LeonardV/restriktor", 
+#                        ref = "Branch_Rebec", 
+#                        force = TRUE) 
+#library(restriktor) # for goric and evSyn function 
 
 # print docs in the help-tab to view arguments and explanations for the function
 #?evSyn

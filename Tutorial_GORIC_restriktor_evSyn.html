@@ -1481,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Tutorial for GORIC(A) evidence
 aggregation</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">16 juli 2026</h4>
+<h4 class="date">17 juli 2026</h4>
 
 </div>
 
@@ -1608,12 +1608,12 @@ function in the help-tab.</p>
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
 ## Then, load the packages:
-library(restriktor)  # for the goric function
+library(restriktor)  # for goric and evSyn function
 
-# If you want to use restriktor from github: if (!require(&#39;devtools&#39;))
-# install.packages(&#39;devtools&#39;) library(devtools)
-# install_github(&#39;LeonardV/restriktor&#39;) library(restriktor) # for goric
-# function
+# If you want to use restriktor from github: | if (!require(&#39;pak&#39;))
+# install.packages(&#39;pak&#39;) | library(pak) | pak::pak(&#39;LeonardV/restriktor&#39;) |
+# #pak::pkg_install(&#39;LeonardV/restriktor&#39;) | library(restriktor) # for goric
+# and evsyn function
 
 # print docs in the help-tab to view arguments and explanations for the
 # function ?evSyn</code></pre>
@@ -1747,12 +1747,10 @@ load the <code>evSyn</code> function. If needed, it is possible to view
 the description of the data set and function with the <code>?</code>
 operator or the <code>help</code> command.</p>
 <pre class="r"><code># To install the packages in R: if (!require(&#39;restriktor&#39;))
-# install.packages(&#39;restriktor&#39;)
-
-# To install restriktor from github: if (!require(&#39;devtools&#39;))
-# install.packages(&#39;devtools&#39;) library(devtools)
-# install_github(&#39;LeonardV/restriktor&#39;)
-library(restriktor)
+# install.packages(&#39;restriktor&#39;) If you want to use restriktor from github: |
+# if (!require(&#39;pak&#39;)) install.packages(&#39;pak&#39;) | library(pak) |
+# pak::pak(&#39;LeonardV/restriktor&#39;) | #pak::pkg_install(&#39;LeonardV/restriktor&#39;)
+library(restriktor)  # for goric and evSyn function
 # print docs in the help-tab to view arguments and explanations for the
 # function ?evSyn
 
