@@ -91,11 +91,14 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   
   # Conclusion:
   #
-  # H1_JU is not weak hypothesis, since its support is stronger than for the unconstrained; 
-  # whereas H2\_JU is a weak hypothesis.
+  # Both H1_JU and H2_JU are not weak hypotheses, since their support is stronger than for the unconstrained.
   # Since at least one of the competing hypotheses is not weak, one can compare their support.
   #
-  #It can be seen that H1_JU receives the most support; and many more times support than H2_JU.
+  # It can be seen that H1_JU receives the most support. 
+  # But H2_JU does obtain some support as well.
+  # More precisely, H1_JU is 2.502 times more supported / more likely than H2_JU.
+  #
+  # So, we found support for central theory 'H1'.
   
   
   ### Replication of the JU study: C
@@ -147,7 +150,7 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   # their support.
   #
   # It can be seen that H1_C receives the most support. 
-  # So, also in the replication study, we found support for 'H1'.
+  # So, also in the replication study, we found support for central theory 'H1'.
 
   
   # GORICA Evidence synthesis #
