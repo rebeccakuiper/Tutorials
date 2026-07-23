@@ -7,10 +7,10 @@
 # Each time you re-open this R file you have to execute this step.
 
 ## First, install the package, if you have not done this already:
-if (!require("restriktor")) install.packages("restriktor")
+#if (!require("restriktor")) install.packages("restriktor")
 
 ## Then, load the package:
-library(restriktor) # for evSyn and also goric function
+#library(restriktor) # for evSyn and also goric function
 
 # If you want to use restriktor from github: 
 #if (!require("pak")) install.packages("pak") 
@@ -20,10 +20,13 @@ library(restriktor) # for evSyn and also goric function
 #library(restriktor) # for goric and evSyn function 
 #
 # Or possibly (for extra functionalities): 
-#remotes::install_github("LeonardV/restriktor", 
-#                        ref = "Branch_Rebec", 
-#                        force = TRUE) 
-#library(restriktor) # for goric and evSyn function 
+if (!require("remotes")) install.packages("remotes") 
+library(remotes) 
+# remotes::install_github("LeonardV/restriktor",
+#                        ref = "Branch_Rebec",
+#                        force = TRUE)
+remotes::install_github("LeonardV/restriktor@Branch_Rebec") #, force = TRUE)
+library(restriktor) # for goric and evSyn function
 
 # print docs in the help-tab to view arguments and explanations for the function
 #?evSyn
@@ -70,13 +73,15 @@ H0 <- "beta1 = 0"
 Hpos <- "beta1 > 0"
 Hneg <- "beta1 < 0"
 #
-Hypo_studies <- list(H0 = H0, Hpos = Hpos, Hneg = Hneg)
+Hypo_studies <- list(H0 = H0, Hpos = Hpos, Hneg = Hneg) # here, you can (re-)label hypotheses:
+# Now, in the output the hypotheses are labelled 'H0', 'Hpos', and 'Hneg'.
+# Note: if no labels/names are used, then they will be labelled 'H1', 'H2', and 'H3'.
 #
 # Then, we also need to set a safeguard-hypothesis, to prevent choosing a best hypothesis from a set of weak hypotheses. 
 # In this example, the whole space of theories is covered by the three hypotheses. 
 # Therefore, we do not need a safeguard-hypothesis here.
 safeguard <- "none"
-# Notably, if not specified, the unconstrained would be used.
+# Notably, if not specified, the unconstrained would be used by default.
 
 
 # GORICA evidence synthesis (the added-evidence approach) #
@@ -84,19 +89,19 @@ safeguard <- "none"
 # Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
 # type = "added" (default) or type = "equal"
 # In this case, we will use the default added-evidence approach.
-evSyn_trust <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
-                          hypotheses = Hypo_studies,
-                          #type_ev = "added", # Default
-                          comparison = safeguard)
+evSyn_trust_inclNull <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
+                              hypotheses = Hypo_studies,
+                              #type_ev = "added", # Default
+                              comparison = safeguard)
 
 # Show output
-evSyn_trust
+evSyn_trust_inclNull
 # Final ratios of GORICA weights:
-#round(evSyn_trust$Final_ratio_GORICA_weights, 2)
+#round(evSyn_trust_inclNull$Final_ratio_GORICA_weights, 2)
 # Study-specific and final/overall output:
-#summary(evSyn_trust)
+#summary(evSyn_trust_inclNull)
 # evSyn plot:
-plot(evSyn_trust)
+plot(evSyn_trust_inclNull)
 
 
 # Alternatively, you could do (which is what I would do):
@@ -140,8 +145,8 @@ Hypo_studies <- list(Hpos = Hpos)
 
 # GORICA evidence synthesis -- the equal-evidence approach #
 evSyn_trust_eq <- evSyn(object = Param_studies, VCOV = CovMx_studies, 
-                     hypotheses = Hypo_studies,
-                     type_ev = "equal")
+                        hypotheses = Hypo_studies,
+                        type_ev = "equal")
 
 # Show output
 evSyn_trust_eq
@@ -156,6 +161,10 @@ plot(evSyn_trust_eq)
 #Conclusion:
 #Support for Hpos is highest; thus, favor Hpos over its complement (Hneg).
 #Hence, previous experience has a positive effect on trust, which receives full support.
+
+#Note:
+#In the case of added-evidence: There is full support that all studies favor Hpos.
+#In the case of equal-evidence: There is full support that, on average (based on all studies) Hpos is best.
 
 
 ###################################################################################
@@ -181,12 +190,15 @@ dat <- dat.berkey1998
 #Here, 'AL' and 'PD', levels of the variable 'outcome'. 
 #
 # All studies have the same hypotheses in the set:
-H_absComp_Gr <- "abs(AL) > abs(PD)"
-# Complement of H_absComp_Gr, included by default.
+H_absComp_Gr <- "abs(AL) > abs(PD)" 
+# Thus, we compare the absolute values of the parameters and expect that that of AL is greater than that of PD.
+# This will be evaluated against its complement, which is included by default.
 #
 # Here, the hypotheses are the same for all studies,
 # then, only specify one list:
-Hypo_studies <- list(H_absComp = H_absComp_Gr) # here, you can (re-)label hypotheses
+Hypo_studies <- list(H_absComp = H_absComp_Gr) # here, you can (re-)label hypotheses:
+# Now, in the output the hypothesis is labelled 'H_absComp'.
+# Note: if no label/name is used, then it will be labelled 'H1'.
 
 
 # Study names #
@@ -207,11 +219,11 @@ results_Set3_Gr <- evSyn(object = dat,
                          study_names = study_names)
 #
 # Show output
-#results_Set3_Gr
+results_Set3_Gr
 # Final ratios of GORICA weights:
 #round(results_Set3_Gr$Final_ratio_GORICA_weights, 2)
 # Study-specific and final/overall output:
-summary(results_Set3_Gr)
+#summary(results_Set3_Gr)
 # evSyn plot:
 plot(results_Set3_Gr)
 
@@ -229,10 +241,14 @@ plot(results_Set3_Gr)
 
 
 #Conclusion:
+#
 #Support for H_absComp is highest: favor H_absComp over its complement.
-#On study level: mixed support; combined: preference for H_absComp.
-#H_absComp is $0.744 / 0.256 \approx 2.9$ times more likely than its complement.
-#Preference for central theory 'the difference in symptom reduction between surgery and non-surgery is larger for AL than for PB'.
+#
+#On study level (cf. round(results_Set3_Gr$Final_ratio_GORICA_weights, 2)): mixed support; 
+#combined: preference for H_absComp.
+#
+#H_absComp is 0.744 / 0.256 = approx. 2.9 times more likely than its complement.
+#Henec, preference for central theory that 'the difference in symptom reduction between surgery and non-surgery is larger for AL than for PB'.
 
 
 ########## evSyn options ########## 
@@ -306,12 +322,16 @@ leave1out_Set3_Gr <- leave1studyout(results_Set3_Gr)
 leave1out_Set3_Gr 
 #leave1out_Set3_Gr$OverallGoricaWeights
 
+#Conclusion:
+#
 #In this example, the results are sensitive to the choice of set of studies.
+#
 #The conclusion even changes when study nr. 2 called 'Lindhe et al.' is left out. 
+#
 #When one would leave that study out, the complement of H_absComp_Gr is the overall best hypothesis (or better: central theory), 
 #receiving almost full support.
 #When one of the other studies would be left out, 
-#then the overall GORICA weight for H_absComp_Gr varies between 0,7 and 1.
+#then the overall GORICA weight for H_absComp_Gr varies between 0.7 and 1.
 
 
 #In case you want to perform GORICA evidence synthesis for the set of studies leaving the second one out:
@@ -339,26 +359,30 @@ ICweights <- results_Set3_Gr$GORICA_weight_m[,1]
 #
 plot(n, ICweights)
 
-# Ratio of weights overall preferred hypothesis
+# Ratio of weights overall preferred hypothesis; 
+# here, H_absComp (preferred) vs Complement; thus column 1 vs 2:
 n <- dat[dat$outcome=="AL",]$ni 
-ratioICweights <- log(results_Set3_Gr$GORICA_weight_m[,1] / results_Set3_Gr$GORICA_weight_m[,2])
+ratioICweights <- (results_Set3_Gr$GORICA_weight_m[,1] / results_Set3_Gr$GORICA_weight_m[,2])
+#round(ratioICweights, 2)
 #
 plot(n, ratioICweights)
-abline(a = 1, b = 0, col = "gray")
+abline(a = 1, b = 0, col = "gray") # when 1, then H_absComp and Complement equally likely.
 #
 plot(n, log(ratioICweights))
-abline(a = 0, b = 0, col = "gray")
+abline(a = 0, b = 0, col = "gray") # when 0, then H_absComp and Complement equally likely.
 
 
 # Measures of variation #
 
-# Weight overall preferred hypothesis
+# Weight overall preferred hypothesis; 
+# here, H_absComp and thus column 1:
 ICweights <- results_Set3_Gr$GORICA_weight_m[,1]
-quantile(ICweights, probs = c(0, .25, .50, .75, 1.00))
+round(quantile(ICweights, probs = c(0, .25, .50, .75, 1.00)), 2)
 
-# Ratio of weights overall preferred hypothesis
+# Ratio of weights overall preferred hypothesis; 
+# here, H_absComp (preferred) vs Complement; thus column 1 vs 2:
 ratioICweights <- results_Set3_Gr$GORICA_weight_m[,1] / results_Set3_Gr$GORICA_weight_m[,2]
-quantile(ratioICweights, probs = c(0, .25, .50, .75, 1.00))
+round(quantile(ratioICweights, probs = c(0, .25, .50, .75, 1.00)), 2)
 
 
 ###################################################################################

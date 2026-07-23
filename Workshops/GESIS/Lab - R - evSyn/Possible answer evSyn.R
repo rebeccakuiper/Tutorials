@@ -9,11 +9,15 @@
 #install_github("LeonardV/restriktor", force = TRUE)
 #
 # Or possibly:
-#remotes::install_github("LeonardV/restriktor", ref = "Branch_Rebec")
+if (!require("remotes")) install.packages("remotes") 
+library(remotes) 
+#remotes::install_github("LeonardV/restriktor", ref = "Branch_Rebec", force = TRUE)
+remotes::install_github("LeonardV/restriktor@Branch_Rebec") #, force = TRUE)
+library(restriktor) # for evSyn and goric function
 #
 # If you want to use restriktor from CRAN:
-if (!require("restriktor")) install.packages("restriktor")
-library(restriktor) # for evSyn and goric function
+#if (!require("restriktor")) install.packages("restriktor")
+#library(restriktor) # for evSyn and goric function
 #
 #
 if (!require("psych")) install.packages("psych")
@@ -91,7 +95,8 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   
   # Conclusion:
   #
-  # Both H1_JU and H2_JU are not weak hypotheses, since their support is stronger than for the unconstrained.
+  # Both H1_JU and H2_JU are not weak hypotheses, since their support is stronger 
+  # than the support for the unconstrained.
   # Since at least one of the competing hypotheses is not weak, one can compare their support.
   #
   # It can be seen that H1_JU receives the most support. 
@@ -144,7 +149,7 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   
   # Conclusion:
   #
-  # H1_C is not a weak hypothesis, since its support is stronger than 
+  # H1_C is not a weak hypothesis, since its support is stronger than the support  
   # for the unconstrained.
   # Since at least one of the competing hypotheses is not weak, one can compare 
   # their support.
@@ -163,12 +168,24 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   
   # Show output
   evSyn_anchor
+  # Final ratios of GORICA weights:
+  #round(evSyn_anchor$Final_ratio_GORICA_weights, 2) 
+  # Study-specific and final/overall output:
   #summary(evSyn_anchor)
+  # Study-specific GORICA weights:
+  #evSyn_anchor$GORICA_weight_m
+  # evSyn plot:
   #plot(evSyn_anchor)
+  #
+  # Note: With this input, you do not obtain output regarding log-likelihood values and weights.
+  # For that, one needs to use, for example, the 'LL & PT' as input or the goric objects themselves;
+  # see other examples and/or 'Tutorial_GORIC_restriktor_evSyn' on https://github.com/rebeccakuiper/Tutorials.
 
+  
   # Conclusion:
   #
-  # When aggregating the results, we find (perhaps unsurprisingly) that 
+  # When aggregating the results, we find (perhaps unsurprisingly) that ‘H1’ is the best (and thus not weak).
+  # More precise, because of the added-evidence approach, 
   # it is many times more likely that overall theory ‘H1’ is correct in both studies 
   # than that ‘H2’ would be correct in both studies. 
   #
@@ -187,12 +204,12 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
     
   # Study 1 (M)
   monin <- read.table("monin.txt",header=TRUE)
-  monin$group <- factor(monin$group)       # this command tells R that group is a factor and not a continuous variable like attract
+  monin$group <- factor(monin$group)       # this command tells R that group is a factor and not a continuous variable like 'attract'.
   fit.lm_monin <-  lm(attract ~ group-1, data=monin)
   #
   # Study 2 (H)
   holubar <- read.table("holubar.txt",header=TRUE)
-  holubar$gr <- factor(holubar$gr)       # this command tells R that gr is a factor and not a continuous variable like at
+  holubar$gr <- factor(holubar$gr)       # this command tells R that gr is a factor and not a continuous variable like 'at'.
   # lm object (of ANOVA model)
   fit.lm_holubar <-  lm(at ~ gr-1, data=holubar)
   
@@ -208,7 +225,7 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   CovMx_studies <- list(vcov_est_M, vcov_est_H)
   
   # Set of hypotheses for each study 
-  # Note: in this case the same for each study, but different names are used.
+  # Note: in this case the same set for each study, but different names are used.
   # Either re-label estimate names as the same (as suggested above)
   # or use study-specific estimates (as done next).
   #
@@ -218,6 +235,10 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   # names(est_2) # Specify restrictions using those names
   H1_H <- 'gr1 = gr2 > gr3'
   H2_H <- 'gr2 > gr1 > gr3'
+  # Note: overall theory H2 states that the attraction to moral rebels 
+  # after a self-confidence boost is higher than 
+  # the attraction to a person that is obedient 
+  # which are both higher than the attraction to moral rebels after a bogus task.
   #
   # Evaluate H1 and H2 (with Hunc as failsafe):
   Hypo_studies <- list(Set_M = list(H1 = H1_M, H2 = H2_M), 
@@ -232,54 +253,34 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
                         ) 
   
   # Show output
-  # Study-specific GORICA weights
-  evSyn_params$GORICA_weight_m
-  # Overall support
   evSyn_params
+  # Final ratios of GORICA weights:
+  #round(evSyn_params$Final_ratio_GORICA_weights, 2) 
+  # Study-specific and final/overall output:
   #summary(evSyn_params)
+  # Study-specific GORICA weights:
+  evSyn_params$GORICA_weight_m
+  # evSyn plot:
   #plot(evSyn_params)
 
   
   # Conclusion:
   #
-  # When inspecting the study-specific results, 
-  # one can see that the studies do not prefer the same hypothesis 
-  # (i.e., the result in the first study is not replicated by the second).
+  # When inspecting the study-specific results (cf. evSyn_params$GORICA_weight_m), 
+  # one can see that the studies do not prefer the same hypothesis: 
+  # That is, the result in the first study ('H2' is best and bout equally likely as 'H1') is not replicated by the second ('unconstrained' is best).
   #
-  # When aggregating the mixed results, 
-  # we find that it is many times more likely that overall theory ‘H2’ is correct in both studies 
-  # than that ‘H1’ would be correct in both studies. 
-  # Hence, there is support for the overall theory H2, 
-  # which states that the attraction to moral rebels after a self-confidence boost is higher than 
-  # the attraction to a person that is obedient 
-  # which are both higher than the attraction to moral rebels after a bogus task.
-  
-  # One could, for future research, decide to evaluate $H_1$ versus its complement:
-  
-  
-  #Possible follow-up analysis:
-    
-  # Evaluate H2 vs its complement:
-  Hypo_studies_2c <- list(Set_M = list(H2 = H2_M), 
-                          Set_H = list(H2 = H2_H))
-  # Note that the "complement" is used by default in case of 1 hypothesis.
-  
-  # Evidence synthesis
-  evSyn_params_2c <- evSyn(Param_studies, VCOV = CovMx_studies, 
-                           hypotheses = Hypo_studies_2c
-                           #type = "added", # default
-                           #comparison = "complement" # default
-                           ) 
-  
-  # Show output
-  evSyn_params_2c
-  #summary(evSyn_params_2c)
-  #plot(evSyn_params_2c)
-
-  # Conclusion:
+  # When aggregating the mixed results, we find that overall theory ‘H1’ is the best.
+  # More precise, because of the added-evidence approach, it is is more likely that overall theory ‘H1’ is correct in both studies than that ‘H2’ would be correct in both studies. 
+  # However, it is only 1.118 times more likely.
+  # Additionally, the 'unconstrained' also receives quite some support.
   #
-  # When aggregating the (mixed) results, we find that 
-  # there is support for H2 versus its complement (so, not H2, that is, all the other possibilities).
+  # Since the log-likelihood (LL) for the 'unconstrained' is much higher than 
+  # the LL for the informative hypotheses / central theories,
+  # I would conclude that neither of the two is preferred in both studies. 
+  # One may need more studies to say something about the population with more certainty;
+  # and/or one should update the theories;
+  # and/or one should inspect differences between these studies which may explain this finding. 
 
 
 ###
@@ -341,8 +342,15 @@ lm_fit_JU <-  lm(z ~ g-1, data = JU) # `lm` stands for linear model.
   
   # Show output
   evSyn_trust
+  # Final ratios of GORICA weights:
+  #round(evSyn_trust$Final_ratio_GORICA_weights, 2) 
+  # Study-specific and final/overall output:
   #summary(evSyn_trust)
+  # Study-specific GORICA weights:
+  #evSyn_trust$GORICA_weight_m
+  # evSyn plot:
   plot(evSyn_trust)
+  
 
   # Conclusion:
   #
