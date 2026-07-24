@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-01-14" />
 
 <title>Evaluate a set of hypotheses with GORIC or GORICA: ANOVA Example</title>
 
@@ -1482,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Evaluate a set of hypotheses with GORIC or
 GORICA: ANOVA Example</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">14 January 2025</h4>
+<h4 class="date">24 juli 2026</h4>
 
 </div>
 
@@ -1507,14 +1506,13 @@ if (!require(&quot;psych&quot;)) install.packages(&quot;psych&quot;)
 if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
 
 ## Then, load the packages:
-library(psych) # for the function describeBy
-library(restriktor) # for the goric function
+library(psych)  # for the function describeBy
+library(restriktor)  # for the goric function
 
-# If you want to use restriktor from github:
-#if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-#library(devtools) 
-#install_github(&quot;LeonardV/restriktor&quot;)
-#library(restriktor) # for goric function</code></pre>
+# If you want to use restriktor from github: if (!require(&#39;pak&#39;))
+# install.packages(&#39;pak&#39;) library(pak) pak::pak(&#39;LeonardV/restriktor&#39;)
+# pak::pkg_install(&#39;LeonardV/restriktor&#39;) library(restriktor) # for goric
+# function</code></pre>
 <p>Second, it is necessary to load the data.</p>
 <p>Notably, it is only possible to load the data if you are using the
 correct working directory (with both your R script and data file). The
@@ -1540,10 +1538,10 @@ more than two groups, one has to tell R that the variable
 function on the <code>group</code> variable (i.e., a grouping /
 categorical / nominal variable):</p>
 <pre class="r"><code># Make the variable group a factor
-Lucas$group &lt;- factor(Lucas$group) </code></pre>
+Lucas$group &lt;- factor(Lucas$group)</code></pre>
 <p>To inspect the first 6 rows of the dataset, use the
 <code>head()</code> function:</p>
-<pre class="r"><code>head(Lucas) # Look at first (6) rows of the data</code></pre>
+<pre class="r"><code>head(Lucas)  # Look at first (6) rows of the data</code></pre>
 <pre><code>  group Influence
 1     1      3.58
 2     1     -0.15
@@ -1584,7 +1582,10 @@ resulting, here, in five group means.<br />
 If the intercept is not dropped, `y ~ group’ would estimate an intercept
 – representing the mean of the reference group – and the mean
 differences between the other (here, four) groups and the reference
-group.</p></li>
+group.<br />
+Note that if you would have multiple factors, you may want to leave the
+intercept in to improve the interpretation of the parameters; which aids
+in specifying your hypotheses.</p></li>
 <li><p>The results are collected in, what is called, an R-object; here,
 named <code>lm_fit_Lucas</code>.</p></li>
 </ol>
@@ -1634,10 +1635,11 @@ hypotheses’ near the end of the <code>goric</code> tutorial called
 ‘Tutorial_GORIC_restriktor_General’ (<a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).</p></li>
 </ul>
 <p>Let us specify the following theory-based hypotheses:</p>
-<pre class="r"><code>H1 &lt;- &#39;group5 = group3 &gt; (group1, group4) &gt; group2&#39; 
-# which equals: H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
-# Note: H1 is not full row-rank (see below and the goric() tutorial for more details).
-H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></pre>
+<pre class="r"><code>H1 &lt;- &quot;group5 = group3 &gt; (group1, group4) &gt; group2&quot;
+# which equals: H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt;
+# group2&#39; Note: H1 is not full row-rank (see below and the goric() tutorial for
+# more details).
+H2 &lt;- &quot;group3 &gt; group1 &gt; group4 = group5 &gt; group2&quot;</code></pre>
 <p>To prevent from selecting a weak hypothesis, that is, a hypothesis
 not supported by the data, one should include a failsafe/safeguard
 hypothesis. This can be:</p>
@@ -1692,11 +1694,11 @@ output, see ‘Guidelines_output_GORIC’ (<a href="https://github.com/rebeccaku
 <div id="example-1.1a-using-the-unconstrained-as-failsafe" class="section level3" number="1.3.1">
 <h3><span class="header-section-number">1.3.1</span> Example 1.1a: Using
 the unconstrained as failsafe</h3>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 output &lt;- goric(lm_fit_Lucas, hypotheses = list(H1 = H1, H2 = H2))
-#summary(output)
+# summary(output)
 output</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
@@ -1706,10 +1708,8 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 29.593 times more supported than &#39;H2&#39;.</code></pre>
+  * &#39;H1&#39; is 29.586 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(output$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00  29.59             12.67
@@ -1726,11 +1726,11 @@ hypotheses:<br />
 <div id="example-1.1b-using-the-complement-as-failsafe" class="section level3" number="1.3.2">
 <h3><span class="header-section-number">1.3.2</span> Example 1.1b: Using
 the complement as failsafe</h3>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 output_c &lt;- goric(lm_fit_Lucas, hypotheses = list(H1))
-#summary(output_c)
+# summary(output_c)
 output_c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -1761,29 +1761,27 @@ calculate the <em>GORICA</em> values, one should use
 <div id="example-1.2a-using-the-unconstrained-as-failsafe" class="section level3" number="1.4.1">
 <h3><span class="header-section-number">1.4.1</span> Example 1.2a: Using
 the unconstrained as failsafe</h3>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 output_gorica &lt;- goric(lm_fit_Lucas, hypotheses = list(H1 = H1, H2 = H2), type = &quot;gorica&quot;)
-#summary(output_gorica)
+# summary(output_gorica)
 output_gorica</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
-1             H1   1.647    2.458   1.622           0.493            0.407           0.898                       0.966
-2             H2  -2.029    2.136   8.330           0.012            0.561           0.031                       0.034
-3  unconstrained   1.650    5.000   6.700           0.494            0.032           0.071                            
+1             H1   1.732    2.458   1.453           0.494            0.407           0.901                       0.970
+2             H2  -2.071    2.136   8.414           0.011            0.561           0.028                       0.030
+3  unconstrained   1.735    5.000   6.531           0.495            0.032           0.071                            
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 28.622 times more supported than &#39;H2&#39;.</code></pre>
+  * &#39;H1&#39; is 32.483 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(output_gorica$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
-H1              1.00  28.62             12.67
-H2              0.03   1.00              0.44
-unconstrained   0.08   2.26              1.00</code></pre>
+H1              1.00  32.48             12.67
+H2              0.03   1.00              0.39
+unconstrained   0.08   2.56              1.00</code></pre>
 <p>In Example 1, the same analysis is done with the GORIC, you can see
 that the (relative) weights are (about) the same for the GORIC and
 GORICA. The ratio of weights may differ (somewhat see a note at the end
@@ -1794,18 +1792,19 @@ than <span class="math inline">\(H_u\)</span> (the unconstrained
 hypothesis). Hence, <span class="math inline">\(H_1\)</span> is not a
 weak hypotheses and can thus be compared to the other (weak and
 non-weak) competing hypotheses:<br />
-<span class="math inline">\(H_1\)</span> is 28.6 times more likely than
+<span class="math inline">\(H_1\)</span> is 32.5 times more likely than
 <span class="math inline">\(H_2\)</span>.</p>
 <div id="alternative-input" class="section level4" number="1.4.1.1">
 <h4><span class="header-section-number">1.4.1.1</span> Alternative
 input</h4>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 est &lt;- coef(lm_fit_Lucas)
 VCOV &lt;- vcov(lm_fit_Lucas)
-output_gorica_alt &lt;- goric(est, VCOV = VCOV, hypotheses = list(H1 = H1, H2 = H2), type = &quot;gorica&quot;)
-#summary(output_gorica_alt)
+output_gorica_alt &lt;- goric(est, VCOV = VCOV, hypotheses = list(H1 = H1, H2 = H2),
+    type = &quot;gorica&quot;)
+# summary(output_gorica_alt)
 output_gorica_alt</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
@@ -1815,10 +1814,8 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 28.622 times more supported than &#39;H2&#39;.</code></pre>
+  * &#39;H1&#39; is 28.615 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(output_gorica_alt$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. unconstrained
 H1              1.00  28.62             12.67
@@ -1829,21 +1826,20 @@ unconstrained   0.08   2.26              1.00</code></pre>
 <div id="example-1.2b-using-the-complement-as-failsafe" class="section level3" number="1.4.2">
 <h3><span class="header-section-number">1.4.2</span> Example 1.2b: Using
 the complement as failsafe</h3>
-<pre class="r"><code>H1 &lt;- &#39;group5 = group3 &gt; (group1, group4) &gt; group2&#39;  
-# Note: H1 is not full row-rank; 
-# for more details, see below and/or the goric tutorial.
+<pre class="r"><code>H1 &lt;- &quot;group5 = group3 &gt; (group1, group4) &gt; group2&quot;
+# Note: H1 is not full row-rank; for more details, see below and/or the goric
+# tutorial.
 
-set.seed(123) # Set seed value
-output_gorica_c &lt;- goric(lm_fit_Lucas, hypotheses = list(H1), 
-                         type = &quot;gorica&quot;)
-#summary(output_gorica_c)
+set.seed(123)  # Set seed value
+output_gorica_c &lt;- goric(lm_fit_Lucas, hypotheses = list(H1), type = &quot;gorica&quot;)
+# summary(output_gorica_c)
 output_gorica_c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1          H1   1.647    2.458   1.622           0.499            0.903           0.903
-2  complement   1.650    4.691   6.082           0.501            0.097           0.097
+1          H1   1.732    2.458   1.453           0.499            0.903           0.903
+2  complement   1.735    4.691   5.912           0.501            0.097           0.097
 
 Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 9.30 times more support than its complement.</code></pre>
@@ -1869,9 +1865,9 @@ similar to the ones from Lucas example (Example 1). Hence, for more
 comments and details, see that example.</p>
 <div id="data-preparation-1" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Data preparation</h2>
-<pre class="r"><code># Read Data. 
+<pre class="r"><code># Read Data.
 BerzEtAl &lt;- read.table(&quot;data/Data_BerzEtAl.txt&quot;, header = TRUE)
-BerzEtAl$group &lt;- factor(BerzEtAl$group) 
+BerzEtAl$group &lt;- factor(BerzEtAl$group)
 # this command tells R that group is a factor and not a continuous variable
 
 # Inspect data
@@ -1900,74 +1896,72 @@ X18    8      8    1 15  0.22 0.217  0.263   0.225 0.218 -0.150  0.528  0.677 -0
 <h2><span class="header-section-number">2.2</span> Preparation for
 GORIC(A)</h2>
 <pre class="r"><code># Using the R package lm
-lm_fit_BerzEtAl &lt;-  lm(Influence ~ group-1, data=BerzEtAl)
+lm_fit_BerzEtAl &lt;- lm(Influence ~ group - 1, data = BerzEtAl)
 
 # Check names used in model
 names(coef(lm_fit_BerzEtAl))</code></pre>
 <pre><code>[1] &quot;group1&quot; &quot;group2&quot; &quot;group3&quot; &quot;group4&quot; &quot;group5&quot; &quot;group6&quot; &quot;group7&quot; &quot;group8&quot;</code></pre>
 <pre class="r"><code># Specify restrictions using those names</code></pre>
 <pre class="r"><code># Set of hypotheses
-H1 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
+H1 &lt;- &quot;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
 group5 &gt; group6; group5 &gt; group7; group5 &gt; group8; 
 group1 &gt; group5; group2 &gt; group6; group3 &gt; group7; group4 &gt; group8; 
 group1 - group5 &gt; group2 - group6; 
 group1 - group5 &gt; group3 - group7; 
-group1 - group5 &gt; group4 - group8;&#39;
+group1 - group5 &gt; group4 - group8;&quot;
 
-H2 &lt;- &#39;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
+H2 &lt;- &quot;group1 &gt; group2; group1 &gt; group3; group1 &gt; group4; 
 group5 &gt; group6; group5 &gt; group7; group5 &gt; group8;  
 group1 &gt; group5; group2 &gt; group6; group3 &gt; group7; group4 &gt; group8;
 group1 - group5 &gt; 2*(group2 - group6); 
 group1 - group5 &gt; 2*(group3 - group7); 
-group1 - group5 &gt; 2*(group4 - group8);&#39;</code></pre>
+group1 - group5 &gt; 2*(group4 - group8);&quot;</code></pre>
 </div>
 <div id="goric-examples-1" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> GORIC examples</h2>
 <div id="example-2.1a-using-the-unconstrained-as-failsafe" class="section level3" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Example 2.1a: Using
 the unconstrained as failsafe</h3>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 output_B &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1 = H1, H2 = H2))
-#summary(output_B)
+# summary(output_B)
 output_B</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
-1             H1  -328.302    6.090  668.784           0.229            0.487          0.845                      1.000
-2             H2  -361.183    6.090  734.548           0.000            0.487          0.000                      0.000
+1             H1  -328.302    6.089  668.784           0.229            0.487          0.845                      1.000
+2             H2  -353.318    6.090  718.815           0.000            0.487          0.000                      0.000
 3  unconstrained  -327.087    9.000  672.173           0.771            0.027          0.155                           
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 1.907e+14 times more supported than &#39;H2&#39;.</code></pre>
+  * &#39;H1&#39; is 7.314e+10 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(output_B$ratio.gw, 2)</code></pre>
-<pre><code>              vs. H1       vs. H2 vs. unconstrained
-H1              1.00 1.907329e+14              5.44
-H2              0.00 1.000000e+00              0.00
-unconstrained   0.18 3.503245e+13              1.00</code></pre>
+<pre><code>              vs. H1      vs. H2 vs. unconstrained
+H1              1.00 73135417616              5.45
+H2              0.00           1              0.00
+unconstrained   0.18 13430577836              1.00</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has &gt; 1 times more support than
 <span class="math inline">\(H_u\)</span> (unconstrained). Hence, <span class="math inline">\(H_1\)</span> is not a weak hypotheses and can thus
 be compared to the other (weak and non-weak) competing hypotheses:<br />
 <span class="math inline">\(H_1\)</span> is much more <!-- (namely,  -->
-<!-- 1.9073294\times 10^{14}  --> <!-- times more)  --> supported than
+<!-- 7.3135418\times 10^{10}  --> <!-- times more)  --> supported than
 <span class="math inline">\(H_2\)</span>.</p>
 </div>
 <div id="example-2.1b-using-the-complement-as-failsafe" class="section level3" number="2.3.2">
 <h3><span class="header-section-number">2.3.2</span> Example 2.1b: Using
 the complement as failsafe</h3>
-<pre class="r"><code>set.seed(123) 
-output_B_c &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1)) 
-#summary(output_B_c)
+<pre class="r"><code>set.seed(123)
+output_B_c &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1))
+# summary(output_B_c)
 output_B_c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
-1          H1  -328.302    6.090  668.784           0.229            0.942          0.827
+1          H1  -328.302    6.089  668.784           0.229            0.942          0.827
 2  complement  -327.087    8.869  671.911           0.771            0.058          0.173
 
 Conclusion:
@@ -1981,53 +1975,51 @@ complement.</p>
 <div id="example-2.2a-using-the-unconstrained-as-failsafe" class="section level3" number="2.4.1">
 <h3><span class="header-section-number">2.4.1</span> Example 2.2a: Using
 the unconstrained as failsafe</h3>
-<pre class="r"><code>set.seed(123) # Set seed value
-output_B_gorica &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1 = H1, H2 = H2), type = &quot;gorica&quot;) 
-#summary(output_B_gorica)
+<pre class="r"><code>set.seed(123)  # Set seed value
+output_B_gorica &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1 = H1, H2 = H2), type = &quot;gorica&quot;)
+# summary(output_B_gorica)
 output_B_gorica</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
-           model   loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
-1             H1   -8.396    5.090   26.971           0.241            0.487           0.854                       1.000
-2             H2  -50.102    5.090  110.386           0.000            0.487           0.000                       0.000
-3  unconstrained   -7.250    8.000   30.499           0.759            0.027           0.146                            
+           model   loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
+1             H1   -8.202    5.089  26.582           0.226            0.487           0.843                       1.000
+2             H2  -39.874    5.090  89.927           0.000            0.487           0.000                       0.000
+3  unconstrained   -6.974    8.000  29.947           0.774            0.027           0.157                            
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 1.298e+18 times more supported than &#39;H2&#39;.</code></pre>
+  * &#39;H1&#39; is 5.691e+13 times more supported than &#39;H2&#39;.</code></pre>
 <pre class="r"><code>round(output_B_gorica$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1       vs. H2 vs. unconstrained
-H1              1.00 1.298057e+18              5.84
+H1              1.00 5.691241e+13              5.38
 H2              0.00 1.000000e+00              0.00
-unconstrained   0.17 2.224148e+17              1.00</code></pre>
+unconstrained   0.19 1.058182e+13              1.00</code></pre>
 <p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has &gt; 1 times more support than
 <span class="math inline">\(H_u\)</span> (unconstrained). Hence, <span class="math inline">\(H_1\)</span> is not a weak hypotheses and can thus
 be compared to the other (weak and non-weak) competing hypotheses:<br />
 <span class="math inline">\(H_1\)</span> is much more <!-- (namely, -->
-<!-- 1.9073294\times 10^{14}  --> <!-- times more)  --> supported than
+<!-- 7.3135418\times 10^{10}  --> <!-- times more)  --> supported than
 <span class="math inline">\(H_2\)</span>.</p>
 </div>
 <div id="example-2.2b-using-the-unconstrained-as-failsafe" class="section level3" number="2.4.2">
 <h3><span class="header-section-number">2.4.2</span> Example 2.2b: Using
 the unconstrained as failsafe</h3>
-<pre class="r"><code>set.seed(123) 
-output_B_gorica_c &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1), type = &quot;gorica&quot;) 
-#summary(output_B_gorica_c)
+<pre class="r"><code>set.seed(123)
+output_B_gorica_c &lt;- goric(lm_fit_BerzEtAl, hypotheses = list(H1), type = &quot;gorica&quot;)
+# summary(output_B_gorica_c)
 output_B_gorica_c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1          H1  -8.396    5.090  26.971           0.241            0.942           0.837
-2  complement  -7.250    7.869  30.237           0.759            0.058           0.163
+1          H1  -8.202    5.089  26.582           0.226            0.942           0.825
+2  complement  -6.974    7.869  29.685           0.774            0.058           0.175
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 5.12 times more support than its complement.</code></pre>
-<p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 5.1 times more support than its
+The order-restricted hypothesis &#39;H1&#39; has 4.72 times more support than its complement.</code></pre>
+<p>The order-restricted hypothesis <span class="math inline">\(H_1\)</span> has 4.7 times more support than its
 complement.</p>
 </div>
 </div>
@@ -2040,8 +2032,8 @@ complement.</p>
 <code>gr</code> (group) is a factor instead of a continuous variable
 (although it is not necessary because it consists of only two
 groups).</p>
-<pre class="r"><code>Holubar &lt;- read.table(&quot;data/Data_Holubar.txt&quot;, header = TRUE) # load the data
-Holubar$gr &lt;- factor(Holubar$gr) # tell R that gr is a factor</code></pre>
+<pre class="r"><code>Holubar &lt;- read.table(&quot;data/Data_Holubar.txt&quot;, header = TRUE)  # load the data
+Holubar$gr &lt;- factor(Holubar$gr)  # tell R that gr is a factor</code></pre>
 <p>If you want a more detailed overview of the data, also by means of
 descriptive statistics splitted by <code>group</code>, use</p>
 <pre class="r"><code>head(Holubar)</code></pre>
@@ -2075,18 +2067,18 @@ names(coef(lm_fit_Holubar))</code></pre>
 <h3><span class="header-section-number">3.2.2</span> Set of
 hypotheses</h3>
 <p>The following hypothesis will be evaluated:</p>
-<pre class="r"><code>H1 &lt;- &#39;gr2 &gt; gr1 &gt; gr3&#39;</code></pre>
+<pre class="r"><code>H1 &lt;- &quot;gr2 &gt; gr1 &gt; gr3&quot;</code></pre>
 </div>
 </div>
 <div id="model-selection-using-goric" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Model selection using
 GORIC</h2>
 <p>Calculate the GORIC values and weights:</p>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code>set.seed(123)  # Set seed value
 output_Hol &lt;- goric(lm_fit_Holubar, hypotheses = list(H1))
-#summary(output_Hol)
+# summary(output_Hol)
 output_Hol</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2094,13 +2086,13 @@ Results:
 2  complement  -143.038    3.697  293.469           0.875            0.290          0.741
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.259 / 0.741 &lt; 1 times more support than its complement. That is, the complement has 2.86 times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has less support (namely,  0.259 / 0.741 &lt; 1 times more support) than its complement. That is, the complement has 2.86 times more support than &#39;H1&#39;</code></pre>
 </div>
 </div>
 <div id="example-4-sesame" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Example 4: Sesame</h1>
 <pre class="r"><code># read in the sesame data from a text file
-Sesame &lt;- read.table(&quot;data/sesamesimANOVA.txt&quot;, header=TRUE)
+Sesame &lt;- read.table(&quot;data/sesamesimANOVA.txt&quot;, header = TRUE)
 
 # make viewcat a factor, that is, a categorical variable
 Sesame$viewcat &lt;- factor(Sesame$viewcat)
@@ -2114,7 +2106,7 @@ head(Sesame)</code></pre>
 4       1 39.82436
 5       4 40.42370
 6       3 22.87055</code></pre>
-<pre class="r"><code># estimate the parameters of the statistical model at hand 
+<pre class="r"><code># estimate the parameters of the statistical model at hand
 fit_Sesame &lt;- lm(postnumb ~ viewcat - 1, data = Sesame)
 
 # Check names used in model
@@ -2123,21 +2115,21 @@ names(coef(fit_Sesame))</code></pre>
 <pre class="r"><code># Specify restrictions using those names
 
 
-# Example hypotheses: 
-H1 &lt;- &#39;viewcat1 = viewcat2 &lt; viewcat3 &lt; viewcat4&#39;  
-H2 &lt;- &#39;viewcat1 &lt; viewcat2 &lt; viewcat3 &lt; viewcat4&#39;   
-H3 &lt;- &#39;viewcat1 = viewcat2 &lt; viewcat3 = viewcat4&#39;   </code></pre>
+# Example hypotheses:
+H1 &lt;- &quot;viewcat1 = viewcat2 &lt; viewcat3 &lt; viewcat4&quot;
+H2 &lt;- &quot;viewcat1 &lt; viewcat2 &lt; viewcat3 &lt; viewcat4&quot;
+H3 &lt;- &quot;viewcat1 = viewcat2 &lt; viewcat3 = viewcat4&quot;</code></pre>
 <div id="calculate-goric-values-and-weights" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Calculate GORIC
 values and weights</h2>
 <p>Here, we assume that the interest lies in H1 to H3. Since these do
 not cover all possibilities, the unconstrained hypotheses is included in
 the set.</p>
-<pre class="r"><code>set.seed(123) 
+<pre class="r"><code>set.seed(123)
 goric_sesam &lt;- goric(fit_Sesame, hypotheses = list(H1, H2, H3))
-#summary(goric_sesam)
+# summary(goric_sesam)
 goric_sesam</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
@@ -2148,9 +2140,7 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
   * &#39;H2&#39; is 5.262 times more supported than &#39;H1&#39;.
   * &#39;H2&#39; is 12.293 times more supported than &#39;H3&#39;.</code></pre>
 <pre class="r"><code>round(goric_sesam$ratio.gw, 2)</code></pre>
@@ -2168,32 +2158,30 @@ Hence, H2 is the preferred hypothesis (and has quite some evidence).</p>
 <div id="calculate-gorica-values-and-weights" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Calculate GORICA
 values and weights</h3>
-<pre class="r"><code>set.seed(123) 
+<pre class="r"><code>set.seed(123)
 gorica_sesam &lt;- goric(fit_Sesame, hypotheses = list(H1, H2, H3), type = &quot;gorica&quot;)
-#summary(gorica_sesam)
+# summary(gorica_sesam)
 gorica_sesam</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc
-1             H1  -7.052    1.810  17.725           0.066            0.310           0.136                       0.152
-2             H2  -5.125    2.094  14.438           0.456            0.233           0.702                       0.784
-3             H3  -8.216    1.500  19.432           0.021            0.422           0.058                       0.065
-4  unconstrained  -5.125    4.000  18.249           0.456            0.035           0.104                            
+1             H1  -7.051    1.810  17.723           0.064            0.310           0.132                       0.148
+2             H2  -5.091    2.094  14.371           0.458            0.233           0.707                       0.790
+3             H3  -8.235    1.500  19.470           0.020            0.422           0.055                       0.062
+4  unconstrained  -5.091    4.000  18.182           0.458            0.035           0.105                            
 
 Conclusion:
 - The order-restricted hypothesis &#39;H2&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H2&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H2&#39; against the other order-restricted hypotheses:
-
-  * &#39;H2&#39; is 5.174 times more supported than &#39;H1&#39;.
-  * &#39;H2&#39; is 12.148 times more supported than &#39;H3&#39;.</code></pre>
+  * &#39;H2&#39; is 5.346 times more supported than &#39;H1&#39;.
+  * &#39;H2&#39; is 12.801 times more supported than &#39;H3&#39;.</code></pre>
 <pre class="r"><code>round(gorica_sesam$ratio.gw, 2)</code></pre>
 <pre><code>              vs. H1 vs. H2 vs. H3 vs. unconstrained
-H1              1.00   0.19   2.35              1.30
-H2              5.17   1.00  12.15              6.72
-H3              0.43   0.08   1.00              0.55
-unconstrained   0.77   0.15   1.81              1.00</code></pre>
+H1              1.00   0.19   2.39              1.26
+H2              5.35   1.00  12.80              6.72
+H3              0.42   0.08   1.00              0.53
+unconstrained   0.80   0.15   1.90              1.00</code></pre>
 </div>
 </div>
 <div id="calculate-goric-values-and-weights-for-h1-and-its-complement" class="section level2" number="4.2">
@@ -2201,11 +2189,11 @@ unconstrained   0.77   0.15   1.81              1.00</code></pre>
 values and weights for H1 and its complement</h2>
 <p>Here, we assume that the interest lies only in H1. In that case, it
 should be evaluated against its complement.</p>
-<pre class="r"><code>set.seed(123) 
+<pre class="r"><code>set.seed(123)
 goric_sesam_1c &lt;- goric(fit_Sesame, hypotheses = list(H1))
-#summary(goric_sesam_1c)
+# summary(goric_sesam_1c)
 goric_sesam_1c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
@@ -2213,7 +2201,7 @@ Results:
 2  complement  -916.540    4.690  1842.460           0.875            0.132          0.516
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.484 / 0.516 &lt; 1 times more support than its complement. That is, the complement has 1.07 times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has less support (namely,  0.484 / 0.516 &lt; 1 times more support) than its complement. That is, the complement has 1.07 times more support than &#39;H1&#39;</code></pre>
 <p>From the output, it is concluded that the support for H1 is
 comparable to that of its complement, with a slight preference for the
 complement. Note that the complement has the highest (log) likelihood
@@ -2223,19 +2211,19 @@ H1.</p>
 <div id="calculate-gorica-values-and-weights-for-h1-and-its-complement" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Calculate GORICA
 values and weights for H1 and its complement</h3>
-<pre class="r"><code>set.seed(123) 
+<pre class="r"><code>set.seed(123)
 gorica_sesam_1c &lt;- goric(fit_Sesame, hypotheses = list(H1), type = &quot;gorica&quot;)
-#summary(gorica_sesam_1c)
+# summary(gorica_sesam_1c)
 gorica_sesam_1c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1          H1  -7.052    1.810  17.725           0.127            0.868           0.488
-2  complement  -5.125    3.690  17.629           0.873            0.132           0.512
+1          H1  -7.051    1.810  17.723           0.123            0.868           0.480
+2  complement  -5.091    3.690  17.561           0.877            0.132           0.520
 
 Conclusion:
-The order-restricted hypothesis &#39;H1&#39; has 0.488 / 0.512 &lt; 1 times more support than its complement. That is, the complement has 1.05 times more support than &#39;H1&#39; </code></pre>
+The order-restricted hypothesis &#39;H1&#39; has less support (namely,  0.480 / 0.520 &lt; 1 times more support) than its complement. That is, the complement has 1.08 times more support than &#39;H1&#39;</code></pre>
 </div>
 </div>
 <div id="calculate-goric-values-and-weights-for-h2-and-its-complement" class="section level2" number="4.3">
@@ -2243,15 +2231,15 @@ The order-restricted hypothesis &#39;H1&#39; has 0.488 / 0.512 &lt; 1 times more
 values and weights for H2 and its complement</h2>
 <p>Here, we assume that the interest lies only in H2. In that case, it
 should be evaluated against its complement.</p>
-<pre class="r"><code>set.seed(123) 
+<pre class="r"><code>set.seed(123)
 goric_sesam_2c &lt;- goric(fit_Sesame, hypotheses = list(H2 = H2))
-#summary(goric_sesam_2c)
+# summary(goric_sesam_2c)
 goric_sesam_2c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty     goric  loglik.weights  penalty.weights  goric.weights
-1          H2  -916.540    3.095  1839.270           0.765            0.855          0.950
+1          H2  -916.540    3.094  1839.269           0.765            0.855          0.950
 2  complement  -917.718    4.870  1845.176           0.235            0.145          0.050
 
 Conclusion:
@@ -2261,19 +2249,19 @@ likely than its complement, showing quite some support for H2.</p>
 <div id="calculate-gorica-values-and-weights-for-h2-and-its-complement" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Calculate GORICA
 values and weights for H2 and its complement</h3>
-<pre class="r"><code>set.seed(123) 
+<pre class="r"><code>set.seed(123)
 gorica_sesam_2c &lt;- goric(fit_Sesame, hypotheses = list(H2 = H2), type = &quot;gorica&quot;)
-#summary(gorica_sesam_2c)
+# summary(gorica_sesam_2c)
 gorica_sesam_2c</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
-1          H2  -5.125    2.095  14.438           0.762            0.855           0.950
-2  complement  -6.288    3.870  20.317           0.238            0.145           0.050
+1          H2  -5.091    2.094  14.371           0.766            0.855           0.951
+2  complement  -6.274    3.870  20.289           0.234            0.145           0.049
 
 Conclusion:
-The order-restricted hypothesis &#39;H2&#39; has 18.90 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H2&#39; has 19.28 times more support than its complement.</code></pre>
 </div>
 </div>
 </div>
@@ -2281,10 +2269,10 @@ The order-restricted hypothesis &#39;H2&#39; has 18.90 times more support than i
 <h1><span class="header-section-number">5</span> Notes on weights</h1>
 <p>Here, the example of Lucas is used again; thus, using the following
 hypotheses of interest:</p>
-<pre class="r"><code>H1 &lt;- &#39;group5 = group3 &gt; (group1, group4) &gt; group2&#39;  
-# Note: H1 is not full row-rank; 
-# for more details, see below and/or the goric tutorial.
-H2 &lt;- &#39;group3 &gt; group1 &gt; group4 = group5 &gt; group2&#39;</code></pre>
+<pre class="r"><code>H1 &lt;- &quot;group5 = group3 &gt; (group1, group4) &gt; group2&quot;
+# Note: H1 is not full row-rank; for more details, see below and/or the goric
+# tutorial.
+H2 &lt;- &quot;group3 &gt; group1 &gt; group4 = group5 &gt; group2&quot;</code></pre>
 <div id="note-1-goric-weights-versus-gorica-weights" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Note 1: GORIC weights
 versus GORICA weights</h2>
@@ -2302,11 +2290,11 @@ case of two hypotheses of interest</h2>
 their complements. Instead, one should evaluate them simultaneously in
 one set (like done above):</p>
 <pre class="r"><code># Calculate goric for H1 and its complement
-set.seed(123) # Set seed value
+set.seed(123)  # Set seed value
 output_c_H1 &lt;- goric(lm_fit_Lucas, hypotheses = list(H1))
-#summary(output_c_H1)
+# summary(output_c_H1)
 output_c_H1</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2316,11 +2304,11 @@ Results:
 Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 9.30 times more support than its complement.</code></pre>
 <pre class="r"><code># Calculate goric for H2 and its complement
-set.seed(123) # Set seed value
+set.seed(123)  # Set seed value
 output_c_H2 &lt;- goric(lm_fit_Lucas, hypotheses = list(H2 = H2))
-#summary(output_c_H2)
+# summary(output_c_H2)
 output_c_H2</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2328,14 +2316,13 @@ Results:
 2  complement  -278.048    5.853  567.803           0.976            0.062          0.730
 
 Conclusion:
-The order-restricted hypothesis &#39;H2&#39; has 0.270 / 0.730 &lt; 1 times more support than its complement. That is, the complement has 2.70 times more support than &#39;H2&#39; </code></pre>
+The order-restricted hypothesis &#39;H2&#39; has less support (namely,  0.270 / 0.730 &lt; 1 times more support) than its complement. That is, the complement has 2.70 times more support than &#39;H2&#39;</code></pre>
 <pre class="r"><code># Calculate goric for H1 and H2 (and Hu):
-set.seed(123) # Set seed value
-output_H1H2 &lt;- goric(lm_fit_Lucas, hypotheses = list(H1, H2)) # Note: by default, 
-                                                               # against the unconstrained
-#summary(output_H1H2)
+set.seed(123)  # Set seed value
+output_H1H2 &lt;- goric(lm_fit_Lucas, hypotheses = list(H1, H2))  # Note: by default, 
+# against the unconstrained summary(output_H1H2)
 output_H1H2</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
@@ -2345,56 +2332,54 @@ Results:
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 29.593 times more supported than &#39;H2&#39;.</code></pre>
-<pre class="r"><code>output_H1H2$ratio.gw[1,2]</code></pre>
-<pre><code>[1] 29.59315</code></pre>
+  * &#39;H1&#39; is 29.586 times more supported than &#39;H2&#39;.</code></pre>
+<pre class="r"><code>output_H1H2$ratio.gw[1, 2]</code></pre>
+<pre><code>[1] 29.58579</code></pre>
 <pre class="r"><code># The latter is not equal to:
-output_c_H1$ratio.gw[1,2] / output_c_H2$ratio.gw[1,2] </code></pre>
-<pre><code>[1] 25.16131</code></pre>
+output_c_H1$ratio.gw[1, 2]/output_c_H2$ratio.gw[1, 2]</code></pre>
+<pre><code>[1] 25.15443</code></pre>
 <div id="extra" class="section level3" number="5.2.1">
 <h3><span class="header-section-number">5.2.1</span> Extra</h3>
-<pre class="r"><code># Notably, you could derive the support from H1 vs H2 from their support versus 
+<pre class="r"><code># Notably, you could derive the support from H1 vs H2 from their support versus
 # that of Hu:
-set.seed(123) # Set seed value
-output_u_H1 &lt;- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = &#39;unconstrained&#39;)
-#summary(output_u_H1)
+set.seed(123)  # Set seed value
+output_u_H1 &lt;- goric(lm_fit_Lucas, hypotheses = list(H1), comparison = &quot;unconstrained&quot;)
+# summary(output_u_H1)
 output_u_H1</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H1  -278.051    3.458  563.019           0.499            0.927          0.927
 2  unconstrained  -278.048    6.000  568.097           0.501            0.073          0.073</code></pre>
 <pre><code>---
-Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement?</code></pre>
+Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement? Note that the order-restricted hypothesis overlaps (is contained in) the unconstrained, while it does not overlap with its complement (except for their boundary).</code></pre>
 <pre><code>
 Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 0.927 / 0.073 &gt; 1 times more support than the unconstrained.</code></pre>
 <pre class="r"><code>#
-set.seed(123) # Set seed value
-output_u_H2 &lt;- goric(lm_fit_Lucas, hypotheses = list(H2 = H2), comparison = &#39;unconstrained&#39;)
-#summary(output_u_H2)
+set.seed(123)  # Set seed value
+output_u_H2 &lt;- goric(lm_fit_Lucas, hypotheses = list(H2 = H2), comparison = &quot;unconstrained&quot;)
+# summary(output_u_H2)
 output_u_H2</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1             H2  -281.761    3.136  569.794           0.024            0.946          0.300
 2  unconstrained  -278.048    6.000  568.097           0.976            0.054          0.700</code></pre>
 <pre><code>---
-Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement?</code></pre>
+Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement? Note that the order-restricted hypothesis overlaps (is contained in) the unconstrained, while it does not overlap with its complement (except for their boundary).</code></pre>
 <pre><code>
 Conclusion:
-The order-restricted hypothesis &#39;H2&#39; has 0.300 / 0.700 &lt; 1 times more support than the unconstrained.</code></pre>
+The order-restricted hypothesis &#39;H2&#39; has less support (namely,  0.300 / 0.700 &lt; 1 times more support) than the unconstrained.</code></pre>
 <pre class="r"><code>#
-output_u_H1$ratio.gw[1,2] / output_u_H2$ratio.gw[1,2] </code></pre>
-<pre><code>[1] 29.59099</code></pre>
+output_u_H1$ratio.gw[1, 2]/output_u_H2$ratio.gw[1, 2]</code></pre>
+<pre><code>[1] 29.58579</code></pre>
 <pre class="r"><code># which (approximately) equals:
-output_H1H2$ratio.gw[1,2]</code></pre>
-<pre><code>[1] 29.59315</code></pre>
+output_H1H2$ratio.gw[1, 2]</code></pre>
+<pre><code>[1] 29.58579</code></pre>
 </div>
 </div>
 <div id="note-3-weights-when-using-complement-not-per-se-higher" class="section level2" number="5.3">
@@ -2419,11 +2404,11 @@ explanation</h3>
 <p>This is because for this particular example the mean of group 3 and 5
 are close (and they are compared in Hypothesis <span class="math inline">\(H_1\)</span>). Notably, it will hold for all of
 the following three hypothesis:</p>
-<pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+<pre class="r"><code>H1_gr &lt;- &quot;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&quot;
 # not full row-rank
-H1_sm &lt;- &#39;group5 &lt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+H1_sm &lt;- &quot;group5 &lt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&quot;
 # not full row-rank
-H1 &lt;- &#39;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+H1 &lt;- &quot;group5 = group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&quot;
 # not full row-rank</code></pre>
 <p>Because the means of groups 3&amp;5 are similar (and the other
 restrictions are in agreement with the data), the log likelihood values
@@ -2441,36 +2426,36 @@ of group 5 with 0.5 points (and change the name of the data &amp; the
 analysis):</p>
 <pre class="r"><code>Lucas2 &lt;- Lucas
 Lucas2$Influence[Lucas$group == 5] &lt;- Lucas$Influence[Lucas$group == 5] + 0.5
-#describeBy(Lucas$Influence, Lucas$group, mat = TRUE)
-#describeBy(Lucas2$Influence, Lucas$group, mat = TRUE)
-lm_fit_Lucas2 &lt;-  lm(Influence ~ group-1, data = Lucas2)
-# Now, from the three hypotheses H1_gr, H1_sm, and H1, # the first (H_gr) is 
-# correct. Hence, that one is used to illustrate the case where # a correct 
+# describeBy(Lucas$Influence, Lucas$group, mat = TRUE)
+# describeBy(Lucas2$Influence, Lucas$group, mat = TRUE)
+lm_fit_Lucas2 &lt;- lm(Influence ~ group - 1, data = Lucas2)
+# Now, from the three hypotheses H1_gr, H1_sm, and H1, # the first (H_gr) is
+# correct. Hence, that one is used to illustrate the case where # a correct
 # hypothesis obtains more support when it is evaluated against its complement:</code></pre>
-<pre class="r"><code>H1_gr &lt;- &#39;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&#39; 
+<pre class="r"><code>H1_gr &lt;- &quot;group5 &gt; group3 &gt; group1 &gt; group2; group3 &gt; group4 &gt; group2&quot;
 # not full row-rank
-set.seed(123) # Set seed value
-output_u_gr &lt;- goric(lm_fit_Lucas2, hypotheses = list(H1_gr = H1_gr), comparison = &#39;unconstrained&#39;)
-#summary(output_u_gr)
+set.seed(123)  # Set seed value
+output_u_gr &lt;- goric(lm_fit_Lucas2, hypotheses = list(H1_gr = H1_gr), comparison = &quot;unconstrained&quot;)
+# summary(output_u_gr)
 output_u_gr</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
 1          H1_gr  -278.048    3.683  563.464           0.500            0.910          0.910
 2  unconstrained  -278.048    6.000  568.097           0.500            0.090          0.090</code></pre>
 <pre><code>---
-Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement?</code></pre>
+Advise: Are you certain you wish to assess the order-restricted hypothesis in comparison to the unconstrained one, rather than its complement? Note that the order-restricted hypothesis overlaps (is contained in) the unconstrained, while it does not overlap with its complement (except for their boundary).</code></pre>
 <pre><code>
 Conclusion:
 The order-restricted hypothesis &#39;H1_gr&#39; has 0.910 / 0.090 &gt; 1 times more support than the unconstrained.</code></pre>
-<pre class="r"><code># Notably, this is the maximum support H1 can 
-# receive versus Hu (because the log-likelihoods (LLs) are the same).</code></pre>
-<pre class="r"><code>set.seed(123) # Set seed value
+<pre class="r"><code># Notably, this is the maximum support H1 can receive versus Hu (because the
+# log-likelihoods (LLs) are the same).</code></pre>
+<pre class="r"><code>set.seed(123)  # Set seed value
 output_c_gr &lt;- goric(lm_fit_Lucas2, hypotheses = list(H1_gr = H1_gr))
-#summary(output_c_gr)
+# summary(output_c_gr)
 output_c_gr</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
         model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights
@@ -2478,7 +2463,7 @@ Results:
 2  complement  -278.923    5.900  569.646           0.294            0.098          0.043
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_gr&#39; has 22.00 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1_gr&#39; has 22.01 times more support than its complement.</code></pre>
 <p>Now, when the means of groups 3 and 5 differ more, then evaluating
 against the complement does render more support than if <span class="math inline">\(H_u\)</span> were used: 22 versus 10.</p>
 </div>
@@ -2495,28 +2480,24 @@ deal with hypotheses that are not of full row-rank (like <span class="math inlin
 method.</p>
 <!-- In this bootstrap method, one can also more easily change the number of iterations on which the penalty is based (mix.bootstrap). The computation time of this bootstrap method can be reduced by using multiple cores. For a windows device, you then have to use 'parallel = "snow"' (see the goric tutorial for more options). It is worth noting that setting up a local cluster can take some time if one is not provided. Therefore, in the example given below, using no parallel computing may actually be faster. However, the advantage of using parallel computing becomes apparent when dealing with a much larger number of bootstrap samples. -->
 <p>To use this bootstrap method use ‘mix_weights = “boot”’:</p>
-<pre class="r"><code>#if (!require(&quot;parallel&quot;)) install.packages(&quot;parallel&quot;) 
-#library(parallel)
-#nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)</code></pre>
-<pre class="r"><code>set.seed(123) # Set seed value
-output_b &lt;- goric(lm_fit_Lucas, hypotheses = list(H1 = H1, H2 = H2),
-                  mix_weights = &quot;boot&quot;)
-#summary(output_b)
+<pre class="r"><code># if (!require(&#39;parallel&#39;)) install.packages(&#39;parallel&#39;) library(parallel)
+# nrCPUcores &lt;- detectCores(all.tests = FALSE, logical = TRUE)</code></pre>
+<pre class="r"><code>set.seed(123)  # Set seed value
+output_b &lt;- goric(lm_fit_Lucas, hypotheses = list(H1 = H1, H2 = H2), mix_weights = &quot;boot&quot;)
+# summary(output_b)
 output_b</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion: 
+<pre><code>restriktor (0.7): generalized order-restricted information criterion: 
 
 Results:
            model    loglik  penalty    goric  loglik.weights  penalty.weights  goric.weights  goric.weights_without_unc
-1             H1  -278.051    3.457  563.016           0.493            0.406          0.899                      0.967
-2             H2  -281.761    3.131  569.784           0.012            0.562          0.030                      0.033
+1             H1  -278.051    3.460  563.022           0.493            0.407          0.899                      0.967
+2             H2  -281.761    3.138  569.798           0.012            0.561          0.030                      0.033
 3  unconstrained  -278.048    6.000  568.097           0.495            0.032          0.071                           
 
 Conclusion:
 - The order-restricted hypothesis &#39;H1&#39; is the best in the set, as it has the highest GORIC(A) weight.
-
 - Since &#39;H1&#39; has a higher GORIC(A) weight than the unconstrained hypothesis, it is not considered weak. We can now inspect the relative support for &#39;H1&#39; against the other order-restricted hypotheses:
-
-  * &#39;H1&#39; is 29.483 times more supported than &#39;H2&#39;.</code></pre>
+  * &#39;H1&#39; is 29.599 times more supported than &#39;H2&#39;.</code></pre>
 <p>This, of course, renders the same results as above (if there is a
 difference, it is in the second decimal of the penalty).</p>
 <div id="note-on-not-full-row-rank" class="section level2" number="6.1">

@@ -187,7 +187,12 @@ dat <- dat.berkey1998
 #Parameter names to be used in the hypotheses:
 #- If one outcome: 'theta'.
 #- Labels used in specified outcome column/variable:
-#Here, 'AL' and 'PD', levels of the variable 'outcome'. 
+# Here, 'AL' and 'PD', levels of the variable 'outcome',
+# which then denotes the labels of our parameters of interest.
+# NOTE:
+# Below, I use 'outcome_col = "outcome"', but you can leave it out:
+# Then, it is NULL but finds a variable 'outcome' (default name).
+unique(dat$outcome)
 #
 # All studies have the same hypotheses in the set:
 H_absComp_Gr <- "abs(AL) > abs(PD)" 
@@ -212,11 +217,12 @@ study_names <- dat[dat$outcome=="AL",]$author
 #if (!require("restriktor")) install.packages("restriktor")
 #library(restriktor)
 results_Set3_Gr <- evSyn(object = dat, 
-                         outcome_col = "outcome", # column with 'AL' & 'PB'
+                         outcome_col = "outcome", # column with 'AL' & 'PD'; default
                          hypotheses = Hypo_studies,
                          #type = "added", # Default
-                         #comparison = "complement", # Default
-                         study_names = study_names)
+                         #comparison = "complement", # default (if 1 hypothesis)
+                         study_names = study_names # Optional
+                         ) 
 #
 # Show output
 results_Set3_Gr
@@ -248,7 +254,7 @@ plot(results_Set3_Gr)
 #combined: preference for H_absComp.
 #
 #H_absComp is 0.744 / 0.256 = approx. 2.9 times more likely than its complement.
-#Henec, preference for central theory that 'the difference in symptom reduction between surgery and non-surgery is larger for AL than for PB'.
+#Henec, preference for central theory that 'the difference in symptom reduction between surgery and non-surgery is larger for AL than for PD'.
 
 
 ########## evSyn options ########## 
@@ -266,7 +272,7 @@ plot(results_Set3_Gr)
 #if (!require("restriktor")) install.packages("restriktor")
 #library(restriktor)
 results_Set3_Gr_asc <- evSyn(object = dat, 
-                         outcome_col = "outcome", # column with 'AL' & 'PB'
+                         outcome_col = "outcome", # column with 'AL' & 'PD'; default
                          hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
                          #type = "added", # Default
                          #comparison = "complement", # Default
@@ -292,7 +298,7 @@ plot(results_Set3_Gr_asc)
 
 #If of interest, one can also specify their own order perhaps based on one of the study characteristics:
 order_ascYear <- order(dat[dat$outcome=="AL",]$year)
-results_Set3_Gr_ascYear <- evSyn(object = dat, outcome_col = "outcome",
+results_Set3_Gr_ascYear <- evSyn(object = dat, outcome_col = "outcome", # default
                                  hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
                                  study_names = study_names,
                                  order_studies = order_ascYear)
@@ -337,17 +343,69 @@ leave1out_Set3_Gr
 #In case you want to perform GORICA evidence synthesis for the set of studies leaving the second one out:
 dat_subset <- dat[dat$trial!=2,]
 study_names_subset <- study_names[-1]
-results_Set3_Gr_asc_subset <- evSyn(object = dat_subset, outcome_col = "outcome",
-                                 hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
-                                 order_studies = "ascending",
-                                 study_names = study_names_subset)
+results_Set3_Gr_asc_subset <- evSyn(object = dat_subset, 
+                                    outcome_col = "outcome", # default
+                                    hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
+                                    order_studies = "ascending",
+                                    study_names = study_names_subset)
 results_Set3_Gr_asc_subset
 plot(results_Set3_Gr_asc_subset)
 
 
+# Study weights #
+
+results_Set3_Gr_stw <- evSyn(object = dat, 
+                         outcome_col = "outcome", # column with 'AL' & 'PD'; default
+                         hypotheses = Hypo_studies,
+                         #type = "added", # Default
+                         #comparison = "complement", # Default
+                         study_names = study_names, # Optional
+                         study_weights = c(1/10, 2/10, 3/10, 2/10, 2/10)
+) 
+#
+# Show output
+results_Set3_Gr_stw
+# Final ratios of GORICA weights:
+#round(results_Set3_Gr_stw$Final_ratio_GORICA_weights, 2)
+# Study-specific and final/overall output:
+#summary(results_Set3_Gr_stw)
+# evSyn plot:
+plot(results_Set3_Gr_stw)
+
+
 ####
 
+# GORICA evidence synthesis (the equal-evidence approach) #
+
+# Before we can start with the evidence-synthesis, we need to set the type of evidence-synthesis: 
+# type_ev = "added" (default) or type_ev = "equal"
+# Next, we will use the equal-evidence approach:
+
+# Set of hypotheses #
+Hypo_studies <- list(H_absComp = H_absComp_Gr)
+#versus its complement, which is the default option in case of one hypothesis of interest
+
+# GORICA evidence synthesis -- the equal-evidence approach #
+results_Set3_Gr_eq <- evSyn(object = dat, 
+                            outcome_col = "outcome", # column with 'AL' & 'PD'; default
+                            hypotheses = Hypo_studies,
+                            type = "equal", 
+                            #comparison = "complement", # Default
+                            study_names = study_names # Optional
+                           ) 
+#
+# Show output
+results_Set3_Gr_eq
+# Final ratios of GORICA weights:
+#round(results_Set3_Gr_eq$Final_ratio_GORICA_weights, 2)
+# Study-specific and final/overall output:
+#summary(results_Set3_Gr_eq)
+# evSyn plot:
+plot(results_Set3_Gr_eq)
+
+
 ###################################################################################
+
 
 ### WORK IN PROGRESS ###
 

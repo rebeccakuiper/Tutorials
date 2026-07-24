@@ -1507,7 +1507,7 @@ if (!require(&quot;remotes&quot;)) install.packages(&quot;remotes&quot;)
 library(remotes)
 # remotes::install_github(&#39;LeonardV/restriktor&#39;, ref = &#39;Branch_Rebec&#39;, force =
 # TRUE)
-remotes::install_github(&quot;LeonardV/restriktor@Branch_Rebec&quot;, force = TRUE)
+remotes::install_github(&quot;LeonardV/restriktor@Branch_Rebec&quot;)  #, force = TRUE)
 library(restriktor)  # for evSyn and goric function
 # If you want to use restriktor from CRAN: if (!require(&#39;restriktor&#39;))
 # install.packages(&#39;restriktor&#39;) library(restriktor) # for evSyn and goric
@@ -1730,8 +1730,11 @@ lm_fit_JU &lt;- lm(z ~ g - 1, data = JU)  # `lm` stands for linear model.
 # therefore, estimate the means in each group, resulting here in five group
 # means.  On the other hand, `y ~ group&#39; would estimate an intercept,
 # representing the mean of the reference group, and the mean differences
-# between the other (here, four) groups and the reference group.  3. The
-# results are collected in, what is called, an R-object, named `lm_fit_Ju`.
+# between the other (here, four) groups and the reference group.  Note that if
+# you would have multiple factors, you may want to leave the intercept in to
+# improve the interpretation of the parameters; which aids in specifying your
+# hypotheses.  3. The results are collected in, what is called, an R-object,
+# named `lm_fit_Ju`.
 
 # Check the names used in model
 names(coef(lm_fit_JU))</code></pre>
@@ -2426,12 +2429,15 @@ the data.frame as the input without an extra data-argument. When not
 specifying the data-argument ‘outcome_col’, the function assumes that
 the parameter of interest is called ‘theta’; as it will also mention.
 The hypotheses should then thus also that labeling.</p>
-<p>In this case, we have two parameters of interest and, thus, we have
-to specify the data-argument ‘outcome_col’. This argument needs the name
-of the column that contains the outcome names. The hypotheses should
-then be specified using those outcome names.</p>
+<p>In this case, we have two parameters of interest. Since we have the
+variable ‘outcome’ in our data set (cf. ‘dat$outcome’), we do not need
+to use the data-argument ‘outcome_col’. Next, I will use code in which
+we do specify the data-argument ‘outcome_col’. This argument needs the
+name of the column that contains the outcome names, which then denotes
+the labels of our parameters of interest. The hypotheses should then be
+specified using those outcome names (cf. ‘unique(dat$outcome)’.</p>
 <p>Here, the column is called ‘outcome’, which contains the names/labels
-‘AL’ and ‘PD’ (so, theses should used in the hypothesis
+‘AL’ and ‘PD’ (so, theses should be used in the hypothesis
 specification).</p>
 </details>
 <p> </p>
@@ -2788,6 +2794,8 @@ outcomePD     0.307  0.029   10.751  &lt;.001   0.251   0.363  ***
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># Note When looking at the forest plot, you can also see the mixed results from
+# these studies: forest(res_metaan)</code></pre>
 <p>Note: The GORICA can also be applied to random-effects and
 mixed-effects models, but in the answers I use the fixed-effects
 model.</p>

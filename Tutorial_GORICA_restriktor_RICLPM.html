@@ -11,7 +11,6 @@
 
 <meta name="author" content="Rebecca M. Kuiper" />
 
-<meta name="date" content="2025-02-11" />
 
 <title>How to evaluate theory-based hypotheses in a RI-CLPM using the GORICA</title>
 
@@ -1482,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a RI-CLPM using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper</h4>
-<h4 class="date">11 February 2025</h4>
+<h4 class="date">24 juli 2026</h4>
 
 </div>
 
@@ -1500,12 +1499,16 @@ be used to evaluate theory-driven hypotheses.</p>
 research to analyze the relations between variables measured at multiple
 time points.</p>
 <p>Here, two examples are presented for the use of the
-<code>goric</code> function in the restriktor package to evaluate
-hypotheses about a RI-CLPM. These are based on the analysis in:<br />
-Sukpan, C., &amp; Kuiper, R. M. (2024). How to Evaluate Causal Dominance
-Hypotheses in Lagged Effects Models. Structural Equation Modeling,
-31(3), 404-419. <a href="https://doi.org/10.1080/10705511.2023.2265065" class="uri">https://doi.org/10.1080/10705511.2023.2265065</a><br />
-The corresponding R files can be found on ‘<a href="https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM" class="uri">https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM</a>’.</p>
+<code>goric</code> function in the <code>restriktor</code> package to
+evaluate hypotheses about a RI-CLPM. These are based on the analysis
+in:</p>
+<ul>
+<li>Sukpan, C., &amp; Kuiper, R. M. (2024). How to Evaluate Causal
+Dominance Hypotheses in Lagged Effects Models. Structural Equation
+Modeling, 31(3), 404-419. <a href="https://doi.org/10.1080/10705511.2023.2265065" class="uri">https://doi.org/10.1080/10705511.2023.2265065</a><br />
+</li>
+<li>The corresponding R files can be found on ‘<a href="https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM" class="uri">https://github.com/rebeccakuiper/Tutorials/tree/main/GORICA%20in%20RI-CLPM</a>’.</li>
+</ul>
 <p>Note: For (more) information regarding interpreting the GORIC(A)
 output, see ‘Guidelines_output_GORIC’ (<a href="https://github.com/rebeccakuiper/Tutorials" class="uri">https://github.com/rebeccakuiper/Tutorials</a>).</p>
 <div id="r-packages" class="section level1" number="1">
@@ -1515,20 +1518,15 @@ output, see ‘Guidelines_output_GORIC’ (<a href="https://github.com/rebeccaku
 function). If needed, it is possible to view the description of the
 function with the <code>?</code> operator or the <code>help</code>
 command.</p>
-<pre class="r"><code># To install restriktor in R:
-#if (!require(&quot;restriktor&quot;)) install.packages(&quot;restriktor&quot;)
-
-# To install restriktor from github:
-# if (!require(&quot;devtools&quot;)) install.packages(&quot;devtools&quot;)
-# library(devtools) 
-# install_github(&quot;LeonardV/restriktor&quot;)
+<pre class="r"><code># To install restriktor in R: if (!require(&#39;restriktor&#39;))
+# install.packages(&#39;restriktor&#39;) If you want to use restriktor from github: if
+# (!require(&#39;pak&#39;)) install.packages(&#39;pak&#39;) library(pak)
+# pak::pak(&#39;LeonardV/restriktor&#39;) pak::pkg_install(&#39;LeonardV/restriktor&#39;)
 library(restriktor)
+# print docs in the help-tab to view arguments and explanations for the
+# function ?goric
 
-# print docs in the help-tab to view arguments and explanations for the function
-#?goric
-
-# To install lavaan in R:
-# if (!require(&quot;lavaan&quot;)) install.packages(&quot;lavaan&quot;)
+# To install lavaan in R: if (!require(&#39;lavaan&#39;)) install.packages(&#39;lavaan&#39;)
 library(lavaan)</code></pre>
 </div>
 <div id="example-1-wave-independent-parameters-model" class="section level1" number="2">
@@ -1624,7 +1622,7 @@ RICLPM5.fit &lt;- lavaan(RICLPM5,
                       int.ov.free = T
 ) 
 summary(RICLPM5.fit, standardized = T)</code></pre>
-<pre><code>lavaan 0.6-19 ended normally after 30 iterations
+<pre><code>lavaan 0.7-2 ended normally after 30 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -1763,17 +1761,19 @@ Variances:
 <pre class="r"><code># Compute GORICA values and weights
 set.seed(123)
 GORICA.Result &lt;- goric(RICLPM5.fit, 
-                       hypotheses = list(H1)) 
-# Defaults: comparison = &quot;complement&quot; 
+                       hypotheses = list(H1)) </code></pre>
+<pre><code>
+restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
+<pre class="r"><code># Defaults: comparison = &quot;complement&quot; 
 #           type = &quot;gorica&quot;
 #
 GORICA.Result</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
-        model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1          H1  28.317    8.500  -39.634           0.999            0.500           0.999
-2  complement  21.651    8.500  -26.301           0.001            0.500           0.001
+        model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
+1          H1   6.130    1.500  -9.260           0.999            0.500           0.999
+2  complement  -0.537    1.500   4.073           0.001            0.500           0.001
 
 Conclusion:
 The order-restricted hypothesis &#39;H1&#39; has 785.56 times more support than its complement.</code></pre>
@@ -1875,7 +1875,7 @@ RICLPM.fit.l &lt;- lavaan(RICLPM.l,
                      int.ov.free = T
 )
 summary(RICLPM.fit.l, standardized = T)</code></pre>
-<pre><code>lavaan 0.6-19 ended normally after 116 iterations
+<pre><code>lavaan 0.7-2 ended normally after 115 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -2015,17 +2015,19 @@ Variances:
 set.seed(123)
 GORICA.Result.ws.l &lt;- goric(RICLPM.fit.l, 
                           standardized = T,
-                          hypotheses = list(H1ws.l = H1ws.l)) 
-# Defaults: comparison = &quot;complement&quot; 
+                          hypotheses = list(H1ws.l = H1ws.l)) </code></pre>
+<pre><code>
+restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
+<pre class="r"><code># Defaults: comparison = &quot;complement&quot; 
 #           type = &quot;gorica&quot;
 #
 GORICA.Result.ws.l</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
-1      H1ws.l  39.996   13.966  -52.061           0.684            0.858           0.929
-2  complement  39.222   15.767  -46.910           0.316            0.142           0.071
+1      H1ws.l  19.591    5.966  -27.250           0.684            0.858           0.929
+2  complement  18.817    7.767  -22.100           0.316            0.142           0.071
 
 Conclusion:
 The order-restricted hypothesis &#39;H1ws.l&#39; has 13.14 times more support than its complement.</code></pre>
@@ -2106,7 +2108,7 @@ RICLPM.fit &lt;- lavaan(RICLPM,
                      int.ov.free = T
 )
 summary(RICLPM.fit, standardized = T)</code></pre>
-<pre><code>lavaan 0.6-19 ended normally after 116 iterations
+<pre><code>lavaan 0.7-2 ended normally after 115 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -2407,7 +2409,7 @@ GORICA.Result.ws &lt;- goric(est, VCOV = vcov,
 #           type = &quot;gorica&quot;
 #
 GORICA.Result.ws</code></pre>
-<pre><code>restriktor (0.6-10): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -2431,12 +2433,11 @@ given.</p>
 dependency</h1>
 <p>The parameter estimates in a (RI-)CLPM are time-interval dependent,
 and thus the GORICA results as well. By using the CTmeta package:</p>
-<pre class="r"><code># Install and load packages
-#
-#library(devtools)
-#if (!require(&quot;CTmeta&quot;)) install_github(&quot;rebeccakuiper/CTmeta&quot;) ##install_github(&quot;rebeccakuiper/CTmeta&quot;, force = TRUE)
+<pre class="r"><code># Install and load packages if (!require(&#39;pak&#39;)) install.packages(&#39;pak&#39;)
+# library(pak) if (!require(&#39;CTmeta&#39;)) pak::pak(&#39;rebeccakuiper/CTmeta&#39;) if
+# (!require(&#39;CTmeta&#39;)) pak::pkg_install(&#39;rebeccakuiper/CTmeta&#39;)
 library(CTmeta)
-#?PhiPlot</code></pre>
+# ?PhiPlot</code></pre>
 <p>one can plot the lagged-effects parameter estimates for different
 choices of time intervals. Based on this plot (and/or on other
 information), one can evaluate the hypotheses using the GORICA for

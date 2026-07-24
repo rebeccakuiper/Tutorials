@@ -1481,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">How to evaluate theory-based hypotheses in
 a lavaan model using the GORICA</h1>
 <h4 class="author">Rebecca M. Kuiper and Yves Rosseel</h4>
-<h4 class="date">08 januari 2026</h4>
+<h4 class="date">24 juli 2026</h4>
 
 </div>
 
@@ -1567,7 +1567,7 @@ results_cfa &lt;- goric(fit_cfa, hypotheses = list(H1_cfa = H1_cfa), standardize
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_cfa)
 results_cfa</code></pre>
-<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1695,12 +1695,12 @@ results_mgcfa &lt;- goric(fit_mgcfa, hypotheses = list(H1_mgcfa = H1_mgcfa))</co
 <pre><code>
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code>results_mgcfa</code></pre>
-<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
 1    H1_mgcfa  -2.500    4.774  14.549           0.000            0.649           0.000
-2  complement   9.594    5.390  -8.408           1.000            0.351           1.000
+2  complement   9.594    5.391  -8.407           1.000            0.351           1.000
 
 Conclusion:
 The order-restricted hypothesis &#39;H1_mgcfa&#39; has less support (namely,  0.000 / 1.000 &lt; 1 times more support) than its complement. That is, the complement has Inf times more support than &#39;H1_mgcfa&#39;</code></pre>
@@ -1770,7 +1770,7 @@ results_sem &lt;- goric(fit_sem, hypotheses = list(H1_sem = H1_sem), standardize
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_sem)
 results_sem</code></pre>
-<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model   loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1778,7 +1778,7 @@ Results:
 2  complement  -14.069    1.500  31.137           0.000            0.500           0.000
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_sem&#39; has 99620500.72 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1_sem&#39; has 9.96e+07 times more support than its complement.</code></pre>
 <pre class="r"><code># Unrestricted &amp; Order-restricted parameter estimates of interest Note:
 # Hypotheses should be specified before seeing the data.  Looking afterwards at
 # the standardized estimates can give you more insight.  Unrestricted parameter
@@ -1837,7 +1837,7 @@ results_msem &lt;- goric(fit_msem, hypotheses = list(H1_msem = H1_msem), standar
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_msem)
 results_msem</code></pre>
-<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty   gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1896,7 +1896,7 @@ results_growth &lt;- goric(fit_growth, hypotheses = list(H1_growth = H1_growth),
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_growth)
 results_growth</code></pre>
-<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
         model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights
@@ -1904,7 +1904,7 @@ Results:
 2  complement  -8.912    1.500  20.824           0.000            0.500           0.000
 
 Conclusion:
-The order-restricted hypothesis &#39;H1_growth&#39; has 1358030.63 times more support than its complement.</code></pre>
+The order-restricted hypothesis &#39;H1_growth&#39; has 1.36e+06 times more support than its complement.</code></pre>
 <p>Conclusion: The order-restricted hypothesis ‘H1_growth’ has many more
 (<span class="math inline">\(&gt;&gt;  1\)</span> times more) support
 than its complement. Thus, we found support that the intercept of the
@@ -1958,7 +1958,7 @@ results_med &lt;- goric(fit_med, hypotheses = list(H_part = H_part, H_full = H_f
 restriktor Message: The covariance matrix of the estimates was obtained via &#39;vcov()&#39;. This is the biased (restricted) sample covariance matrix, not the unbiased version based on the total sample size (&#39;N&#39;).</code></pre>
 <pre class="r"><code># summary(results_med)
 results_med</code></pre>
-<pre><code>restriktor (0.6-30): generalized order-restricted information criterion approximation:
+<pre><code>restriktor (0.7): generalized order-restricted information criterion approximation:
 
 Results:
            model  loglik  penalty  gorica  loglik.weights  penalty.weights  gorica.weights  gorica.weights_without_unc

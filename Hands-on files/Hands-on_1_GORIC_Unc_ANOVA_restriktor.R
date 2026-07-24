@@ -185,6 +185,9 @@ lm_fit_Lucas <-  lm(Influence ~ group-1, data = Lucas)
 #    estimate an intercept, representing the mean of the reference group, and 
 #    the mean differences between the other (here, four) groups and the 
 #    reference group.
+#    Note that if you would have multiple factors, 
+#    you may want to leave the intercept in to improve the interpretation of the parameters; 
+#    which aids in specifying your hypotheses.
 # 3. The results are collected in, what is called, an R-object, named 
 #    `lm_fit_Lucas`.
   
