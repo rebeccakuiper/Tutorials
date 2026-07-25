@@ -342,7 +342,7 @@ leave1out_Set3_Gr
 
 #In case you want to perform GORICA evidence synthesis for the set of studies leaving the second one out:
 dat_subset <- dat[dat$trial!=2,]
-study_names_subset <- study_names[-1]
+study_names_subset <- study_names[-2]
 results_Set3_Gr_asc_subset <- evSyn(object = dat_subset, 
                                     outcome_col = "outcome", # default
                                     hypotheses = Hypo_studies, # list(H_absComp = H_absComp_Gr)
