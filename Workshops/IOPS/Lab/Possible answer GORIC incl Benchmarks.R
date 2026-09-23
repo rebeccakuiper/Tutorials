@@ -134,6 +134,9 @@ plot(benchmarks_sesam, output_type = "gw", log_scale = T)
 #plot(benchmarks_sesam, output_type = "rlw", log_scale = T)
 
 
+################################################################################
+
+
 # Extra for those who noticed and want to know :-) #
 # Note that the difference in sample value is due to using est&VCOV (gorica) instead of lm object (goric or gorica):
 # Technical info:

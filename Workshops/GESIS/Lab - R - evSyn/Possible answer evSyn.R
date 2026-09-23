@@ -188,9 +188,6 @@ evSyn_anchor
 # Conclusion:
 #
 # When aggregating the results, we find (perhaps unsurprisingly) that ‘H1’ is the best (and thus not weak).
-# More precise, because of the added-evidence approach, 
-# it is many times more likely that overall theory ‘H1’ is correct in both studies 
-# than that ‘H2’ would be correct in both studies. 
 #
 # Hence, there is support for the overall theory ‘H1’: 
 # The amount in which a number differs from an anchor number is the highest 
@@ -271,10 +268,10 @@ evSyn_params$GORICA_weight_m
 #
 # When inspecting the study-specific results (cf. evSyn_params$GORICA_weight_m), 
 # one can see that the studies do not prefer the same hypothesis: 
-# That is, the result in the first study ('H2' is best and bout equally likely as 'H1') is not replicated by the second ('unconstrained' is best).
+# That is, the result in the first study ('H2' is best and bout equally likely as 'H1') 
+# is not replicated by the second ('unconstrained' is best).
 #
 # When aggregating the mixed results, we find that overall theory ‘H1’ is the best.
-# More precise, because of the added-evidence approach, it is is more likely that overall theory ‘H1’ is correct in both studies than that ‘H2’ would be correct in both studies. 
 # However, it is only 1.118 times more likely.
 # Additionally, the 'unconstrained' also receives quite some support.
 #
@@ -358,8 +355,6 @@ plot(evSyn_trust)
 # Conclusion:
 #
 # Support for Hpos is highest: thus, favor Hpos over H0 and Hneg.
-# More precise, because of the added-evidence approach, 
-# it is most likely that Hpos is correct in all studies. 
 #
 # Hence, previous experience has a positive effect on trust; 
 # which receives full support.
