@@ -115,11 +115,12 @@ goric_sesam$b.unrestr
 #all means are equal is used. 
 # Use 'pop_es' to specify own null population(s).	
 #  
-# Benchmarks (based on GORICA):
+# Benchmarks (based on GORICA)
+iter <- 100 # faster to run, in practice perhaps use: # 2000 # 500
 benchmarks_sesam <- benchmark(goric_sesam, 
-                              ncpus = 8, iter = 2000)
+                              ncpus = 8, iter = iter)
 benchmarks_sesam 
-plot(benchmarks_sesam, x_lim = c(0, 15))
+#plot(benchmarks_sesam, x_lim = c(0, 15))
 plot(benchmarks_sesam, log_scale = T)
 # Our finding is very extreme under the null:
 # Namely, our sample value is higher than the 95th percentile under the null. 
@@ -127,8 +128,13 @@ plot(benchmarks_sesam, log_scale = T)
 #
 # Inspection of the weights of the preferred hypothesis:
 benchmarks_sesam_means$benchmarks_goric_weights
-plot(benchmarks_sesam, output_type = "gw")
+#plot(benchmarks_sesam, output_type = "gw")
 plot(benchmarks_sesam, output_type = "gw", log_scale = T)
+#
+#plot(benchmarks_sesam, output_type = "rlw", log_scale = T)
+
+
+################################################################################
 
 
 # Extra for those who noticed and want to know :-) #
@@ -149,6 +155,7 @@ gorica_sesam_est <- goric(est, VCOV = VCOV,
                           hypotheses = list(H1_sesam = H1_sesam),
                           type = "gorica")
 gorica_sesam_est
+gorica_sesam
 #
 # This way it does resemble the output when using the lm object:
 set.seed(123) # Set seed value
@@ -162,8 +169,9 @@ gorica_sesam_est_Nmink <- goric(est, VCOV = VCOV,
 #
 goric_sesam
 gorica_sesam
-gorica_sesam_est
 gorica_sesam_est_Nmink
+gorica_sesam_est
+
 
 
 ###################################################################################
