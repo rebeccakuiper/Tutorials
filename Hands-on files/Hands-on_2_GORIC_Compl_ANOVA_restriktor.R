@@ -128,6 +128,18 @@ output_c
 # and/or the benchmark tutorial on https://github.com/rebeccakuiper/Tutorials. 
 
 
+# Looking at range restriction:
+
+H1_range <- '-0.05 < group5 - group3 < 0.05;  group3 > (group1, group4) > group2'
+# This is evaluated against its complement (default in case of 1 hypothesis).
+
+# Calculate GORIC values and weights
+set.seed(123) # Set seed value, for reproducibility and option for sensitive check
+output_c_range <- goric(lm_fit_Lucas, 
+                  hypotheses = list(H_range = H1_range))
+output_c_range
+
+
 ########################
 
 

@@ -111,5 +111,13 @@ group3 > group1 > group4 = group5 > group2'
 set.seed(123) # Set seed value
 output <- bain(lm_fit_Lucas, Hypotheses)
 output
+output$BFmatrix
 #summary(output)
+
+
+# Prior sensitivity check
+output_frac2 <- bain(lm_fit_Lucas, Hypotheses, 
+                     fraction = 2)
+output_frac2
+output
 
