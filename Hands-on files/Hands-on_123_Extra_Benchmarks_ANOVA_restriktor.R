@@ -57,9 +57,10 @@ goric.PandG
 
 # Benchmarks #
 set.seed(123) # Set seed value, for reproducibility and option for sensitive check
-iter <- 500
+#iter <- 500
 benchmarks.PandG <- benchmark(goric.PandG, model_type = "means", 
-                              iter = iter, ncpus = 8)
+                              #iter = iter, 
+                              ncpus = 8)
 benchmarks.PandG
 plot(benchmarks.PandG)
 plot(benchmarks.PandG, log_scale = T)
@@ -78,9 +79,10 @@ gorica.PandG <- goric(est, VCOV = VCOV,
                        hypotheses = list(H1))
 # Benchmarks #
 set.seed(123) # Set seed value, for reproducibility and option for sensitive check
-iter <- 500
+#iter <- 500
 benchmarks.PandG_gorica <- benchmark(gorica.PandG, 
-                                     iter = iter, ncpus = 8)
+                                     #iter = iter, 
+                                     ncpus = 8)
 benchmarks.PandG_gorica
 plot(benchmarks.PandG_gorica)
 plot(benchmarks.PandG_gorica, log_scale = T)
@@ -126,9 +128,10 @@ goric.Lucas$ratio.gw
 
 # Benchmarks #
 set.seed(123) # Set seed value, for reproducibility and option for sensitive check
-iter <- 500
+#iter <- 500
 benchmarks.Lucas <- benchmark(goric.Lucas, model_type = "means", 
-                              iter = iter, ncpus = 8)
+                              #iter = iter, 
+                              ncpus = 8)
 benchmarks.Lucas
 plot(benchmarks.Lucas)
 plot(benchmarks.Lucas, log_scale = T)

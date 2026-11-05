@@ -435,12 +435,12 @@ abline(a = 0, b = 0, col = "gray") # when 0, then H_absComp and Complement equal
 # Weight overall preferred hypothesis; 
 # here, H_absComp and thus column 1:
 ICweights <- results_Set3_Gr$GORICA_weight_m[,1]
-round(quantile(ICweights, probs = c(0, .25, .50, .75, 1.00)), 2)
+round(quantile(ICweights, probs = c(0, .025, .25, .50, .75, 0.975, 1.00)), 2)
 
 # Ratio of weights overall preferred hypothesis; 
 # here, H_absComp (preferred) vs Complement; thus column 1 vs 2:
 ratioICweights <- results_Set3_Gr$GORICA_weight_m[,1] / results_Set3_Gr$GORICA_weight_m[,2]
-round(quantile(ratioICweights, probs = c(0, .25, .50, .75, 1.00)), 2)
+round(quantile(ratioICweights, probs = c(0, .025, .25, .50, .75, 0.975, 1.00)), 2)
 
 
 ###################################################################################
