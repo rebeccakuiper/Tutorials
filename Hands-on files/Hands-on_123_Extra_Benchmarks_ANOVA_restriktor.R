@@ -19,6 +19,22 @@ library(restriktor) # for the goric function
 #pak::pak("LeonardV/restriktor") 
 ##pak::pkg_install("LeonardV/restriktor") 
 #library(restriktor) # for goric function 
+#
+# The benchmark() function as used below is that of restriktor version 0.7, 
+# currently available from GitHub (branch 'Branch_Rebec'; in the near future on CRAN):
+#pak::pak("LeonardV/restriktor@Branch_Rebec") # TO DO delete when newest version on CRAN
+#
+# Number of iterations (iter) in benchmark() (restriktor 0.7):
+# By default (iter = NULL), the number of iterations is set automatically:
+# it starts with 500 and adds 100 at a time, until the benchmarks have stabilized,
+# up to at most 2000 (see the benchmark tutorial for the stopping rule).
+
+
+# Parallel computing (used in the benchmark() function below):
+# Determine the number of cores of your machine
+# and use (at most) that number minus one or two:
+ncpus <- max(1, parallel::detectCores() - 2)
+ncpus
 
 
 ################################################################################
@@ -60,7 +76,7 @@ set.seed(123) # Set seed value, for reproducibility and option for sensitive che
 #iter <- 500
 benchmarks.PandG <- benchmark(goric.PandG, model_type = "means", 
                               #iter = iter, 
-                              ncpus = 8)
+                              ncpus = ncpus)
 benchmarks.PandG
 plot(benchmarks.PandG)
 plot(benchmarks.PandG, log_scale = T)
@@ -82,7 +98,7 @@ set.seed(123) # Set seed value, for reproducibility and option for sensitive che
 #iter <- 500
 benchmarks.PandG_gorica <- benchmark(gorica.PandG, 
                                      #iter = iter, 
-                                     ncpus = 8)
+                                     ncpus = ncpus)
 benchmarks.PandG_gorica
 plot(benchmarks.PandG_gorica)
 plot(benchmarks.PandG_gorica, log_scale = T)
@@ -131,7 +147,7 @@ set.seed(123) # Set seed value, for reproducibility and option for sensitive che
 #iter <- 500
 benchmarks.Lucas <- benchmark(goric.Lucas, model_type = "means", 
                               #iter = iter, 
-                              ncpus = 8)
+                              ncpus = ncpus)
 benchmarks.Lucas
 plot(benchmarks.Lucas)
 plot(benchmarks.Lucas, log_scale = T)
@@ -170,7 +186,7 @@ goric.Lucas_c
 #iter <- 500
 #benchmarks.Lucas <- benchmark(goric.Lucas_c, 
 #                              model_type = "means", 
-#                              iter = iter, ncpus = 8)
+#                              iter = iter, ncpus = ncpus)
 #print(benchmarks.Lucas, output_type = "rlw")
 #plot(benchmarks.Lucas, output_type = "rlw", log_scale = T)
 #
@@ -203,7 +219,7 @@ set.seed(123) # Set seed value, for reproducibility and option for sensitive che
 iter <- 500
 # As a reminder: running the next code will take some time.
 benchmarks.Lucas <- benchmark(goric.Lucas_c, pop_est = pop_est, 
-                              iter = iter, ncpus = 8)
+                              iter = iter, ncpus = ncpus)
 print(benchmarks.Lucas, output_type = "rlw") # see below
 plot(benchmarks.Lucas, output_type = "rlw", log_scale = T)
 #
@@ -217,45 +233,46 @@ plot(benchmarks.Lucas, output_type = "rlw", log_scale = T)
 #
 # In case you can specify a range for when the means are said to be the same, 
 # then use that in your (future) hypothesis; e.g.:
-# H1 <- '0.05 < (group5 - group3) < 0.05, group3 > (group1, group4) > group2',
-# where '0.05 < (group5 - group3) < 0.05' is an about-equality restriction.
+# H1 <- '-0.05 < (group5 - group3) < 0.05, group3 > (group1, group4) > group2',
+# where '-0.05 < (group5 - group3) < 0.05' is an about-equality restriction.
 #
 #
 # Results of benchmarks.Lucas based on the default number of iterations:
 # print(benchmarks.Lucas, output_type = "rlw")
-Benchmark Results 
----------------------------------------------------------------------- 
-  Preferred Hypothesis: H_theory1
-Error probability Preferred Hypothesis vs. Complement: 0.097
-Sample Size: 150
-Number of Parameters: 5
-Population Estimates (PE):
-  group1  group2  group3  group4  group5
-PE_12345eq   2.463   2.463   2.463   2.463   2.463
-PE_1345eq    2.329   1.328   2.747   2.747   2.747
-PE_35eq      2.329   1.328   3.215   2.231   3.215
-Observed     2.329   1.328   3.200   2.231   3.229
-
-
-================================================================================================================== 
-  Benchmark: Percentiles of Ratio-of-log-likelihood-weights for the Preferred Hypothesis 'H_theory1' 
------------------------------------------------------------------------------------------------------------------- 
-  Population estimates = PE_12345eq
-Sample 5%    35%   50%   65%   95%  
-H_theory1 vs. complement 1.003  0.023 0.251 0.395 0.568 0.967
-
-Population estimates = PE_1345eq
-Sample 5%    35%   50%   65%   95%  
-H_theory1 vs. complement 1.003  0.098 0.579 0.751 0.905 1.058
-
-Population estimates = PE_35eq
-Sample 5%    35%   50%   65%   95%  
-H_theory1 vs. complement 1.003  0.264 0.919 1.000 1.043 1.942
-
-Population estimates = Observed
-Sample 5%    35%   50%   65%   95%  
-H_theory1 vs. complement 1.003  0.281 0.938 1.000 1.057 1.958
-
-
+# (Output from an earlier version of restriktor; in version 0.7, the layout differs.)
+# Benchmark Results 
+# ---------------------------------------------------------------------- 
+#   Preferred Hypothesis: H_theory1
+# Error probability Preferred Hypothesis vs. Complement: 0.097
+# Sample Size: 150
+# Number of Parameters: 5
+# Population Estimates (PE):
+#   group1  group2  group3  group4  group5
+# PE_12345eq   2.463   2.463   2.463   2.463   2.463
+# PE_1345eq    2.329   1.328   2.747   2.747   2.747
+# PE_35eq      2.329   1.328   3.215   2.231   3.215
+# Observed     2.329   1.328   3.200   2.231   3.229
+#
+#
+# ================================================================================================================== 
+#   Benchmark: Percentiles of Ratio-of-log-likelihood-weights for the Preferred Hypothesis 'H_theory1' 
+# ------------------------------------------------------------------------------------------------------------------ 
+#   Population estimates = PE_12345eq
+# Sample 5%    35%   50%   65%   95%  
+# H_theory1 vs. complement 1.003  0.023 0.251 0.395 0.568 0.967
+#
+# Population estimates = PE_1345eq
+# Sample 5%    35%   50%   65%   95%  
+# H_theory1 vs. complement 1.003  0.098 0.579 0.751 0.905 1.058
+#
+# Population estimates = PE_35eq
+# Sample 5%    35%   50%   65%   95%  
+# H_theory1 vs. complement 1.003  0.264 0.919 1.000 1.043 1.942
+#
+# Population estimates = Observed
+# Sample 5%    35%   50%   65%   95%  
+# H_theory1 vs. complement 1.003  0.281 0.938 1.000 1.057 1.958
+#
+#
 ################################################################################
 
